@@ -1,0 +1,29 @@
+h1 {
+  text-decoration: underline;
+}
+
+body {
+    background-image: url("/images/grey_wash_wall.png");
+    background-color: #cccccc;
+}
+
+/* Simple text widget styles */
+/* TODO move to dashboard codebase */
+
+.widget {
+    background: #fff;
+}
+
+.widget .title-wrapper {
+    width: 100%;
+}
+.widget .title-wrapper .title {
+    padding: 10px;
+}
+
+.simple-text-widget .data {
+    transform: translateX(-50%) translateY(-50%);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+}
