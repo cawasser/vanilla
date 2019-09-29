@@ -13,6 +13,7 @@
                               :every [5 :seconds]}}])
 
 (defn start-dashboard[]
+  (prn "server starting")
   (dash/start datasources {:port (Integer. (or (env :port) 5000))}))
 
 (defn -main [& [port]]
