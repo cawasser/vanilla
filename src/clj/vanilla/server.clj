@@ -4,8 +4,9 @@
               [vanilla.fetcher])
     (:gen-class))
 
-(def datasources [{:name     :welcome-message
+(def datasources [{:name     :spectrum-traces
                    :read-fn  :vanilla.fetcher/fetch}
+
                   {:name     :current-time
                    :read-fn  :vanilla.fetcher/current-time
                    :params   []

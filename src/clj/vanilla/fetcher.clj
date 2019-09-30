@@ -2,11 +2,12 @@
   (:require [vanilla.db :as db]))
 
 (defn fetch []
-  (prn "fetch service")
+  (prn "Spectrum Traces")
 
-  {:title "Welcome"
-   :text "Here's some text for you"
+  {:title "Spectrum Traces"
    :spectrum-data db/spectrum-data})
+
+
 
 (defn current-time []
   (prn  "current-time service")

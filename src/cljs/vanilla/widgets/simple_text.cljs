@@ -15,12 +15,14 @@
    (.log js/console ":simple-text" (str data) (str options))
    [:div
     [:div {:class "title-wrapper"}
-     [:h3 {:class "title"} (get-in data [:data :title])]]
+     [:h3 {:class "title"
+           :style {:background-color (:color options)}}
+      (get-in data [:data :title])]]
     [:div (merge {:class "simple-text-widget"}
                  {:style (-> options :wrapper :style)})
      [:div (merge {:class "data"}
                   {:style (-> options :data :style)})
-      [:p (get-in data [:data :text])]
-      (if (-> data :data :spectrum-data)
-        (doall
-          (map #(make-spectrum %) (-> data :data :spectrum-data))))]]]))
+      [:p {:style {:fontSize "50px"
+                   :font-weight "bold"
+                   :color "blue"}}
+       (get-in data [:data :text])]]]]))

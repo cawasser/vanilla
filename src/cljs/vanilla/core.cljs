@@ -2,33 +2,34 @@
   (:require [dashboard-clj.core :as d]
             [dashboard-clj.layouts.grid-layout-responsive :as grid]
             [vanilla.widgets.simple-text]
+            [vanilla.widgets.chart]
             [re-frame.core :as rf]))
 
-(def widgets [{:type        :simple-text
-               :name        :sample-widget
-               :data-source :welcome-message
-               :options     {:data    {:style {:font-weight      "bold"
-                                               :font-size        "large"
-                                               :background-color "red"
-                                               :color            "white"
-                                               :border-style     "solid"
-                                               :border-radius    "5px"
-                                               :border-width     "2px"}}
-                             :wrapper {:style {:border-style  "solid"
-                                               ;:border-radius "5px"
-                                               :border-width  "5px"}}}}
+(def widgets [
+              {:type        :line-chart
+               :name        :spectrum-widget
+               :data-source :spectrum-traces
+               :options     {:title       "Dashboard(Clojure)"
+                             :chart-title "commits"
+                             :x-title     "frequency"
+                             :y-title     "amount"
+                             :color       "lightgreen"
+                             :style-name  "widget"
+                             :height      "500px"}}
+
+
               {:type        :simple-text
                :name        :time-widget
                :data-source :current-time
-               :options     {}}])
+               :options     {:color "lightblue"}}])
 
 (def widget-layout {
-                    :sample-widget {:layout-opts {:position {:lg {:x 0 :y 0 :w 2 :h 2}
-                                                             :md {:x 0 :y 0 :w 2 :h 2}
-                                                             :sm {:x 0 :y 0 :w 2 :h 2 :static true}}}}
-                    :time-widget   {:layout-opts {:position {:lg {:x 2 :y 0 :w 2 :h 2}
-                                                             :md {:x 2 :y 0 :w 2 :h 2}
-                                                             :sm {:x 0 :y 2 :w 2 :h 2 :static true}}}}})
+                    :spectrum-widget {:layout-opts {:position {:lg {:x 0 :y 0 :w 2 :h 2}
+                                                               :md {:x 0 :y 0 :w 2 :h 2}
+                                                               :sm {:x 0 :y 0 :w 2 :h 2 :static true}}}}
+                    :time-widget     {:layout-opts {:position {:lg {:x 2 :y 0 :w 2 :h 2}
+                                                               :md {:x 2 :y 0 :w 2 :h 2}
+                                                               :sm {:x 0 :y 2 :w 2 :h 2 :static true}}}}})
 
 (def dashboard {
                 :layout  :responsive-grid-layout
