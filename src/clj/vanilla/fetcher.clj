@@ -5,7 +5,7 @@
   (prn "Spectrum Traces")
 
   {:title "Spectrum Traces"
-   :spectrum-data db/spectrum-data})
+   :spectrum-data (db/spectrum-data)})
 
 
 
