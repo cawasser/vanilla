@@ -5,7 +5,9 @@
     (:gen-class))
 
 (def datasources [{:name     :spectrum-traces
-                   :read-fn  :vanilla.fetcher/fetch}
+                   :read-fn  :vanilla.fetcher/fetch
+                   :schedule {:in    [0 :seconds]
+                              :every [2 :seconds]}}
 
                   {:name     :current-time
                    :read-fn  :vanilla.fetcher/current-time

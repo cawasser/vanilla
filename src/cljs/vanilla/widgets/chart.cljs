@@ -66,26 +66,35 @@
     name
     (fn [data options]
       (.log js/console (str name) (str data) (str options))
-      [:div {:class "chart" :style {:height (:height options) :width "100%"}}
+      ;(.log js/console (str extract))
+      [:div {:class "chart" :style {:height (get-in options [:viz :height]) :width "100%"}}
        [:div {:class "title-wrapper"}
         [:h3 {:class "title"
-              :style {:background-color (:color options)}}
-         (:title options)]]
+              :style {:background-color (get-in options [:viz :banner-color])}}
+         (get-in options [:viz :title])]]
 
        [:div
-        [:select {:on-click #(.log js/console "clicked")}
+        [:select {:on-click #(do
+                               (.log js/console "clicked")
+                               (.stopPropagation (.-event %)))}
          (map #(into ^{:key %} [:option] (:name %))
-              (get-in data [:data :spectrum-data]))]]
+              (get-in data [:data (get-in options [:src :extract])]))]]
 
-       [:div {:class (str (:style-name options)) :style {:width "95%" :height "40%"}}
+       [:div {:class (str (get-in options [:viz :style-name])) :style {:width "95%" :height "40%"}}
         [render-fn
          {:chart-options
-          {:title  {:text (:name data)}
+          {:title  {:text (get data (get-in options [:src :name]))}
 
-           :xAxis  {:title      {:text (:x-title options)}
-                    :categories (into [] (range (count (get-in data [:data :spectrum-data 0 :values]))))}
+           :xAxis  {:title      {:text (get-in options [:viz :x-title])}
+                    :categories (into [] (range (count (get-in data [:data
+                                                                     (get-in options [:src :extract])
+                                                                     (get-in options [:src :selector])
+                                                                     (get-in options [:src :values])]))))}
 
-           :yAxis  {:title {:text (:y-title options)}}
+           :yAxis  {:title {:text (get-in options [:viz :y-title])}}
 
            :series [{:name (:chart-title options)
-                     :data (into [] (get-in data [:data :spectrum-data 0 :values]))}]}}]]])))
+                     :data (into [] (get-in data [:data
+                                                  (get-in options [:src :extract])
+                                                  (get-in options [:src :selector])
+                                                  (get-in options [:src :values])]))}]}}]]])))

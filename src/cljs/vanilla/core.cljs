@@ -7,16 +7,41 @@
 
 (def widgets [
               {:type        :line-chart
-               :name        :spectrum-widget
+               :name        :spectrum-line-widget
                :data-source :spectrum-traces
-               :options     {:title       "Dashboard(Clojure)"
-                             :chart-title "commits"
-                             :x-title     "frequency"
-                             :y-title     "amount"
-                             :color       "lightgreen"
-                             :style-name  "widget"
-                             :height      "500px"}}
+               :options     {:src {:extract  :spectrum-data
+                                   :selector 0
+                                   :name     :name
+                                   :values   :values
+                                   :x-val    :x
+                                   :y-val    :y}
+                             :viz {:title        "Channels"
+                                   :chart-title  "dB"
+                                   :x-title      "frequency"
+                                   :y-title      "power"
+                                   :banner-color "lightgreen"
+                                   :line-color   "red"
+                                   :style-name   "widget"
+                                   :height       "500px"}}}
 
+
+              {:type        :bar-chart
+               :name        :spectrum-bar-widget
+               :data-source :spectrum-traces
+               :options     {:src {:extract  :spectrum-data
+                                   :selector 0
+                                   :name     :name
+                                   :values   :values
+                                   :x-val    :x
+                                   :y-val    :y}
+                             :viz {:title        "Channels"
+                                   :chart-title  "dB"
+                                   :x-title      "frequency"
+                                   :y-title      "power"
+                                   :banner-color "yellow"
+                                   :line-color   "red"
+                                   :style-name   "widget"
+                                   :height       "500px"}}}
 
               {:type        :simple-text
                :name        :time-widget
@@ -24,9 +49,12 @@
                :options     {:color "lightblue"}}])
 
 (def widget-layout {
-                    :spectrum-widget {:layout-opts {:position {:lg {:x 0 :y 0 :w 2 :h 2}
-                                                               :md {:x 0 :y 0 :w 2 :h 2}
-                                                               :sm {:x 0 :y 0 :w 2 :h 2 :static true}}}}
+                    :spectrum-line-widget {:layout-opts {:position {:lg {:x 0 :y 0 :w 2 :h 2}
+                                                                    :md {:x 0 :y 0 :w 2 :h 2}
+                                                                    :sm {:x 0 :y 0 :w 2 :h 2 :static true}}}}
+                    :spectrum-bar-widget {:layout-opts {:position {:lg {:x 0 :y 0 :w 2 :h 2}
+                                                                   :md {:x 0 :y 0 :w 2 :h 2}
+                                                                   :sm {:x 0 :y 0 :w 2 :h 2 :static true}}}}
                     :time-widget     {:layout-opts {:position {:lg {:x 2 :y 0 :w 2 :h 2}
                                                                :md {:x 2 :y 0 :w 2 :h 2}
                                                                :sm {:x 0 :y 2 :w 2 :h 2 :static true}}}}})
