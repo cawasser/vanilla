@@ -1,17 +1,18 @@
-(ns vanilla.widgets.chart
+(ns vanilla.widgets.bar-chart
   (:require [reagent.core :as r]
-            [reagent.ratom :refer-macros [reaction]]
-            [cljsjs.highcharts]
-            [cljsjs.jquery]
-            [dashboard-clj.widgets.core :as widget-common]))
+    [reagent.ratom :refer-macros [reaction]]
+    [cljsjs.highcharts]
+    [cljsjs.jquery]
+    [dashboard-clj.widgets.core :as widget-common]))
 
 
 (defn- render
   []
   [:div {:style {:width "100%" :height "100%"}}])
 
-(def line-chart-config
-  {:chart {:type            "line"
+
+(def bar-chart-config
+  {:chart {:type            "column"
            :backgroundColor "transparent"
 
            :style           {:labels {
@@ -22,28 +23,27 @@
    :xAxis {:labels {:style {:color "#fff"}}}})
 
 
-(defn- plot-line [this]
+(defn- plot-bar [this]
   (let [config     (-> this r/props :chart-options)
-        all-config (merge line-chart-config config)]
+        all-config (merge bar-chart-config config)]
     (.highcharts (js/$ (r/dom-node this))
                  (clj->js all-config))))
 
-(defn- line-chart
+
+(defn- bar-chart
   [chart-options]
   (r/create-class {:reagent-render       render
-                   :component-did-mount  plot-line
-                   :component-did-update plot-line}))
+                   :component-did-mount  plot-bar
+                   :component-did-update plot-bar}))
 
 
 (widget-common/register-widget
-  :line-chart
+  :bar-chart
   (fn [data options]
     (.log js/console (str (get-in data [:data
                                         (get-in options [:src :extract] :data)
                                         (get-in options [:src :selector] :selector)
                                         (get-in options [:src :name] :name)])))
-    ;(.log js/console (str name) (str (-> options :viz :animation)))
-    ;(.log js/console (str extract))
     [:div {:class "chart" :style {:height (get-in options [:viz :height]) :width "100%"}}
      [:div {:class "title-wrapper"}
       [:h3 {:class "title"
@@ -58,7 +58,7 @@
             (get-in data [:data (get-in options [:src :extract] :data)]))]]
 
      [:div {:class (str (get-in options [:viz :style-name] "widget")) :style {:width "95%" :height "40%"}}
-      [line-chart
+      [bar-chart
        {:chart-options
         {:title       {:text (get-in data
                                      [:data
@@ -74,9 +74,7 @@
 
          :yAxis       {:title {:text (get-in options [:viz :y-title] "y-axis")}}
 
-         :plotOptions {:line    {:color     (get-in options [:viz :line-color] "black")
-                                 :lineWidth (get-in options [:viz :line-width] 2)}
-                       :series  {:animation (-> options :viz :animation)}
+         :plotOptions {:series  {:animation (-> options :viz :animation)}
                        :tooltip (-> options :viz :tooltip)}
 
          :series      [{:name (get-in options [:viz :chart-title] "data")
