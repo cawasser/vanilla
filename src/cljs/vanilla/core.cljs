@@ -12,7 +12,7 @@
                :data-source :spectrum-traces
                :options     {:src {:extract  :spectrum-data
                                    :selector 0
-                                   :name     :nil
+                                   :name     :name
                                    :values   :values
                                    :x-val    :x
                                    :y-val    :y}
@@ -34,7 +34,7 @@
                :data-source :spectrum-traces
                :options     {:src {:extract  :spectrum-data
                                    :selector 0
-                                   :name     :nil
+                                   :name     :name
                                    :values   :values
                                    :x-val    :x
                                    :y-val    :y}
@@ -49,7 +49,8 @@
               {:type        :simple-text
                :name        :time-widget
                :data-source :current-time
-               :options     {:color "lightblue"}}])
+               :options     {:viz {:title "Current Time"
+                                   :color "lightblue"}}}])
 
 (def widget-layout {
                     :spectrum-line-widget {:layout-opts {:position {:lg {:x 0 :y 0 :w 5 :h 2}

@@ -1,6 +1,7 @@
 (ns vanilla.widgets.simple-text
     (:require [reagent.core :as r :refer [atom]]
-              [dashboard-clj.widgets.core :as widget-common]))
+              [dashboard-clj.widgets.core :as widget-common]
+              [vanilla.widgets.basic-widget :as basic]))
 
 
 (defn make-spectrum [data]
@@ -13,11 +14,9 @@
  :simple-text
  (fn [data options]
    (.log js/console ":simple-text" (str data) (str options))
-   [:div
-    [:div {:class "title-wrapper"}
-     [:h3 {:class "title"
-           :style {:background-color (:color options)}}
-      (get-in data [:data :title])]]
+
+   [basic/basic-widget data options
+
     [:div (merge {:class "simple-text-widget"}
                  {:style (-> options :wrapper :style)})
      [:div (merge {:class "data"}
