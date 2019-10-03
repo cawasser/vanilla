@@ -3,7 +3,7 @@
             [dashboard-clj.layouts.grid-layout-responsive :as grid]
             [vanilla.widgets.simple-text]
             [vanilla.widgets.chart]
-            [vanilla-widgets.bar-chart]
+            [vanilla.widgets.bar-chart]
             [re-frame.core :as rf]))
 
 (def widgets [
