@@ -11,7 +11,7 @@
                :data-source :spectrum-traces
                :options     {:src {:extract  :spectrum-data
                                    :selector 0
-                                   :name     :name
+                                   :name     :nil
                                    :values   :values
                                    :x-val    :x
                                    :y-val    :y}
@@ -21,8 +21,11 @@
                                    :y-title      "power"
                                    :banner-color "lightgreen"
                                    :line-color   "red"
+                                   :line-width   0.5
+                                   :animation    false
                                    :style-name   "widget"
-                                   :height       "500px"}}}
+                                   :height       "500px"
+                                   :tooltip      {:followPointer true}}}}
 
 
               {:type        :bar-chart
@@ -30,7 +33,7 @@
                :data-source :spectrum-traces
                :options     {:src {:extract  :spectrum-data
                                    :selector 0
-                                   :name     :name
+                                   :name     :nil
                                    :values   :values
                                    :x-val    :x
                                    :y-val    :y}
@@ -39,7 +42,6 @@
                                    :x-title      "frequency"
                                    :y-title      "power"
                                    :banner-color "yellow"
-                                   :line-color   "red"
                                    :style-name   "widget"
                                    :height       "500px"}}}
 
@@ -49,15 +51,15 @@
                :options     {:color "lightblue"}}])
 
 (def widget-layout {
-                    :spectrum-line-widget {:layout-opts {:position {:lg {:x 0 :y 0 :w 2 :h 2}
-                                                                    :md {:x 0 :y 0 :w 2 :h 2}
+                    :spectrum-line-widget {:layout-opts {:position {:lg {:x 0 :y 0 :w 5 :h 2}
+                                                                    :md {:x 0 :y 0 :w 5 :h 2}
                                                                     :sm {:x 0 :y 0 :w 2 :h 2 :static true}}}}
-                    :spectrum-bar-widget {:layout-opts {:position {:lg {:x 0 :y 0 :w 2 :h 2}
-                                                                   :md {:x 0 :y 0 :w 2 :h 2}
-                                                                   :sm {:x 0 :y 0 :w 2 :h 2 :static true}}}}
-                    :time-widget     {:layout-opts {:position {:lg {:x 2 :y 0 :w 2 :h 2}
-                                                               :md {:x 2 :y 0 :w 2 :h 2}
-                                                               :sm {:x 0 :y 2 :w 2 :h 2 :static true}}}}})
+                    :spectrum-bar-widget  {:layout-opts {:position {:lg {:x 0 :y 2 :w 5 :h 2}
+                                                                    :md {:x 0 :y 2 :w 5 :h 2}
+                                                                    :sm {:x 0 :y 0 :w 2 :h 2 :static true}}}}
+                    :time-widget          {:layout-opts {:position {:lg {:x 5 :y 0 :w 1 :h 2}
+                                                                    :md {:x 5 :y 0 :w 1 :h 2}
+                                                                    :sm {:x 0 :y 2 :w 2 :h 2 :static true}}}}})
 
 (def dashboard {
                 :layout  :responsive-grid-layout

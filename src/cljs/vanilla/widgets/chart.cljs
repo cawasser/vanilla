@@ -60,17 +60,26 @@
                    :component-did-mount  plot-line
                    :component-did-update plot-line}))
 
+
+(def options)
+(def banner-color (get-in options [:viz :banner-color] "lightblue"))
+
+
 (doseq [{:keys [name render-fn]} [{:name :bar-chart :render-fn bar-chart}
                                   {:name :line-chart :render-fn line-chart}]]
   (widget-common/register-widget
     name
     (fn [data options]
-      (.log js/console (str name) (str data) (str options))
+      (.log js/console (str (get-in data [:data
+                                          (get-in options [:src :extract] :data)
+                                          (get-in options [:src :selector] :selector)
+                                          (get-in options [:src :name] :name)])))
+      ;(.log js/console (str name) (str (-> options :viz :animation)))
       ;(.log js/console (str extract))
       [:div {:class "chart" :style {:height (get-in options [:viz :height]) :width "100%"}}
        [:div {:class "title-wrapper"}
         [:h3 {:class "title"
-              :style {:background-color (get-in options [:viz :banner-color])}}
+              :style {:background-color (get-in options [:viz :banner-color] "lightblue")}}
          (get-in options [:viz :title])]]
 
        [:div
@@ -78,23 +87,32 @@
                                (.log js/console "clicked")
                                (.stopPropagation (.-event %)))}
          (map #(into ^{:key %} [:option] (:name %))
-              (get-in data [:data (get-in options [:src :extract])]))]]
+              (get-in data [:data (get-in options [:src :extract] :data)]))]]
 
-       [:div {:class (str (get-in options [:viz :style-name])) :style {:width "95%" :height "40%"}}
+       [:div {:class (str (get-in options [:viz :style-name] "widget")) :style {:width "95%" :height "40%"}}
         [render-fn
          {:chart-options
-          {:title  {:text (get data (get-in options [:src :name]))}
+          {:title       {:text (get-in data
+                                       [:data
+                                        (get-in options [:src :extract] :data)
+                                        (get-in options [:src :selector] :selector)
+                                        (get-in options [:src :name] :name)])}
 
-           :xAxis  {:title      {:text (get-in options [:viz :x-title])}
-                    :categories (into [] (range (count (get-in data [:data
-                                                                     (get-in options [:src :extract])
-                                                                     (get-in options [:src :selector])
-                                                                     (get-in options [:src :values])]))))}
+           :xAxis       {:title      {:text (get-in options [:viz :x-title] "x-axis")}
+                         :categories (into [] (range (count (get-in data [:data
+                                                                          (get-in options [:src :extract] :data)
+                                                                          (get-in options [:src :selector] :selector)
+                                                                          (get-in options [:src :values] :values)]))))}
 
-           :yAxis  {:title {:text (get-in options [:viz :y-title])}}
+           :yAxis       {:title {:text (get-in options [:viz :y-title] "y-axis")}}
 
-           :series [{:name (:chart-title options)
-                     :data (into [] (get-in data [:data
-                                                  (get-in options [:src :extract])
-                                                  (get-in options [:src :selector])
-                                                  (get-in options [:src :values])]))}]}}]]])))
+           :plotOptions {:line    {:color     (get-in options [:viz :line-color] "black")
+                                   :lineWidth (get-in options [:viz :line-width] 2)}
+                         :series  {:animation (-> options :viz :animation)}
+                         :tooltip (-> options :viz :tooltip)}
+
+           :series      [{:name (get-in options [:viz :chart-title] "data")
+                          :data (into [] (get-in data [:data
+                                                       (get-in options [:src :extract] :data)
+                                                       (get-in options [:src :selector] :selector)
+                                                       (get-in options [:src :values] :values)]))}]}}]]])))
