@@ -7,7 +7,7 @@
 (widget-common/register-widget
  :simple-text
  (fn [data options]
-   (.log js/console ":simple-text" (str data) (str options))
+   ;(.log js/console ":simple-text" (str data) (str options))
 
    [basic/basic-widget data options
 

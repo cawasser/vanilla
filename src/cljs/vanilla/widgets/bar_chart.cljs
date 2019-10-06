@@ -4,7 +4,8 @@
             [cljsjs.highcharts]
             [cljsjs.jquery]
             [dashboard-clj.widgets.core :as widget-common]
-            [vanilla.widgets.basic-widget :as basic]))
+            [vanilla.widgets.basic-widget :as basic]
+            [vanilla.widgets.util :as util]))
 
 
 (defn- render
@@ -27,6 +28,9 @@
 (defn- plot-bar [this]
   (let [config     (-> this r/props :chart-options)
         all-config (merge bar-chart-config config)]
+
+    (.log js/console (str "plt-bar " all-config))
+
     (.highcharts (js/$ (r/dom-node this))
                  (clj->js all-config))))
 
@@ -38,33 +42,39 @@
                    :component-did-update plot-bar}))
 
 
+(defn embed-bar [data options series]
+  (let [dats (get-in data [:data (get-in options [:src :extract])])
+        num  (count dats)]
+
+    (.log js/console (str "embed-bar " data))
+
+    [bar-chart
+     {:chart-options
+      {:zoomType    :x
+       :title       {:text ""}
+
+       :xAxis       {:title {:text (get-in options [:viz :x-title] "x-axis")}}
+
+       :yAxis       {:title      {:text (get-in options [:viz :y-title] "y-axis")}
+                     :color      (get-in options [:viz :line-colors])
+                     :categories (into [] (map str (range (count (:values (first dats))))))}
+
+       :plotOptions {:series  {:animation (-> options :viz :animation)}
+                     :tooltip (-> options :viz :tooltip)
+                     :column  {:pointPadding 0.2
+                               :borderWidth  0}}
+
+       :series      series}}]))
+
+
 (widget-common/register-widget
   :bar-chart
   (fn [data options]
     (let [dats (get-in data [:data (get-in options [:src :extract])])
           num  (count dats)]
-      ;(.log js/console (str ":bar-chart " (into [] (map str (range (count (:values (first dats))))))))
 
       [basic/basic-widget data options
+       [:div {:style {:width "95%" :height "100%"}}
 
-        [bar-chart
-         {:chart-options
-          {:zoomType    :x
-           :title       {:text ""}
-
-           :xAxis       {:title {:text (get-in options [:viz :x-title] "x-axis")}}
-
-           :yAxis       {:title      {:text (get-in options [:viz :y-title] "y-axis")}
-                         :color      (get-in options [:viz :line-colors])
-                         :categories (into [] (map str (range (count (:values (first dats))))))}
-
-           :plotOptions {:series  {:animation (-> options :viz :animation)}
-                         :tooltip (-> options :viz :tooltip)
-                         :column  {:pointPadding 0.2
-                                   :borderWidth  0}}
-
-           :series      (into []
-                              (for [n (range num)]
-                                {:name (get-in dats [n (get-in options [:src :name] :name)] (str "set " n))
-                                 :data (into [] (get-in dats [n (get-in options [:src :values] :values)]))}))}}]])))
+        [embed-bar data options (util/line->bar data options)]]])))
 

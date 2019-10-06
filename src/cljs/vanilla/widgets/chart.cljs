@@ -35,30 +35,38 @@
                    :component-did-mount  plot-line
                    :component-did-update plot-line}))
 
+(defn embed-line [data options]
+  (fn [data options]
+    (let [dats (get-in data [:data (get-in options [:src :extract])])
+          num  (count dats)]
+
+      ;(.log js/console (str ":line-chart " dats))))
+
+      [line-chart
+       {:chart-options
+        {:zoomType    :x
+         :title       {:text ""}
+
+         :xAxis       {:title {:text (get-in options [:viz :x-title] "x-axis")}}
+
+         :yAxis       {:title {:text (get-in options [:viz :y-title] "y-axis")}}
+
+         :plotOptions {:line    {:lineWidth (get-in options [:viz :line-width] 1)}
+                       :series  {:animation (-> options :viz :animation)}
+                       :tooltip (-> options :viz :tooltip)}
+
+         :series      (into []
+                            (for [n (range num)]
+                              {:name  (get-in dats [n (get-in options [:src :name] :name)] (str "set " n))
+                               :data  (into [] (get-in dats [n (get-in options [:src :values] :values)]))}))}}])))
+
 
 (widget-common/register-widget
   :line-chart
   (fn [data options]
-    (let [dats (get-in data [:data (get-in options [:src :extract])])
-          num  (count dats)]
-      ;(.log js/console (str ":line-chart " (str (first dats))))
 
       [basic/basic-widget data options
 
-        [line-chart
-         {:chart-options
-          {:zoomType    :x
-           :title       {:text ""}
+       [:div {:style {:width "95%" :height "100%"}}
 
-           :xAxis       {:title {:text (get-in options [:viz :x-title] "x-axis")}}
-
-           :yAxis       {:title {:text (get-in options [:viz :y-title] "y-axis")}}
-
-           :plotOptions {:line    {:lineWidth (get-in options [:viz :line-width] 1)}
-                         :series  {:animation (-> options :viz :animation)}
-                         :tooltip (-> options :viz :tooltip)}
-
-           :series      (into []
-                              (for [n (range num)]
-                                {:name  (get-in dats [n (get-in options [:src :name] :name)] (str "set " n))
-                                 :data  (into [] (get-in dats [n (get-in options [:src :values] :values)]))}))}}]])))
+        [embed-line data options]]]))
