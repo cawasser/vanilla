@@ -3,7 +3,8 @@
             [reagent.ratom :refer-macros [reaction]]
             [cljsjs.highcharts]
             [cljsjs.jquery]
-            [dashboard-clj.widgets.core :as widget-common]))
+            [dashboard-clj.widgets.core :as widget-common]
+            [vanilla.widgets.basic-widget :as basic]))
 
 
 (defn- render
@@ -11,7 +12,7 @@
   [:div {:style {:width "100%" :height "100%"}}])
 
 (def line-chart-config
-  {:chart {:type            "line"
+  {:chart {:type            :line
            :backgroundColor "transparent"
 
            :style           {:labels {
@@ -28,59 +29,44 @@
     (.highcharts (js/$ (r/dom-node this))
                  (clj->js all-config))))
 
-(defn- line-chart
+(defn line-chart
   [chart-options]
   (r/create-class {:reagent-render       render
                    :component-did-mount  plot-line
                    :component-did-update plot-line}))
 
+(defn embed-line [data options]
+  (fn [data options]
+    (let [dats (get-in data [:data (get-in options [:src :extract])])
+          num  (count dats)]
+
+      ;(.log js/console (str ":line-chart " dats))))
+
+      [line-chart
+       {:chart-options
+        {:zoomType    :x
+         :title       {:text ""}
+
+         :xAxis       {:title {:text (get-in options [:viz :x-title] "x-axis")}}
+
+         :yAxis       {:title {:text (get-in options [:viz :y-title] "y-axis")}}
+
+         :plotOptions {:line    {:lineWidth (get-in options [:viz :line-width] 1)}
+                       :series  {:animation (-> options :viz :animation)}
+                       :tooltip (-> options :viz :tooltip)}
+
+         :series      (into []
+                            (for [n (range num)]
+                              {:name  (get-in dats [n (get-in options [:src :name] :name)] (str "set " n))
+                               :data  (into [] (get-in dats [n (get-in options [:src :values] :values)]))}))}}])))
+
 
 (widget-common/register-widget
   :line-chart
   (fn [data options]
-    (.log js/console (str (get-in data [:data
-                                        (get-in options [:src :extract] :data)
-                                        (get-in options [:src :selector] :selector)
-                                        (get-in options [:src :name] :name)])))
-    ;(.log js/console (str name) (str (-> options :viz :animation)))
-    ;(.log js/console (str extract))
-    [:div {:class "chart" :style {:height (get-in options [:viz :height]) :width "100%"}}
-     [:div {:class "title-wrapper"}
-      [:h3 {:class "title"
-            :style {:background-color (get-in options [:viz :banner-color] "lightblue")}}
-       (get-in options [:viz :title])]]
 
-     [:div
-      [:select {:on-click #(do
-                             (.log js/console "clicked")
-                             (.stopPropagation (.-event %)))}
-       (map #(into ^{:key %} [:option] (:name %))
-            (get-in data [:data (get-in options [:src :extract] :data)]))]]
+      [basic/basic-widget data options
 
-     [:div {:class (str (get-in options [:viz :style-name] "widget")) :style {:width "95%" :height "40%"}}
-      [line-chart
-       {:chart-options
-        {:title       {:text (get-in data
-                                     [:data
-                                      (get-in options [:src :extract] :data)
-                                      (get-in options [:src :selector] :selector)
-                                      (get-in options [:src :name] :name)])}
+       [:div {:style {:width "95%" :height "100%"}}
 
-         :xAxis       {:title      {:text (get-in options [:viz :x-title] "x-axis")}
-                       :categories (into [] (range (count (get-in data [:data
-                                                                        (get-in options [:src :extract] :data)
-                                                                        (get-in options [:src :selector] :selector)
-                                                                        (get-in options [:src :values] :values)]))))}
-
-         :yAxis       {:title {:text (get-in options [:viz :y-title] "y-axis")}}
-
-         :plotOptions {:line    {:color     (get-in options [:viz :line-color] "black")
-                                 :lineWidth (get-in options [:viz :line-width] 2)}
-                       :series  {:animation (-> options :viz :animation)}
-                       :tooltip (-> options :viz :tooltip)}
-
-         :series      [{:name (get-in options [:viz :chart-title] "data")
-                        :data (into [] (get-in data [:data
-                                                     (get-in options [:src :extract] :data)
-                                                     (get-in options [:src :selector] :selector)
-                                                     (get-in options [:src :values] :values)]))}]}}]]]))
+        [embed-line data options]]]))

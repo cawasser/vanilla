@@ -1,4 +1,4 @@
-(defproject vanilla "0.1.2-SNAPSHOT"
+(defproject vanilla "0.1.3-SNAPSHOT"
   :description "Vanilla Dashboard - a simple dashboard built on dashboard-clj"
   :url ""
   :dependencies [[org.clojure/clojure "1.8.0"]
@@ -6,7 +6,8 @@
                  [environ "1.0.2"]
                  [com.multunus/dashboard-clj "0.1.0-SNAPSHOT"]
                  [cljsjs/highcharts "4.2.2-2"]
-                 [cljsjs/jquery "1.11.3-0"]]
+                 [cljsjs/jquery "1.11.3-0"]
+                 [org.webjars.npm/bulma "0.7.5"]]
 
   :min-lein-version "2.6.1"
 

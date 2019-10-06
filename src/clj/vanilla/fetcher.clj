@@ -1,11 +1,19 @@
 (ns vanilla.fetcher
   (:require [vanilla.db :as db]))
 
-(defn fetch []
+(defn spectrum-traces []
   (prn "Spectrum Traces")
 
   {:title "Spectrum Traces"
    :spectrum-data (db/spectrum-data)})
+
+
+
+(defn usage-data []
+  (prn "Usage Data")
+
+  {:title "Usage Data"
+   :usage-data (db/usage-data)})
 
 
 
