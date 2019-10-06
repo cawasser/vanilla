@@ -31,7 +31,7 @@
                  (clj->js all-config))))
 
 
-(defn- bar-chart
+(defn bar-chart
   [chart-options]
   (r/create-class {:reagent-render       render
                    :component-did-mount  plot-bar
@@ -43,7 +43,7 @@
   (fn [data options]
     (let [dats (get-in data [:data (get-in options [:src :extract])])
           num  (count dats)]
-      (.log js/console (str ":bar-chart " (into [] (map str (range (count (:values (first dats))))))))
+      ;(.log js/console (str ":bar-chart " (into [] (map str (range (count (:values (first dats))))))))
 
       [basic/basic-widget data options
 

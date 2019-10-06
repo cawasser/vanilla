@@ -4,12 +4,6 @@
               [vanilla.widgets.basic-widget :as basic]))
 
 
-(defn make-spectrum [data]
-  [:div
-   [:p (-> data :name)]
-   [:p "count " (count (-> data :values))]])
-
-
 (widget-common/register-widget
  :simple-text
  (fn [data options]
@@ -21,7 +15,8 @@
                  {:style (-> options :wrapper :style)})
      [:div (merge {:class "data"}
                   {:style (-> options :data :style)})
-      [:p {:style {:fontSize "50px"
+      [:p {:style {:paddingTop "25%"
+                   :fontSize "50px"
                    :font-weight "bold"
                    :color "blue"}}
        (get-in data [:data :text])]]]]))

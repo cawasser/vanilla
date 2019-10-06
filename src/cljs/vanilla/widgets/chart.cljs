@@ -29,7 +29,7 @@
     (.highcharts (js/$ (r/dom-node this))
                  (clj->js all-config))))
 
-(defn- line-chart
+(defn line-chart
   [chart-options]
   (r/create-class {:reagent-render       render
                    :component-did-mount  plot-line
@@ -41,7 +41,7 @@
   (fn [data options]
     (let [dats (get-in data [:data (get-in options [:src :extract])])
           num  (count dats)]
-      (.log js/console (str ":line-chart " (str (first dats))))
+      ;(.log js/console (str ":line-chart " (str (first dats))))
 
       [basic/basic-widget data options
 
@@ -54,12 +54,11 @@
 
            :yAxis       {:title {:text (get-in options [:viz :y-title] "y-axis")}}
 
-           :plotOptions {:line    {:lineWidth (get-in options [:viz :line-width] 3)}
+           :plotOptions {:line    {:lineWidth (get-in options [:viz :line-width] 1)}
                          :series  {:animation (-> options :viz :animation)}
                          :tooltip (-> options :viz :tooltip)}
 
            :series      (into []
                               (for [n (range num)]
                                 {:name  (get-in dats [n (get-in options [:src :name] :name)] (str "set " n))
-                                 :color (get-in options [:viz :line-colors (mod n num)])
                                  :data  (into [] (get-in dats [n (get-in options [:src :values] :values)]))}))}}]])))

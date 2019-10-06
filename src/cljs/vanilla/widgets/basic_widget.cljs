@@ -15,7 +15,9 @@
                   (get-in options [:viz :banner-color] "lightblue")}}
      (get-in options [:viz :title])]]
 
-   [:div {:class (str (get-in options [:viz :style-name] "widget")) :style {:width "95%" :height "40%"}}
+   [:div {:class (str (get-in options [:viz :style-name] "widget"))
+          :style {:width "100%" :height "40%"
+                  :marginRight "50px" :marginTop "25px"}}
 
     custom-content]])
 
