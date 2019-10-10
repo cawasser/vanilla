@@ -12,8 +12,9 @@
   :min-lein-version "2.6.1"
 
   :source-paths ["src/clj" "src/cljs"]
-
   :test-paths ["test/clj"]
+  :resource-paths ["resources" "target/cljsbuild"]
+  :target-path "target/%s/"
 
   :clean-targets ^{:protect false} [:target-path :compile-path "resources/public/js"]
 
@@ -27,6 +28,8 @@
   ;; (browser-repl) live.
   :repl-options {:init-ns user}
 
+  :plugins [[lein-cljsbuild "1.1.7"]]
+
   :cljsbuild {:builds
               {:app
                {:source-paths ["src/cljs"]
@@ -35,10 +38,10 @@
                 ;; Alternatively, you can configure a function to run every time figwheel reloads.
                 ;; :figwheel {:on-jsload "vanilla.core/on-figwheel-reload"}
 
-                :compiler     {:main vanilla.core
-                               :asset-path "js/compiled/out"
-                               :output-to "resources/public/js/compiled/app.js"
-                               :output-dir "resources/public/js/compiled/out"
+                :compiler     {:main                 vanilla.core
+                               :asset-path           "js/compiled/out"
+                               :output-to            "resources/public/js/compiled/app.js"
+                               :output-dir           "resources/public/js/compiled/out"
                                :source-map-timestamp true}}}}
 
   ;; When running figwheel from nREPL, figwheel will read this configuration
@@ -47,9 +50,9 @@
   ;; not be picked up, instead configure figwheel here on the top level.
 
   :figwheel {;; :http-server-root "public"       ;; serve static assets from resources/public/
-             :server-port 3469                ;; default
+             :server-port    3469                           ;; default
              ;; :server-ip "127.0.0.1"           ;; default
-             :css-dirs ["resources/public/css"]  ;; watch and update CSS
+             :css-dirs       ["resources/public/css"]       ;; watch and update CSS
 
              ;; Instead of booting a separate server on its own port, we embed
              ;; the server ring handler inside figwheel's http-kit server, so
@@ -76,41 +79,42 @@
 
   :doo {:build "test"}
 
-  :profiles {:dev
+  :profiles {:dev     {:source-paths ["dev"]
+                       :dependencies [[binaryage/devtools "0.9.10"]
+                                      [figwheel "0.5.2"]
+                                      [figwheel-sidecar "0.5.2"]
+                                      [pjstadig/humane-test-output "0.9.0"]
+                                      [prone "1.6.1"]
+                                      [com.cemerick/piggieback "0.2.1"]
+                                      [org.clojure/tools.nrepl "0.2.12"]
+                                      [org.clojure/tools.namespace "0.2.3"]
+                                      [org.clojure/java.classpath "0.2.0"]]
 
-             {
-              :source-paths ["dev"]
-              :dependencies [[binaryage/devtools "0.9.10"]
-                             [figwheel "0.5.2"]
-                             [figwheel-sidecar "0.5.2"]
-                             [pjstadig/humane-test-output "0.9.0"]
-                             [prone "1.6.1"]
-                             [com.cemerick/piggieback "0.2.1"]
-                             [org.clojure/tools.nrepl "0.2.12"]
-                             [org.clojure/tools.namespace "0.2.3"]
-                             [org.clojure/java.classpath "0.2.0"]]
+                       :plugins      [[lein-figwheel "0.5.2"]
+                                      [lein-doo "0.1.6"]]
 
-              :plugins [[lein-figwheel "0.5.2"]
-                        [lein-doo "0.1.6"]]
+                       :cljsbuild    {:builds
+                                      {:test
+                                       {:source-paths ["src/cljs" "test/cljs"]
+                                        :compiler
+                                                      {:output-to     "resources/public/js/compiled/testable.js"
+                                                       :main          vanilla.test-runner
+                                                       :optimizations :none}}}}}
 
-              :cljsbuild {:builds
-                          {:test
-                           {:source-paths ["src/cljs" "test/cljs"]
-                            :compiler
-                            {:output-to "resources/public/js/compiled/testable.js"
-                             :main vanilla.test-runner
-                             :optimizations :none}}}}}
+             :uberjar {:omit-source  true
+                       :prep-tasks   ["compile" ["cljsbuild" "once" "min"]]
+                       :cljsbuild    {:builds
+                                      {:min
+                                       {:source-paths ["src/cljc" "src/cljs"]
+                                        :compiler     {:output-dir       "target/cljsbuild/public/js/compiled"
+                                                       :output-to        "target/cljsbuild/public/js/compiled/app.js"
+                                                       :source-map       "target/cljsbuild/public/js/compiled/app.js.map"
+                                                       :optimizations    :advanced
+                                                       :pretty-print     false
+                                                       :infer-externs    true
+                                                       :closure-warnings {:externs-validation :off
+                                                                          :non-standard-jsdoc :off}}}}}
 
-             :uberjar
-             {:source-paths ^:replace ["src/clj"]
-              :hooks [leiningen.cljsbuild]
-              :omit-source true
-              :aot :all
-              :cljsbuild {:builds
-                          {:app
-                           {
-                            :source-paths ^:replace ["src/cljs"]
-                            :compiler
-                            {:optimizations :advanced
-                             :pretty-print false
-                             :pseudo-names true}}}}}})
+                       :aot          :all
+                       :uberjar-name "vanilla.jar"}})
+
