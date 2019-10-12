@@ -70,8 +70,7 @@
 (widget-common/register-widget
   :bar-chart
   (fn [data options]
-    (let [dats (get-in data [:data (get-in options [:src :extract])])
-          num  (count dats)]
+    (let []
 
       [basic/basic-widget data options
        [:div {:style {:width "95%" :height "100%"}}

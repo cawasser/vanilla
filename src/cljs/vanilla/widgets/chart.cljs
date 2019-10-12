@@ -52,8 +52,9 @@
          :yAxis       {:title {:text (get-in options [:viz :y-title] "y-axis")}}
 
          :plotOptions {:line    {:lineWidth (get-in options [:viz :line-width] 1)}
-                       :series  {:animation (-> options :viz :animation)}
-                       :tooltip (-> options :viz :tooltip)}
+                       :series  {:animation (get-in options [:viz :animation] false)}
+                       :tooltip (get-in options [:viz :tooltip] {})}
+
 
          :series      (into []
                             (for [n (range num)]

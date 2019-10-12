@@ -81,16 +81,16 @@
              {
               :source-paths ["dev"]
               :dependencies [[binaryage/devtools "0.9.10"]
-                             [figwheel "0.5.2"]
-                             [figwheel-sidecar "0.5.2"]
-                             [pjstadig/humane-test-output "0.9.0"]
-                             [prone "1.6.1"]
-                             [com.cemerick/piggieback "0.2.1"]
-                             [org.clojure/tools.nrepl "0.2.12"]
-                             [org.clojure/tools.namespace "0.2.3"]
-                             [org.clojure/java.classpath "0.2.0"]]
+                             [figwheel "0.5.19"]
+                             [figwheel-sidecar "0.5.19"]
+                             [pjstadig/humane-test-output "0.10.0"]
+                             [prone "2019-07-08"]
+                             [com.cemerick/piggieback "0.2.2"]
+                             [org.clojure/tools.nrepl "0.2.13"]
+                             [org.clojure/tools.namespace "0.3.1"]
+                             [org.clojure/java.classpath "0.3.0"]]
 
-              :plugins [[lein-figwheel "0.5.2"]
+              :plugins [[lein-figwheel "0.5.19"]
                         [lein-doo "0.1.6"]]
 
               :cljsbuild {:builds
