@@ -67,6 +67,8 @@
                                    :y-title      "power"
                                    :banner-color "yellow"
                                    :style-name   "widget"
+                                   :animation    false
+                                   :tooltip      {:followPointer true}
                                    :height       "500px"}}}
 
               {:type        :simple-text
@@ -94,7 +96,8 @@
                                    :slice-at 50}
                              :viz {:title        "Usage Data (side-by-side)"
                                    :banner-color "lavender"
-                                   :animation    false}}}])
+                                   :animation    false
+                                   :tooltip      {:followPointer true}}}}])
 
 
 

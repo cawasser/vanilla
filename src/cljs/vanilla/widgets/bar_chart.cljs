@@ -29,7 +29,7 @@
   (let [config     (-> this r/props :chart-options)
         all-config (merge bar-chart-config config)]
 
-    (.log js/console (str "plt-bar " all-config))
+    (.log js/console (str "plot-bar " all-config))
 
     (.highcharts (js/$ (r/dom-node this))
                  (clj->js all-config))))
@@ -59,10 +59,12 @@
                      :color      (get-in options [:viz :line-colors])
                      :categories (into [] (map str (range (count (:values (first dats))))))}
 
-       :plotOptions {:series  {:animation (-> options :viz :animation)}
-                     :tooltip (-> options :viz :tooltip)
+       :plotOptions {:series  {:animation (get-in options [:viz :animation] false)}
+                     :tooltip (get-in options [:viz :tooltip] {})
                      :column  {:pointPadding 0.2
-                               :borderWidth  0}}
+                               :borderWidth  0
+                               :dataLabels {:enabled
+                                            (get-in options [:viz :data-labels] false)}}}
 
        :series      series}}]))
 

@@ -19,7 +19,12 @@
           :style {:width "100%"
                   :height "40%"
                   :marginRight "50px"
-                  :marginTop "25px"}}
+                  :marginTop "25px"
+                  :cursor :default
+                  :border-style (if (get-in options [:viz :debug] false)
+                                  :dotted
+                                  :none)}
+          :on-mouse-down #(.stopPropagation %)}
 
     custom-content]])
 

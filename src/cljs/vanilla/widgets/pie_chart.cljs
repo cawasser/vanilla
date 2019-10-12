@@ -26,7 +26,12 @@
 
 (defn- plot-pie [this]
   (let [config     (-> this r/props :chart-options)
-        all-config (merge pie-chart-config config)]
+        render-to  {:render-to (r/dom-node this)}
+        all-config (merge pie-chart-config config render-to)]
+
+    (.log js/console (str "plot-pie " (-> this r/dom-node) ", "
+                          (-> this r/dom-node .-children) "|"))
+
     (.highcharts (js/$ (r/dom-node this))
                  (clj->js all-config))))
 
@@ -39,7 +44,7 @@
 
 (defn embed-pie [data options]
   (let [dats (util/process-data (get-in data [:data (get-in options [:src :extract])])
-                           (get-in options [:src :slice-at]))]
+                                (get-in options [:src :slice-at]))]
 
     ;(.log js/console (str ":pie-chart " name " " slice-at))
 
@@ -47,13 +52,14 @@
      [pie-chart
       {:chart-options
        {:title       {:text ""}
-        :plotOptions {:series  {:animation (-> options :viz :animation)}}
+        :plotOptions {:series {:animation (get-in options [:viz :animation] false)}}
+        :tooltip     (get-in options [:viz :tooltip] {})
         :series      dats}}]]))
 
 
 (widget-common/register-widget
   :pie-chart
   (fn [data options]
-      [basic/basic-widget data options
-       [:div {:style {:height "40%" :marginTop "-25px"}}
-        [embed-pie data options]]]))
+    [basic/basic-widget data options
+     [:div {:style {:height "40%" :marginTop "-25px"}}
+      [embed-pie data options]]]))
