@@ -28,8 +28,8 @@
                                    :line-width   0.5
                                    :animation    false
                                    :style-name   "widget"
-                                   :height       "575px"
                                    :tooltip      {:followPointer true}}}}
+                                   ;:debug        true}}}
 
               {:type        :line-chart
                :name        :spectrum-line-widget
@@ -48,9 +48,9 @@
                                    :line-width   0.5
                                    :animation    false
                                    :style-name   "widget"
-                                   :height       "575px"
                                    :tooltip      {:followPointer true}
                                    :icon         "timeline"}}}
+                                   ;:debug        true}}}
 
               {:type        :bar-chart
                :name        :spectrum-bar-widget
@@ -68,15 +68,15 @@
                                    :banner-color "yellow"
                                    :style-name   "widget"
                                    :animation    false
-                                   :tooltip      {:followPointer true}
-                                   :height       "500px"}}}
+                                   :tooltip      {:followPointer true}}}}
+                                   ;:debug        true}}}
 
               {:type        :simple-text
                :name        :time-widget
                :data-source :current-time
                :options     {:viz {:title        "Current Time"
                                    :banner-color "lightblue"
-                                   :style        {:paddingTop "15px"}
+                                   :style        {:display :flex :align-items :center}
                                    :height       "100px"}}}
 
               {:type        :pie-chart
@@ -87,6 +87,7 @@
                              :viz {:title        "Usage Data"
                                    :banner-color "goldenrod"
                                    :animation    false}}}
+                                   ;:debug        true}}}
 
               {:type        :side-by-side-chart
                :name        :usage-side-by-side-widget
@@ -98,6 +99,7 @@
                                    :banner-color "lavender"
                                    :animation    false
                                    :tooltip      {:followPointer true}}}}])
+                                   ;:debug        true}}}])
 
 
 

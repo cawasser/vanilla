@@ -2,7 +2,7 @@
   (:require [reagent.core :as r]
             [reagent.ratom :refer-macros [reaction]]
             [cljsjs.highcharts]
-            [cljsjs.jquery]
+            ;[cljsjs.jquery]
             [dashboard-clj.widgets.core :as widget-common]
             [vanilla.widgets.basic-widget :as basic]
             [vanilla.widgets.util :as util]
@@ -16,9 +16,10 @@
   (fn [data options]
     [basic/basic-widget data options
 
-     [:div {:style {:width "95%" :height "80%"}}
+     [:div {:style {:width "95%" :height "65%"}}
       [line/embed-line data options]
 
-      [bar/embed-bar data options (util/line->bar data options)]]]))
+      [:div {:style {:width "95%" :height "65%"}}
+       [bar/embed-bar data options (util/line->bar data options)]]]]))
 
 

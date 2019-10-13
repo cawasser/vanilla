@@ -2,7 +2,7 @@
   (:require [reagent.core :as r]
             [reagent.ratom :refer-macros [reaction]]
             [cljsjs.highcharts]
-            [cljsjs.jquery]
+    ;[cljsjs.jquery]
             [dashboard-clj.widgets.core :as widget-common]
             [vanilla.widgets.basic-widget :as basic]
             [vanilla.widgets.util :as util]))
@@ -10,30 +10,28 @@
 
 (defn- render
   []
-  [:div {:style {:width "100%" :height "70%"}}])
+  [:div {:style {:width "100%" :height "100%"}}])
 
 (def pie-chart-config
-  {:chart {:type            "pie"
-           :backgroundColor "transparent"
-
-           :style           {:labels {
-                                      :fontFamily "monospace"
-                                      :color      "#FFFFFF"}}}
-   :yAxis {:title  {:style {:color "#000000"}}
-           :labels {:color "#ffffff"}}
-   :xAxis {:labels {:style {:color "#fff"}}}})
+  {:chart   {:type            "pie"
+             :backgroundColor "transparent"
+             :style           {:labels {
+                                        :fontFamily "monospace"
+                                        :color      "#FFFFFF"}}}
+   :yAxis   {:title  {:style {:color "#000000"}}
+             :labels {:color "#ffffff"}}
+   :xAxis   {:labels {:style {:color "#fff"}}}
+   :credits {:enabled false}})
 
 
 (defn- plot-pie [this]
   (let [config     (-> this r/props :chart-options)
-        render-to  {:render-to (r/dom-node this)}
-        all-config (merge pie-chart-config config render-to)]
+        all-config (merge pie-chart-config config)]
 
-    (.log js/console (str "plot-pie " (-> this r/dom-node) ", "
-                          (-> this r/dom-node .-children) "|"))
+    (.log js/console (str "plot-pie "))
 
-    (.highcharts (js/$ (r/dom-node this))
-                 (clj->js all-config))))
+    (js/Highcharts.Chart. (r/dom-node this)
+                          (clj->js all-config))))
 
 (defn- pie-chart
   [chart-options]
@@ -48,18 +46,17 @@
 
     ;(.log js/console (str ":pie-chart " name " " slice-at))
 
-    [:div {:style {:height "100%"}}
-     [pie-chart
-      {:chart-options
-       {:title       {:text ""}
-        :plotOptions {:series {:animation (get-in options [:viz :animation] false)}}
-        :tooltip     (get-in options [:viz :tooltip] {})
-        :series      dats}}]]))
+    [pie-chart
+     {:chart-options
+      {:title       {:text ""}
+       :plotOptions {:series {:animation (get-in options [:viz :animation] false)}}
+       :tooltip     (get-in options [:viz :tooltip] {})
+       :series      dats}}]))
 
 
 (widget-common/register-widget
   :pie-chart
   (fn [data options]
     [basic/basic-widget data options
-     [:div {:style {:height "40%" :marginTop "-25px"}}
+     [:div {:style {:width "100%"}}
       [embed-pie data options]]]))

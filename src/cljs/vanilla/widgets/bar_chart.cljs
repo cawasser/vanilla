@@ -2,7 +2,7 @@
   (:require [reagent.core :as r]
             [reagent.ratom :refer-macros [reaction]]
             [cljsjs.highcharts]
-            [cljsjs.jquery]
+    ;[cljsjs.jquery]
             [dashboard-clj.widgets.core :as widget-common]
             [vanilla.widgets.basic-widget :as basic]
             [vanilla.widgets.util :as util]))
@@ -14,15 +14,16 @@
 
 
 (def bar-chart-config
-  {:chart {:type            :column
-           :backgroundColor "transparent"
+  {:chart   {:type            :column
+             :backgroundColor "transparent"
 
-           :style           {:labels {
-                                      :fontFamily "monospace"
-                                      :color      "#FFFFFF"}}}
-   :yAxis {:title  {:style {:color "#000000"}}
-           :labels {:color "#ffffff"}}
-   :xAxis {:labels {:style {:color "#fff"}}}})
+             :style           {:labels {
+                                        :fontFamily "monospace"
+                                        :color      "#FFFFFF"}}}
+   :credits {:enabled false}
+   :yAxis   {:title  {:style {:color "#000000"}}
+             :labels {:color "#ffffff"}}
+   :xAxis   {:labels {:style {:color "#fff"}}}})
 
 
 (defn- plot-bar [this]
@@ -31,8 +32,8 @@
 
     (.log js/console (str "plot-bar " all-config))
 
-    (.highcharts (js/$ (r/dom-node this))
-                 (clj->js all-config))))
+    (js/Highcharts.Chart. (r/dom-node this)
+                          (clj->js all-config))))
 
 
 (defn bar-chart
@@ -63,8 +64,8 @@
                      :tooltip (get-in options [:viz :tooltip] {})
                      :column  {:pointPadding 0.2
                                :borderWidth  0
-                               :dataLabels {:enabled
-                                            (get-in options [:viz :data-labels] false)}}}
+                               :dataLabels   {:enabled
+                                              (get-in options [:viz :data-labels] false)}}}
 
        :series      series}}]))
 

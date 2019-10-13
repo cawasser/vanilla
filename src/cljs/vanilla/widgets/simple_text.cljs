@@ -11,12 +11,11 @@
 
    [basic/basic-widget data options
 
-    [:div (merge {:class "simple-text-widget"}
-                 {:style (-> options :wrapper :style)})
-     [:div (merge {:class "data"}
-                  {:style (-> options :data :style)})
-      [:p {:style {:paddingTop "25%"
-                   :fontSize "50px"
+    [:div {:class "simple-text-widget"}
+     [:div {:class "data"
+            :style (get-in options [:viz :style] {})}
+      [:p {:style {:fontSize "50px"
                    :font-weight "bold"
                    :color "blue"}}
+
        (get-in data [:data :text])]]]]))
