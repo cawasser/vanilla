@@ -18,7 +18,17 @@
                    :read-fn  :vanilla.fetcher/current-time
                    :params   []
                    :schedule {:in    [0 :seconds]
-                              :every [5 :seconds]}}])
+                              :every [5 :seconds]}}
+
+                  {:name     :power-data
+                   :read-fn  :vanilla.fetcher/power-data
+                   :schedule {:in    [0 :seconds]
+                              :every [3 :seconds]}}
+
+                  {:name     :heatmap-data
+                   :read-fn  :vanilla.fetcher/heatmap-data
+                   :schedule {:in    [0 :seconds]
+                              :every [3 :seconds]}}])
 
 (defn start-dashboard[]
   (prn "server starting")
