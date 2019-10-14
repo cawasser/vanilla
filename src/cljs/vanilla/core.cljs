@@ -76,7 +76,7 @@
                :data-source :current-time
                :options     {:viz {:title        "Current Time"
                                    :banner-color "lightblue"
-                                   :style        {:display :flex :align-items :center}
+                                   :style        {}
                                    :height       "100px"}}}
 
               {:type        :pie-chart

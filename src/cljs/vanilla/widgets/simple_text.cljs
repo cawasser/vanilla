@@ -11,11 +11,10 @@
 
    [basic/basic-widget data options
 
-    [:div {:class "simple-text-widget"}
-     [:div {:class "data"
-            :style (get-in options [:viz :style] {})}
-      [:p {:style {:fontSize "50px"
-                   :font-weight "bold"
-                   :color "blue"}}
+    [:div {:style {:width "100%"
+                   :display :flex :align-items :center}}    ;(get-in options [:viz :style] {})}
+     [:p {:style {:fontSize    "50px"
+                  :font-weight "bold"
+                  :color       "blue"}}
 
-       (get-in data [:data :text])]]]]))
+      (get-in data [:data :text])]]]))
