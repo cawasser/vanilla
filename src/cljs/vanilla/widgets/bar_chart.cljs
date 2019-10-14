@@ -2,7 +2,7 @@
   (:require [reagent.core :as r]
             [reagent.ratom :refer-macros [reaction]]
             [cljsjs.highcharts]
-            [cljsjs.jquery]
+    ;[cljsjs.jquery]
             [dashboard-clj.widgets.core :as widget-common]
             [vanilla.widgets.basic-widget :as basic]
             [vanilla.widgets.util :as util]))
@@ -14,25 +14,26 @@
 
 
 (def bar-chart-config
-  {:chart {:type            :column
-           :backgroundColor "transparent"
+  {:chart   {:type            :column
+             :backgroundColor "transparent"
 
-           :style           {:labels {
-                                      :fontFamily "monospace"
-                                      :color      "#FFFFFF"}}}
-   :yAxis {:title  {:style {:color "#000000"}}
-           :labels {:color "#ffffff"}}
-   :xAxis {:labels {:style {:color "#fff"}}}})
+             :style           {:labels {
+                                        :fontFamily "monospace"
+                                        :color      "#FFFFFF"}}}
+   :credits {:enabled false}
+   :yAxis   {:title  {:style {:color "#000000"}}
+             :labels {:color "#ffffff"}}
+   :xAxis   {:labels {:style {:color "#fff"}}}})
 
 
 (defn- plot-bar [this]
   (let [config     (-> this r/props :chart-options)
         all-config (merge bar-chart-config config)]
 
-    (.log js/console (str "plt-bar " all-config))
+    (.log js/console (str "plot-bar " all-config))
 
-    (.highcharts (js/$ (r/dom-node this))
-                 (clj->js all-config))))
+    (js/Highcharts.Chart. (r/dom-node this)
+                          (clj->js all-config))))
 
 
 (defn bar-chart
@@ -59,10 +60,12 @@
                      :color      (get-in options [:viz :line-colors])
                      :categories (into [] (map str (range (count (:values (first dats))))))}
 
-       :plotOptions {:series  {:animation (-> options :viz :animation)}
-                     :tooltip (-> options :viz :tooltip)
+       :plotOptions {:series  {:animation (get-in options [:viz :animation] false)}
+                     :tooltip (get-in options [:viz :tooltip] {})
                      :column  {:pointPadding 0.2
-                               :borderWidth  0}}
+                               :borderWidth  0
+                               :dataLabels   {:enabled
+                                              (get-in options [:viz :data-labels] false)}}}
 
        :series      series}}]))
 
@@ -70,8 +73,7 @@
 (widget-common/register-widget
   :bar-chart
   (fn [data options]
-    (let [dats (get-in data [:data (get-in options [:src :extract])])
-          num  (count dats)]
+    (let []
 
       [basic/basic-widget data options
        [:div {:style {:width "95%" :height "100%"}}

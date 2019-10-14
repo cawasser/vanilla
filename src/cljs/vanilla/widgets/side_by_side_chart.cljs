@@ -2,7 +2,7 @@
   (:require [reagent.core :as r]
             [reagent.ratom :refer-macros [reaction]]
             [cljsjs.highcharts]
-            [cljsjs.jquery]
+            ;[cljsjs.jquery]
             [dashboard-clj.widgets.core :as widget-common]
             [vanilla.widgets.basic-widget :as basic]
             [vanilla.widgets.util :as util]
@@ -19,7 +19,7 @@
 
     [basic/basic-widget data options
 
-     [:div.columns {:style {:height "225px" :width "100%" :marginTop "10px"}}
+     [:div.columns {:style {:height "100%" :width "100%" :marginTop "10px"}}
 
       [:div.column.is-two-thirds {:style {:height "200px"}}
        (let [dats (util/pie->bar data

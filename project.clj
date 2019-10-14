@@ -5,9 +5,9 @@
                  [org.clojure/clojurescript "1.8.40" :scope "provided"]
                  [environ "1.0.2"]
                  [com.multunus/dashboard-clj "0.1.0-SNAPSHOT"]
-                 [cljsjs/highcharts "4.2.2-2"]
-                 [cljsjs/jquery "1.11.3-0"]
-                 [org.webjars.npm/bulma "0.7.5"]]
+                 [cljsjs/highcharts "7.0.3-0"]
+                 [cljsjs/jquery "3.4.0-0"]]
+  ;[org.webjars.npm/bulma "0.7.5"]]
 
   :min-lein-version "2.6.1"
 
@@ -83,12 +83,12 @@
                        :dependencies [[binaryage/devtools "0.9.10"]
                                       [figwheel "0.5.2"]
                                       [figwheel-sidecar "0.5.2"]
-                                      [pjstadig/humane-test-output "0.9.0"]
-                                      [prone "1.6.1"]
-                                      [com.cemerick/piggieback "0.2.1"]
-                                      [org.clojure/tools.nrepl "0.2.12"]
-                                      [org.clojure/tools.namespace "0.2.3"]
-                                      [org.clojure/java.classpath "0.2.0"]]
+                                      [pjstadig/humane-test-output "0.10.0"]
+                                      [prone "2019-07-08"]
+                                      [com.cemerick/piggieback "0.2.2"]
+                                      [org.clojure/tools.nrepl "0.2.13"]
+                                      [org.clojure/tools.namespace "0.3.1"]
+                                      [org.clojure/java.classpath "0.3.0"]]
 
                        :plugins      [[lein-figwheel "0.5.2"]
                                       [lein-doo "0.1.6"]]
@@ -96,8 +96,7 @@
                        :cljsbuild    {:builds
                                       {:test
                                        {:source-paths ["src/cljs" "test/cljs"]
-                                        :compiler
-                                                      {:output-to     "resources/public/js/compiled/testable.js"
+                                        :compiler     {:output-to     "resources/public/js/compiled/testable.js"
                                                        :main          vanilla.test-runner
                                                        :optimizations :none}}}}}
 
@@ -117,4 +116,3 @@
 
                        :aot          :all
                        :uberjar-name "vanilla.jar"}})
-

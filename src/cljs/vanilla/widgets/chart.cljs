@@ -2,7 +2,7 @@
   (:require [reagent.core :as r]
             [reagent.ratom :refer-macros [reaction]]
             [cljsjs.highcharts]
-            [cljsjs.jquery]
+    ;[cljsjs.jquery]
             [dashboard-clj.widgets.core :as widget-common]
             [vanilla.widgets.basic-widget :as basic]))
 
@@ -12,22 +12,25 @@
   [:div {:style {:width "100%" :height "100%"}}])
 
 (def line-chart-config
-  {:chart {:type            :line
-           :backgroundColor "transparent"
-
-           :style           {:labels {
-                                      :fontFamily "monospace"
-                                      :color      "#FFFFFF"}}}
-   :yAxis {:title  {:style {:color "#000000"}}
-           :labels {:color "#ffffff"}}
-   :xAxis {:labels {:style {:color "#fff"}}}})
+  {:chart   {:type            :line
+             :backgroundColor "transparent"
+             :style           {:labels {
+                                        :fontFamily "monospace"
+                                        :color      "#FFFFFF"}}}
+   :yAxis   {:title  {:style {:color "#000000"}}
+             :labels {:color "#ffffff"}}
+   :xAxis   {:labels {:style {:color "#fff"}}}
+   :credits {:enabled false}})
 
 
 (defn- plot-line [this]
   (let [config     (-> this r/props :chart-options)
         all-config (merge line-chart-config config)]
-    (.highcharts (js/$ (r/dom-node this))
-                 (clj->js all-config))))
+
+    (.log js/console (str "plot-line "))
+
+    (js/Highcharts.Chart. (r/dom-node this)
+                          (clj->js all-config))))
 
 (defn line-chart
   [chart-options]
@@ -52,21 +55,22 @@
          :yAxis       {:title {:text (get-in options [:viz :y-title] "y-axis")}}
 
          :plotOptions {:line    {:lineWidth (get-in options [:viz :line-width] 1)}
-                       :series  {:animation (-> options :viz :animation)}
-                       :tooltip (-> options :viz :tooltip)}
+                       :series  {:animation (get-in options [:viz :animation] false)}
+                       :tooltip (get-in options [:viz :tooltip] {})}
+
 
          :series      (into []
                             (for [n (range num)]
-                              {:name  (get-in dats [n (get-in options [:src :name] :name)] (str "set " n))
-                               :data  (into [] (get-in dats [n (get-in options [:src :values] :values)]))}))}}])))
+                              {:name (get-in dats [n (get-in options [:src :name] :name)] (str "set " n))
+                               :data (into [] (get-in dats [n (get-in options [:src :values] :values)]))}))}}])))
 
 
 (widget-common/register-widget
   :line-chart
   (fn [data options]
 
-      [basic/basic-widget data options
+    [basic/basic-widget data options
 
-       [:div {:style {:width "95%" :height "100%"}}
+     [:div {:style {:width "95%" :height "100%"}}
 
-        [embed-line data options]]]))
+      [embed-line data options]]]))
