@@ -6,8 +6,8 @@
                  [environ "1.0.2"]
                  [com.multunus/dashboard-clj "0.1.0-SNAPSHOT"]
                  [cljsjs/highcharts "7.0.3-0"]
-                 [cljsjs/jquery "3.4.0-0"]
-                 [org.webjars.npm/bulma "0.7.5"]]
+                 [cljsjs/jquery "3.4.0-0"]]
+                 ;[org.webjars.npm/bulma "0.7.5"]]
 
   :min-lein-version "2.6.1"
 
@@ -81,8 +81,8 @@
              {
               :source-paths ["dev"]
               :dependencies [[binaryage/devtools "0.9.10"]
-                             [figwheel "0.5.19"]
-                             [figwheel-sidecar "0.5.19"]
+                             [figwheel "0.5.2"]
+                             [figwheel-sidecar "0.5.2"]
                              [pjstadig/humane-test-output "0.10.0"]
                              [prone "2019-07-08"]
                              [com.cemerick/piggieback "0.2.2"]
@@ -90,7 +90,7 @@
                              [org.clojure/tools.namespace "0.3.1"]
                              [org.clojure/java.classpath "0.3.0"]]
 
-              :plugins [[lein-figwheel "0.5.19"]
+              :plugins [[lein-figwheel "0.5.2"]
                         [lein-doo "0.1.6"]]
 
               :cljsbuild {:builds
@@ -101,16 +101,19 @@
                              :main vanilla.test-runner
                              :optimizations :none}}}}}
 
-             :uberjar
-             {:source-paths ^:replace ["src/clj"]
-              :hooks [leiningen.cljsbuild]
-              :omit-source true
-              :aot :all
-              :cljsbuild {:builds
-                          {:app
-                           {
-                            :source-paths ^:replace ["src/cljs"]
-                            :compiler
-                            {:optimizations :advanced
-                             :pretty-print false
-                             :pseudo-names true}}}}}})
+             :uberjar {:omit-source  true
+                       :prep-tasks   ["compile" ["cljsbuild" "once" "min"]]
+                       :cljsbuild    {:builds
+                                      {:min
+                                       {:source-paths ["src/cljc" "src/cljs"]
+                                        :compiler     {:output-dir       "target/cljsbuild/public/js/compiled"
+                                                       :output-to        "target/cljsbuild/public/js/compiled/app.js"
+                                                       :source-map       "target/cljsbuild/public/js/compiled/app.js.map"
+                                                       :optimizations    :advanced
+                                                       :pretty-print     false
+                                                       :infer-externs    true
+                                                       :closure-warnings {:externs-validation :off
+                                                                          :non-standard-jsdoc :off}}}}}
+
+                       :aot          :all
+                       :uberjar-name "vanilla.jar"}})
