@@ -7,7 +7,8 @@
             [vanilla.widgets.bar-chart]
             [vanilla.widgets.dual-chart]
             [vanilla.widgets.pie-chart]
-            [vanilla.widgets.side-by-side-chart]))
+            [vanilla.widgets.side-by-side-chart]
+            [vanilla.widgets.sankey-chart]))
 
 
 (def widgets [
@@ -29,7 +30,7 @@
                                    :animation    false
                                    :style-name   "widget"
                                    :tooltip      {:followPointer true}}}}
-                                   ;:debug        true}}}
+              ;:debug        true}}}
 
               {:type        :line-chart
                :name        :spectrum-line-widget
@@ -50,7 +51,7 @@
                                    :style-name   "widget"
                                    :tooltip      {:followPointer true}
                                    :icon         "timeline"}}}
-                                   ;:debug        true}}}
+              ;:debug        true}}}
 
               {:type        :bar-chart
                :name        :spectrum-bar-widget
@@ -69,7 +70,7 @@
                                    :style-name   "widget"
                                    :animation    false
                                    :tooltip      {:followPointer true}}}}
-                                   ;:debug        true}}}
+              ;:debug        true}}}
 
               {:type        :simple-text
                :name        :time-widget
@@ -87,7 +88,7 @@
                              :viz {:title        "Usage Data"
                                    :banner-color "goldenrod"
                                    :animation    false}}}
-                                   ;:debug        true}}}
+              ;:debug        true}}}
 
               {:type        :side-by-side-chart
                :name        :usage-side-by-side-widget
@@ -98,9 +99,19 @@
                              :viz {:title        "Usage Data (side-by-side)"
                                    :banner-color "lavender"
                                    :animation    false
-                                   :tooltip      {:followPointer true}}}}])
-                                   ;:debug        true}}}])
+                                   :tooltip      {:followPointer true}}}}
+              ;:debug        true}}}
 
+              {:type        :sankey-chart
+               :name        :sankey-widget
+               :data-source :sankey-service
+               :options     {:src {:extract :data
+                                   :keys    :keys}
+                             :viz {:title             "Sankey"
+                                   :banner-color      "darkmagenta"
+                                   :banner-text-color "white"
+                                   :animation         false}}}])
+;:debug        true}}}
 
 
 
@@ -123,7 +134,12 @@
                                                                          :sm {:x 0 :y 0 :w 2 :h 2 :static true}}}}
                     :pie-widget                {:layout-opts {:position {:lg {:x 4 :y 2 :w 2 :h 3}
                                                                          :md {:x 4 :y 2 :w 2 :h 3}
-                                                                         :sm {:x 0 :y 2 :w 2 :h 3 :static true}}}}})
+                                                                         :sm {:x 0 :y 2 :w 2 :h 3 :static true}}}}
+                    :sankey-widget             {:layout-opts {:position {:lg {:x 0 :y 8 :w 4 :h 3}
+                                                                         :md {:x 0 :y 8 :w 4 :h 3}
+                                                                         :sm {:x 0 :y 8 :w 4 :h 3 :static true}}}}})
+
+
 
 (def dashboard {
                 :layout  :responsive-grid-layout

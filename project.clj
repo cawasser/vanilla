@@ -13,7 +13,7 @@
 
   :source-paths ["src/clj" "src/cljs"]
   :test-paths ["test/clj"]
-  :resource-paths ["resources" "target/cljsbuild"]
+  :resource-paths ["resources" "target/cljsbuild"]; "resources/public/libs"
   :target-path "target/%s/"
 
   :clean-targets ^{:protect false} [:target-path :compile-path "resources/public/js"]
