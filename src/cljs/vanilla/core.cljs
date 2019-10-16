@@ -8,7 +8,8 @@
             [vanilla.widgets.dual-chart]
             [vanilla.widgets.pie-chart]
             [vanilla.widgets.side-by-side-chart]
-            [vanilla.widgets.sankey-chart]))
+            [vanilla.widgets.sankey-chart]
+            [vanilla.widgets.bubble-chart]))
 
 
 (def widgets [
@@ -110,7 +111,18 @@
                              :viz {:title             "Sankey"
                                    :banner-color      "darkmagenta"
                                    :banner-text-color "white"
-                                   :animation         false}}}])
+                                   :animation         false}}}
+
+              {:type        :bubble-chart
+               :name        :bubble-widget
+               :data-source :bubble-service
+               :options     {:src {:extract :data}
+                             :viz {:title             "Bubble"
+                                   :banner-color      "darkgreen"
+                                   :banner-text-color "white"
+                                   :animation         false
+                                   :data-labels       true}}}])
+
 ;:debug        true}}}
 
 
@@ -123,21 +135,26 @@
                     :spectrum-bar-widget       {:layout-opts {:position {:lg {:x 0 :y 2 :w 4 :h 2}
                                                                          :md {:x 0 :y 2 :w 4 :h 2}
                                                                          :sm {:x 0 :y 0 :w 2 :h 2 :static true}}}}
-                    :spectrum-dual-widget      {:layout-opts {:position {:lg {:x 0 :y 4 :w 4 :h 3}
-                                                                         :md {:x 0 :y 4 :w 4 :h 3}
-                                                                         :sm {:x 0 :y 0 :w 2 :h 3 :static true}}}}
+                    :spectrum-dual-widget      {:layout-opts {:position {:lg {:x 0 :y 8 :w 4 :h 3}
+                                                                         :md {:x 0 :y 8 :w 4 :h 3}
+                                                                         :sm {:x 0 :y 8 :w 2 :h 3 :static true}}}}
                     :time-widget               {:layout-opts {:position {:lg {:x 4 :y 0 :w 2 :h 1}
                                                                          :md {:x 4 :y 0 :w 2 :h 1}
                                                                          :sm {:x 0 :y 2 :w 2 :h 1 :static true}}}}
-                    :usage-side-by-side-widget {:layout-opts {:position {:lg {:x 0 :y 6 :w 4 :h 2}
-                                                                         :md {:x 0 :y 6 :w 4 :h 2}
-                                                                         :sm {:x 0 :y 0 :w 2 :h 2 :static true}}}}
+                    :usage-side-by-side-widget {:layout-opts {:position {:lg {:x 0 :y 11 :w 4 :h 2}
+                                                                         :md {:x 0 :y 11 :w 4 :h 2}
+                                                                         :sm {:x 0 :y 11 :w 2 :h 2 :static true}}}}
                     :pie-widget                {:layout-opts {:position {:lg {:x 4 :y 2 :w 2 :h 3}
                                                                          :md {:x 4 :y 2 :w 2 :h 3}
                                                                          :sm {:x 0 :y 2 :w 2 :h 3 :static true}}}}
-                    :sankey-widget             {:layout-opts {:position {:lg {:x 0 :y 8 :w 4 :h 3}
-                                                                         :md {:x 0 :y 8 :w 4 :h 3}
-                                                                         :sm {:x 0 :y 8 :w 4 :h 3 :static true}}}}})
+                    :sankey-widget             {:layout-opts {:position {:lg {:x 0 :y 5 :w 4 :h 3}
+                                                                         :md {:x 0 :y 5 :w 4 :h 3}
+                                                                         :sm {:x 0 :y 5 :w 4 :h 3 :static true}}}}
+                    :bubble-widget {:layout-opts
+                                    {:position {:lg {:x 4 :y 5 :w 2 :h 3}
+                                                :md {:x 4 :y 5 :w 2 :h 3}
+                                                :sm {:x 0 :y 5 :w 2 :h 3 :static true}}}}})
+
 
 
 

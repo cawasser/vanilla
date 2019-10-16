@@ -2,7 +2,8 @@
     (:require [dashboard-clj.core :as dash]
               [environ.core :refer [env]]
               [vanilla.fetcher]
-              [vanilla.sankey-service])
+              [vanilla.sankey-service]
+              [vanilla.bubble-service])
     (:gen-class))
 
 (def datasources [{:name     :spectrum-traces
@@ -23,6 +24,11 @@
 
                   {:name :sankey-service
                    :read-fn :vanilla.sankey-service/fetch-data
+                   :schedule {:in    [0 :seconds]
+                              :every [5 :seconds]}}
+
+                  {:name :bubble-service
+                   :read-fn :vanilla.bubble-service/fetch-data
                    :schedule {:in    [0 :seconds]
                               :every [5 :seconds]}}])
 
