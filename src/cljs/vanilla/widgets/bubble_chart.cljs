@@ -46,7 +46,8 @@
      {:chart-options
       {:title  {:text ""}
        :plotOptions {:series {:dataLabels {:enabled (get-in options [:viz :data-labels] false)
-                                           :format "{point.name}"}}}
+                                           :format "{point.name}"}
+                              :animation (get-in options [:viz :animation] false)}}
        :series (get-in data [:data (get-in options [:src :extract])])}}]))
 
 

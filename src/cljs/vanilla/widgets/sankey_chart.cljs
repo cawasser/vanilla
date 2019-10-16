@@ -46,6 +46,7 @@
     [sankey-chart
      {:chart-options
       {:title       {:text ""}
+       :plotOptions {:series {:animation (get-in options [:viz :animation] false)}}
        :series      [{:type "sankey"
                       :keys (get-in data [:data (get-in options [:src :keys])])
                       :data (get-in data [:data (get-in options [:src :extract])])}]}}]))
