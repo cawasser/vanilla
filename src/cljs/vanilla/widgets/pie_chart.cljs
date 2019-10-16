@@ -26,7 +26,7 @@
 
 (defn- plot-pie [this]
   (let [config     (-> this r/props :chart-options)
-        all-config (merge pie-chart-config config)]
+        all-config (merge-with clojure.set/union pie-chart-config config)]
 
     (.log js/console (str "plot-pie "))
 

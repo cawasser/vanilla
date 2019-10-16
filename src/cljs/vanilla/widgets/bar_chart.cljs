@@ -28,7 +28,7 @@
 
 (defn- plot-bar [this]
   (let [config     (-> this r/props :chart-options)
-        all-config (merge bar-chart-config config)]
+        all-config (merge-with clojure.set/union bar-chart-config config)]
 
     (.log js/console (str "plot-bar " all-config))
 
@@ -51,7 +51,8 @@
 
     [bar-chart
      {:chart-options
-      {:zoomType    :x
+      {:chart       {:zoomType "x"}
+
        :title       {:text ""}
 
        :xAxis       {:title {:text (get-in options [:viz :x-title] "x-axis")}}

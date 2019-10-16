@@ -23,7 +23,7 @@
 
 (defn- plot-sankey [this]
   (let [config     (-> this r/props :chart-options)
-        all-config (merge sankey-chart-config config)]
+        all-config (merge-with clojure.set/union sankey-chart-config config)]
 
     (.log js/console (str "plot-sankey " all-config))
 

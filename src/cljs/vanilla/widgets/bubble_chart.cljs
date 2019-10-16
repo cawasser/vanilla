@@ -22,7 +22,7 @@
 
 (defn- plot-bubble [this]
   (let [config     (-> this r/props :chart-options)
-        all-config (merge bubble-chart-config config)]
+        all-config (merge-with clojure.set/union bubble-chart-config config)]
 
     (.log js/console (str "plot-bubble " all-config))
 
