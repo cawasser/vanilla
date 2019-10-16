@@ -5,6 +5,7 @@
             [vanilla.widgets.simple-text]
             [vanilla.widgets.chart]
             [vanilla.widgets.bar-chart]
+            [vanilla.widgets.column-chart]
             [vanilla.widgets.dual-chart]
             [vanilla.widgets.pie-chart]
             [vanilla.widgets.side-by-side-chart]
@@ -54,7 +55,7 @@
                                    :icon         "timeline"}}}
               ;:debug        true}}}
 
-              {:type        :bar-chart
+              {:type        :column-chart
                :name        :spectrum-bar-widget
                :data-source :spectrum-traces
                :options     {:src {:extract  :spectrum-data
