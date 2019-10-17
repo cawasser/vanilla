@@ -1,7 +1,9 @@
 (ns vanilla.server
     (:require [dashboard-clj.core :as dash]
               [environ.core :refer [env]]
-              [vanilla.fetcher])
+              [vanilla.fetcher]
+              [vanilla.sankey-service]
+              [vanilla.bubble-service])
     (:gen-class))
 
 (def datasources [{:name     :spectrum-traces
@@ -20,6 +22,16 @@
                    :schedule {:in    [0 :seconds]
                               :every [5 :seconds]}}
 
+                  {:name :sankey-service
+                   :read-fn :vanilla.sankey-service/fetch-data
+                   :schedule {:in    [0 :seconds]
+                              :every [5 :seconds]}}
+
+                  {:name :bubble-service
+                   :read-fn :vanilla.bubble-service/fetch-data
+                   :schedule {:in    [0 :seconds]
+                              :every [5 :seconds]}}
+
                   {:name     :power-data
                    :read-fn  :vanilla.fetcher/power-data
                    :schedule {:in    [0 :seconds]
@@ -29,6 +41,7 @@
                    :read-fn  :vanilla.fetcher/heatmap-data
                    :schedule {:in    [0 :seconds]
                               :every [3 :seconds]}}])
+
 
 (defn start-dashboard[]
   (prn "server starting")

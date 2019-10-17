@@ -1,8 +1,6 @@
 (ns vanilla.widgets.chart
   (:require [reagent.core :as r]
             [reagent.ratom :refer-macros [reaction]]
-            [cljsjs.highcharts]
-    ;[cljsjs.jquery]
             [dashboard-clj.widgets.core :as widget-common]
             [vanilla.widgets.basic-widget :as basic]))
 
@@ -25,7 +23,7 @@
 
 (defn- plot-line [this]
   (let [config     (-> this r/props :chart-options)
-        all-config (merge line-chart-config config)]
+        all-config (merge-with clojure.set/union line-chart-config config)]
 
     (.log js/console (str "plot-line "))
 
@@ -47,7 +45,7 @@
 
       [line-chart
        {:chart-options
-        {:zoomType    :x
+        {:chart       {:zoomType "x"}
          :title       {:text ""}
 
          :xAxis       {:title {:text (get-in options [:viz :x-title] "x-axis")}}
