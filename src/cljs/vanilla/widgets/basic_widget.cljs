@@ -1,8 +1,6 @@
 (ns vanilla.widgets.basic-widget
   (:require [reagent.core :as r]
             [reagent.ratom :refer-macros [reaction]]
-            [cljsjs.highcharts]
-            ;[cljsjs.jquery]
             [dashboard-clj.widgets.core :as widget-common]))
 
 
