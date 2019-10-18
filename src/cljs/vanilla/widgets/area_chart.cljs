@@ -66,10 +66,11 @@
       {:zoomType    :x
        :title       {:text ""}
 
-       :xAxis       {:allowDecimals (get-in options [:viz :allowDecimals] false)
+       :xAxis       {:title   {:text (get-in options [:viz :x-title] "x-axis")}
+                     :allowDecimals (get-in options [:viz :allowDecimals] false)
                      :categories (into [] (map str (range (count (:values (first dats))))))}
                 
-       :yAxis       {:title      {:text (get-in options [:viz :y-title] "y-axis")}}
+       :yAxis       {:title   {:text (get-in options [:viz :y-title] "y-axis")}}
                      ;:labels {:formatter (into [] (map str (range (count (:values (first dats))))))}}
 
        :plotOptions {:series  {:animation (get-in options [:viz :animation] false)}

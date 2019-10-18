@@ -24,6 +24,7 @@
                              :viz {:title        "Channels (area)"
                                    :chart-title  "dB"
                                    :allowDecimals "false" 
+                                   :x-title      "frequency"
                                    :y-title      "power"
                                    :banner-color "blue"
                                    :style-name   "widget"
