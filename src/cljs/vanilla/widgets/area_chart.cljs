@@ -7,6 +7,23 @@
               [vanilla.widgets.basic-widget :as basic]
               [vanilla.widgets.util :as util]))
 
+(defn spectrum-data []
+  [{:name   "trace-1"
+    :values (into []
+                  (take 200
+                        (repeatedly #(+ 5.0
+                                        (rand 5)))))}
+   {:name   "trace-2"
+    :values (into []
+                  (take 200
+                        (repeatedly #(+ 5.0
+                                        (rand 5)))))}
+   {:name   "trace-3"
+    :values (into []
+                  (take 200
+                        (repeatedly #(+ 5.0
+                                        (rand 5)))))}])
+
 (defn- render
   []
   [:div {:style {:width "100%" :height "100%"}}])
@@ -43,26 +60,22 @@
 
     (.log js/console (str "embed-area " data))
 
-    ;accessibility option?
-    ;tooltip option dif
+    
     [area-chart
      {:chart-options
       {:zoomType    :x
        :title       {:text ""}
 
-       :xAxis       {:title {:text (get-in options [:viz :x-title] "x-axis")}}
-
-       :yAxis       {:title      {:text (get-in options [:viz :y-title] "y-axis")}
-                     :color      (get-in options [:viz :line-colors])
+       :xAxis       {:allowDecimals (get-in options [:viz :allowDecimals] false)
                      :categories (into [] (map str (range (count (:values (first dats))))))}
+                
+       :yAxis       {:title      {:text (get-in options [:viz :y-title] "y-axis")}}
+                     ;:labels {:formatter (into [] (map str (range (count (:values (first dats))))))}}
 
        :plotOptions {:series  {:animation (get-in options [:viz :animation] false)}
                      :tooltip (get-in options [:viz :tooltip] {})
                      :column  {:pointPadding 0.2
-                               :borderWidth  0
-                               :pointStart   {:enabled  ;TODO
-                                              (get-in options [:viz :point-start] false)}
-                                :marker}}       ;TODO + marker options
+                               :borderWidth  0}}       ;TODO + marker options
 
        :series      series}}]))
 
@@ -73,6 +86,5 @@
 
       [basic/basic-widget data options
        [:div {:style {:width "95%" :height "100%"}}
-                                ;  TODO vvvvv implement
-        [embed-area data options (util/area->bar data options)]]])))
+        [embed-area {:data {:spectrum-data (spectrum-data)}} options (util/area->bar {:data {:spectrum-data (spectrum-data)}} options)]]])))
 
