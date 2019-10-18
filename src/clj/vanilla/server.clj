@@ -3,7 +3,8 @@
               [environ.core :refer [env]]
               [vanilla.fetcher]
               [vanilla.sankey-service]
-              [vanilla.bubble-service])
+              [vanilla.bubble-service]
+              [vanilla.network-service])
     (:gen-class))
 
 (def datasources [{:name     :spectrum-traces
@@ -29,6 +30,11 @@
 
                   {:name :bubble-service
                    :read-fn :vanilla.bubble-service/fetch-data
+                   :schedule {:in    [0 :seconds]
+                              :every [5 :seconds]}}
+
+                  {:name :network-service
+                   :read-fn :vanilla.network-service/fetch-data
                    :schedule {:in    [0 :seconds]
                               :every [5 :seconds]}}
 
