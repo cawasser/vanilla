@@ -5,6 +5,13 @@
 
 
 
+(defn debug-style [options]
+  (if (get-in options [:viz :debug] false)
+    :dotted
+    :none))
+
+
+
 (defn basic-widget [data options custom-content]
   [:div {:class "chart container"
          :style {:height (get-in options [:viz :height] "100%")
@@ -22,9 +29,7 @@
                   :marginRight "50px"
                   :marginTop "5px"
                   :cursor :default
-                  :border-style (if (get-in options [:viz :debug] false)
-                                  :dotted
-                                  :none)
+                  :border-style (debug-style options)
                   :align-items :stretch
                   :display :flex}
           :on-mouse-down #(.stopPropagation %)}
