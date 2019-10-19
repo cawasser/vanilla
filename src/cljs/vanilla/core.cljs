@@ -1,16 +1,19 @@
 (ns vanilla.core
-  (:require [dashboard-clj.core :as d]
-            [dashboard-clj.layouts.grid-layout-responsive :as grid]
-            [re-frame.core :as rf]
-            [vanilla.widgets.simple-text]
-            [vanilla.widgets.chart]
-            [vanilla.widgets.bar-chart]
-            [vanilla.widgets.dual-chart]
-            [vanilla.widgets.pie-chart]
-            [vanilla.widgets.side-by-side-chart]
-            [vanilla.widgets.sankey-chart]
-            [vanilla.widgets.bubble-chart]
-            [vanilla.widgets.network-graph-chart]))
+  (:require
+    [reagent.core :as r]
+    [dashboard-clj.core :as d]
+    [dashboard-clj.layouts.grid-layout-responsive :as grid]
+    [re-frame.core :as rf]
+    [vanilla.widgets.simple-text]
+    [vanilla.widgets.chart]
+    [vanilla.widgets.bar-chart]
+    [vanilla.widgets.dual-chart]
+    [vanilla.widgets.pie-chart]
+    [vanilla.widgets.side-by-side-chart]
+    [vanilla.widgets.sankey-chart]
+    [vanilla.widgets.bubble-chart]
+    [vanilla.widgets.network-graph-chart]
+    [vanilla.widgets.org-chart]))
 
 
 (def widgets [
@@ -76,8 +79,9 @@
                :data-source :current-time
                :options     {:viz {:title        "Current Time"
                                    :banner-color "lightblue"
-                                   :style        {}
-                                   :height       "100px"}}}
+                                   ;:style        {}
+                                   :height       "100px"
+                                   :debug        false}}}
 
               {:type        :pie-chart
                :name        :pie-widget
@@ -107,7 +111,8 @@
                              :viz {:title             "Sankey"
                                    :banner-color      "darkmagenta"
                                    :banner-text-color "white"
-                                   :animation         false}}}
+                                   :animation         false
+                                   :debug             false}}}
 
               {:type        :bubble-chart
                :name        :bubble-widget
@@ -119,15 +124,24 @@
                                    :animation         false
                                    :data-labels       true}}}
 
-              {:type        :network-graph-chart
-               :name        :network-widget
+              {:type        :org-chart
+               :name        :org-widget
                :data-source :network-service
                :options     {:src {:extract :data}
                              :viz {:title             "Network"
-                                   :banner-color      "black"
-                                   :banner-text-color "white"
+                                   :banner-color      "darkgray"
                                    :animation         false
                                    :data-labels       true}}}])
+
+              ;{:type        :network-graph-chart
+              ; :name        :network-widget
+              ; :data-source :network-service
+              ; :options     {:src {:extract :data}
+              ;               :viz {:title             "Network"
+              ;                     :banner-color      "black"
+              ;                     :banner-text-color "white"
+              ;                     :animation         false
+              ;                     :data-labels       true}}}])
 
 
 
@@ -173,6 +187,11 @@
                              :md {:x 0 :y 0 :w 4 :h 4}
                              :sm {:x 0 :y 0 :w 4 :h 4 :static true}}}}
 
+   :org-widget
+   {:layout-opts {:position {:lg {:x 0 :y 0 :w 4 :h 4}
+                             :md {:x 0 :y 0 :w 4 :h 4}
+                             :sm {:x 0 :y 0 :w 4 :h 4 :static true}}}}
+
    :bubble-widget
    {:layout-opts {:position {:lg {:x 4 :y 5 :w 2 :h 3}
                              :md {:x 4 :y 5 :w 2 :h 3}
@@ -187,22 +206,22 @@
                 :widgets (mapv #(merge % (get widget-layout (:name %))) widgets)})
 
 
-;(defn home-page []
-;  (let [new-layout (layout/setup-layout (get dashboard :layout) dashboard)]
-;    [:div.container>div.content
-;     [:h2 "Welcome!"]]))
+(defn home-page []
+  [:div.container>div.content
+   [:h7.subtitle.is-6 "v0.1.3-SNAPSHOT (static)"]])
 
 
 
 
 
-;(defn start-dashboard[]
-;  (rf/dispatch-sync [:initialize])
-;  (d/register-global-app-state-subscription)
-;  (d/connect-to-data-sources)
-;  (r/render home-page (.getElementById js/document "dashboard")))
-;
-;
-;(start-dashboard)
+(defn start-dashboard []
+  (rf/dispatch-sync [:initialize])
+  (d/register-global-app-state-subscription)
+  (d/connect-to-data-sources)
+  (r/render home-page (.getElementById js/document "app"))
+  (d/start-dashboard dashboard "dashboard"))
 
-(d/start-dashboard dashboard "dashboard")
+
+(start-dashboard)
+
+;(d/start-dashboard dashboard "dashboard")
