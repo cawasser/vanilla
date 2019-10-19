@@ -25,7 +25,7 @@
   (let [config     (-> this r/props :chart-options)
         all-config (merge-with clojure.set/union line-chart-config config)]
 
-    (.log js/console (str "plot-line "))
+    ;(.log js/console (str "plot-line "))
 
     (js/Highcharts.Chart. (r/dom-node this)
                           (clj->js all-config))))
