@@ -29,7 +29,7 @@
   (let [dats (get-in data [:data (get-in options [:src :extract])])
         new-data (into [] (map (fn [[n v]] {:name n :data [v]}) dats))]
 
-    (.log js/console (str "pie->bar " data " -> " new-data))
+    ;(.log js/console (str "pie->bar " data " -> " new-data))
 
     (assoc data :series new-data)))
 
