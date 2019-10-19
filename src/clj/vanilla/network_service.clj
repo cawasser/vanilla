@@ -6,8 +6,7 @@
 
   {:title "Network Data"
 
-   :data [{:dataLabels {:enabled true}
-           :data [["Proto Indo-European", "Balto-Slavic"],
+   :data [{:data [["Proto Indo-European", "Balto-Slavic"],
                   ["Proto Indo-European", "Germanic"],
                   ["Proto Indo-European", "Celtic"],
                   ["Proto Indo-European", "Italic"],

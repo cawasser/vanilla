@@ -40,13 +40,22 @@
 (defn embed-network-graph [data options]
   (let []
 
-    (.log js/console (str "embed-network-graph " (get-in data [:data (get-in options [:src :extract])])))
+    ;(.log js/console (str "embed-network-graph "
+    ;                      (get-in data [:data (get-in options [:src :extract])])))
 
     [network-graph-chart
      {:chart-options
-      {:title  {:text ""}
-       :plotOptions {:networkgraph {:keys ["from", "to"]}}
-       :series (get-in data [:data (get-in options [:src :extract])])}}]))
+      {:title       {:text ""}
+       :plotOptions {:networkgraph    {:keys ["from", "to"]}}
+                     ;:layoutAlgorithm {:enableSimulation true
+                     ;                  :integration      "verlet"
+                     ;                  :linkLength       100}}
+
+       :series      (map #(merge
+                            {:dataLabels {:enabled    true
+                                          :linkFormat ""}}
+                            %)
+                         (get-in data [:data (get-in options [:src :extract])]))}}]))
 
 
 (widget-common/register-widget
