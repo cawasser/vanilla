@@ -131,17 +131,17 @@
                              :viz {:title             "Network"
                                    :banner-color      "darkgray"
                                    :animation         false
-                                   :data-labels       true}}}])
+                                   :data-labels       true}}}
 
-              ;{:type        :network-graph-chart
-              ; :name        :network-widget
-              ; :data-source :network-service
-              ; :options     {:src {:extract :data}
-              ;               :viz {:title             "Network"
-              ;                     :banner-color      "black"
-              ;                     :banner-text-color "white"
-              ;                     :animation         false
-              ;                     :data-labels       true}}}])
+              {:type        :network-graph-chart
+               :name        :network-widget
+               :data-source :network-service
+               :options     {:src {:extract :data}
+                             :viz {:title             "Network"
+                                   :banner-color      "black"
+                                   :banner-text-color "white"
+                                   :animation         false
+                                   :data-labels       true}}}])
 
 
 
