@@ -5,7 +5,7 @@
   (prn "Network Service")
 
   {:title "Network Data"
-
+   :format [:from-to]
    :data [{:data [["Proto Indo-European", "Balto-Slavic"],
                   ["Proto Indo-European", "Germanic"],
                   ["Proto Indo-European", "Celtic"],
