@@ -5,6 +5,24 @@
             [vanilla.widgets.basic-widget :as basic]))
 
 
+(defn spectrum-data []
+  [{:name   "trace-1"
+    :values (into []
+                  (take 200
+                        (repeatedly #(+ 5.0
+                                        (rand 5)))))}
+   {:name   "trace-2"
+    :values (into []
+                  (take 200
+                        (repeatedly #(+ 5.0
+                                        (rand 5)))))}
+   {:name   "trace-3"
+    :values (into []
+                  (take 200
+                        (repeatedly #(+ 5.0
+                                        (rand 5)))))}])
+
+
 (defn- render
   []
   [:div {:style {:width "100%" :height "100%"}}])
@@ -71,4 +89,4 @@
 
      [:div {:style {:width "95%" :height "100%"}}
 
-      [embed-line data options]]]))
+      [embed-line {:data {:spectrum-data (spectrum-data)}} options]]]))

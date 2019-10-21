@@ -1,9 +1,11 @@
-(ns vanilla.widgets.bar-chart
-  (:require [reagent.core :as r]
-            [reagent.ratom :refer-macros [reaction]]
-            [dashboard-clj.widgets.core :as widget-common]
-            [vanilla.widgets.basic-widget :as basic]
-            [vanilla.widgets.util :as util]))
+(ns vanilla.widgets.area-chart
+    (:require [reagent.core :as r]
+              [reagent.ratom :refer-macros [reaction]]
+              [cljsjs.highcharts]
+      ;[cljsjs.jquery]
+              [dashboard-clj.widgets.core :as widget-common]
+              [vanilla.widgets.basic-widget :as basic]
+              [vanilla.widgets.util :as util]))
 
 (defn spectrum-data []
   [{:name   "trace-1"
@@ -22,77 +24,68 @@
                         (repeatedly #(+ 5.0
                                         (rand 5)))))}])
 
-
 (defn- render
   []
   [:div {:style {:width "100%" :height "100%"}}])
 
-
-(def bar-chart-config
-  {:chart   {:type            :column
+(def area-chart-config
+  {:chart   {:type            "area"
              :backgroundColor "transparent"
-
              :style           {:labels {
                                         :fontFamily "monospace"
                                         :color      "#FFFFFF"}}}
-   :credits {:enabled false}
    :yAxis   {:title  {:style {:color "#000000"}}
              :labels {:color "#ffffff"}}
-   :xAxis   {:labels {:style {:color "#fff"}}}})
+   :xAxis   {:labels {:style {:color "#fff"}}}
+   :credits {:enabled false}})
 
-
-(defn- plot-bar [this]
+(defn- plot-area [this]
   (let [config     (-> this r/props :chart-options)
-        all-config (merge-with clojure.set/union bar-chart-config config)]
+        all-config (merge area-chart-config config)]
 
-    (.log js/console (str "plot-bar " all-config))
+    (.log js/console (str "plot-area " all-config))
 
     (js/Highcharts.Chart. (r/dom-node this)
                           (clj->js all-config))))
 
-
-(defn bar-chart
+(defn- area-chart
   [chart-options]
   (r/create-class {:reagent-render       render
-                   :component-did-mount  plot-bar
-                   :component-did-update plot-bar}))
+                   :component-did-mount  plot-area
+                   :component-did-update plot-area}))
 
-
-(defn embed-bar [data options series]
+(defn embed-area [data options series]
   (let [dats (get-in data [:data (get-in options [:src :extract])])
         num  (count dats)]
 
-    (.log js/console (str "embed-bar " data))
+    (.log js/console (str "embed-area " data))
 
-    [bar-chart
+    
+    [area-chart
      {:chart-options
-      {:chart       {:zoomType "x"}
-
+      {:zoomType    :x
        :title       {:text ""}
 
-       :xAxis       {:title {:text (get-in options [:viz :x-title] "x-axis")}}
-
-       :yAxis       {:title      {:text (get-in options [:viz :y-title] "y-axis")}
-                     :color      (get-in options [:viz :line-colors])
+       :xAxis       {:title   {:text (get-in options [:viz :x-title] "x-axis")}
+                     :allowDecimals (get-in options [:viz :allowDecimals] false)
                      :categories (into [] (map str (range (count (:values (first dats))))))}
+                
+       :yAxis       {:title   {:text (get-in options [:viz :y-title] "y-axis")}}
+                     ;:labels {:formatter (into [] (map str (range (count (:values (first dats))))))}}
 
        :plotOptions {:series  {:animation (get-in options [:viz :animation] false)}
                      :tooltip (get-in options [:viz :tooltip] {})
                      :column  {:pointPadding 0.2
-                               :borderWidth  0
-                               :dataLabels   {:enabled
-                                              (get-in options [:viz :data-labels] false)}}}
+                               :borderWidth  0}}       ;TODO + marker options
 
        :series      series}}]))
 
-
 (widget-common/register-widget
-  :bar-chart
+  :area-chart
   (fn [data options]
     (let []
 
       [basic/basic-widget data options
        [:div {:style {:width "95%" :height "100%"}}
-
-        [embed-bar {:data {:spectrum-data (spectrum-data)}} options (util/line->bar {:data {:spectrum-data (spectrum-data)}} options)]]])))
+        [embed-area {:data {:spectrum-data (spectrum-data)}} options (util/area->bar {:data {:spectrum-data (spectrum-data)}} options)]]])))
 
