@@ -1,4 +1,4 @@
-(ns vanilla.widgets.bar-chart
+(ns vanilla.widgets.column-chart
   (:require [reagent.core :as r]
             [reagent.ratom :refer-macros [reaction]]
             [dashboard-clj.widgets.core :as widget-common]
@@ -11,8 +11,8 @@
   [:div {:style {:width "100%" :height "100%"}}])
 
 
-(def bar-chart-config
-  {:chart   {:type            "bar"
+(def column-chart-config
+  {:chart   {:type            "column"
              :backgroundColor "transparent"
 
              :style           {:labels {
@@ -24,30 +24,30 @@
    :xAxis   {:labels {:style {:color "#fff"}}}})
 
 
-(defn- plot-bar [this]
-  (let [config (-> this r/props :chart-options)
-        all-config (merge-with clojure.set/union bar-chart-config config)]
+(defn- plot-column [this]
+  (let [config     (-> this r/props :chart-options)
+        all-config (merge-with clojure.set/union column-chart-config config)]
 
-    ;(.log js/console (str "plot-bar " all-config))
+    (.log js/console (str "plot-column " all-config))
 
     (js/Highcharts.Chart. (r/dom-node this)
                           (clj->js all-config))))
 
 
-(defn bar-chart
+(defn column-chart
   [chart-options]
   (r/create-class {:reagent-render       render
-                   :component-did-mount  plot-bar
-                   :component-did-update plot-bar}))
+                   :component-did-mount  plot-column
+                   :component-did-update plot-column}))
 
 
-(defn embed-bar [data options series]
+(defn embed-column [data options series]
   (let [dats (get-in data [:data (get-in options [:src :extract])])
-        num (count dats)]
+        num  (count dats)]
 
-    ;(.log js/console (str "embed-bar " data))
+    (.log js/console (str "embed-column " data))
 
-    [bar-chart
+    [column-chart
      {:chart-options
       {:chart       {:zoomType "x"}
 
@@ -61,7 +61,7 @@
 
        :plotOptions {:series  {:animation (get-in options [:viz :animation] false)}
                      :tooltip (get-in options [:viz :tooltip] {})
-                     :bar     {:pointPadding 0.2
+                     :column  {:pointPadding 0.2
                                :borderWidth  0
                                :dataLabels   {:enabled
                                               (get-in options [:viz :data-labels] false)}}}
@@ -70,12 +70,12 @@
 
 
 (widget-common/register-widget
-  :bar-chart
+  :column-chart
   (fn [data options]
     (let []
 
       [basic/basic-widget data options
        [:div {:style {:width "95%" :height "100%"}}
 
-        [embed-bar data options (util/line->bar data options)]]])))
+        [embed-column data options (util/line->bar data options)]]])))
 

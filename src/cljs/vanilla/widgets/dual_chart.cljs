@@ -5,7 +5,7 @@
             [vanilla.widgets.basic-widget :as basic]
             [vanilla.widgets.util :as util]
             [vanilla.widgets.chart :as line]
-            [vanilla.widgets.bar-chart :as bar]))
+            [vanilla.widgets.column-chart :as column]))
 
 
 
@@ -18,6 +18,6 @@
       [line/embed-line data options]
 
       [:div {:style {:width "95%" :height "65%"}}
-       [bar/embed-bar data options (util/line->bar data options)]]]]))
+       [column/embed-column data options (util/line->bar data options)]]]]))
 
 
