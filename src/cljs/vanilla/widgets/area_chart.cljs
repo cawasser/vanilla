@@ -3,26 +3,17 @@
               [reagent.ratom :refer-macros [reaction]]
               [dashboard-clj.widgets.core :as widget-common]
               [vanilla.widgets.basic-widget :as basic]
-              [vanilla.widgets.util :as util]))
+              [vanilla.widgets.util :as util]
+              [vanilla.widgets.widget-base :as wb]))
 
 (defn- render
   []
   [:div {:style {:width "100%" :height "100%"}}])
 
-(def area-chart-config
-  {:chart   {:type            "area"
-             :backgroundColor "transparent"
-             :style           {:labels {
-                                        :fontFamily "monospace"
-                                        :color      "#FFFFFF"}}}
-   :yAxis   {:title  {:style {:color "#000000"}}
-             :labels {:color "#ffffff"}}
-   :xAxis   {:labels {:style {:color "#fff"}}}
-   :credits {:enabled false}})
 
 (defn- plot-area [this]
   (let [config     (-> this r/props :chart-options)
-        all-config (merge area-chart-config config)]
+        all-config (merge (wb/chart-config "area") config)]
 
     (.log js/console (str "plot-area " all-config))
 
