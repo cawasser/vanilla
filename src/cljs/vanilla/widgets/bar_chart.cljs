@@ -7,6 +7,7 @@
             [vanilla.widgets.basic-widget :as basic]
             [vanilla.widgets.util :as util]))
 
+
 (defn- render
   []
   [:div {:style {:width "100%" :height "100%"}}])
