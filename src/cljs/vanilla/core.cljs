@@ -8,7 +8,9 @@
             [vanilla.widgets.bar-chart]
             [vanilla.widgets.dual-chart]
             [vanilla.widgets.pie-chart]
-            [vanilla.widgets.side-by-side-chart]))
+            [vanilla.widgets.side-by-side-chart]
+            [vanilla.widgets.sankey-chart]
+            [vanilla.widgets.bubble-chart]))
 
 
 (def widgets [
@@ -50,7 +52,7 @@
                                    :animation    false
                                    :style-name   "widget"
                                    :tooltip      {:followPointer true}}}}
-                                   ;:debug        true}}}
+              ;:debug        true}}}
 
               {:type        :line-chart
                :name        :spectrum-line-widget
@@ -71,7 +73,7 @@
                                    :style-name   "widget"
                                    :tooltip      {:followPointer true}
                                    :icon         "timeline"}}}
-                                   ;:debug        true}}}
+              ;:debug        true}}}
 
               {:type        :bar-chart
                :name        :spectrum-bar-widget
@@ -90,7 +92,7 @@
                                    :style-name   "widget"
                                    :animation    false
                                    :tooltip      {:followPointer true}}}}
-                                   ;:debug        true}}}
+              ;:debug        true}}}
 
                               
               {:type        :simple-text
@@ -109,7 +111,7 @@
                              :viz {:title        "Usage Data"
                                    :banner-color "goldenrod"
                                    :animation    false}}}
-                                   ;:debug        true}}}
+              ;:debug        true}}}
 
               {:type        :side-by-side-chart
                :name        :usage-side-by-side-widget
@@ -120,9 +122,30 @@
                              :viz {:title        "Usage Data (side-by-side)"
                                    :banner-color "lavender"
                                    :animation    false
-                                   :tooltip      {:followPointer true}}}}])
-                                   ;:debug        true}}}])
+                                   :tooltip      {:followPointer true}}}}
+              ;:debug        true}}}
 
+              {:type        :sankey-chart
+               :name        :sankey-widget
+               :data-source :sankey-service
+               :options     {:src {:extract :data
+                                   :keys    :keys}
+                             :viz {:title             "Sankey"
+                                   :banner-color      "darkmagenta"
+                                   :banner-text-color "white"
+                                   :animation         false}}}
+
+              {:type        :bubble-chart
+               :name        :bubble-widget
+               :data-source :bubble-service
+               :options     {:src {:extract :data}
+                             :viz {:title             "Bubble"
+                                   :banner-color      "darkgreen"
+                                   :banner-text-color "white"
+                                   :animation         false
+                                   :data-labels       true}}}])
+
+;:debug        true}}}
 
 
 
@@ -150,7 +173,17 @@
                                                                          :sm {:x 0 :y 2 :w 2 :h 1 :static true}}}}
                     :pie-widget                {:layout-opts {:position {:lg {:x 4 :y 2 :w 2 :h 3}
                                                                          :md {:x 4 :y 2 :w 2 :h 3}
-                                                                         :sm {:x 0 :y 2 :w 2 :h 3 :static true}}}}})
+                                                                         :sm {:x 0 :y 2 :w 2 :h 3 :static true}}}}
+                    :sankey-widget             {:layout-opts {:position {:lg {:x 0 :y 5 :w 4 :h 3}
+                                                                         :md {:x 0 :y 5 :w 4 :h 3}
+                                                                         :sm {:x 0 :y 5 :w 4 :h 3 :static true}}}}
+                    :bubble-widget {:layout-opts
+                                    {:position {:lg {:x 4 :y 5 :w 2 :h 3}
+                                                :md {:x 4 :y 5 :w 2 :h 3}
+                                                :sm {:x 0 :y 5 :w 2 :h 3 :static true}}}}})
+
+
+
 
 (def dashboard {
                 :layout  :responsive-grid-layout

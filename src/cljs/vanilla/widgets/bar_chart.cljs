@@ -1,8 +1,6 @@
 (ns vanilla.widgets.bar-chart
   (:require [reagent.core :as r]
             [reagent.ratom :refer-macros [reaction]]
-            [cljsjs.highcharts]
-    ;[cljsjs.jquery]
             [dashboard-clj.widgets.core :as widget-common]
             [vanilla.widgets.basic-widget :as basic]
             [vanilla.widgets.util :as util]))
@@ -28,7 +26,7 @@
 
 (defn- plot-bar [this]
   (let [config     (-> this r/props :chart-options)
-        all-config (merge bar-chart-config config)]
+        all-config (merge-with clojure.set/union bar-chart-config config)]
 
     (.log js/console (str "plot-bar " all-config))
 
@@ -51,7 +49,8 @@
 
     [bar-chart
      {:chart-options
-      {:zoomType    :x
+      {:chart       {:zoomType "x"}
+
        :title       {:text ""}
 
        :xAxis       {:title {:text (get-in options [:viz :x-title] "x-axis")}}

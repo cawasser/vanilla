@@ -1,11 +1,11 @@
-(defproject vanilla "0.1.3-SNAPSHOT"
+(defproject vanilla "0.1.4-SNAPSHOT"
   :description "Vanilla Dashboard - a simple dashboard built on dashboard-clj"
   :url ""
   :dependencies [[org.clojure/clojure "1.8.0"]
                  [org.clojure/clojurescript "1.8.40" :scope "provided"]
                  [environ "1.0.2"]
                  [com.multunus/dashboard-clj "0.1.0-SNAPSHOT"]
-                 [cljsjs/highcharts "7.0.3-0"]
+                 ;[cljsjs/highcharts "7.0.3-0"]
                  [cljsjs/jquery "3.4.0-0"]]
   ;[org.webjars.npm/bulma "0.7.5"]]
 
@@ -13,7 +13,7 @@
 
   :source-paths ["src/clj" "src/cljs"]
   :test-paths ["test/clj"]
-  :resource-paths ["resources" "target/cljsbuild"]
+  :resource-paths ["resources" "target/cljsbuild" "resources/public/libs"]
   :target-path "target/%s/"
 
   :clean-targets ^{:protect false} [:target-path :compile-path "resources/public/js"]
@@ -39,6 +39,7 @@
                 ;; :figwheel {:on-jsload "vanilla.core/on-figwheel-reload"}
 
                 :compiler     {:main                 vanilla.core
+                               :externs              ["externs.js"]
                                :asset-path           "js/compiled/out"
                                :output-to            "resources/public/js/compiled/app.js"
                                :output-dir           "resources/public/js/compiled/out"
@@ -110,6 +111,7 @@
                                                        :source-map       "target/cljsbuild/public/js/compiled/app.js.map"
                                                        :optimizations    :advanced
                                                        :pretty-print     false
+                                                       :externs          ["externs.js"]
                                                        :infer-externs    true
                                                        :closure-warnings {:externs-validation :off
                                                                           :non-standard-jsdoc :off}}}}}
