@@ -32,4 +32,3 @@
     (.log js/console (str "pie->bar " data " -> " new-data))
 
     (assoc data :series new-data)))
-

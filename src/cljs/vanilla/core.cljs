@@ -4,6 +4,7 @@
             [re-frame.core :as rf]
             [vanilla.widgets.simple-text]
             [vanilla.widgets.chart]
+            [vanilla.widgets.area-chart]
             [vanilla.widgets.bar-chart]
             [vanilla.widgets.dual-chart]
             [vanilla.widgets.pie-chart]
@@ -13,6 +14,26 @@
 
 
 (def widgets [
+              {:type        :area-chart
+               :name        :spectrum-area-widget
+               :data-source :spectrum-traces
+               :options     {:src {:extract  :spectrum-data
+                                   :selector 0
+                                   :name     :name
+                                   :values   :values
+                                   :x-val    :x
+                                   :y-val    :y}
+                             :viz {:title        "Channels (area)"
+                                   :chart-title  "dB"
+                                   :allowDecimals "false" 
+                                   :x-title      "frequency"
+                                   :y-title      "power"
+                                   :banner-color "blue"
+                                   :style-name   "widget"
+                                   :animation    false
+                                   :tooltip      {:followPointer true}}}}
+                              
+
               {:type        :dual-chart
                :name        :spectrum-dual-widget
                :data-source :spectrum-traces
@@ -73,6 +94,7 @@
                                    :tooltip      {:followPointer true}}}}
               ;:debug        true}}}
 
+                              
               {:type        :simple-text
                :name        :time-widget
                :data-source :current-time
@@ -129,21 +151,26 @@
 
 
 (def widget-layout {
+                              ;; Left column wide widgets
                     :spectrum-line-widget      {:layout-opts {:position {:lg {:x 0 :y 0 :w 4 :h 2}
                                                                          :md {:x 0 :y 0 :w 4 :h 2}
                                                                          :sm {:x 0 :y 0 :w 2 :h 2 :static true}}}}
                     :spectrum-bar-widget       {:layout-opts {:position {:lg {:x 0 :y 2 :w 4 :h 2}
                                                                          :md {:x 0 :y 2 :w 4 :h 2}
                                                                          :sm {:x 0 :y 0 :w 2 :h 2 :static true}}}}
-                    :spectrum-dual-widget      {:layout-opts {:position {:lg {:x 0 :y 8 :w 4 :h 3}
-                                                                         :md {:x 0 :y 8 :w 4 :h 3}
-                                                                         :sm {:x 0 :y 8 :w 2 :h 3 :static true}}}}
+                    :spectrum-dual-widget      {:layout-opts {:position {:lg {:x 0 :y 4 :w 4 :h 3}
+                                                                         :md {:x 0 :y 4 :w 4 :h 3}
+                                                                         :sm {:x 0 :y 0 :w 2 :h 3 :static true}}}}
+                    :usage-side-by-side-widget {:layout-opts {:position {:lg {:x 0 :y 6 :w 4 :h 2}
+                                                                         :md {:x 0 :y 6 :w 4 :h 2}
+                                                                         :sm {:x 0 :y 0 :w 2 :h 2 :static true}}}}
+                    :spectrum-area-widget      {:layout-opts {:position {:lg {:x 0 :y 8 :w 4 :h 2}
+                                                                         :md {:x 0 :y 8 :w 4 :h 2}
+                                                                         :sm {:x 0 :y 0 :w 2 :h 2 :static true}}}}
+                              ;; Right column small widgets
                     :time-widget               {:layout-opts {:position {:lg {:x 4 :y 0 :w 2 :h 1}
                                                                          :md {:x 4 :y 0 :w 2 :h 1}
                                                                          :sm {:x 0 :y 2 :w 2 :h 1 :static true}}}}
-                    :usage-side-by-side-widget {:layout-opts {:position {:lg {:x 0 :y 11 :w 4 :h 2}
-                                                                         :md {:x 0 :y 11 :w 4 :h 2}
-                                                                         :sm {:x 0 :y 11 :w 2 :h 2 :static true}}}}
                     :pie-widget                {:layout-opts {:position {:lg {:x 4 :y 2 :w 2 :h 3}
                                                                          :md {:x 4 :y 2 :w 2 :h 3}
                                                                          :sm {:x 0 :y 2 :w 2 :h 3 :static true}}}}
