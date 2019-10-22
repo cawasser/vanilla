@@ -6,7 +6,7 @@
             [dashboard-clj.widgets.core :as widget-common]
             [vanilla.widgets.basic-widget :as basic]))
 
-          
+
 (defn- render
   []
   [:div {:style {:width "100%" :height "100%"}}])
