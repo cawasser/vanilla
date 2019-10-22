@@ -1,18 +1,20 @@
 (ns vanilla.core
-  (:require [dashboard-clj.core :as d]
-            [dashboard-clj.layouts.grid-layout-responsive :as grid]
-            [re-frame.core :as rf]
-            [vanilla.widgets.simple-text]
-            [vanilla.widgets.chart]
-            [vanilla.widgets.bar-chart]
-            [vanilla.widgets.column-chart]
-            [vanilla.widgets.dual-chart]
-            [vanilla.widgets.pie-chart]
-            [vanilla.widgets.side-by-side-chart]
-            [vanilla.widgets.sankey-chart]
-            [vanilla.widgets.bubble-chart]
-            [vanilla.widgets.network-graph-chart]
-            [vanilla.widgets.org-chart]))
+  (:require
+    [reagent.core :as r]
+    [dashboard-clj.core :as d]
+    [dashboard-clj.layouts.grid-layout-responsive :as grid]
+    [re-frame.core :as rf]
+    [vanilla.widgets.simple-text]
+    [vanilla.widgets.chart]
+    [vanilla.widgets.bar-chart]
+    [vanilla.widgets.column-chart]
+    [vanilla.widgets.dual-chart]
+    [vanilla.widgets.pie-chart]
+    [vanilla.widgets.side-by-side-chart]
+    [vanilla.widgets.sankey-chart]
+    [vanilla.widgets.bubble-chart]
+    [vanilla.widgets.network-graph-chart]
+    [vanilla.widgets.org-chart]))
 
 
 (def widgets [
@@ -127,10 +129,10 @@
                :name        :org-widget
                :data-source :network-service
                :options     {:src {:extract :data}
-                             :viz {:title             "Network"
-                                   :banner-color      "darkgray"
-                                   :animation         false
-                                   :data-labels       true}}}
+                             :viz {:title        "Network"
+                                   :banner-color "darkgray"
+                                   :animation    false
+                                   :data-labels  true}}}
 
               {:type        :network-graph-chart
                :name        :network-widget
