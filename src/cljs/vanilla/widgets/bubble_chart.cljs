@@ -24,7 +24,7 @@
   (let [config     (-> this r/props :chart-options)
         all-config (merge-with clojure.set/union bubble-chart-config config)]
 
-    (.log js/console (str "plot-bubble " all-config))
+    ;(.log js/console (str "plot-bubble " all-config))
 
     (js/Highcharts.Chart. (r/dom-node this)
                           (clj->js all-config))))
@@ -40,7 +40,7 @@
 (defn embed-bubble [data options]
   (let []
 
-    (.log js/console (str "embed-bubble " data))
+    ;(.log js/console (str "embed-bubble " data))
 
     [bubble-chart
      {:chart-options

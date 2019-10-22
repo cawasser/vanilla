@@ -24,7 +24,7 @@
   (let [config     (-> this r/props :chart-options)
         all-config (merge-with clojure.set/union sankey-chart-config config)]
 
-    (.log js/console (str "plot-sankey " all-config))
+    ;(.log js/console (str "plot-sankey " all-config))
 
     (js/Highcharts.Chart. (r/dom-node this)
                           (clj->js all-config))))
@@ -40,7 +40,7 @@
 (defn embed-sankey [data options]
   (let []
 
-    (.log js/console (str "embed-sankey " data))
+    ;(.log js/console (str "embed-sankey " data))
 
     [sankey-chart
      {:chart-options

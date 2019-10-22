@@ -28,7 +28,7 @@
   (let [config (-> this r/props :chart-options)
         all-config (merge-with clojure.set/union bar-chart-config config)]
 
-    (.log js/console (str "plot-bar " all-config))
+    ;(.log js/console (str "plot-bar " all-config))
 
     (js/Highcharts.Chart. (r/dom-node this)
                           (clj->js all-config))))
@@ -45,7 +45,7 @@
   (let [dats (get-in data [:data (get-in options [:src :extract])])
         num (count dats)]
 
-    (.log js/console (str "embed-bar " data))
+    ;(.log js/console (str "embed-bar " data))
 
     [bar-chart
      {:chart-options

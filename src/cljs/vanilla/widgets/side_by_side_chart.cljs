@@ -13,7 +13,7 @@
   :side-by-side-chart
   (fn [data options]
 
-    (.log js/console (str ":side-by-side-chart " data))
+    ;(.log js/console (str ":side-by-side-chart " data))
 
     [basic/basic-widget data options
 

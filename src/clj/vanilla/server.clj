@@ -3,10 +3,13 @@
               [environ.core :refer [env]]
               [vanilla.fetcher]
               [vanilla.sankey-service]
-              [vanilla.bubble-service])
+              [vanilla.bubble-service]
+              [vanilla.network-service]
+              [vanilla.stoplight-service])
     (:gen-class))
 
-(def datasources [{:name     :spectrum-traces
+(def datasources [
+                  {:name     :spectrum-traces
                    :read-fn  :vanilla.fetcher/spectrum-traces
                    :schedule {:in    [0 :seconds]
                               :every [2 :seconds]}}
@@ -23,19 +26,29 @@
                               :every [5 :seconds]}}
 
                   {:name :sankey-service
-                   :read-fn :vanilla.sankey-service/fetch-data
-                   :schedule {:in    [0 :seconds]
-                              :every [5 :seconds]}}
+                   :read-fn :vanilla.sankey-service/fetch-data}
+                   ;:schedule {:in    [0 :seconds]
+                   ;           :every [5 :seconds]}}
 
                   {:name :bubble-service
-                   :read-fn :vanilla.bubble-service/fetch-data
-                   :schedule {:in    [0 :seconds]
-                              :every [5 :seconds]}}
+                   :read-fn :vanilla.bubble-service/fetch-data}
+                   ;:schedule {:in    [0 :seconds]
+                   ;           :every [5 :seconds]}}
+
+                  {:name :network-service
+                   :read-fn :vanilla.network-service/fetch-data}
+                   ;:schedule {:in    [0 :seconds]
+                   ;           :every [5 :seconds]}}
 
                   {:name     :power-data
                    :read-fn  :vanilla.fetcher/power-data
                    :schedule {:in    [0 :seconds]
                               :every [3 :seconds]}}
+
+                  {:name :health-and-status-data
+                   :read-fn :vanilla.stoplight-service/fetch-data
+                   :schedule {:in    [0 :seconds]
+                              :every [10 :seconds]}}
 
                   {:name     :heatmap-data
                    :read-fn  :vanilla.fetcher/heatmap-data

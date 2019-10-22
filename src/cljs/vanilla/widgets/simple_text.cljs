@@ -13,11 +13,9 @@
 
      [:div {:style {:width "100%"
                     :text-align :center
-                    :border-style  (get-in options [:viz :debug] :none)}}
+                    :border-style  (basic/debug-style options)}}
       [:p {:style {:fontSize    "50px"
                    :font-weight "bold"
                    :color       "blue"}}
-                                    ;
-
 
        (get-in data [:data :text])]]]))

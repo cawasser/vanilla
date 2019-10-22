@@ -26,7 +26,7 @@
   (let [config     (-> this r/props :chart-options)
         all-config (merge-with clojure.set/union pie-chart-config config)]
 
-    (.log js/console (str "plot-pie "))
+    ;(.log js/console (str "plot-pie "))
 
     (js/Highcharts.Chart. (r/dom-node this)
                           (clj->js all-config))))
