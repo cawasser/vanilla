@@ -17,7 +17,8 @@
     [vanilla.widgets.org-chart]
     [vanilla.widgets.pie-chart]
     [vanilla.widgets.sankey-chart]
-    [vanilla.widgets.side-by-side-chart]))
+    [vanilla.widgets.side-by-side-chart]
+    [vanilla.widgets.stoplight-widget]))
 
 
 (def widgets [
@@ -163,7 +164,14 @@
                                    :banner-color      "black"
                                    :banner-text-color "white"
                                    :animation         false
-                                   :data-labels       true}}}])
+                                   :data-labels       true}}}
+
+              {:type        :stoplight-widget
+               :name        :health-and-status-widget
+               :data-source :health-and-status-data
+               :options     {:src {:extract :data}
+                             :viz {:title        "Status"
+                                   :banner-color "aqua"}}}])
 
 
 (def widget-layout
@@ -200,10 +208,10 @@
                                            :sm {:x 0 :y 5 :w 2 :h 3 :static true}}}}
 
    ;; Right column small widgets
-   :time-widget               {:layout-opts
-                               {:position {:lg {:x 4 :y 0 :w 2 :h 1}
-                                           :md {:x 4 :y 0 :w 2 :h 1}
-                                           :sm {:x 0 :y 2 :w 2 :h 1 :static true}}}}
+   :time-widget              {:layout-opts
+                              {:position {:lg {:x 4 :y 0 :w 2 :h 1}
+                                          :md {:x 4 :y 0 :w 2 :h 1}
+                                          :sm {:x 0 :y 2 :w 2 :h 1 :static true}}}}
    :pie-widget                {:layout-opts
                                {:position {:lg {:x 4 :y 2 :w 2 :h 3}
                                            :md {:x 4 :y 2 :w 2 :h 3}
@@ -215,7 +223,14 @@
    :spectrum-column-widget    {:layout-opts
                                {:position {:lg {:x 4 :y 7 :w 2 :h 2}
                                            :md {:x 4 :y 7 :w 2 :h 2}
-                                           :sm {:x 0 :y 0 :w 2 :h 2 :static true}}}}})
+                                           :sm {:x 0 :y 0 :w 2 :h 2 :static true}}}}
+   :health-and-status-widget {:layout-opts
+                              {:position {:lg {:x 4 :y 1 :w 2 :h 2}
+                                          :md {:x 4 :y 1 :w 2 :h 2}
+                                          :sm {:x 0 :y 0 :w 2 :h 2 :static true}}}}})
+
+
+
 
 
 (def dashboard {
