@@ -78,7 +78,7 @@
                                    :animation    false
                                    :style-name   "widget"
                                    :tooltip      {:followPointer true}
-                                   :icon         "timeline"}}}])
+                                   :icon         "timeline"}}}
 
             ;   {:type        :column-chart
             ;    :name        :spectrum-column-widget
@@ -115,16 +115,29 @@
             ;                        :banner-color "goldenrod"
             ;                        :animation    false}}}
 
-            ;   {:type        :side-by-side-chart
-            ;    :name        :usage-side-by-side-widget
-            ;    :data-source :usage-data
-            ;    :options     {:src {:extract  :usage-data
-            ;                        :values   :usage-data
-            ;                        :slice-at 50}
-            ;                  :viz {:title        "Usage Data (side-by-side)"
-            ;                        :banner-color "lavender"
-            ;                        :animation    false
-            ;                        :tooltip      {:followPointer true}}}}
+              {:type        :side-by-side-chart
+               :name        :usage-side-by-side-widget
+               :data-source :usage-data
+               :options     {:src {:extract  :spectrum-data
+                                   :selector 0
+                                   :name     :name
+                                   :values   :values
+                                   :x-val    :x
+                                   :y-val    :y}
+                             :viz {:title             "Channels (side-by-side)"
+                                   :chart-title       "dB"
+                                   :allowDecimals     "false"
+                                   :x-title           "frequency"
+                                   :y-title           "power"
+                                   :banner-color      "lavender"
+                                   :banner-text-color "white"
+                                   :line-width        0.5
+                                   :icon              "timeline"
+                                   :style-name        "widget"
+                                   :animation         false
+                                   :tooltip           {:followPointer true}}}}])
+
+                              
 
             ;   {:type        :sankey-chart
             ;    :name        :sankey-widget
@@ -173,10 +186,10 @@
 ;                                {:position {:lg {:x 0 :y 4 :w 4 :h 3}
 ;                                            :md {:x 0 :y 4 :w 4 :h 3}
 ;                                            :sm {:x 0 :y 0 :w 2 :h 3 :static true}}}}
-;    :usage-side-by-side-widget {:layout-opts
-;                                {:position {:lg {:x 0 :y 6 :w 4 :h 2}
-;                                            :md {:x 0 :y 6 :w 4 :h 2}
-;                                            :sm {:x 0 :y 0 :w 2 :h 2 :static true}}}}
+   :usage-side-by-side-widget {:layout-opts
+                               {:position {:lg {:x 0 :y 6 :w 4 :h 2}
+                                           :md {:x 0 :y 6 :w 4 :h 2}
+                                           :sm {:x 0 :y 0 :w 2 :h 2 :static true}}}}
    :spectrum-area-widget      {:layout-opts
                                {:position {:lg {:x 0 :y 8 :w 4 :h 2}
                                            :md {:x 0 :y 8 :w 4 :h 2}

@@ -5,19 +5,39 @@
             [vanilla.widgets.basic-widget :as basic]
             [vanilla.widgets.util :as util]
             [vanilla.widgets.chart :as line]
-            [vanilla.widgets.column-chart :as column]))
+            [vanilla.widgets.column-chart :as column]
+            [vanilla.widgets.make-chart :as mc]))
+
+
+(defn spectrum-data []
+  [{:name   "trace-1"
+    :values (into []
+                  (take 200
+                        (repeatedly #(+ 5.0
+                                        (rand 5)))))}
+   {:name   "trace-2"
+    :values (into []
+                  (take 200
+                        (repeatedly #(+ 5.0
+                                        (rand 5)))))}
+   {:name   "trace-3"
+    :values (into []
+                  (take 200
+                        (repeatedly #(+ 5.0
+                                        (rand 5)))))}])
 
 
 
 (widget-common/register-widget
   :dual-chart
   (fn [data options]
+    (.log js/console (str "SIDEBYSIDE " data))
     [basic/basic-widget data options
 
      [:div {:style {:width "95%" :height "65%"}}
-      [line/embed-line data options]
+      [mc/embed-chart "area-chart" {:data {:spectrum-data (spectrum-data)}} options (util/line->bar {:data {:spectrum-data (spectrum-data)}} options)]
 
       [:div {:style {:width "95%" :height "65%"}}
-       [column/embed-column data options (util/line->bar data options)]]]]))
+       [mc/embed-chart "line-chart" {:data {:spectrum-data (spectrum-data)}} options (util/line->bar {:data {:spectrum-data (spectrum-data)}} options)]]]]))
 
 

@@ -50,8 +50,6 @@
 
     (.log js/console (str "embed-area " data))
 
-    
-    [area-chart
      {:chart-options
       {:zoomType    :x
        :title       {:text ""}
@@ -68,7 +66,8 @@
                      :column  {:pointPadding 0.2
                                :borderWidth  0}}       ;TODO + marker options
 
-       :series      series}}]))
+       :series      series}}))
+
 
 (widget-common/register-widget
   :area-chart
@@ -77,5 +76,5 @@
 
       [basic/basic-widget data options
        [:div {:style {:width "95%" :height "100%"}}
-        [embed-area {:data {:spectrum-data (spectrum-data)}} options (util/line->bar {:data {:spectrum-data (spectrum-data)}} options)]]])))
+        [mc/embed-chart "area-chart" {:data {:spectrum-data (spectrum-data)}} (embed-area {:data {:spectrum-data (spectrum-data)}} options (util/line->bar {:data {:spectrum-data (spectrum-data)}} options))]]])))
 
