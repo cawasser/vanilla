@@ -4,7 +4,25 @@
               [dashboard-clj.widgets.core :as widget-common]
               [vanilla.widgets.basic-widget :as basic]
               [vanilla.widgets.util :as util]
-              [vanilla.widgets.widget-base :as wb]))
+              [vanilla.widgets.widget-base :as wb]
+              [vanilla.widgets.make-chart :as mc]))
+
+(defn spectrum-data []
+  [{:name   "trace-1"
+    :values (into []
+                  (take 200
+                        (repeatedly #(+ 5.0
+                                        (rand 5)))))}
+   {:name   "trace-2"
+    :values (into []
+                  (take 200
+                        (repeatedly #(+ 5.0
+                                        (rand 5)))))}
+   {:name   "trace-3"
+    :values (into []
+                  (take 200
+                        (repeatedly #(+ 5.0
+                                        (rand 5)))))}])
 
 (defn- render
   []
@@ -59,5 +77,5 @@
 
       [basic/basic-widget data options
        [:div {:style {:width "95%" :height "100%"}}
-        [embed-area data options (util/line->bar data options)]]])))
+        [embed-area {:data {:spectrum-data (spectrum-data)}} options (util/line->bar {:data {:spectrum-data (spectrum-data)}} options)]]])))
 

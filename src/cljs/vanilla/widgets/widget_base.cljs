@@ -5,12 +5,14 @@
               [vanilla.widgets.basic-widget :as basic]
               [vanilla.widgets.util :as util]))
 
+; DOESNT WORK
+(defn render
+  []
+  [:div {:style {:width "100%" :height "100%"}}])
 
 
 
-
-
-(def chart-config [chartType]
+(defn chart-config [chartType]
     {:chart   {:type            chartType
                :backgroundColor "transparent"
                :style           {:labels {

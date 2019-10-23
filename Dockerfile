@@ -1,6 +1,6 @@
 FROM openjdk:8-alpine
 
-RUN apk add --no-cache bash
+#RUN apk add --no-cache bash
 
 COPY target/uberjar/vanilla.jar /vanilla/app.jar
 

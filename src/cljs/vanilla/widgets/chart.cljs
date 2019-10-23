@@ -2,28 +2,35 @@
   (:require [reagent.core :as r]
             [reagent.ratom :refer-macros [reaction]]
             [dashboard-clj.widgets.core :as widget-common]
-            [vanilla.widgets.basic-widget :as basic]))
+            [vanilla.widgets.basic-widget :as basic]
+            [vanilla.widgets.widget-base :as wb]))
+
+(defn spectrum-data []
+  [{:name   "trace-1"
+    :values (into []
+                  (take 200
+                        (repeatedly #(+ 5.0
+                                        (rand 5)))))}
+   {:name   "trace-2"
+    :values (into []
+                  (take 200
+                        (repeatedly #(+ 5.0
+                                        (rand 5)))))}
+   {:name   "trace-3"
+    :values (into []
+                  (take 200
+                        (repeatedly #(+ 5.0
+                                        (rand 5)))))}])
 
 
 (defn- render
   []
   [:div {:style {:width "100%" :height "100%"}}])
 
-(def line-chart-config
-  {:chart   {:type            :line
-             :backgroundColor "transparent"
-             :style           {:labels {
-                                        :fontFamily "monospace"
-                                        :color      "#FFFFFF"}}}
-   :yAxis   {:title  {:style {:color "#000000"}}
-             :labels {:color "#ffffff"}}
-   :xAxis   {:labels {:style {:color "#fff"}}}
-   :credits {:enabled false}})
-
 
 (defn- plot-line [this]
   (let [config     (-> this r/props :chart-options)
-        all-config (merge-with clojure.set/union line-chart-config config)]
+        all-config (merge-with clojure.set/union (wb/chart-config "line") config)]
 
     ;(.log js/console (str "plot-line "))
 
@@ -71,4 +78,4 @@
 
      [:div {:style {:width "95%" :height "100%"}}
 
-      [embed-line data options]]]))
+      [embed-line {:data {:spectrum-data (spectrum-data)}} options]]]))
