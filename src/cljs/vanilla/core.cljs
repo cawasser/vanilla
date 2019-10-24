@@ -107,6 +107,14 @@
                                    :style        {}
                                    :height       "100px"}}}
 
+              {:type        :simple-text
+               :name        :map-widget
+               :data-source :current-time
+               :options     {:viz {:title        "Map Widget"
+                                   :banner-color "lightblue"
+                                   :style        {}
+                                   :height       "100px"}}}
+
               {:type        :pie-chart
                :name        :pie-widget
                :data-source :usage-data
@@ -203,6 +211,11 @@
                                            :sm {:x 0 :y 5 :w 4 :h 3 :static true}}}}
 
    :bubble-widget             {:layout-opts
+                               {:position {:lg {:x 4 :y 5 :w 2 :h 3}
+                                           :md {:x 4 :y 5 :w 2 :h 3}
+                                           :sm {:x 0 :y 5 :w 2 :h 3 :static true}}}}
+
+   :map-widget                {:layout-opts
                                {:position {:lg {:x 4 :y 5 :w 2 :h 3}
                                            :md {:x 4 :y 5 :w 2 :h 3}
                                            :sm {:x 0 :y 5 :w 2 :h 3 :static true}}}}
