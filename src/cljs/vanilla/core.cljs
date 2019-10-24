@@ -18,7 +18,8 @@
     [vanilla.widgets.pie-chart]
     [vanilla.widgets.sankey-chart]
     [vanilla.widgets.side-by-side-chart]
-    [vanilla.widgets.stoplight-widget]))
+    [vanilla.widgets.stoplight-widget]
+    [vanilla.widgets.map]))
 
 
 (def widgets [
@@ -107,7 +108,7 @@
                                    :style        {}
                                    :height       "100px"}}}
 
-              {:type        :simple-text
+              {:type        :map-container
                :name        :map-widget
                :data-source :current-time
                :options     {:viz {:title        "Map Widget"
