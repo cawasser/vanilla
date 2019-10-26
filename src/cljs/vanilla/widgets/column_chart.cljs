@@ -28,7 +28,7 @@
   (let [config     (-> this r/props :chart-options)
         all-config (merge-with clojure.set/union column-chart-config config)]
 
-    (.log js/console (str "plot-column " all-config))
+    ;(.log js/console (str "plot-column " all-config))
 
     (js/Highcharts.Chart. (r/dom-node this)
                           (clj->js all-config))))
@@ -45,7 +45,7 @@
   (let [dats (get-in data [:data (get-in options [:src :extract])])
         num  (count dats)]
 
-    (.log js/console (str "embed-column " data))
+    ;(.log js/console (str "embed-column " data))
 
     [column-chart
      {:chart-options
@@ -69,13 +69,13 @@
        :series      series}}]))
 
 
-(widget-common/register-widget
-  :column-chart
-  (fn [data options]
-    (let []
-
-      [basic/basic-widget data options
-       [:div {:style {:width "95%" :height "100%"}}
-
-        [embed-column data options (util/line->bar data options)]]])))
-
+;(widget-common/register-widget
+;  :column-chart
+;  (fn [data options]
+;    (let []
+;
+;      [basic/basic-widget data options
+;       [:div {:style {:width "95%" :height "100%"}}
+;
+;        [embed-column data options (util/line->bar data options)]]])))
+;

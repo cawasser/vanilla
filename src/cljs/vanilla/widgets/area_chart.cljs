@@ -29,14 +29,14 @@
   [:div {:style {:width "100%" :height "100%"}}])
 
 
-(defn- plot-area [this]
-  (let [config     (-> this r/props :chart-options)
-        all-config (merge (wb/chart-config "area") config)]
-
-    (.log js/console (str "plot-area " all-config))
-
-    (js/Highcharts.Chart. (r/dom-node this)
-                          (clj->js all-config))))
+(defn- plot-area [this])
+  ;(let [config     (-> this r/props :chart-options)
+  ;      all-config (merge (wb/chart-config "area") config)]
+  ;
+  ;  (.log js/console (str "plot-area " all-config))
+  ;
+  ;  (js/Highcharts.Chart. (r/dom-node this)
+  ;                        (clj->js all-config))))
 
 (defn- area-chart
   [chart-options]
@@ -48,7 +48,7 @@
   (let [dats (get-in data [:data (get-in options [:src :extract])])
         num  (count dats)]
 
-    (.log js/console (str "embed-area " data))
+    (.log js/console (str "embed-area " data)
 
      {:chart-options
       {:zoomType    :x
@@ -66,15 +66,15 @@
                      :column  {:pointPadding 0.2
                                :borderWidth  0}}       ;TODO + marker options
 
-       :series      series}}))
+       :series      series}})))
 
 
-(widget-common/register-widget
-  :area-chart
-  (fn [data options]
-    (let []
-
-      [basic/basic-widget data options
-       [:div {:style {:width "95%" :height "100%"}}
-        [mc/embed-chart "area-chart" {:data {:spectrum-data (spectrum-data)}} (embed-area {:data {:spectrum-data (spectrum-data)}} options (util/line->bar {:data {:spectrum-data (spectrum-data)}} options))]]])))
-
+;(widget-common/register-widget
+;  :area-chart
+;  (fn [data options]
+;    (let []
+;
+;      [basic/basic-widget data options
+;       [:div {:style {:width "95%" :height "100%"}}]])))
+;        ;[mc/embed-chart "area-chart" {:data {:spectrum-data (spectrum-data)}} (embed-area {:data {:spectrum-data (spectrum-data)}} options (util/line->bar {:data {:spectrum-data (spectrum-data)}} options))]]])))
+;

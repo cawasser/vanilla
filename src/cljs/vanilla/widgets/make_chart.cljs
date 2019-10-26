@@ -1,54 +1,125 @@
 (ns vanilla.widgets.make-chart
-    (:require [reagent.core :as r]
-              [reagent.ratom :refer-macros [reaction]]
-              [dashboard-clj.widgets.core :as widget-common]
-              [vanilla.widgets.basic-widget :as basic]
-              [vanilla.widgets.util :as util]))
-(defn- render
-  []
-  [:div {:style {:width "100%" :height "100%"}}])
-  
-  
-(defn- plot [chart-config]
-  (fn [this]
-    (let [config     (-> this r/props :chart-options)
-          all-config (merge-with clojure.set/union chart-config config)]
-  
-      (.log js/console (str "plot "
-                            (:title chart-config) ","
-                            config ", "
-                            chart-config all-config))
-  
-      (js/Highcharts.Chart. (r/dom-node this)
-                            (clj->js all-config)))))
-  
-  
-(defn- chart
-  [chart-options]
-  (r/create-class {:reagent-render       render
-                   :component-did-mount  (plot chart-options)
-                   :component-did-update (plot chart-options)}))
-  
-  
-  
-  
-(defn embed-chart [chart data options]
-  (let []
-    (.log js/console (str "embed-ANYTHING-graph" [(symbol chart) options]))
-  
-    [(symbol chart) options]))
-  
-  
-  
-(defn register-widget [id chart-type & opt-data]
-  (widget-common/register-widget
-    id
-    (fn [data options]
-      (let []
-  
-        [basic/basic-widget data options
-         [:div {:style {:width "95%" :height "100%"}}
-  
-          [chart-type {:data opt-data} options]]]))))
-  
-  
+  (:require [reagent.core :as reagent]
+            [reagent.ratom :refer-macros [reaction]]
+            [dashboard-clj.widgets.core :as widget-common]
+            [vanilla.widgets.basic-widget :as basic]
+            [vanilla.widgets.util :as util]))
+
+
+
+;;;;;;;;;;;;;;;;;
+;
+; PRIVATE support functions
+;
+;
+(defn- make-config
+  "combine the various config items into the one 'master' config
+   for all of Highcharts, since it has only 1 function:
+
+         Highcharts.Chart()
+
+   NOTE: this function will get more sophisticated as we flesh out the
+         handling of :data-format/xxx and :src/xxx metadata keys"
+
+  [chart-config data options]
+
+  (.log js/console (str "make-config " options))
+
+  (let [chart-type  (keyword (-> chart-config :chart :type))
+        data-config (if (instance? Atom data) @data data)
+        base-config {:title       {:text  (get options :viz/chart-title "")
+                                   :style {:labels {:fontFamily "monospace"
+                                                    :color      "#FFFFFF"}}}
+
+                     :subtitle    {:text ""}
+
+                     :xAxis       {:categories (:src/x-categories options [])
+                                   :title      {:text (:src/x-title data-config "")}}
+
+                     :tooltip     {:valueSuffix (:src/y-valueSuffix data-config "")}
+
+                     :yAxis       {:title {:text (:src/y-title data-config "")}}
+
+                     :plotOptions {:series    {:animation (:viz/animation options false)}
+                                   chart-type {:dataLabels
+                                               {:enabled (:viz/dataLabels options false)}}}
+                     :credits     {:enabled false}}]
+
+    (merge-with clojure.set/union base-config chart-config)))
+
+
+(defn- merge-configs
+  "merge the data into the :series key whenever it change so
+   we get the new data to re-render"
+
+  [chart-config data]
+
+  ;(.log js/console (str "merge-configs " data))
+
+  (assoc chart-config :series (get-in (if (instance? Atom data) @data data)
+                                      [:data :series] [])))
+
+
+
+
+;;;;;;;;;;;;;;;;;
+;
+; PUBLIC interface
+;
+;
+(defn make-chart
+  "creates the correct reagent 'hiccup' and react/class to implement a
+  Highcharts.js UI component that can be embedded inside any valid hiccup"
+
+  [chart-config data local-config]
+
+  (let [dom-node (reagent/atom nil)]
+
+    (reagent/create-class
+      {:reagent-render
+       (fn [args]
+         @dom-node                                          ; be sure to render if node changes
+         [:div {:style {:style {:width "100%" :height "100%"}}}])
+
+       :component-did-mount
+       (fn [this]
+         (let [node (reagent/dom-node this)]
+           ;(.log js/console (str (-> chart-config :chart :type)
+           ;                   " component-did-mount"))
+           (reset! dom-node node)))
+
+       :component-did-update
+       (fn [this old-argv]
+         (let [new-args    (rest (reagent/argv this))
+               new-data    (js->clj (second new-args))
+               base-config (make-config chart-config data local-config)
+               all-configs (merge-configs base-config new-data)]
+
+           (.log js/console (str (-> chart-config :chart :type)
+                                 " component-did-update "
+                                 all-configs))
+           ;(.log js/console (str (-> chart-config :chart :type)
+           ;                      " PROPS "
+           ;                      (reagent/props this)))
+           ;(.log js/console (str (-> chart-config :chart :type)
+           ;                      " NEW-ARGS "
+           ;                      new-args))
+           (.log js/console (str (-> chart-config :chart :type)
+                                 " NEWDATA "
+                                 (if (instance? Atom new-data)
+                                   @new-data
+                                   new-data)))
+
+           (js/Highcharts.Chart. (reagent/dom-node this)
+                                 (clj->js all-configs))))})))
+
+;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;
+
+(comment
+
+  ())

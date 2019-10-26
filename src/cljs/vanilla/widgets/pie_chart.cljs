@@ -52,9 +52,9 @@
        :series      dats}}]))
 
 
-(widget-common/register-widget
-  :pie-chart
-  (fn [data options]
-    [basic/basic-widget data options
-     [:div {:style {:width "100%"}}
-      [embed-pie data options]]]))
+;(widget-common/register-widget
+;  :pie-chart
+;  (fn [data options]
+;    [basic/basic-widget data options
+;     [:div {:style {:width "100%"}}
+;      [embed-pie data options]]]))

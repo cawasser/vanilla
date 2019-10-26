@@ -51,12 +51,12 @@
                       :data (get-in data [:data (get-in options [:src :extract])])}]}}]))
 
 
-(widget-common/register-widget
-  :sankey-chart
-  (fn [data options]
-    (let []
-
-      [basic/basic-widget data options
-       [:div {:style {:width "95%" :height "100%"}}
-
-        [embed-sankey data options]]])))
+;(widget-common/register-widget
+;  :sankey-chart
+;  (fn [data options]
+;    (let []
+;
+;      [basic/basic-widget data options
+;       [:div {:style {:width "95%" :height "100%"}}
+;
+;        [embed-sankey data options]]])))

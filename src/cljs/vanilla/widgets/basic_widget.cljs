@@ -14,16 +14,16 @@
 
 (defn basic-widget [data options custom-content]
   [:div {:class "chart container"
-         :style {:height (get-in options [:viz :height] "100%")
+         :style {:height (get options :viz/height "100%")
                  :width "100%"}}
    [:div {:class "title-wrapper"}
     [:h3 {:class "title"
           :style {:background-color
-                  (get-in options [:viz :banner-color] "lightblue")
-                  :color (get-in options [:viz :banner-text-color] "black")}}
-     (get-in options [:viz :title])]]
+                  (get options :viz/banner-color "lightblue")
+                  :color (get options :viz/banner-text-color "black")}}
+     (get options :viz/title)]]
 
-   [:div {:class (str (get-in options [:viz :style-name] "widget"))
+   [:div {:class (str (get options :viz/style-name "widget"))
           :style {:width "100%"
                   :height "80%"
                   :marginRight "50px"

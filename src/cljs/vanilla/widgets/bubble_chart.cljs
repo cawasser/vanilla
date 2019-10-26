@@ -51,15 +51,15 @@
        :series (get-in data [:data (get-in options [:src :extract])])}}]))
 
 
-(widget-common/register-widget
-  :bubble-chart
-  (fn [data options]
-    (let []
-
-      [basic/basic-widget data options
-       [:div {:style {:width "95%" :height "100%"}}
-
-        [embed-bubble data options]]])))
-
-
-
+;(widget-common/register-widget
+;  :bubble-chart
+;  (fn [data options]
+;    (let []
+;
+;      [basic/basic-widget data options
+;       [:div {:style {:width "95%" :height "100%"}}
+;
+;        [embed-bubble data options]]])))
+;
+;
+;

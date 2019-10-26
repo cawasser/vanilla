@@ -86,13 +86,13 @@
        :series      series}}]))
 
 
-(widget-common/register-widget
-  :bar-chart
-  (fn [data options]
-    (let []
-
-      [basic/basic-widget data options
-       [:div {:style {:width "95%" :height "100%"}}
-
-        [embed-bar {:data {:spectrum-data (spectrum-data)}} options (util/line->bar {:data {:spectrum-data (spectrum-data)}} options)]]])))
-
+;(widget-common/register-widget
+;  :bar-chart
+;  (fn [data options]
+;    (let []
+;
+;      [basic/basic-widget data options
+;       [:div {:style {:width "95%" :height "100%"}}
+;
+;        [embed-bar {:data {:spectrum-data (spectrum-data)}} options (util/line->bar {:data {:spectrum-data (spectrum-data)}} options)]]])))
+;

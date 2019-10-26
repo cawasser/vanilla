@@ -58,13 +58,13 @@
                          (get-in data [:data (get-in options [:src :extract])]))}}]))
 
 
-(widget-common/register-widget
-  :network-graph-chart
-  (fn [data options]
-    (let []
-
-      [basic/basic-widget data options
-       [:div {:style {:width "95%" :height "100%"}}
-
-        [embed-network-graph data options]]])))
-
+;(widget-common/register-widget
+;  :network-graph-chart
+;  (fn [data options]
+;    (let []
+;
+;      [basic/basic-widget data options
+;       [:div {:style {:width "95%" :height "100%"}}
+;
+;        [embed-network-graph data options]]])))
+;

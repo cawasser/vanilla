@@ -3,20 +3,20 @@
 
 (defn spectrum-data []
   [{:name   "trace-1"
-    :values (into []
-                  (take 200
-                        (repeatedly #(+ 5.0
-                                        (rand 5)))))}
+    :data (into []
+                (take 200
+                      (repeatedly #(+ 5.0
+                                      (rand 5)))))}
    {:name   "trace-2"
-    :values (into []
-                  (take 200
-                        (repeatedly #(+ 5.0
-                                        (rand 5)))))}
+    :data (into []
+                (take 200
+                      (repeatedly #(+ 5.0
+                                      (rand 5)))))}
    {:name   "trace-3"
-    :values (into []
-                  (take 200
-                        (repeatedly #(+ 5.0
-                                        (rand 5)))))}])
+    :data (into []
+                (take 200
+                      (repeatedly #(+ 5.0
+                                      (rand 5)))))}])
 
 (defn usage-data []
   [["Apples" (rand 100)]

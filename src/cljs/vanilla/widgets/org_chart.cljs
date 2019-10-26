@@ -60,12 +60,12 @@
                          (get-in data [:data (get-in options [:src :extract])]))}}]))
 
 
-(widget-common/register-widget
-  :org-chart
-  (fn [data options]
-    (let []
-
-      [basic/basic-widget data options
-       [:div {:style {:width "95%" :height "100%"}}
-
-        [embed-org-graph data options]]])))
+;(widget-common/register-widget
+;  :org-chart
+;  (fn [data options]
+;    (let []
+;
+;      [basic/basic-widget data options
+;       [:div {:style {:width "95%" :height "100%"}}
+;
+;        [embed-org-graph data options]}}]))
