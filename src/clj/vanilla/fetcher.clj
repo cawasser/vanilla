@@ -16,7 +16,7 @@
   (prn "Usage Data")
 
   {:title      "Usage Data"
-   :format     [:x-y]
+   :format     :x-y
    :usage-data (db/usage-data)})
 
 (defn current-time []

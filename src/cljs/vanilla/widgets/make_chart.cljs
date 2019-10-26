@@ -33,19 +33,26 @@
 
                      :subtitle    {:text ""}
 
-                     :xAxis       {:categories (:src/x-categories options [])
-                                   :title      {:text (:src/x-title data-config "")}}
+                     :xAxis       {:title      {:text (:src/x-title data-config "")}
+                                   :allowDecimals (get-in options [:viz/x-allowDecimals] false)}
 
                      :tooltip     {:valueSuffix (:src/y-valueSuffix data-config "")}
 
-                     :yAxis       {:title {:text (:src/y-title data-config "")}}
+                     :yAxis       {:title {:text (:src/y-title data-config "")}
+                                   :allowDecimals (get-in options [:viz/y-allowDecimals] false)}
 
                      :plotOptions {:series    {:animation (:viz/animation options false)}
                                    chart-type {:dataLabels
-                                               {:enabled (:viz/dataLabels options false)}}}
-                     :credits     {:enabled false}}]
+                                               {:enabled (:viz/dataLabels options false)}
+                                               :lineWidth (:viz/lineWidth options 1)}
+                                   :keys (:src/keys options [])}
+                     :credits     {:enabled false}}
 
-    (merge-with clojure.set/union base-config chart-config)))
+        special-config (if (:src/x-categories options)
+                         (assoc-in base-config [:xAxis :categories] (:src/x-categories options))
+                         base-config)]
+
+    (merge-with clojure.set/union special-config chart-config)))
 
 
 (defn- merge-configs
@@ -54,10 +61,13 @@
 
   [chart-config data]
 
-  ;(.log js/console (str "merge-configs " data))
+  (let [ret (assoc chart-config :series (get-in (if (instance? Atom data) @data data)
+                                                [:data :series] []))]
 
-  (assoc chart-config :series (get-in (if (instance? Atom data) @data data)
-                                      [:data :series] [])))
+    (.log js/console (str "merge-configs <<<<< " data))
+    (.log js/console (str "merge-configs " chart-config " >>>>> " ret))
+
+    ret))
 
 
 
@@ -79,7 +89,7 @@
       {:reagent-render
        (fn [args]
          @dom-node                                          ; be sure to render if node changes
-         [:div {:style {:style {:width "100%" :height "100%"}}}])
+         [:div {:style {:width "100%" :height "100%"}}])
 
        :component-did-mount
        (fn [this]
@@ -95,20 +105,20 @@
                base-config (make-config chart-config data local-config)
                all-configs (merge-configs base-config new-data)]
 
-           (.log js/console (str (-> chart-config :chart :type)
-                                 " component-did-update "
-                                 all-configs))
+           ;(.log js/console (str (-> chart-config :chart :type)
+           ;                      " component-did-update "
+           ;                      all-configs))
            ;(.log js/console (str (-> chart-config :chart :type)
            ;                      " PROPS "
            ;                      (reagent/props this)))
            ;(.log js/console (str (-> chart-config :chart :type)
            ;                      " NEW-ARGS "
            ;                      new-args))
-           (.log js/console (str (-> chart-config :chart :type)
-                                 " NEWDATA "
-                                 (if (instance? Atom new-data)
-                                   @new-data
-                                   new-data)))
+           ;(.log js/console (str (-> chart-config :chart :type)
+           ;                      " NEWDATA "
+           ;                      (if (instance? Atom new-data)
+           ;                        @new-data
+           ;                        new-data)))
 
            (js/Highcharts.Chart. (reagent/dom-node this)
                                  (clj->js all-configs))))})))

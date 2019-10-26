@@ -5,8 +5,8 @@
   (prn "Sankey Service")
 
   {:title "Sankey Data"
-   :format [:from-to-value]
-   :keys ["from" "to" "weight"]
+   :data-format :data-format/from-to-value
+   :src/keys ["from" "to" "weight"]
    :data [["Brazil" "Portugal" 5]
           ["Brazil" "France" 1]
           ["Brazil" "Spain" 1]

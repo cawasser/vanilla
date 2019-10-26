@@ -7,9 +7,3 @@
             [vanilla.widgets.make-chart :as mc]))
 
 
-         ;:series      (into []
-         ;                   (for [n (range num)]
-         ;                     {:name (get-in dats [n (get-in options [:src :name] :name)] (str "set " n))
-         ;                      :data (into [] (get-in dats [n (get-in options [:src :values] :values)]))}))}}])))
-
-
