@@ -11,18 +11,18 @@
   [{:name     :spectrum-traces
     :read-fn  :vanilla.fetcher/spectrum-traces
     :schedule {:in    [0 :seconds]
-               :every [1 :minute]}}
+               :every [2 :minutes]}}
 
    {:name     :usage-data
-    :read-fn  :vanilla.fetcher/usage-data}
-    ;:schedule {:in    [0 :seconds]
-    ;           :every [4 :seconds]}}
+    :read-fn  :vanilla.fetcher/usage-data
+    :schedule {:in    [0 :seconds]
+               :every [4 :minutes]}}
 
    {:name     :current-time
     :read-fn  :vanilla.fetcher/current-time
-    :params   []}
-    ;:schedule {:in    [0 :seconds]
-    ;           :every [5 :seconds]}}
+    :params   []
+    :schedule {:in    [0 :seconds]
+               :every [5 :minutes]}}
 
    {:name :sankey-service
     :read-fn :vanilla.sankey-service/fetch-data}
@@ -30,9 +30,9 @@
     ;           :every [5 :seconds]}}
 
    {:name :bubble-service
-    :read-fn :vanilla.bubble-service/fetch-data}
-    ;:schedule {:in    [0 :seconds]
-    ;           :every [5 :seconds]}}
+    :read-fn :vanilla.bubble-service/fetch-data
+    :schedule {:in    [0 :seconds]
+               :every [5 :minutes]}}
 
    {:name :network-service
     :read-fn :vanilla.network-service/fetch-data}

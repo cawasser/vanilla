@@ -2,13 +2,6 @@
 
 
 
-(defn process-data [data slice-at]
-  ;(.log js/console "process-data" (str data))
-
-  [{:colorByPoint true
-    :keys ["name" "y" "selected" "sliced"]
-    :data (map #(conj % false (> (second %) slice-at)) data)}])
-
 
 
 (defn line->bar [data options]

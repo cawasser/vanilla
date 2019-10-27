@@ -13,7 +13,7 @@
 
 
 (defn basic-widget [data options custom-content]
-  [:div {:class "chart container"
+  [:div {:class "vanilla.widgets.line-chart container"
          :style {:height (get options :viz/height "100%")
                  :width "100%"}}
    [:div {:class "title-wrapper"}

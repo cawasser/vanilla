@@ -4,83 +4,37 @@
             [dashboard-clj.widgets.core :as widget-common]
             [vanilla.widgets.basic-widget :as basic]
             [vanilla.widgets.make-chart :as mc]
-            [vanilla.widgets.util :as util]))
+
+            [vanilla.widgets.area-chart]
+            [vanilla.widgets.bubble-chart]
+            [vanilla.widgets.column-chart]
+            [vanilla.widgets.line-chart]
+            [vanilla.widgets.network-graph-chart]
+            [vanilla.widgets.org-chart]
+            [vanilla.widgets.pie-chart]
+            [vanilla.widgets.sankey-chart]))
 
 
-;;;;;;;;;;;;;;;;;
-;
-; One structure to specify each highcharts "type" along with a few
-; small config things
-;
-; :chart/supported-formats is a vector of the keys that this chart
-;                          can display.
-;                          TODO used to find the correct format converters
-;
 (def chart-configs
   {
-   :area-chart
-   {:chart/supported-formats [:data-format/y :data-format/x-y]
-    :chart {:type     "area"
-            :zoomType "x"}
-    :yAxis {:min    0
-            :title  {:align "high"}
-            :labels {:overflow "justify"}}}
-
    :bar-chart
    {:chart/supported-formats [:data-format/y :data-format/x-y]
-    :chart {:type     "bar"
-            :zoomType "x"}
-    :yAxis {:min    0
-            :title  {:align "high"}
-            :labels {:overflow "justify"}}}
-
-   :bubble-chart
-   {:chart/supported-formats [:data-format/x-y-n :data-format/x-y-e]
-    :chart   {:type "bubble"}
-    :series  {:dataLabels {:format "{point.name}"}}}
-
-   :column-chart
-   {:chart/supported-formats [:data-format/y :data-format/x-y]
-    :chart {:type "column"
-            :zoomType "x"}
-    :yAxis {:min    0
-            :title  {:align "high"}
-            :labels {:overflow "justify"}}}
-
-   :line-chart
-   {:chart/supported-formats [:data-format/y :data-format/x-y]
-    :chart {:type     "line"
-            :zoomType "x"}
-    :yAxis {:min    0
-            :title  {:align "high"}
-            :labels {:overflow "justify"}}}
-
-   :network-chart
-   {:chart/supported-formats [:data-format/from-to :data-format/form-to-n]
-    :chart  {:type "networkgraph"}
-    :series {:dataLabels {:linkFormat ""}}}
-
-   :org-chart
-   {:chart/supported-formats [:data-formats/form-to]
-    :chart {:type "organization"}
-    :plotOptions {:type "organization"
-                  :keys ["from", "to"]}
-    :series {:type "organization"}}
-
-   :pie-chart
-   {:chart/supported-formats [:data-format/x-y]
-    :chart {:type "pie"}}
+    :chart                   {:type     "bar"
+                              :zoomType "x"}
+    :yAxis                   {:min    0
+                              :title  {:align "high"}
+                              :labels {:overflow "justify"}}}
 
    :sankey-chart
    {:chart/supported-formats [:data-format/from-to :data-format/form-to-n]
-    :chart {:type "sankey"}
-    :series {:type "sankey"}}})
+    :chart                   {:type "sankey"}
+    :series                  {:type "sankey"}}})
 
 
 
 
 (defn get-config [type]
-  (let [config (get chart-configs type {})]
+  (let [config (get-in @mc/type-registry [type :chart-options] {})]
 
     (.log js/console (str "get-config " type ", " config))
 
@@ -111,15 +65,15 @@
 
     (fn [data options]
 
-      (.log js/console (str "dual-chart " data ", " options))
+      ;(.log js/console (str "dual-vanilla.widgets.line-chart " data ", " options))
 
       [basic/basic-widget data options
 
        (into [:div]
-         (map
-           #([:div {:style {:width "95%" :height "65%"}}
-              [mc/make-chart % data options]])
-           chart-configs))])))
+             (map
+               #([:div {:style {:width "95%" :height "65%"}}
+                  [mc/make-chart % data options]])
+               chart-configs))])))
 
 
 (defn make-side-by-side [id left-chart right-chart]
@@ -129,7 +83,7 @@
 
     (fn [data options]
 
-      ;(.log js/console (str ":side-by-side-chart " data))
+      ;(.log js/console (str ":side-by-side-vanilla.widgets.line-chart " data))
 
       [basic/basic-widget data options
 

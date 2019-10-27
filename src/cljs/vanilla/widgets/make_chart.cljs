@@ -1,10 +1,11 @@
 (ns vanilla.widgets.make-chart
   (:require [reagent.core :as reagent]
             [reagent.ratom :refer-macros [reaction]]
-            [dashboard-clj.widgets.core :as widget-common]
-            [vanilla.widgets.basic-widget :as basic]
-            [vanilla.widgets.util :as util]))
+            [dashboard-clj.widgets.core :as widget-common]))
 
+
+
+(defonce type-registry (atom {}))
 
 
 ;;;;;;;;;;;;;;;;;
@@ -12,6 +13,53 @@
 ; PRIVATE support functions
 ;
 ;
+(defn- plot-config [chart-type chart-config data options]
+  (let [chart-reg-entry (get @type-registry chart-type {})
+        format-type     (get-in data [:data :data-format])
+        pc-fn           (get-in chart-reg-entry [:merge-plot-option format-type]
+                                (get-in chart-reg-entry [:merge-plot-option :default]))]
+
+    (.log js/console (str "plot-config " chart-type
+                          " ///// (format-type)" format-type
+                          " ///// (pc-fn)" pc-fn))
+
+    (if pc-fn
+      (pc-fn chart-config data options))))
+
+
+(defn default-conversion [chart-type data options]
+  (let [ret (get-in data [:data :series])]
+    (.log js/console (str "default-conversion " chart-type
+                          " //// (data) " data
+                          " //// (ret)" ret))
+
+    ret))
+
+
+
+
+
+(defn- get-conversion [chart-type data options]
+  (let [chart-reg-entry (get @type-registry chart-type {})
+        format-type     (get-in data [:data :data-format])
+        conversions     (get chart-reg-entry :conversions)
+        conv-fn         (get-in chart-reg-entry [:conversions format-type]
+                                (get-in chart-reg-entry [:conversions :default]
+                                        default-conversion))
+        ret             (conv-fn chart-type data options)]
+
+    (.log js/console (str "get-conversion " chart-type "/" format-type
+                          " //// (data)" data
+                          " //// (chart-reg-entry)" chart-reg-entry
+                          " //// (conversions)" conversions
+                          " //// (conv-fn)" conv-fn
+                          " //// (ret)" ret))
+
+    ret))
+
+
+
+
 (defn- make-config
   "combine the various config items into the one 'master' config
    for all of Highcharts, since it has only 1 function:
@@ -23,49 +71,43 @@
 
   [chart-config data options]
 
-  (.log js/console (str "make-config " options))
+  (.log js/console (str "make-config " chart-config " ///// " data))
 
-  (let [chart-type  (keyword (-> chart-config :chart :type))
-        data-config (if (instance? Atom data) @data data)
-        base-config {:title       {:text  (get options :viz/chart-title "")
-                                   :style {:labels {:fontFamily "monospace"
-                                                    :color      "#FFFFFF"}}}
+  (let [chart-type     (-> chart-config :chart/type)
+        data-config    (if (instance? Atom data) @data data)
+        base-config    {:title       {:text  (get options :viz/chart-title "")
+                                      :style {:labels {:fontFamily "monospace"
+                                                       :color      "#FFFFFF"}}}
 
-                     :subtitle    {:text ""}
+                        :subtitle    {:text ""}
 
-                     :xAxis       {:title      {:text (:src/x-title data-config "")}
-                                   :allowDecimals (get-in options [:viz/x-allowDecimals] false)}
+                        :tooltip     {:valueSuffix (:src/y-valueSuffix data-config "")}
 
-                     :tooltip     {:valueSuffix (:src/y-valueSuffix data-config "")}
+                        :plotOptions {:series {:animation (:viz/animation options false)}}
 
-                     :yAxis       {:title {:text (:src/y-title data-config "")}
-                                   :allowDecimals (get-in options [:viz/y-allowDecimals] false)}
+                        :credits     {:enabled false}}
 
-                     :plotOptions {:series    {:animation (:viz/animation options false)}
-                                   chart-type {:dataLabels
-                                               {:enabled (:viz/dataLabels options false)}
-                                               :lineWidth (:viz/lineWidth options 1)}
-                                   :keys (:src/keys options [])}
-                     :credits     {:enabled false}}
+        plot-config    (plot-config chart-type base-config data-config options)
 
-        special-config (if (:src/x-categories options)
-                         (assoc-in base-config [:xAxis :categories] (:src/x-categories options))
-                         base-config)]
+        special-config {}]
 
-    (merge-with clojure.set/union special-config chart-config)))
+    (merge-with clojure.set/union special-config base-config plot-config chart-config)))
 
 
-(defn- merge-configs
-  "merge the data into the :series key whenever it change so
-   we get the new data to re-render"
 
-  [chart-config data]
 
-  (let [ret (assoc chart-config :series (get-in (if (instance? Atom data) @data data)
-                                                [:data :series] []))]
+(defn- merge-configs [chart-config data options]
 
-    (.log js/console (str "merge-configs <<<<< " data))
-    (.log js/console (str "merge-configs " chart-config " >>>>> " ret))
+  (let [chart-type (-> chart-config :chart/type)
+        dat        (if (instance? Atom data) @data data)
+        converted  (get-conversion chart-type dat options)
+        ret        (assoc chart-config :series converted)]
+
+    (.log js/console (str "merge-configs " chart-type
+                          " //// (data) " data
+                          " //// (converted)" converted
+                          " //// (chart-config) " chart-config
+                          " //// (ret)" ret))
 
     ret))
 
@@ -77,48 +119,71 @@
 ; PUBLIC interface
 ;
 ;
+
+(defn register-type
+  "register the data structure manipulations to support a certain
+   Highcharts chart type, identified by 'id'
+
+   'registry-data' provides a map of chart-options, plot-option
+   configurations, and data conversion functions"
+
+  [id registry-data]
+
+  (.log js/console (str "register-type " id
+                        " //// (registry-data)" registry-data))
+
+  (swap! type-registry assoc id registry-data))
+
+
+; spec
+
+
+
+
 (defn make-chart
   "creates the correct reagent 'hiccup' and react/class to implement a
   Highcharts.js UI component that can be embedded inside any valid hiccup"
 
-  [chart-config data local-config]
+  [chart-config data options]
 
-  (let [dom-node (reagent/atom nil)]
+  (let [dom-node        (reagent/atom nil)
+        chart-type      (-> chart-config :chart/type)
+        chart-reg-entry (get type-registry chart-type {})]
+
+    (.log js/console (str "make-chart " chart-type
+                          " //// (chart-config)" chart-config
+                          " ////// (chart-reg-entry)" chart-reg-entry))
 
     (reagent/create-class
       {:reagent-render
        (fn [args]
          @dom-node                                          ; be sure to render if node changes
-         [:div {:style {:width "100%" :height "100%"}}])
+         [:div {:style {:width (get options :viz/width "100%") :height "100%"}}])
 
        :component-did-mount
        (fn [this]
-         (let [node (reagent/dom-node this)]
-           ;(.log js/console (str (-> chart-config :chart :type)
-           ;                   " component-did-mount"))
+         (let [chart-type  ""
+               node (reagent/dom-node this)]
+
+           ;(.log js/console (str "component-did-mount " chart-type))
+
            (reset! dom-node node)))
 
        :component-did-update
        (fn [this old-argv]
-         (let [new-args    (rest (reagent/argv this))
+         (let [chart-type  ""
+               new-args    (rest (reagent/argv this))
                new-data    (js->clj (second new-args))
-               base-config (make-config chart-config data local-config)
-               all-configs (merge-configs base-config new-data)]
+               base-config (make-config chart-config new-data options)
+               all-configs (merge-configs base-config new-data options)]
 
-           ;(.log js/console (str (-> chart-config :chart :type)
-           ;                      " component-did-update "
-           ;                      all-configs))
-           ;(.log js/console (str (-> chart-config :chart :type)
-           ;                      " PROPS "
-           ;                      (reagent/props this)))
-           ;(.log js/console (str (-> chart-config :chart :type)
-           ;                      " NEW-ARGS "
-           ;                      new-args))
-           ;(.log js/console (str (-> chart-config :chart :type)
-           ;                      " NEWDATA "
-           ;                      (if (instance? Atom new-data)
-           ;                        @new-data
-           ;                        new-data)))
+           ;(.log js/console (str "component-did-update " chart-type
+           ;                      " //// (all-config)" all-configs
+           ;                      " //// (props)" (reagent/props this)
+           ;                      " //// (new-args)" new-args
+           ;                      " //// (new-data)" (if (instance? Atom new-data)
+           ;                                             @new-data
+           ;                                             new-data)))
 
            (js/Highcharts.Chart. (reagent/dom-node this)
                                  (clj->js all-configs))))})))

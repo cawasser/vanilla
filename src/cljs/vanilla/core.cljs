@@ -9,42 +9,47 @@
 
 
 (def widgets [
-              ;{:name        :spectrum-area-widget
-              ; :type        :area-chart
-              ; :name        :spectrum-area-widget
-              ; :data-source :spectrum-traces
-              ; :options     {:viz/title             "Channels (area)"
-              ;               :viz/chart-title       "dB"
-              ;               :viz/allowDecimals     "false"
-              ;               :viz/x-title           "frequency"
-              ;               :viz/y-title           "power"
-              ;               :viz/banner-color      "blue"
-              ;               :viz/banner-text-color "white"
-              ;               :viz/style-name        "widget"
-              ;               :viz/animation         false
-              ;               :viz/tooltip           {:followPointer true}}}
-              ;
-              ;{:name        :bubble-widget
-              ; :type        :bubble-chart
-              ; :data-source :bubble-service
-              ; :options     {:viz/title             "Bubble"
-              ;               :viz/banner-color      "darkgreen"
-              ;               :viz/banner-text-color "white"
-              ;               :viz/animation         false
-              ;               :viz/data-labels       true}}
-              ;
-              ;{:name        :spectrum-column-widget
-              ; :type        :column-chart
-              ; :data-source :spectrum-traces
-              ; :options     {:viz/title        "Channels (bar)"
-              ;               :viz/banner-color "yellow"
-              ;               :viz/line-width   0.5
-              ;               :viz/animation    false
-              ;               :viz/style-name   "widget"
-              ;               :viz/tooltip      {:followPointer true}
-              ;               :viz/icon         "timeline"}}
-              ;
+              {:name        :spectrum-area-widget
+               :basis       :chart
+               :type        :area-chart
+               :data-source :spectrum-traces
+               :options     {:viz/title             "Channels (area)"
+                             :viz/allowDecimals     false
+                             ;:viz/x-title           "frequency"
+                             ;:viz/y-title           "power"
+                             :viz/banner-color      "blue"
+                             :viz/banner-text-color "white"
+                             :viz/style-name        "widget"
+                             :viz/animation         false
+                             :viz/tooltip           {:followPointer true}}}
+
+              {:name        :bubble-widget
+               :basis       :chart
+               :type        :bubble-chart
+               :data-source :bubble-service
+               :options     {:viz/title             "Bubble"
+                             :viz/banner-color      "darkgreen"
+                             :viz/banner-text-color "white"
+                             :viz/dataLabels        true
+                             :viz/labelFormat       "{point.name}"
+                             :viz/lineWidth         0
+                             :viz/animation         false
+                             :viz/data-labels       true}}
+
+              {:name        :spectrum-column-widget
+               :basis       :chart
+               :type        :column-chart
+               :data-source :spectrum-traces
+               :options     {:viz/title        "Channels (column)"
+                             :viz/banner-color "yellow"
+                             :viz/line-width   0.5
+                             :viz/animation    false
+                             :viz/style-name   "widget"
+                             :viz/tooltip      {:followPointer true}
+                             :viz/icon         "timeline"}}
+
               {:name        :spectrum-line-widget
+               :basis       :chart
                :type        :line-chart
                :data-source :spectrum-traces
                :options     {:viz/title        "Channels (line)"
@@ -53,90 +58,82 @@
                              :viz/animation    false
                              :viz/style-name   "widget"
                              :viz/tooltip      {:followPointer true}
-                             :viz/icon         "timeline"}}])
+                             :viz/icon         "timeline"}}
 
-              ;{:name        :network-widget
-              ; :type        :network-chart
-              ; :data-source :network-service
-              ; :options     {:viz/title             "Network"
-              ;               :viz/banner-color      "black"
-              ;               :viz/banner-text-color "white"
-              ;               :viz/animation         false
-              ;               :viz/data-labels       true}}
-              ;
-              ;{:name        :org-widget
-              ; :type        :org-chart
-              ; :data-source :network-service
-              ; :options     {:viz/title        "Network"
-              ;               :viz/banner-color "darkgray"
-              ;               :viz/animation    false
-              ;               :viz/data-labels  true}}
-              ;
-              ;{:name        :pie-widget
-              ; :type        :pie-chart
-              ; :data-source :usage-data
-              ; :options     {:viz/title        "Usage Data"
-              ;               :viz/banner-color "goldenrod"
-              ;               :viz/animation    false
-              ;               :viz/slice-at 60}}
-              ;
-              ;{:name        :sankey-widget
-              ; :type        :sankey-chart
-              ; :data-source :sankey-service
-              ; :options     {:viz/title             "Sankey"
-              ;               :viz/banner-color      "darkmagenta"
-              ;               :viz/banner-text-color "white"
-              ;               :viz/animation         false}}
-              ;
-              ;{:name        :time-widget
-              ; :type        :simple-text
-              ; :data-source :current-time
-              ; :options     {:viz/title        "Current Time"
-              ;               :viz/banner-color "lightblue"
-              ;               :viz/style        {}
-              ;               :viz/height       "100px"}}])
+              {:name        :network-widget
+               :basis       :chart
+               :type        :network-chart
+               :data-source :network-service
+               :options     {:viz/title             "Network (network)"
+                             :viz/banner-color      "black"
+                             :viz/banner-text-color "white"
+                             :viz/animation         false
+                             :viz/data-labels       true}}
+
+              {:name        :org-widget
+               :basis       :chart
+               :type        :org-chart
+               :data-source :network-service
+               :options     {:viz/title        "Network (org chart)"
+                             :viz/banner-color "darkgray"
+                             :viz/animation    false
+                             :viz/data-labels  true}}
+
+              {:name        :pie-widget
+               :basis       :chart
+               :type        :pie-chart
+               :data-source :usage-data
+               :options     {:viz/title        "Usage Data (pie)"
+                             :viz/banner-color "goldenrod"
+                             :viz/animation    false
+                             :viz/dataLabels   true
+                             :viz/labelFormat  "{point.name}"
+                             :viz/slice-at     20}}
+
+              {:name        :sankey-widget
+               :basis       :chart
+               :type        :sankey-chart
+               :data-source :sankey-service
+               :options     {:viz/title             "Sankey"
+                             :viz/banner-color      "darkmagenta"
+                             :viz/banner-text-color "white"
+                             :viz/dataLabels        true
+                             :viz/labelFormat       "{point.name}"
+                             :viz/animation         false}}
+
+              {:name        :time-widget
+               :basis       :simple
+               :type        :simple-text
+               :data-source :current-time
+               :options     {:viz/title        "Current Time"
+                             :viz/banner-color "lightblue"
+                             :viz/style        {}
+                             :viz/height       "100px"}}])
 
 ;
-; {:type        :dual-chart
-;  :name        :spectrum-dual-widget
+; {:name        :spectrum-dual-widget
+;  :basis       :dual-chart
+;  :type        :line-column-stack
+;  :chart-types [:line-chart :column-chart]
 ;  :data-source :spectrum-traces
-;  :options     {:src {:extract  :spectrum-data
-;                      :selector 0
-;                      :name     :name
-;                      :values   :values
-;                      :x-val    :x
-;                      :y-val    :y}
-;                :viz {:title        "Channels (stacked)"
-;                      :chart-title  "dB"
-;                      :x-title      "frequency"
-;                      :y-title      "power"
-;                      :banner-color "lightsalmon"
-;                      :line-width   0.5
-;                      :animation    false
-;                      :style-name   "widget"
-;                      :tooltip      {:followPointer true}}}}
+;  :options     {:viz/title        "Channels (stacked)"
+;                :viz/banner-color "lightsalmon"
+;                :viz/line-width   0.5
+;                :viz/animation    false
+;                :viz/style-name   "widget"
+;                :viz/tooltip      {:followPointer true}}}}
 
-;{:type        :side-by-side-chart
-; :name        :usage-side-by-side-widget
+;{:name        :usage-side-by-side-widget
+; :type        :side-by-side-chart
+; :chart-types [:bar-chart :pie-chart]
 ; :data-source :usage-data
-; :options     {:src {:extract  :spectrum-data
-;                     :selector 0
-;                     :name     :name
-;                     :values   :values
-;                     :x-val    :x
-;                     :y-val    :y}
-;               :viz {:title             "Channels (side-by-side)"
-;                     :chart-title       "dB"
-;                     :allowDecimals     "false"
-;                     :x-title           "frequency"
-;                     :y-title           "power"
-;                     :banner-color      "lavender"
-;                     :banner-text-color "white"
-;                     :line-width        0.5
-;                     :icon              "timeline"
-;                     :style-name        "widget"
-;                     :animation         false
-;                     :tooltip           {:followPointer true}}}}])
+; :options     {:viz/title             "Channels (side-by-side)"
+;               :viz/banner-color      "lavender"
+;               :viz/banner-text-color "white"
+;               :viz/line-width        0.5
+;               :viz/style-name        "widget"
+;               :viz/animation         false
+;               :viz/tooltip           {:followPointer true}}}}])
 ;
 
 
@@ -160,9 +157,9 @@
                                            :md {:x 0 :y 0 :w 4 :h 4}
                                            :sm {:x 0 :y 0 :w 4 :h 4 :static true}}}}
    :org-widget                {:layout-opts
-                               {:position {:lg {:x 0 :y 0 :w 4 :h 4}
-                                           :md {:x 0 :y 0 :w 4 :h 4}
-                                           :sm {:x 0 :y 0 :w 4 :h 4 :static true}}}}
+                               {:position {:lg {:x 0 :y 4 :w 4 :h 4}
+                                           :md {:x 0 :y 4 :w 4 :h 4}
+                                           :sm {:x 0 :y 4 :w 4 :h 4 :static true}}}}
    :sankey-widget             {:layout-opts
                                {:position {:lg {:x 0 :y 5 :w 4 :h 3}
                                            :md {:x 0 :y 5 :w 4 :h 3}
@@ -204,10 +201,15 @@
    [:h7.subtitle.is-6 "0.1.4-SNAPSHOT (static)"]])
 
 
-(defn build-widget [{:keys [name type]}]
+(defn build-widget [{:keys [name basis type chart-types]}]
   (.log js/console (str "building widget " name " of " type))
 
-  (wb/make-widget type (wb/get-config type)))
+  (condp = basis
+    :chart (wb/make-widget type (wb/get-config type))
+
+    :stacked-chart (wb/make-stacked-widget type chart-types)
+
+    :simple))
 
 
 (defn start-dashboard []

@@ -5,7 +5,7 @@
             [vanilla.widgets.basic-widget :as basic]
             [vanilla.widgets.util :as util]
             [vanilla.widgets.pie-chart :as pie]
-            [vanilla.widgets.chart :as line]
+            [vanilla.widgets.line-chart :as line]
             [vanilla.widgets.bar-chart :as bar]))
 
 
