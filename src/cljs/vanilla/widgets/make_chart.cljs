@@ -19,9 +19,9 @@
         pc-fn           (get-in chart-reg-entry [:merge-plot-option format-type]
                                 (get-in chart-reg-entry [:merge-plot-option :default]))]
 
-    (.log js/console (str "plot-config " chart-type
-                          " ///// (format-type)" format-type
-                          " ///// (pc-fn)" pc-fn))
+    ;(.log js/console (str "plot-config " chart-type
+    ;                      " ///// (format-type)" format-type
+    ;                      " ///// (pc-fn)" pc-fn))
 
     (if pc-fn
       (pc-fn chart-config data options))))
@@ -29,9 +29,9 @@
 
 (defn default-conversion [chart-type data options]
   (let [ret (get-in data [:data :series])]
-    (.log js/console (str "default-conversion " chart-type
-                          " //// (data) " data
-                          " //// (ret)" ret))
+    ;(.log js/console (str "default-conversion " chart-type
+    ;                      " //// (data) " data
+    ;                      " //// (ret)" ret))
 
     ret))
 
@@ -48,12 +48,12 @@
                                         default-conversion))
         ret             (conv-fn chart-type data options)]
 
-    (.log js/console (str "get-conversion " chart-type "/" format-type
-                          " //// (data)" data
-                          " //// (chart-reg-entry)" chart-reg-entry
-                          " //// (conversions)" conversions
-                          " //// (conv-fn)" conv-fn
-                          " //// (ret)" ret))
+    ;(.log js/console (str "get-conversion " chart-type "/" format-type
+    ;                      " //// (data)" data
+    ;                      " //// (chart-reg-entry)" chart-reg-entry
+    ;                      " //// (conversions)" conversions
+    ;                      " //// (conv-fn)" conv-fn
+    ;                      " //// (ret)" ret))
 
     ret))
 
@@ -71,7 +71,7 @@
 
   [chart-config data options]
 
-  (.log js/console (str "make-config " chart-config " ///// " data))
+  ;(.log js/console (str "make-config " chart-config " ///// " data))
 
   (let [chart-type     (-> chart-config :chart/type)
         data-config    (if (instance? Atom data) @data data)
@@ -103,11 +103,11 @@
         converted  (get-conversion chart-type dat options)
         ret        (assoc chart-config :series converted)]
 
-    (.log js/console (str "merge-configs " chart-type
-                          " //// (data) " data
-                          " //// (converted)" converted
-                          " //// (chart-config) " chart-config
-                          " //// (ret)" ret))
+    ;(.log js/console (str "merge-configs " chart-type
+    ;                      " //// (data) " data
+    ;                      " //// (converted)" converted
+    ;                      " //// (chart-config) " chart-config
+    ;                      " //// (ret)" ret))
 
     ret))
 
@@ -129,8 +129,8 @@
 
   [id registry-data]
 
-  (.log js/console (str "register-type " id
-                        " //// (registry-data)" registry-data))
+  ;(.log js/console (str "register-type " id
+  ;                      " //// (registry-data)" registry-data))
 
   (swap! type-registry assoc id registry-data))
 
@@ -150,9 +150,9 @@
         chart-type      (-> chart-config :chart/type)
         chart-reg-entry (get type-registry chart-type {})]
 
-    (.log js/console (str "make-chart " chart-type
-                          " //// (chart-config)" chart-config
-                          " ////// (chart-reg-entry)" chart-reg-entry))
+    ;(.log js/console (str "make-chart " chart-type
+    ;                      " //// (chart-config)" chart-config
+    ;                      " ////// (chart-reg-entry)" chart-reg-entry))
 
     (reagent/create-class
       {:reagent-render

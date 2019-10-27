@@ -12,7 +12,7 @@
 (defn plot-options-x-y
   [chart-config data options]
 
-  (.log js/console (str "line/plot-options-x-y " chart-config))
+  ;(.log js/console (str "line/plot-options-x-y " chart-config))
 
   {:xAxis       {:title {:text          (get-in data [:data :src/x-title] "x-axis")
                          :allowDecimals (get-in options [:viz/x-allowDecimals] false)}}
@@ -27,7 +27,7 @@
 (defn plot-options-y
   [chart-config data options]
 
-  (.log js/console (str "line/plot-options-y " chart-config))
+  ;(.log js/console (str "line/plot-options-y " chart-config))
 
   {:xAxis       {; what to do about x-categories?  :categories (:src/x-categories data [])
                  :title {:text          (get-in data [:data :src/x-title] "x-axis")

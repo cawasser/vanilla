@@ -9,7 +9,7 @@
 (defn plot-options
   [chart-config data options]
 
-  (.log js/console (str "pie/plot-options " chart-config))
+  ;(.log js/console (str "pie/plot-options " chart-config))
 
   {:plotOptions {:series {:animation (:viz/animation options false)}
                  :pie    {:allowPointSelect true
@@ -36,7 +36,7 @@
 (defn convert-x-y
   [chart-type data options]
 
-  (.log js/console (str "pie/convert-x-y " chart-type))
+  ;(.log js/console (str "pie/convert-x-y " chart-type))
 
   (process-data (get-in data [:data (get-in options [:src/extract])])
                 (get-in options [:viz/slice-at])))
@@ -45,9 +45,9 @@
 (defn convert-name-y
   [chart-type data options]
 
-  (.log js/console (str "pie/convert-name-y " chart-type
-                        " //// " data " //// " options
-                        " //// " (get-in data [:data :series 0 :data])))
+  ;(.log js/console (str "pie/convert-name-y " chart-type
+  ;                      " //// " data " //// " options
+  ;                      " //// " (get-in data [:data :series 0 :data])))
 
   (process-data (get-in data [:data :series 0 :data] [])
                 (get-in options [:viz/slice-at])))

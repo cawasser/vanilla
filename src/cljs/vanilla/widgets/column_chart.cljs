@@ -8,7 +8,7 @@
 (defn plot-options
   [chart-config data options]
 
-  (.log js/console (str "column/plot-options " chart-config))
+  ;(.log js/console (str "column/plot-options " chart-config))
 
   {:xAxis       {; what to do about x-categories?  :categories (:src/x-categories data [])
                  :title {:text          (get-in data [:data :src/x-title] "x-axis")

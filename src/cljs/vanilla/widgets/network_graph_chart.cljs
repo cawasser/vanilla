@@ -8,7 +8,7 @@
 (defn plot-options
   [chart-config data options]
 
-  (.log js/console (str "network/plot-options " chart-config))
+  ;(.log js/console (str "network/plot-options " chart-config))
 
   {:plotOptions {:series       {:animation (:viz/animation options false)}
                  :networkgraph {:keys ["from", "to"]}}})
@@ -19,9 +19,9 @@
   (let [ret [(merge {:dataLabels {:enabled true :linkFormat ""}}
                     {:data (get-in data [:data :series 0 :data])})]]
 
-    (.log js/console (str "network/convert " chart-type
-                          " //// (data)" data
-                          " //// (ret)" ret))
+    ;(.log js/console (str "network/convert " chart-type
+    ;                      " //// (data)" data
+    ;                      " //// (ret)" ret))
 
     ret))
 

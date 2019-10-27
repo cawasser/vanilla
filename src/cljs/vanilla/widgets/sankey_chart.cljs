@@ -8,7 +8,7 @@
 (defn plot-options
   [chart-config data options]
 
-  (.log js/console (str "org/plot-options " chart-config))
+  ;(.log js/console (str "org/plot-options " chart-config))
 
   {:plotOptions {:series {:animation (:viz/animation options false)}}
 
