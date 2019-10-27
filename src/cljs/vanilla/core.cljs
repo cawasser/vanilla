@@ -198,7 +198,7 @@
 
 (defn home-page []
   [:div.container>div.content
-   [:h7.subtitle.is-6 "0.1.4-SNAPSHOT (static)"]])
+   [:h7.subtitle.is-6 "0.1.5-SNAPSHOT (static)"]])
 
 
 (defn build-widget [{:keys [name basis type chart-types]}]
