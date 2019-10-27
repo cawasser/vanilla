@@ -17,6 +17,8 @@
 
   {:title       "Usage Data"
    :data-format :data-format/name-y
+   :src/x-title "Fruit"
+   :src/y-title "Qty."
    :series      (db/usage-data)})
 
 (defn current-time []

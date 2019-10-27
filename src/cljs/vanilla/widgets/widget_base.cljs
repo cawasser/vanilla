@@ -6,6 +6,7 @@
             [vanilla.widgets.make-chart :as mc]
 
             [vanilla.widgets.area-chart]
+            [vanilla.widgets.bar-chart]
             [vanilla.widgets.bubble-chart]
             [vanilla.widgets.column-chart]
             [vanilla.widgets.line-chart]
@@ -15,37 +16,18 @@
             [vanilla.widgets.sankey-chart]))
 
 
-(def chart-configs
-  {
-   :bar-chart
-   {:chart/supported-formats [:data-format/y :data-format/x-y]
-    :chart                   {:type     "bar"
-                              :zoomType "x"}
-    :yAxis                   {:min    0
-                              :title  {:align "high"}
-                              :labels {:overflow "justify"}}}
-
-   :sankey-chart
-   {:chart/supported-formats [:data-format/from-to :data-format/form-to-n]
-    :chart                   {:type "sankey"}
-    :series                  {:type "sankey"}}})
-
-
-
 
 (defn get-config [type]
   (let [config (get-in @mc/type-registry [type :chart-options] {})]
 
-    (.log js/console (str "get-config " type ", " config))
+    ;(.log js/console (str "get-config " type ", " config))
 
     config))
 
 
-
-
 (defn make-widget [id chart-config]
 
-  (.log js/console (str "make-widget " id ", " chart-config))
+  ;(.log js/console (str "make-widget " id ", " chart-config))
 
   (widget-common/register-widget
 
@@ -58,40 +40,52 @@
         [mc/make-chart chart-config data options]]])))
 
 
-(defn make-stacked-widget [id chart-configs]
+(defn make-stacked-widget [id [top-chart bottom-chart]]
+
+  ;(.log js/console (str "make-stacked-widget " id
+  ;                      "/" top-chart "/" bottom-chart))
+
   (widget-common/register-widget
 
     id
 
     (fn [data options]
 
-      ;(.log js/console (str "dual-vanilla.widgets.line-chart " data ", " options))
+      ;(.log js/console (str "composing stacked-chart " id
+      ;                      " //// (data)" data
+      ;                      " //// (options)" options))
 
       [basic/basic-widget data options
 
-       (into [:div]
-             (map
-               #([:div {:style {:width "95%" :height "65%"}}
-                  [mc/make-chart % data options]])
-               chart-configs))])))
+       [:div {:style {:width "95%" :height "65%"}}
+        [mc/make-chart (get-config top-chart) data options]
+
+        [:div {:style {:width "100%" :height "65%"}}
+         [mc/make-chart (get-config bottom-chart) data options]]]])))
 
 
-(defn make-side-by-side [id left-chart right-chart]
+(defn make-side-by-side-widget [id [left-chart right-chart]]
+
+  ;(.log js/console (str "make-side-by-side-widget " id
+  ;                      "/" left-chart "/" right-chart))
+
   (widget-common/register-widget
 
     id
 
     (fn [data options]
 
-      ;(.log js/console (str ":side-by-side-vanilla.widgets.line-chart " data))
+      ;(.log js/console (str "side-by-side-chart " id "/" left-chart "/" right-chart
+      ;                      " //// (data)" data
+      ;                      " //// (options)" options))
 
       [basic/basic-widget data options
 
        [:div.columns {:style {:height "100%" :width "100%" :marginTop "10px"}}
 
-        [:div.column.is-two-thirds {:style {:height "200px"}}
-         [mc/make-chart left-chart data options]]
+        [:div.column.is-two-thirds {:style {:height "80%"}}
+         [mc/make-chart (get-config left-chart) data options]]
 
-        [:div.column.is-one-third {:style {:height "200px"}}
-         [mc/make-chart right-chart data options]]]])))
+        [:div.column.is-one-third {:style {:height "80%"}}
+         [mc/make-chart (get-config right-chart) data options]]]])))
 

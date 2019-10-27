@@ -108,50 +108,40 @@
                :options     {:viz/title        "Current Time"
                              :viz/banner-color "lightblue"
                              :viz/style        {}
-                             :viz/height       "100px"}}])
+                             :viz/height       "100px"}}
 
-;
-; {:name        :spectrum-dual-widget
-;  :basis       :dual-chart
-;  :type        :line-column-stack
-;  :chart-types [:line-chart :column-chart]
-;  :data-source :spectrum-traces
-;  :options     {:viz/title        "Channels (stacked)"
-;                :viz/banner-color "lightsalmon"
-;                :viz/line-width   0.5
-;                :viz/animation    false
-;                :viz/style-name   "widget"
-;                :viz/tooltip      {:followPointer true}}}}
+              {:name        :spectrum-dual-widget
+               :basis       :stacked-chart
+               :type        :line-column-stack
+               :chart-types [:line-chart :column-chart]
+               :data-source :spectrum-traces
+               :options     {:viz/title        "Channels (stacked)"
+                             :viz/banner-color "lightsalmon"
+                             :viz/line-width   0.5
+                             :viz/animation    false
+                             :viz/style-name   "widget"
+                             :viz/tooltip      {:followPointer true}}}
 
-;{:name        :usage-side-by-side-widget
-; :type        :side-by-side-chart
-; :chart-types [:bar-chart :pie-chart]
-; :data-source :usage-data
-; :options     {:viz/title             "Channels (side-by-side)"
-;               :viz/banner-color      "lavender"
-;               :viz/banner-text-color "white"
-;               :viz/line-width        0.5
-;               :viz/style-name        "widget"
-;               :viz/animation         false
-;               :viz/tooltip           {:followPointer true}}}}])
-;
+              {:name        :usage-side-by-side-widget
+               :basis       :side-by-side-chart
+               :type        :bar-pie-sbs
+               :chart-types [:bar-chart :pie-chart]
+               :data-source :usage-data
+               :options     {:viz/title             "Usage Data (side-by-side)"
+                             :viz/banner-color      "lavender"
+                             :viz/banner-text-color "black"
+                             :viz/line-width        0.5
+                             :viz/style-name        "widget"
+                             :viz/animation         false
+                             :viz/dataLabels        true
+                             :viz/labelFormat       "{point.name}"
+                             :viz/tooltip           {:followPointer true}}}])
+
 
 
 (def widget-layout
   {
    ;; Left column wide widgets
-   :spectrum-dual-widget      {:layout-opts
-                               {:position {:lg {:x 0 :y 4 :w 4 :h 3}
-                                           :md {:x 0 :y 4 :w 4 :h 3}
-                                           :sm {:x 0 :y 0 :w 2 :h 3 :static true}}}}
-   :usage-side-by-side-widget {:layout-opts
-                               {:position {:lg {:x 0 :y 6 :w 4 :h 2}
-                                           :md {:x 0 :y 6 :w 4 :h 2}
-                                           :sm {:x 0 :y 0 :w 2 :h 2 :static true}}}}
-   :spectrum-area-widget      {:layout-opts
-                               {:position {:lg {:x 0 :y 8 :w 4 :h 2}
-                                           :md {:x 0 :y 8 :w 4 :h 2}
-                                           :sm {:x 0 :y 0 :w 2 :h 2 :static true}}}}
    :network-widget            {:layout-opts
                                {:position {:lg {:x 0 :y 0 :w 4 :h 4}
                                            :md {:x 0 :y 0 :w 4 :h 4}
@@ -164,30 +154,40 @@
                                {:position {:lg {:x 0 :y 5 :w 4 :h 3}
                                            :md {:x 0 :y 5 :w 4 :h 3}
                                            :sm {:x 0 :y 5 :w 4 :h 3 :static true}}}}
-
-   :bubble-widget             {:layout-opts
-                               {:position {:lg {:x 4 :y 5 :w 2 :h 3}
-                                           :md {:x 4 :y 5 :w 2 :h 3}
-                                           :sm {:x 0 :y 5 :w 2 :h 3 :static true}}}}
+   :spectrum-dual-widget      {:layout-opts
+                               {:position {:lg {:x 0 :y 8 :w 4 :h 3}
+                                           :md {:x 0 :y 8 :w 4 :h 3}
+                                           :sm {:x 0 :y 8 :w 2 :h 3 :static true}}}}
+   :usage-side-by-side-widget {:layout-opts
+                               {:position {:lg {:x 0 :y 10 :w 4 :h 2}
+                                           :md {:x 0 :y 10 :w 4 :h 2}
+                                           :sm {:x 0 :y 10 :w 2 :h 2 :static true}}}}
+   :spectrum-area-widget      {:layout-opts
+                               {:position {:lg {:x 0 :y 12 :w 4 :h 2}
+                                           :md {:x 0 :y 12 :w 4 :h 2}
+                                           :sm {:x 0 :y 12 :w 2 :h 2 :static true}}}}
 
    ;; Right column small widgets
    :time-widget               {:layout-opts
                                {:position {:lg {:x 4 :y 0 :w 2 :h 1}
                                            :md {:x 4 :y 0 :w 2 :h 1}
-                                           :sm {:x 0 :y 2 :w 2 :h 1 :static true}}}}
+                                           :sm {:x 0 :y 0 :w 2 :h 1 :static true}}}}
    :pie-widget                {:layout-opts
                                {:position {:lg {:x 4 :y 2 :w 2 :h 3}
                                            :md {:x 4 :y 2 :w 2 :h 3}
                                            :sm {:x 0 :y 2 :w 2 :h 3 :static true}}}}
+   :bubble-widget             {:layout-opts
+                               {:position {:lg {:x 4 :y 5 :w 2 :h 3}
+                                           :md {:x 4 :y 5 :w 2 :h 3}
+                                           :sm {:x 0 :y 5 :w 2 :h 3 :static true}}}}
    :spectrum-line-widget      {:layout-opts
-                               {:position {:lg {:x 4 :y 5 :w 2 :h 2}
-                                           :md {:x 4 :y 5 :w 2 :h 2}
-                                           :sm {:x 0 :y 0 :w 2 :h 2 :static true}}}}
-
-   :spectrum-column-widget    {:layout-opts
                                {:position {:lg {:x 4 :y 7 :w 2 :h 2}
                                            :md {:x 4 :y 7 :w 2 :h 2}
-                                           :sm {:x 0 :y 0 :w 2 :h 2 :static true}}}}})
+                                           :sm {:x 0 :y 7 :w 2 :h 2 :static true}}}}
+   :spectrum-column-widget    {:layout-opts
+                               {:position {:lg {:x 4 :y 9 :w 2 :h 2}
+                                           :md {:x 4 :y 9 :w 2 :h 2}
+                                           :sm {:x 0 :y 9 :w 2 :h 2 :static true}}}}})
 
 
 (def dashboard {
@@ -202,14 +202,23 @@
 
 
 (defn build-widget [{:keys [name basis type chart-types]}]
-  (.log js/console (str "building widget " name " of " type))
+  ;(.log js/console (str "building widget " name " of " type
+  ;                      " //// " basis "/" chart-types))
 
   (condp = basis
     :chart (wb/make-widget type (wb/get-config type))
 
-    :stacked-chart (wb/make-stacked-widget type chart-types)
+    :stacked-chart (do
+                     ;(.log js/console (str "calling make-stacked-widget " type
+                     ;                      "/" chart-types))
+                     (wb/make-stacked-widget type chart-types))
 
-    :simple))
+    :side-by-side-chart (do
+                          ;(.log js/console (str "calling make-side-by-side-widget " type
+                          ;                      "/" chart-types))
+                          (wb/make-side-by-side-widget type chart-types))
+
+    ()))                                                    ; default
 
 
 (defn start-dashboard []
@@ -217,7 +226,7 @@
 
   ; build all the required widgets
 
-  (.log js/console (str "building widgets " widgets))
+  ;(.log js/console (str "building widgets " widgets))
   (doall (map build-widget widgets))
 
   (d/register-global-app-state-subscription)
