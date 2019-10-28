@@ -59,27 +59,40 @@
 
   [chart-config data options]
 
-  ;(.log js/console (str "make-config " chart-config " ///// " data))
+  ;(.log js/console (str "make-config " chart-type
+  ;                      " //// (chart-config)" chart-config
+  ;                      " ///// (data)" data))
 
-  (let [chart-type     (-> chart-config :chart/type)
-        data-config    (if (instance? Atom data) @data data)
-        base-config    {:title       {:text  (get options :viz/chart-title "")
-                                      :style {:labels {:fontFamily "monospace"
-                                                       :color      "#FFFFFF"}}}
+  (let [chart-type   (-> chart-config :chart/type)
+        data-config  (if (instance? Atom data) @data data)
+        base-config  {:title       {:text  (get options :viz/chart-title "")
+                                    :style {:labels {:fontFamily "monospace"
+                                                     :color      "#FFFFFF"}}}
 
-                        :subtitle    {:text ""}
+                      :subtitle    {:text ""}
 
-                        :tooltip     {:valueSuffix (:src/y-valueSuffix data-config "")}
+                      :tooltip     {:valueSuffix (:src/y-valueSuffix data-config "")}
 
-                        :plotOptions {:series {:animation (:viz/animation options false)}}
+                      :plotOptions {:series {:animation (:viz/animation options false)}}
 
-                        :credits     {:enabled false}}
+                      :credits     {:enabled false}}
 
-        plot-config    (plot-config chart-type base-config data-config options)
+        plot-config  (plot-config chart-type base-config data options)
 
-        special-config {}]
+        final-config (merge-with
+                       clojure.set/union
+                       base-config plot-config chart-config)]
 
-    (merge-with clojure.set/union special-config base-config plot-config chart-config)))
+    ;(.log js/console (str "make-config " chart-type
+    ;                      " //// (data)" data-config
+    ;                      " //// (base-config)" base-config
+    ;                      " //// (plot-config)" plot-config
+    ;                      " //// (chart-config)" chart-config
+    ;                      " //// (final-config)" final-config))
+
+    final-config))
+
+
 
 
 
@@ -92,10 +105,10 @@
         ret        (assoc chart-config :series converted)]
 
     ;(.log js/console (str "merge-configs " chart-type
-    ;                      " //// (data) " data
-    ;                      " //// (converted)" converted
-    ;                      " //// (chart-config) " chart-config
-    ;                      " //// (ret)" ret))
+                          ;" //// (chart-config) " chart-config
+                          ;" //// (data) " data
+                          ;" //// (converted)" converted
+                          ;" //// (ret)" ret)]
 
     ret))
 
@@ -107,8 +120,13 @@
 ; PUBLIC interface
 ;
 ;
+(defn default-plot-options [chart-type data options]
+  {})
+
+
 (defn default-conversion [chart-type data options]
   (let [ret (get-in data [:data :series])]
+
     ;(.log js/console (str "default-conversion " chart-type
     ;                      " //// (data) " data
     ;                      " //// (ret)" ret))
@@ -154,8 +172,7 @@
 
        :component-did-mount
        (fn [this]
-         (let [chart-type  ""
-               node (reagent/dom-node this)]
+         (let [node (reagent/dom-node this)]
 
            ;(.log js/console (str "component-did-mount " chart-type))
 
@@ -163,19 +180,18 @@
 
        :component-did-update
        (fn [this old-argv]
-         (let [chart-type  ""
-               new-args    (rest (reagent/argv this))
+         (let [new-args    (rest (reagent/argv this))
                new-data    (js->clj (second new-args))
                base-config (make-config chart-config new-data options)
                all-configs (merge-configs base-config new-data options)]
 
            ;(.log js/console (str "component-did-update " chart-type
-           ;                      " //// (all-config)" all-configs
+           ;                      " //// (all-config)" all-configs))
            ;                      " //// (props)" (reagent/props this)
            ;                      " //// (new-args)" new-args
-           ;                      " //// (new-data)" (if (instance? Atom new-data)
-           ;                                             @new-data
-           ;                                             new-data)))
+           ;" //// (new-data)" (if (instance? Atom new-data)
+           ;                     @new-data
+           ;                     new-data)))
 
            (js/Highcharts.Chart. (reagent/dom-node this)
                                  (clj->js all-configs))))})))

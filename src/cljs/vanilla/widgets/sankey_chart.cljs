@@ -8,13 +8,37 @@
 (defn plot-options
   [chart-config data options]
 
-  ;(.log js/console (str "sankey/plot-options " chart-config))
+  ;(.log js/console (str "sankey-deps/plot-options " chart-config))
 
-  {:plotOptions {:series {:animation (:viz/animation options false)}}
+  {:plotOptions {:series {:animation (:viz/animation options false)}}})
 
-   :series      [{:keys (get data :src/keys [])
-                  :data (get-in data [:data :series])}]})
 
+(defn sankey-conversion
+  [chart-type data options]
+
+  ;(.log js/console (str "sankey-conversion " chart-type
+  ;                      " //// (data)" data
+  ;                      " //// (options)" options))
+
+  [{:keys (get-in data [:data :src/keys] [])
+    :data (get-in data [:data :series 0 :data])}])
+
+
+
+(defn dependency-conversion
+  [chart-type data options]
+
+  ;(.log js/console (str "dependency-conversion " chart-type
+  ;                      " //// (data)" data
+  ;                      " //// (options)" options))
+
+  [{:keys       (get-in data [:data :src/keys] [])
+    :dataLabels {:color    "#333"
+                 :textPath {:enabled    true
+                            :attributes {:dy 5}}
+                 :distance 10}
+    :size       "95%"
+    :data       (get-in data [:data :series 0 :data])}])
 
 
 
@@ -29,10 +53,10 @@
                   :chart                   {:type "sankey"}}
 
                  :merge-plot-option
-                 {:default plot-options}
+                 {:default mc/default-plot-options}
 
                  :conversions
-                 {:default mc/default-conversion}})
+                 {:default sankey-conversion}})
 
 
 
@@ -40,14 +64,10 @@
   :dependency-chart {:chart-options
                      {:chart/type              :dependency-chart
                       :chart/supported-formats [:data-format/from-to :data-format/from-to-n]
-                      :chart                   {:type "dependencywheel"}
-                      :series                  {:dataLabels {:color    "#333"
-                                                             :textPath {:enabled    true
-                                                                        :attributes {:dy 5}}
-                                                             :distance 10}}}
+                      :chart                   {:type "dependencywheel"}}
 
                      :merge-plot-option
-                     {:default plot-options}
+                     {:default mc/default-plot-options}
 
                      :conversions
-                     {:default mc/default-conversion}})
+                     {:default dependency-conversion}})
