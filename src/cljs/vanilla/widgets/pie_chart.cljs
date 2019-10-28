@@ -26,7 +26,8 @@
 ; data to the :series, or rearranging the contents
 
 (defn- process-data [data slice-at]
-  (.log js/console "pie process-data" (str data))
+
+  ;(.log js/console "pie process-data" (str data))
 
   [{:colorByPoint true
     :keys         ["name" "y" "selected" "sliced"]

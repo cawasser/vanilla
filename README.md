@@ -22,6 +22,9 @@ using externs.js and embedded highcharts-nnn.js files in index.html
 > 0.1.5-SNAPSHOT - complete refactoring of the Highcharts implementation 
 to make the code more streamlined and flexible
 
+> 0.1.6-SNAPSHOT - added "dependency wheel", a variation on the sankey diagram. 
+this adds another .js dependency. Also, slowed down the update speed of the services
+
 ## Development
 
 - Start server `lein run`

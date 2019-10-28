@@ -7,6 +7,7 @@
 
 (defonce type-registry (atom {}))
 
+(declare default-conversion)
 
 ;;;;;;;;;;;;;;;;;
 ;
@@ -27,25 +28,12 @@
       (pc-fn chart-config data options))))
 
 
-(defn default-conversion [chart-type data options]
-  (let [ret (get-in data [:data :series])]
-    ;(.log js/console (str "default-conversion " chart-type
-    ;                      " //// (data) " data
-    ;                      " //// (ret)" ret))
-
-    ret))
-
-
-
-
 
 (defn- get-conversion [chart-type data options]
   (let [chart-reg-entry (get @type-registry chart-type {})
         format-type     (get-in data [:data :data-format])
         conversions     (get chart-reg-entry :conversions)
-        conv-fn         (get-in chart-reg-entry [:conversions format-type]
-                                (get-in chart-reg-entry [:conversions :default]
-                                        default-conversion))
+        conv-fn         (get conversions format-type (get conversions :default default-conversion))
         ret             (conv-fn chart-type data options)]
 
     ;(.log js/console (str "get-conversion " chart-type "/" format-type
@@ -119,6 +107,14 @@
 ; PUBLIC interface
 ;
 ;
+(defn default-conversion [chart-type data options]
+  (let [ret (get-in data [:data :series])]
+    ;(.log js/console (str "default-conversion " chart-type
+    ;                      " //// (data) " data
+    ;                      " //// (ret)" ret))
+
+    ret))
+
 
 (defn register-type
   "register the data structure manipulations to support a certain
@@ -133,10 +129,6 @@
   ;                      " //// (registry-data)" registry-data))
 
   (swap! type-registry assoc id registry-data))
-
-
-; spec
-
 
 
 

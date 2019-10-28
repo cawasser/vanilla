@@ -135,7 +135,17 @@
                              :viz/animation         false
                              :viz/dataLabels        true
                              :viz/labelFormat       "{point.name}"
-                             :viz/tooltip           {:followPointer true}}}])
+                             :viz/tooltip           {:followPointer true}}}
+
+              {:name        :dependency-widget
+               :basis       :chart
+               :type        :dependency-chart
+               :data-source :sankey-service
+               :options     {:viz/title             "Dependency Wheel"
+                             :viz/banner-color      "crimson"
+                             :viz/banner-text-color "white"
+                             :viz/dataLabels        true
+                             :viz/animation         false}}])
 
 
 
@@ -150,22 +160,23 @@
                                {:position {:lg {:x 0 :y 4 :w 4 :h 4}
                                            :md {:x 0 :y 4 :w 4 :h 4}
                                            :sm {:x 0 :y 4 :w 4 :h 4 :static true}}}}
-   :sankey-widget             {:layout-opts
-                               {:position {:lg {:x 0 :y 5 :w 4 :h 3}
-                                           :md {:x 0 :y 5 :w 4 :h 3}
-                                           :sm {:x 0 :y 5 :w 4 :h 3 :static true}}}}
    :spectrum-dual-widget      {:layout-opts
                                {:position {:lg {:x 0 :y 8 :w 4 :h 3}
                                            :md {:x 0 :y 8 :w 4 :h 3}
                                            :sm {:x 0 :y 8 :w 2 :h 3 :static true}}}}
+   :sankey-widget             {:layout-opts
+                               {:position {:lg {:x 0 :y 11 :w 3 :h 3}
+                                           :md {:x 0 :y 11 :w 3 :h 3}
+                                           :sm {:x 0 :y 11 :w 3 :h 3 :static true}}}}
    :usage-side-by-side-widget {:layout-opts
-                               {:position {:lg {:x 0 :y 10 :w 4 :h 2}
-                                           :md {:x 0 :y 10 :w 4 :h 2}
-                                           :sm {:x 0 :y 10 :w 2 :h 2 :static true}}}}
+                               {:position {:lg {:x 0 :y 14 :w 4 :h 2}
+                                           :md {:x 0 :y 14 :w 4 :h 2}
+                                           :sm {:x 0 :y 14 :w 2 :h 2 :static true}}}}
    :spectrum-area-widget      {:layout-opts
-                               {:position {:lg {:x 0 :y 12 :w 4 :h 2}
-                                           :md {:x 0 :y 12 :w 4 :h 2}
-                                           :sm {:x 0 :y 12 :w 2 :h 2 :static true}}}}
+                               {:position {:lg {:x 0 :y 16 :w 4 :h 2}
+                                           :md {:x 0 :y 16 :w 4 :h 2}
+                                           :sm {:x 0 :y 16 :w 2 :h 2 :static true}}}}
+
 
    ;; Right column small widgets
    :time-widget               {:layout-opts
@@ -187,7 +198,12 @@
    :spectrum-column-widget    {:layout-opts
                                {:position {:lg {:x 4 :y 9 :w 2 :h 2}
                                            :md {:x 4 :y 9 :w 2 :h 2}
-                                           :sm {:x 0 :y 9 :w 2 :h 2 :static true}}}}})
+                                           :sm {:x 0 :y 9 :w 2 :h 2 :static true}}}}
+   :dependency-widget         {:layout-opts
+                               {:position {:lg {:x 3 :y 11 :w 3 :h 3}
+                                           :md {:x 3 :y 11 :w 3 :h 3}
+                                           :sm {:x 3 :y 11 :w 3 :h 3 :static true}}}}})
+
 
 
 (def dashboard {
