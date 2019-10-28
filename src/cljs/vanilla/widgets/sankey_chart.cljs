@@ -5,28 +5,16 @@
 
 
 
-(defn sankey-plot-options
+(defn plot-options
   [chart-config data options]
 
   ;(.log js/console (str "sankey/plot-options " chart-config))
 
   {:plotOptions {:series {:animation (:viz/animation options false)}}
 
-   :series      [{;:type "sankey"
-                  :keys (get data :src/keys [])
-                  :data (get-in data [:data :series])}]})
-
-
-
-(defn dependency-plot-options
-  [chart-config data options]
-
-  ;(.log js/console (str "dependency/plot-options " chart-config))
-
-  {:plotOptions {:series {:animation (:viz/animation options false)}}
-
    :series      [{:keys (get data :src/keys [])
                   :data (get-in data [:data :series])}]})
+
 
 
 
@@ -41,7 +29,7 @@
                   :chart                   {:type "sankey"}}
 
                  :merge-plot-option
-                 {:default sankey-plot-options}
+                 {:default plot-options}
 
                  :conversions
                  {:default mc/default-conversion}})
@@ -59,7 +47,7 @@
                                                              :distance 10}}}
 
                      :merge-plot-option
-                     {:default dependency-plot-options}
+                     {:default plot-options}
 
                      :conversions
                      {:default mc/default-conversion}})
