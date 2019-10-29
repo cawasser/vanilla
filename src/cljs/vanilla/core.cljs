@@ -6,6 +6,7 @@
     [dashboard-clj.layouts.grid-layout-responsive :as grid]
     [vanilla.widgets.widget-base :as wb]
     [vanilla.widgets.simple-text]))
+    [vanilla.widgets.stoplight-widget]))
 
 
 (def widgets [
@@ -145,8 +146,14 @@
                              :viz/banner-color      "crimson"
                              :viz/banner-text-color "white"
                              :viz/dataLabels        true
-                             :viz/animation         false}}])
+                             :viz/animation         false}}
 
+              {:type        :stoplight-widget
+               :basis       :simple
+               :name        :health-and-status-widget
+               :data-source :health-and-status-data
+               :options     {:viz/title        "Status"
+                             :viz/banner-color "aqua"}}}])
 
 
 (def widget-layout
@@ -203,6 +210,10 @@
                                {:position {:lg {:x 3 :y 11 :w 3 :h 3}
                                            :md {:x 3 :y 11 :w 3 :h 3}
                                            :sm {:x 3 :y 11 :w 3 :h 3 :static true}}}}})
+   :health-and-status-widget {:layout-opts
+                              {:position {:lg {:x 4 :y 1 :w 2 :h 2}
+                                          :md {:x 4 :y 1 :w 2 :h 2}
+                                          :sm {:x 0 :y 0 :w 2 :h 2 :static true}}}}})
 
 
 

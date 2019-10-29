@@ -4,7 +4,8 @@
               [vanilla.fetcher]
               [vanilla.sankey-service]
               [vanilla.bubble-service]
-              [vanilla.network-service])
+              [vanilla.network-service]
+              [vanilla.stoplight-service])
     (:gen-class))
 
 (def datasources
@@ -49,6 +50,12 @@
     :schedule {:in    [0 :seconds]
                :every [10 :seconds]}}])
 
+   {:name :health-and-status-data
+    :read-fn :vanilla.stoplight-service/fetch-data
+    :schedule {:in    [0 :seconds]
+               :every [10 :seconds]}}
+
+ 
 
 (defn start-dashboard[]
   (prn "server starting")
