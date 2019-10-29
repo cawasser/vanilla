@@ -5,7 +5,7 @@
     [dashboard-clj.core :as d]
     [dashboard-clj.layouts.grid-layout-responsive :as grid]
     [vanilla.widgets.widget-base :as wb]
-    [vanilla.widgets.simple-text]))
+    [vanilla.widgets.simple-text]
     [vanilla.widgets.stoplight-widget]))
 
 
@@ -16,8 +16,8 @@
                :data-source :spectrum-traces
                :options     {:viz/title             "Channels (area)"
                              :viz/allowDecimals     false
-                             ;:viz/x-title           "frequency"
-                             ;:viz/y-title           "power"
+                             :viz/x-title           "frequency"
+                             :viz/y-title           "power"
                              :viz/banner-color      "blue"
                              :viz/banner-text-color "white"
                              :viz/style-name        "widget"
@@ -153,7 +153,7 @@
                :name        :health-and-status-widget
                :data-source :health-and-status-data
                :options     {:viz/title        "Status"
-                             :viz/banner-color "aqua"}}}])
+                             :viz/banner-color "aqua"}}])
 
 
 (def widget-layout
@@ -190,30 +190,30 @@
                                {:position {:lg {:x 4 :y 0 :w 2 :h 1}
                                            :md {:x 4 :y 0 :w 2 :h 1}
                                            :sm {:x 0 :y 0 :w 2 :h 1 :static true}}}}
+   :health-and-status-widget {:layout-opts
+                              {:position {:lg {:x 4 :y 1 :w 2 :h 2}
+                                          :md {:x 4 :y 1 :w 2 :h 2}
+                                          :sm {:x 0 :y 1 :w 2 :h 2 :static true}}}}
    :pie-widget                {:layout-opts
-                               {:position {:lg {:x 4 :y 2 :w 2 :h 3}
-                                           :md {:x 4 :y 2 :w 2 :h 3}
-                                           :sm {:x 0 :y 2 :w 2 :h 3 :static true}}}}
+                               {:position {:lg {:x 4 :y 3 :w 2 :h 3}
+                                           :md {:x 4 :y 3 :w 2 :h 3}
+                                           :sm {:x 0 :y 3 :w 2 :h 3 :static true}}}}
    :bubble-widget             {:layout-opts
-                               {:position {:lg {:x 4 :y 5 :w 2 :h 3}
-                                           :md {:x 4 :y 5 :w 2 :h 3}
-                                           :sm {:x 0 :y 5 :w 2 :h 3 :static true}}}}
+                               {:position {:lg {:x 4 :y 6 :w 2 :h 3}
+                                           :md {:x 4 :y 6 :w 2 :h 3}
+                                           :sm {:x 0 :y 6 :w 2 :h 3 :static true}}}}
    :spectrum-line-widget      {:layout-opts
-                               {:position {:lg {:x 4 :y 7 :w 2 :h 2}
-                                           :md {:x 4 :y 7 :w 2 :h 2}
-                                           :sm {:x 0 :y 7 :w 2 :h 2 :static true}}}}
-   :spectrum-column-widget    {:layout-opts
                                {:position {:lg {:x 4 :y 9 :w 2 :h 2}
                                            :md {:x 4 :y 9 :w 2 :h 2}
                                            :sm {:x 0 :y 9 :w 2 :h 2 :static true}}}}
    :dependency-widget         {:layout-opts
                                {:position {:lg {:x 3 :y 11 :w 3 :h 3}
                                            :md {:x 3 :y 11 :w 3 :h 3}
-                                           :sm {:x 3 :y 11 :w 3 :h 3 :static true}}}}})
-   :health-and-status-widget {:layout-opts
-                              {:position {:lg {:x 4 :y 1 :w 2 :h 2}
-                                          :md {:x 4 :y 1 :w 2 :h 2}
-                                          :sm {:x 0 :y 0 :w 2 :h 2 :static true}}}}})
+                                           :sm {:x 3 :y 11 :w 3 :h 3 :static true}}}}
+   :spectrum-column-widget    {:layout-opts
+                               {:position {:lg {:x 4 :y 14 :w 2 :h 2}
+                                           :md {:x 4 :y 14 :w 2 :h 2}
+                                           :sm {:x 0 :y 14 :w 2 :h 2 :static true}}}}})
 
 
 

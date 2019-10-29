@@ -20,12 +20,13 @@
   (prn "Stoplight Service")
 
   {:title "Health and Status Data"
-   :keys [:id :status]
-   :data (let [v (map (fn [_]
-                        (->> 10 rand code))
-                      (range 25))]
-           (sort
-             (into []
-                   (zipmap idents v))))})
+   :data-format :data-format/entity
+   :src/keys [:id :status]
+   :series (let [v (map (fn [_]
+                          (->> 10 rand code))
+                        (range 25))]
+             (sort
+               (into []
+                     (zipmap idents v))))})
 
 

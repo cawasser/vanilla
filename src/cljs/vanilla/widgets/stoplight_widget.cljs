@@ -49,7 +49,5 @@
                                      :table-layout   :fixed}}
         [:tbody
          (doall
-           (for [d (partition-all 5 (get-in data [:data
-                                                  (get-in options [:src :extract]
-                                                          :data)]))]
+           (for [d (partition-all 5 (get-in data [:data :series]))]
              (stoplight-row d)))]]]]]))

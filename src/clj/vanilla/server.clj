@@ -48,12 +48,12 @@
    {:name     :heatmap-data
     :read-fn  :vanilla.fetcher/heatmap-data
     :schedule {:in    [0 :seconds]
-               :every [10 :seconds]}}])
+               :every [10 :seconds]}}
 
    {:name :health-and-status-data
     :read-fn :vanilla.stoplight-service/fetch-data
     :schedule {:in    [0 :seconds]
-               :every [10 :seconds]}}
+               :every [10 :seconds]}}])
 
  
 
