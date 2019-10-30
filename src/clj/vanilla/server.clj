@@ -30,21 +30,21 @@
 
                   {:name :sankey-service
                    :read-fn :vanilla.sankey-service/fetch-data}
-                   :schedule {:in    [0 :seconds]
-                              :every [5 :seconds]}
-                  }
+                   ;:schedule {:in    [0 :seconds]
+                   ;           :every [5 :seconds]}
+                  ;}
 
                   {:name :bubble-service
                    :read-fn :vanilla.bubble-service/fetch-data}
-                   :schedule {:in    [0 :seconds]
-                              :every [5 :seconds]}
-}
+;                   :schedule {:in    [0 :seconds]
+;                              :every [5 :seconds]}
+;}
 
                   {:name :network-service
                    :read-fn :vanilla.network-service/fetch-data}
-                   :schedule {:in    [0 :seconds]
-                              :every [5 :seconds]}
-}
+;                   :schedule {:in    [0 :seconds]
+;                              :every [5 :seconds]}
+;}
 
                   {:name     :power-data
                    :read-fn  :vanilla.fetcher/power-data
