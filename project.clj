@@ -1,4 +1,4 @@
-(defproject vanilla "0.1.6-SNAPSHOT"
+(defproject vanilla "0.1.7-SNAPSHOT"
   :description "Vanilla Dashboard - a simple dashboard built on dashboard-clj"
   :url ""
   :dependencies [[org.clojure/clojure "1.8.0"]
