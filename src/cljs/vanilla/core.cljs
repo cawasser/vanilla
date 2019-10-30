@@ -110,11 +110,11 @@
 
               {:type        :map-container
                :name        :map-widget
-               :data-source :current-time
+               ;:data-source :current-time
                :options     {:viz {:title        "Map Widget"
                                    :banner-color "lightblue"
                                    :style        {}
-                                   :height       "100px"}}}
+                                   :height       "500px"}}}
 
               {:type        :pie-chart
                :name        :pie-widget

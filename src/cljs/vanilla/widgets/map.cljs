@@ -3,6 +3,64 @@
             [dashboard-clj.widgets.core :as widget-common]
             [vanilla.widgets.basic-widget :as basic]))
 
+(defn- render
+  []
+  [:div {:style {:width "100%" :height "100%"}}])
+
+
+(defn- show-map [this]
+  (let [config {:chart {
+                        :map "custom/world-continents"
+                        },
+
+                :title {
+                        :text "Fruit Production"
+                        },
+
+                :subtitle {
+                           :text "by continent in tons"
+                           },
+
+                :mapNavigation {
+                                :enabled true,
+                                :buttonOptions {
+                                                :verticalAlign "bottom"
+                                                }
+                                },
+
+                :colorAxis {
+                            :min 0
+                            },
+
+                :series [{:data [["eu", 0],
+                                 ["oc", 1],
+                                 ["af", 2],
+                                 ["as", 3],
+                                 ["na", 4],
+                                 ["sa", 5]],
+                          ;:map  "custom/world-continents" ,
+                          :name "Tons produced" ,
+                          :states {
+                                   :hover {
+                                           :color "#BADA55"
+                                           }
+                                   },
+                          :dataLabels {
+                                       :enabled true,
+                                       :format "{point.name}"
+                                       }
+                          }
+                         ]
+                }]
+
+    (js/Highcharts.mapChart (r/dom-node this)
+                            (clj->js config))) )
+
+(defn map-container
+  [map-options]
+  (r/create-class {:reagent-render render
+                   :component-did-mount show-map
+                   :component-did-update show-map}))
 
 (widget-common/register-widget
   :map-container
@@ -11,11 +69,5 @@
 
     [basic/basic-widget data options
 
-     [:div {:style {:width "100%"
-                    :text-align :left
-                    :border-style  (basic/debug-style options)}}
-      [:p {:style {:fontSize    "50px"
-                   :font-weight "bold"
-                   :color       "blue"}}
-
-       (get-in data [:data :text])]]]))
+     [:div {:style {:width "100%" :height "100%"}}
+      [map-container]]]))
