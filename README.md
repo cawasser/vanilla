@@ -25,6 +25,9 @@ to make the code more streamlined and flexible
 > 0.1.6-SNAPSHOT - added "dependency wheel", a variation on the sankey diagram. 
 this adds another .js dependency. Also, slowed down the update speed of the services
 
+> 0.1.7-SNAPSHOT. added maps and tweaked stoplight to use buttons (better looking). 
+this incorporates gwp-map-widget and stoplight changes
+
 ## Development
 
 - Start server `lein run`
