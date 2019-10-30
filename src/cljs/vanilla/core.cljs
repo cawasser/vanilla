@@ -6,7 +6,8 @@
     [dashboard-clj.layouts.grid-layout-responsive :as grid]
     [vanilla.widgets.widget-base :as wb]
     [vanilla.widgets.simple-text]
-    [vanilla.widgets.stoplight-widget]))
+    [vanilla.widgets.stoplight-widget]
+    [vanilla.widgets.map]))
 
 
 (def widgets [
@@ -123,6 +124,14 @@
                              :viz/style-name   "widget"
                              :viz/tooltip      {:followPointer true}}}
 
+              {:type        :map-container
+               :name        :map-widget
+               ;:data-source :current-time
+               :options     {:viz/title        "Map Widget"
+                             :viz/banner-color "lightblue"
+                             :viz/style        {}
+                             :viz/height       "500px"}}
+
               {:name        :usage-side-by-side-widget
                :basis       :side-by-side-chart
                :type        :bar-pie-sbs
@@ -183,7 +192,10 @@
                                {:position {:lg {:x 0 :y 16 :w 4 :h 2}
                                            :md {:x 0 :y 16 :w 4 :h 2}
                                            :sm {:x 0 :y 16 :w 2 :h 2 :static true}}}}
-
+   :map-widget                {:layout-opts
+                               {:position {:lg {:x 4 :y 5 :w 2 :h 3}
+                                           :md {:x 4 :y 5 :w 2 :h 3}
+                                           :sm {:x 0 :y 5 :w 2 :h 3 :static true}}}}
 
    ;; Right column small widgets
    :time-widget               {:layout-opts
@@ -199,9 +211,9 @@
                                            :md {:x 4 :y 3 :w 2 :h 3}
                                            :sm {:x 0 :y 3 :w 2 :h 3 :static true}}}}
    :bubble-widget             {:layout-opts
-                               {:position {:lg {:x 4 :y 6 :w 2 :h 3}
-                                           :md {:x 4 :y 6 :w 2 :h 3}
-                                           :sm {:x 0 :y 6 :w 2 :h 3 :static true}}}}
+                               {:position {:lg {:x 4 :y 14 :w 2 :h 3}
+                                           :md {:x 4 :y 14 :w 2 :h 3}
+                                           :sm {:x 0 :y 14 :w 2 :h 3 :static true}}}}
    :spectrum-line-widget      {:layout-opts
                                {:position {:lg {:x 4 :y 9 :w 2 :h 2}
                                            :md {:x 4 :y 9 :w 2 :h 2}
@@ -211,9 +223,9 @@
                                            :md {:x 3 :y 11 :w 3 :h 3}
                                            :sm {:x 3 :y 11 :w 3 :h 3 :static true}}}}
    :spectrum-column-widget    {:layout-opts
-                               {:position {:lg {:x 4 :y 14 :w 2 :h 2}
-                                           :md {:x 4 :y 14 :w 2 :h 2}
-                                           :sm {:x 0 :y 14 :w 2 :h 2 :static true}}}}})
+                               {:position {:lg {:x 4 :y 16 :w 2 :h 2}
+                                           :md {:x 4 :y 16 :w 2 :h 2}
+                                           :sm {:x 0 :y 16 :w 2 :h 2 :static true}}}}})
 
 
 

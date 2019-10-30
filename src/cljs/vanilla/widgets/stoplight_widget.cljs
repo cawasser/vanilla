@@ -6,16 +6,17 @@
 
 (defn- stoplight [id val]
 
-  (.log js/console (str "stoplight " id ", " val))
+  ;(.log js/console (str "stoplight " id ", " val))
 
   (let [c (condp = val
             :up "green"
             :warning "yellow"
             :fault "red")]
     ^{:key id}
-    [:td.has-text-centered {:style {:background-color c
-                                    :width "20%"
-                                    :border-spacing "5px"}}
+    [:button.button {:style {:background-color c
+                             :width "20%"
+                             :border-spacing "5px"}
+                     :on-click #(.log js/console (str "clicked " id))}
      id]))
 
 
@@ -24,11 +25,11 @@
   (.log js/console (str "stoplight-row " data))
 
   ^{:key (str data)}
-  [:tr
+  [:buttons
    (for [[k v] data]
      (doall
 
-       (.log js/console (str "stoplight-row> " k "-" v))
+       ;(.log js/console (str "stoplight-row> " k "-" v))
 
        (stoplight k v)))])
 
@@ -38,7 +39,7 @@
   :stoplight-widget
   (fn [data options]
 
-    (.log js/console (str ":stoplight-widget " data ", " options))
+    ;(.log js/console (str ":stoplight-widget " data ", " options))
 
     [basic/basic-widget data options
 
