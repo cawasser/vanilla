@@ -50,6 +50,18 @@
                              :viz/tooltip      {:followPointer true}
                              :viz/icon         "timeline"}}
 
+              {:name        :spectrum-rose-widget
+               :basis       :chart
+               :type        :rose-chart
+               :data-source :spectrum-traces
+               :options     {:viz/title        "Channels (rose)"
+                             :viz/banner-color "pink"
+                             :viz/line-width   0.5
+                             :viz/animation    false
+                             :viz/style-name   "widget"
+                             :viz/tooltip      {:followPointer true}
+                             :viz/icon         "timeline"}}
+
               {:name        :spectrum-line-widget
                :basis       :chart
                :type        :line-chart
@@ -225,7 +237,11 @@
    :spectrum-column-widget    {:layout-opts
                                {:position {:lg {:x 4 :y 16 :w 2 :h 2}
                                            :md {:x 4 :y 16 :w 2 :h 2}
-                                           :sm {:x 0 :y 16 :w 2 :h 2 :static true}}}}})
+                                           :sm {:x 0 :y 16 :w 2 :h 2 :static true}}}}
+   :spectrum-rose-widget      {:layout-opts
+                               {:position {:lg {:x 4 :y 18 :w 2 :h 3}
+                                           :md {:x 4 :y 18 :w 2 :h 3}
+                                           :sm {:x 0 :y 18 :w 2 :h 3 :static true}}}}})
 
 
 
