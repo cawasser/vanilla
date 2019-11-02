@@ -53,7 +53,7 @@
               {:name        :spectrum-rose-widget
                :basis       :chart
                :type        :rose-chart
-               :data-source :spectrum-traces
+               :data-source :usage-24-hour-service
                :options     {:viz/title        "Channels (rose)"
                              :viz/banner-color "pink"
                              :viz/line-width   0.5
