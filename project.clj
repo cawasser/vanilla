@@ -15,7 +15,12 @@
                  [com.stuartsierra/component "0.3.1"]
                  [reagent "0.6.0-alpha"]
                  [re-frame "0.7.0"]
-                 [cljsjs/react-grid-layout "0.12.4-0"]]
+                 [cljsjs/react-grid-layout "0.12.4-0"]
+                 [http-kit "2.1.19"]
+
+                 ; get version data
+                 [trptcolin/versioneer "0.2.0"]
+                 [cljs-ajax "0.7.2"]]
 
   :min-lein-version "2.6.1"
 
