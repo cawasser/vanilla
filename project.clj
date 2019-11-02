@@ -1,13 +1,21 @@
-(defproject vanilla "0.1.7-SNAPSHOT"
+(defproject vanilla "0.2.0-SNAPSHOT"
   :description "Vanilla Dashboard - a simple dashboard built on dashboard-clj"
   :url ""
   :dependencies [[org.clojure/clojure "1.8.0"]
                  [org.clojure/clojurescript "1.8.40" :scope "provided"]
                  [environ "1.0.2"]
-                 [com.multunus/dashboard-clj "0.1.0-SNAPSHOT"]
-                 ;[cljsjs/highcharts "7.0.3-0"]
-                 [cljsjs/jquery "3.4.0-0"]]
-  ;[org.webjars.npm/bulma "0.7.5"]]
+
+                 ;for dashboard-clj
+                 [ring "1.4.0"]
+                 [ring/ring-defaults "0.2.0"]
+                 [bk/ring-gzip "0.1.1"]
+                 [ring.middleware.logger "0.5.0"]
+                 [org.immutant/scheduling "2.1.3"]
+                 [com.taoensso/sente "1.8.1"]
+                 [com.stuartsierra/component "0.3.1"]
+                 [reagent "0.6.0-alpha"]
+                 [re-frame "0.7.0"]
+                 [cljsjs/react-grid-layout "0.12.4-0"]]
 
   :min-lein-version "2.6.1"
 
