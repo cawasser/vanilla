@@ -20,6 +20,26 @@
                 :options {:layout-opts {:cols {:lg 6 :md 4 :sm 2 :xs 1 :xxs 1}}}
                 :widgets (mapv #(merge % (get wlo/widget-layout (:name %))) defs/widgets)})
 
+
+(defn add-widget-model [is-active]
+  [:div.modal (if @is-active {:class "is-active"})
+   [:div.modal-background]
+   [:div.modal-card
+    [:header.modal-card-head
+     [:p.modal-card-title "Modal title"]
+     [:button.delete {:aria-label "close"
+                      :on-click #(reset! is-active false)}]]
+
+    [:section.modal-card-body
+     [:p "we'll put the list of available data services here"]
+     [:p "And we'll put the appropriate list of widgets here"]]
+
+    [:footer.modal-card-foot
+     [:button.button.is-success {:on-click #(reset! is-active false)} "Add"]
+     [:button.button {:on-click #(reset! is-active false)} "Cancel"]]]])
+
+
+
 (defn get-version []
   (GET "/version" {:headers {"Accept" "application/transit+json"}
                    :response-format (ajax/json-response-format {:keywords? true})
@@ -27,9 +47,15 @@
 
 
 (defn version-number []
-  (let [version (rf/subscribe [:version])]
+  (let [version (rf/subscribe [:version])
+        is-active (r/atom false)]
     (fn []
-      [:h7.subtitle.is-6 @version])))
+      [:container.level
+       [:div.level-left.has-text-left
+        [:h7.subtitle.is-6 @version]]
+       [:div.level-right.has-text-right
+        [:button.button.is-link {:on-click #(swap! is-active not)} "Add"]]
+       [add-widget-model is-active]])))
 
 
 
