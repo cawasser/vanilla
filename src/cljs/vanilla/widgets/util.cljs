@@ -1,4 +1,6 @@
-(ns vanilla.widgets.util)
+(ns vanilla.widgets.util
+  (:require
+    [cljs.core.match :refer-macros [match]]))
 
 
 
@@ -18,6 +20,13 @@
              :data (into [] (get-in dats
                                     [n (get-in options [:src :values] :values)]))}))))
 
+
+(defn combine [a b]
+  (let [m-a (map? a)
+        m-b (map? b)]
+    (match [m-a m-b]
+           [true true] (clojure.set/union a b)
+           :else b)))
 
 
 

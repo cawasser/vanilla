@@ -22,7 +22,7 @@
 
 (defn- stoplight-row [data]
 
-  (.log js/console (str "stoplight-row " data))
+  ;(.log js/console (str "stoplight-row " data))
 
   ^{:key (str data)}
   [:buttons

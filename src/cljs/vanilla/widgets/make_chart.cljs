@@ -81,15 +81,15 @@
         plot-config  (plot-config chart-type base-config data options)
 
         final-config (util/deep-merge-with
-                       clojure.set/union
+                       util/combine
                        base-config plot-config chart-config)]
 
-    ;(.log js/console (str "make-config " chart-type
-    ;                      " //// (data)" data-config
-    ;                      " //// (base-config)" base-config
-    ;                      " //// (plot-config)" plot-config
-    ;                      " //// (chart-config)" chart-config
-    ;                      " //// (final-config)" final-config))
+    (.log js/console (str "make-config " chart-type))
+                          ;" //// (data)" data-config
+                          ;" //// (base-config)" base-config
+                          ;" //// (plot-config)" plot-config
+                          ;" //// (chart-config)" chart-config
+                          ;" //// (final-config)" final-config))
 
     final-config))
 
@@ -105,11 +105,11 @@
         converted  (get-conversion chart-type dat options)
         ret        (assoc chart-config :series converted)]
 
-    ;(.log js/console (str "merge-configs " chart-type
-    ;                      " //// (chart-config) " chart-config
-    ;                     ;" //// (data) " data
-    ;                     ;" //// (converted)" converted
-    ;                     " //// (ret)" ret))
+    (.log js/console (str "merge-configs " chart-type
+                          " //// (chart-config) " chart-config
+                         ;" //// (data) " data
+                         ;" //// (converted)" converted
+                         " //// (ret)" ret))
 
     ret))
 

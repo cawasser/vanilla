@@ -5,6 +5,7 @@
                  [org.clojure/clojurescript "1.8.40" :scope "provided"]
                  [environ "1.0.2"]
                  [com.multunus/dashboard-clj "0.1.0-SNAPSHOT"]
+                 [org.clojure/core.match "0.3.0"]
                  ;[cljsjs/highcharts "7.0.3-0"]
                  [cljsjs/jquery "3.4.0-0"]]
   ;[org.webjars.npm/bulma "0.7.5"]]
