@@ -13,15 +13,25 @@
 
 
 (defn basic-widget [data options custom-content]
+
+  ;(.log js/console (str "basic-widget " name " of " type))
+
   [:div {:class "vanilla.widgets.line-chart container"
          :style {:height (get options :viz/height "100%")
                  :width "100%"}}
    [:div {:class "title-wrapper"}
-    [:h3 {:class "title"
-          :style {:background-color
-                  (get options :viz/banner-color "lightblue")
-                  :color (get options :viz/banner-text-color "black")}}
-     (get options :viz/title)]]
+    [:container.level {:style {:background-color
+                                      (get options :viz/banner-color "lightblue")}}
+
+     [:div.level-left.has-text-left
+      [:h3 {:class "title"
+            :style {:color (get options :viz/banner-text-color "black")}}
+       (get options :viz/title)]]
+     [:div.level-right.has-text-centered
+      [:button.delete.is-large {:style {:margin-right "10px"}
+                                :on-click #(.log js/console
+                                                 (str "Close widget "))}]]]]; name))}]]]]
+
 
    [:div {:class (str (get options :viz/style-name "widget"))
           :style {:width "100%"
