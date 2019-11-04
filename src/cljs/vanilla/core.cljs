@@ -92,6 +92,17 @@
                              :viz/labelFormat  "{point.name}"
                              :viz/slice-at     20}}
 
+              {:name        :vari-pie-widget
+               :basis       :chart
+               :type        :vari-pie-chart
+               :data-source :usage-data
+               :options     {:viz/title        "Usage Data (vari-pie)"
+                             :viz/banner-color "red"
+                             :viz/animation    false
+                             :viz/dataLabels   true
+                             :viz/labelFormat  "{point.name}"
+                             :viz/slice-at     20}}
+
               {:name        :sankey-widget
                :basis       :chart
                :type        :sankey-chart
@@ -192,7 +203,7 @@
                                {:position {:lg {:x 0 :y 16 :w 4 :h 2}
                                            :md {:x 0 :y 16 :w 4 :h 2}
                                            :sm {:x 0 :y 16 :w 2 :h 2 :static true}}}}
-   :map-widget                {:layout-opts
+   :vari-pie-widget           {:layout-opts
                                {:position {:lg {:x 4 :y 5 :w 2 :h 3}
                                            :md {:x 4 :y 5 :w 2 :h 3}
                                            :sm {:x 0 :y 5 :w 2 :h 3 :static true}}}}
