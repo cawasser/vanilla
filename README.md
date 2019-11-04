@@ -45,6 +45,8 @@ this version also supports '/version' which gets the version number from the ser
 1. develop code necessary to implement the new widget type 
 1. add the widget definition data structure to [cljs/vanilla/widget-defs.cljs]()
 
+#### running in 'development mode' 
+
 - Start server `lein run`
 - Start figwheel `lein figwheel`
 - Go to http://localhost:5000
