@@ -17,6 +17,7 @@
                  [re-frame "0.7.0"]
                  [cljsjs/react-grid-layout "0.12.4-0"]
                  [http-kit "2.1.19"]
+                 [compojure "1.5.0"]
 
                  ; get version data
                  [trptcolin/versioneer "0.2.0"]
