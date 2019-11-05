@@ -1,7 +1,8 @@
 (ns vanilla.widgets.make-chart
   (:require [reagent.core :as reagent]
             [reagent.ratom :refer-macros [reaction]]
-            [dashboard-clj.widgets.core :as widget-common]))
+            [dashboard-clj.widgets.core :as widget-common]
+            [vanilla.widgets.util :as util]))
 
 
 
@@ -59,7 +60,7 @@
 
   [chart-config data options]
 
-  ;(.log js/console (str "make-config " chart-type
+  ;(.log js/console (str "make-config " (-> chart-config :chart/type)
   ;                      " //// (chart-config)" chart-config
   ;                      " ///// (data)" data))
 
@@ -79,16 +80,16 @@
 
         plot-config  (plot-config chart-type base-config data options)
 
-        final-config (merge-with
-                       clojure.set/union
+        final-config (util/deep-merge-with
+                       util/combine
                        base-config plot-config chart-config)]
 
-    (.log js/console (str "make-config " chart-type
-                          " //// (data)" data-config
-                          " //// (base-config)" base-config
-                          " //// (plot-config)" plot-config
-                          " //// (chart-config)" chart-config
-                          " //// (final-config)" final-config))
+    ;(.log js/console (str "make-config " chart-type
+    ;                      " //// (data)" data-config
+    ;                      " //// (base-config)" base-config
+    ;                      " //// (plot-config)" plot-config
+    ;                      " //// (chart-config)" chart-config
+    ;                      " //// (final-config)" final-config))
 
     final-config))
 
@@ -104,11 +105,11 @@
         converted  (get-conversion chart-type dat options)
         ret        (if converted (assoc chart-config :series converted) chart-config)]
 
-    (.log js/console (str "merge-configs " chart-type
-                          " //// (chart-config) " chart-config
-                          " //// (data) " data
-                          " //// (converted)" converted
-                          " //// (ret)" ret))
+    ;(.log js/console (str "merge-configs " chart-type
+                          ;" //// (chart-config) " chart-config
+                          ;" //// (data) " data
+                          ;" //// (converted)" converted
+                          ;" //// (ret)" ret)]
 
     ret))
 
@@ -185,11 +186,11 @@
                base-config (make-config chart-config new-data options)
                all-configs (merge-configs base-config new-data options)]
 
-           (.log js/console (str "component-did-update " chart-type
-                                 " //// (all-config)" all-configs
-                                 " //// (props)" (reagent/props this)
-                                 " //// (new-args)" new-args))
-           ;;" //// (new-data)" (if (instance? Atom new-data)
+           ;(.log js/console (str "component-did-update " chart-type
+           ;                      " //// (all-config)" all-configs))
+           ;                      " //// (props)" (reagent/props this)
+           ;                      " //// (new-args)" new-args
+           ;" //// (new-data)" (if (instance? Atom new-data)
            ;                     @new-data
            ;                     new-data)))
 

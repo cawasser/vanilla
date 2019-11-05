@@ -51,17 +51,29 @@
                              :viz/tooltip      {:followPointer true}
                              :viz/icon         "timeline"}}
 
-              {:name        :heatmap-widget
+              {:name        :spectrum-rose-widget
                :basis       :chart
-               :type        :heatmap-chart
-               ;:data-source :spectrum-traces
-               :options     {:viz/title        "Heat Map"
-                             :viz/banner-color "lightgreen"
+               :type        :rose-chart
+               :data-source :usage-24-hour-service
+               :options     {:viz/title        "Channels (rose)"
+                             :viz/banner-color "pink"
                              :viz/line-width   0.5
                              :viz/animation    false
                              :viz/style-name   "widget"
                              :viz/tooltip      {:followPointer true}
                              :viz/icon         "timeline"}}
+
+              {:name    :heatmap-widget
+               :basis   :chart
+               :type    :heatmap-chart
+               ;:data-source :spectrum-traces
+               :options {:viz/title        "Heat Map"
+                         :viz/banner-color "lightgreen"
+                         :viz/line-width   0.5
+                         :viz/animation    false
+                         :viz/style-name   "widget"
+                         :viz/tooltip      {:followPointer true}
+                         :viz/icon         "timeline"}}
 
               {:name        :spectrum-line-widget
                :basis       :chart
@@ -137,13 +149,13 @@
                              :viz/style-name   "widget"
                              :viz/tooltip      {:followPointer true}}}
 
-              {:type        :map-container
-               :name        :map-widget
+              {:type    :map-container
+               :name    :map-widget
                ;:data-source :current-time
-               :options     {:viz/title        "Map Widget"
-                             :viz/banner-color "lightblue"
-                             :viz/style        {}
-                             :viz/height       "500px"}}
+               :options {:viz/title        "Map Widget"
+                         :viz/banner-color "lightblue"
+                         :viz/style        {}
+                         :viz/height       "500px"}}
 
               {:name        :usage-side-by-side-widget
                :basis       :side-by-side-chart
@@ -220,10 +232,10 @@
                                {:position {:lg {:x 4 :y 0 :w 2 :h 1}
                                            :md {:x 4 :y 0 :w 2 :h 1}
                                            :sm {:x 0 :y 0 :w 2 :h 1 :static true}}}}
-   :health-and-status-widget {:layout-opts
-                              {:position {:lg {:x 4 :y 1 :w 2 :h 2}
-                                          :md {:x 4 :y 1 :w 2 :h 2}
-                                          :sm {:x 0 :y 1 :w 2 :h 2 :static true}}}}
+   :health-and-status-widget  {:layout-opts
+                               {:position {:lg {:x 4 :y 1 :w 2 :h 2}
+                                           :md {:x 4 :y 1 :w 2 :h 2}
+                                           :sm {:x 0 :y 1 :w 2 :h 2 :static true}}}}
    :pie-widget                {:layout-opts
                                {:position {:lg {:x 4 :y 3 :w 2 :h 3}
                                            :md {:x 4 :y 3 :w 2 :h 3}
@@ -236,14 +248,18 @@
                                {:position {:lg {:x 4 :y 9 :w 2 :h 2}
                                            :md {:x 4 :y 9 :w 2 :h 2}
                                            :sm {:x 0 :y 9 :w 2 :h 2 :static true}}}}
-  :dependency-widget         {:layout-opts
-                               {:position {:lg {:x 3 :y 11 :w 3 :h 3}
-                                           :md {:x 3 :y 11 :w 3 :h 3}
-                                           :sm {:x 3 :y 11 :w 3 :h 3 :static true}}}}
-   :spectrum-column-widget    {:layout-opts
-                               {:position {:lg {:x 4 :y 16 :w 2 :h 2}
-                                           :md {:x 4 :y 16 :w 2 :h 2}
-                                           :sm {:x 0 :y 16 :w 2 :h 2 :static true}}}}})
+   :dependency-widget {:layout-opts
+                       {:position {:lg {:x 3 :y 11 :w 3 :h 3}
+                                   :md {:x 3 :y 11 :w 3 :h 3}
+                                   :sm {:x 3 :y 11 :w 3 :h 3 :static true}}}}
+   :spectrum-column-widget {:layout-opts
+                            {:position {:lg {:x 4 :y 16 :w 2 :h 2}
+                                        :md {:x 4 :y 16 :w 2 :h 2}
+                                        :sm {:x 0 :y 16 :w 2 :h 2 :static true}}}}
+   :spectrum-rose-widget {:layout-opts
+                          {:position {:lg {:x 4 :y 18 :w 2 :h 3}
+                                      :md {:x 4 :y 18 :w 2 :h 3}
+                                      :sm {:x 0 :y 18 :w 2 :h 3 :static true}}}}})
 
 
 
