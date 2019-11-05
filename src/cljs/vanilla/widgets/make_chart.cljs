@@ -21,9 +21,9 @@
         pc-fn           (get-in chart-reg-entry [:merge-plot-option format-type]
                                 (get-in chart-reg-entry [:merge-plot-option :default]))]
 
-    ;(.log js/console (str "plot-config " chart-type
-    ;                      " ///// (format-type)" format-type
-    ;                      " ///// (pc-fn)" pc-fn))
+    (.log js/console (str "plot-config " chart-type
+                         " ///// (format-type)" format-type
+                         " ///// (pc-fn)" pc-fn))
 
     (if pc-fn
       (pc-fn chart-config data options))))
@@ -60,9 +60,9 @@
 
   [chart-config data options]
 
-  ;(.log js/console (str "make-config " (-> chart-config :chart/type)
-  ;                      " //// (chart-config)" chart-config
-  ;                      " ///// (data)" data))
+  (.log js/console (str "make-config " (-> chart-config :chart/type)
+                       " //// (chart-config)" chart-config
+                       " ///// (data)" data))
 
   (let [chart-type   (-> chart-config :chart/type)
         data-config  (if (instance? Atom data) @data data)
@@ -84,12 +84,12 @@
                        util/combine
                        base-config plot-config chart-config)]
 
-    ;(.log js/console (str "make-config " chart-type
-    ;                      " //// (data)" data-config
-    ;                      " //// (base-config)" base-config
-    ;                      " //// (plot-config)" plot-config
-    ;                      " //// (chart-config)" chart-config
-    ;                      " //// (final-config)" final-config))
+    (.log js/console (str "make-config " chart-type
+                         " //// (data)" data-config
+                         " //// (base-config)" base-config
+                         " //// (plot-config)" plot-config
+                         " //// (chart-config)" chart-config
+                         " //// (final-config)" final-config))
 
     final-config))
 
@@ -146,8 +146,8 @@
 
   [id registry-data]
 
-  ;(.log js/console (str "register-type " id
-  ;                      " //// (registry-data)" registry-data))
+;   (.log js/console (str "register-type " id
+;                        " //// (registry-data)" registry-data))
 
   (swap! type-registry assoc id registry-data))
 
@@ -163,9 +163,9 @@
         chart-type      (-> chart-config :chart/type)
         chart-reg-entry (get type-registry chart-type {})]
 
-    ;(.log js/console (str "make-chart " chart-type
-    ;                      " //// (chart-config)" chart-config
-    ;                      " ////// (chart-reg-entry)" chart-reg-entry))
+    (.log js/console (str "make-chart " chart-type
+                         " //// (chart-config)" chart-config
+                         " ////// (chart-reg-entry)" chart-reg-entry))
 
     (reagent/create-class
       {:reagent-render

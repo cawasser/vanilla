@@ -12,9 +12,9 @@
   ;(.log js/console (str "pie/plot-options " chart-config))
 
   {:plotOptions {:series {:animation (:viz/animation options false)}
-                 :pie    {:allowPointSelect true
-                          :dataLabels       {:enabled (get options :viz/dataLabels false)
-                                             :format  (get options :viz/labelFormat "")}}}})
+                 :variablepie    {:allowPointSelect true
+                                  :dataLabels       {:enabled (get options :viz/dataLabels false)
+                                                     :format  (get options :viz/labelFormat "")}}}})
 
 
 
@@ -63,13 +63,12 @@
 ; register all the data stuff so we have access to it
 ;
 (mc/register-type
-  :vari-pie-chart {:chart-options     {:chart/type              :vari-pie-chart}
-                                  :chart/supported-formats [:data-format/name-y :data-format/x-y]
-                                  :chart                   {:type  "variablepie"
-                                                            :style {:labels {:fontFamily "monospace"
-                                                                             :color      "#FFFFFF"}}}
-
-              ;:merge-plot-option {:default plot-options}
+  :vari-pie-chart {:chart-options   {:chart/type              :vari-pie-chart
+                                     :chart/supported-formats [:data-format/name-y :data-format/x-y]
+                                     :chart                   {:type  "variablepie"
+                                                               :style {:labels {:fontFamily "monospace"
+                                                                                :color      "#FFFFFF"}}}}
+                   :merge-plot-option {:default plot-options}
 
                    :conversions       {:data-format/x-y convert-x-y
                                        :default         convert-name-y}})

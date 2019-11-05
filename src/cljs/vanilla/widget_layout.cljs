@@ -28,10 +28,6 @@
                                {:position {:lg {:x 0 :y 16 :w 2 :h 2}
                                            :md {:x 0 :y 16 :w 2 :h 2}
                                            :sm {:x 0 :y 16 :w 2 :h 2 :static true}}}}
-   :map-widget                {:layout-opts
-                               {:position {:lg {:x 4 :y 5 :w 2 :h 3}
-                                           :md {:x 4 :y 5 :w 2 :h 3}
-                                           :sm {:x 0 :y 5 :w 2 :h 3 :static true}}}}
    :heatmap-widget            {:layout-opts
                                {:position {:lg {:x 0 :y 18 :w 4 :h 4}
                                            :md {:x 0 :y 18 :w 4 :h 4}
@@ -50,6 +46,10 @@
                                {:position {:lg {:x 4 :y 3 :w 2 :h 3}
                                            :md {:x 4 :y 3 :w 2 :h 3}
                                            :sm {:x 0 :y 3 :w 2 :h 3 :static true}}}}
+   :vari-pie-widget           {:layout-opts
+                               {:position {:lg {:x 4 :y 5 :w 2 :h 3}
+                                           :md {:x 4 :y 5 :w 2 :h 3}
+                                           :sm {:x 0 :y 5 :w 2 :h 3 :static true}}}}
    :bubble-widget             {:layout-opts
                                {:position {:lg {:x 4 :y 14 :w 2 :h 2}
                                            :md {:x 4 :y 14 :w 2 :h 2}
@@ -69,4 +69,9 @@
    :spectrum-rose-widget      {:layout-opts
                                {:position {:lg {:x 4 :y 18 :w 2 :h 3}
                                            :md {:x 4 :y 18 :w 2 :h 3}
-                                           :sm {:x 0 :y 18 :w 2 :h 3 :static true}}}}})
+                                           :sm {:x 0 :y 18 :w 2 :h 3 :static true}}}}
+   :map-widget                {:layout-opts
+                               {:position {:lg {:x 4 :y 21 :w 2 :h 3}
+                                           :md {:x 4 :y 21 :w 2 :h 3}
+                                           :sm {:x 0 :y 21 :w 2 :h 3 :static true}}}}})
+                                          

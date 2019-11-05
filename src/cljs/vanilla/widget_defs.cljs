@@ -188,4 +188,4 @@
                              :viz/animation    false
                              :viz/style-name   "widget"
                              :viz/tooltip      {:followPointer true}
-                             :viz/icon         "timeline"}}]))
+                             :viz/icon         "timeline"}}])
