@@ -123,6 +123,18 @@
                              :viz/style        {}
                              :viz/height       "500px"}}
 
+              {:name        :heatmap-widget
+               :basis       :chart
+               :type        :heatmap-chart
+               ;:data-source :spectrum-traces
+               :options     {:viz/title        "Heat Map"
+                             :viz/banner-color "lightgreen"
+                             :viz/line-width   0.5
+                             :viz/animation    false
+                             :viz/style-name   "widget"
+                             :viz/tooltip      {:followPointer true}
+                             :viz/icon         "timeline"}}
+
               {:name        :usage-side-by-side-widget
                :basis       :side-by-side-chart
                :type        :bar-pie-sbs

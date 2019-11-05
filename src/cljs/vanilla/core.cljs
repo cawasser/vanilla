@@ -11,7 +11,9 @@
     [vanilla.events]
     [vanilla.widget-defs :as defs]
     [vanilla.widget-layout :as wlo]
-    [ajax.core :refer [GET POST] :as ajax]))
+    [ajax.core :refer [GET POST] :as ajax]
+    [vanilla.widgets.heatmap-chart]))
+
 
 
 

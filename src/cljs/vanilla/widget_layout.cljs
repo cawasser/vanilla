@@ -32,16 +32,20 @@
                                {:position {:lg {:x 4 :y 5 :w 2 :h 3}
                                            :md {:x 4 :y 5 :w 2 :h 3}
                                            :sm {:x 0 :y 5 :w 2 :h 3 :static true}}}}
+   :heatmap-widget            {:layout-opts
+                               {:position {:lg {:x 0 :y 18 :w 4 :h 4}
+                                           :md {:x 0 :y 18 :w 4 :h 4}
+                                           :sm {:x 0 :y 18 :w 4 :h 4 :static true}}}}
 
    ;; Right column small widgets
    :time-widget               {:layout-opts
                                {:position {:lg {:x 4 :y 0 :w 2 :h 1}
                                            :md {:x 4 :y 0 :w 2 :h 1}
                                            :sm {:x 0 :y 0 :w 2 :h 1 :static true}}}}
-   :health-and-status-widget {:layout-opts
-                              {:position {:lg {:x 4 :y 1 :w 2 :h 2}
-                                          :md {:x 4 :y 1 :w 2 :h 2}
-                                          :sm {:x 0 :y 1 :w 2 :h 2 :static true}}}}
+   :health-and-status-widget  {:layout-opts
+                               {:position {:lg {:x 4 :y 1 :w 2 :h 2}
+                                           :md {:x 4 :y 1 :w 2 :h 2}
+                                           :sm {:x 0 :y 1 :w 2 :h 2 :static true}}}}
    :pie-widget                {:layout-opts
                                {:position {:lg {:x 4 :y 3 :w 2 :h 3}
                                            :md {:x 4 :y 3 :w 2 :h 3}
