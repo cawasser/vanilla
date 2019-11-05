@@ -7,7 +7,8 @@
     [vanilla.widgets.widget-base :as wb]
     [vanilla.widgets.simple-text]
     [vanilla.widgets.stoplight-widget]
-    [vanilla.widgets.map]))
+    [vanilla.widgets.map]
+    [vanilla.widgets.heatmap-chart]))
 
 
 (def widgets [
@@ -56,6 +57,18 @@
                :data-source :usage-24-hour-service
                :options     {:viz/title        "Channels (rose)"
                              :viz/banner-color "pink"
+                             :viz/line-width   0.5
+                             :viz/animation    false
+                             :viz/style-name   "widget"
+                             :viz/tooltip      {:followPointer true}
+                             :viz/icon         "timeline"}}
+
+              {:name        :heatmap-widget
+               :basis       :chart
+               :type        :heatmap-chart
+               ;:data-source :spectrum-traces
+               :options     {:viz/title        "Heat Map"
+                             :viz/banner-color "lightgreen"
                              :viz/line-width   0.5
                              :viz/animation    false
                              :viz/style-name   "widget"
@@ -204,6 +217,11 @@
                                {:position {:lg {:x 0 :y 16 :w 4 :h 2}
                                            :md {:x 0 :y 16 :w 4 :h 2}
                                            :sm {:x 0 :y 16 :w 2 :h 2 :static true}}}}
+   :heatmap-widget
+                              {:layout-opts
+                               {:position {:lg {:x 0 :y 18 :w 4 :h 4}
+                                           :md {:x 0 :y 18 :w 4 :h 4}
+                                           :sm {:x 0 :y 18 :w 4 :h 4 :static true}}}}
    :map-widget                {:layout-opts
                                {:position {:lg {:x 4 :y 5 :w 2 :h 3}
                                            :md {:x 4 :y 5 :w 2 :h 3}
@@ -229,11 +247,11 @@
    :spectrum-line-widget      {:layout-opts
                                {:position {:lg {:x 4 :y 9 :w 2 :h 2}
                                            :md {:x 4 :y 9 :w 2 :h 2}
-                                           :sm {:x 0 :y 9 :w 2 :h 2 :static true}}}}
-   :dependency-widget         {:layout-opts
-                               {:position {:lg {:x 3 :y 11 :w 3 :h 3}
-                                           :md {:x 3 :y 11 :w 3 :h 3}
-                                           :sm {:x 3 :y 11 :w 3 :h 3 :static true}}}}
+                                           :sm {:x 0 :y 9 :w 2 :h 2 :static true}}}}}
+  :dependency-widget         {:layout-opts
+                              {:position {:lg {:x 3 :y 11 :w 3 :h 3}
+                                          :md {:x 3 :y 11 :w 3 :h 3}
+                                          :sm {:x 3 :y 11 :w 3 :h 3 :static true}}}}
    :spectrum-column-widget    {:layout-opts
                                {:position {:lg {:x 4 :y 16 :w 2 :h 2}
                                            :md {:x 4 :y 16 :w 2 :h 2}
@@ -241,7 +259,7 @@
    :spectrum-rose-widget      {:layout-opts
                                {:position {:lg {:x 4 :y 18 :w 2 :h 3}
                                            :md {:x 4 :y 18 :w 2 :h 3}
-                                           :sm {:x 0 :y 18 :w 2 :h 3 :static true}}}}})
+                                           :sm {:x 0 :y 18 :w 2 :h 3 :static true}}}})
 
 
 
