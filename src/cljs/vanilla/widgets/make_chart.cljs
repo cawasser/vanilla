@@ -1,7 +1,8 @@
 (ns vanilla.widgets.make-chart
   (:require [reagent.core :as reagent]
             [reagent.ratom :refer-macros [reaction]]
-            [dashboard-clj.widgets.core :as widget-common]))
+            [dashboard-clj.widgets.core :as widget-common]
+            [vanilla.widgets.util :as util]))
 
 
 
@@ -59,7 +60,7 @@
 
   [chart-config data options]
 
-  ;(.log js/console (str "make-config " chart-type
+  ;(.log js/console (str "make-config " (-> chart-config :chart/type)
   ;                      " //// (chart-config)" chart-config
   ;                      " ///// (data)" data))
 
@@ -79,8 +80,8 @@
 
         plot-config  (plot-config chart-type base-config data options)
 
-        final-config (merge-with
-                       clojure.set/union
+        final-config (util/deep-merge-with
+                       util/combine
                        base-config plot-config chart-config)]
 
     ;(.log js/console (str "make-config " chart-type
@@ -102,13 +103,15 @@
   (let [chart-type (-> chart-config :chart/type)
         dat        (if (instance? Atom data) @data data)
         converted  (get-conversion chart-type dat options)
-        ret        (assoc chart-config :series converted)]
+        ret        (if converted
+                     (assoc chart-config :series converted)
+                     chart-config)]
 
     ;(.log js/console (str "merge-configs " chart-type
-                          ;" //// (chart-config) " chart-config
-                          ;" //// (data) " data
-                          ;" //// (converted)" converted
-                          ;" //// (ret)" ret)]
+    ;                      " //// (chart-config) " chart-config
+    ;                      " //// (data) " data
+    ;                      " //// (converted)" converted
+    ;                      " //// (ret)" ret))
 
     ret))
 

@@ -9,52 +9,32 @@
 
 
 (defn- show-map [this]
-  (let [config {:chart {
-                        :map "custom/world-continents"
-                        },
+  (let [config {:chart {:map "custom/world-continents"}
 
-                :title {
-                        :text "Fruit Production"
-                        },
+                :title {:text ""}
 
-                :subtitle {
-                           :text "by continent in tons"
-                           },
+                :subtitle {:text ""}
 
-                :mapNavigation {
-                                :enabled true,
-                                :buttonOptions {
-                                                :verticalAlign "bottom"
-                                                }
-                                },
+                :mapNavigation {:enabled true
+                                :buttonOptions {:verticalAlign "bottom"}}
 
-                :colorAxis {
-                            :min 0
-                            },
+                :colorAxis {:min 0}
 
-                :series [{:data [["eu", 0],
-                                 ["oc", 1],
-                                 ["af", 2],
-                                 ["as", 3],
-                                 ["na", 4],
-                                 ["sa", 5]],
-                          ;:map  "custom/world-continents" ,
-                          :name "Tons produced" ,
-                          :states {
-                                   :hover {
-                                           :color "#BADA55"
-                                           }
-                                   },
-                          :dataLabels {
-                                       :enabled true,
-                                       :format "{point.name}"
-                                       }
-                          }
-                         ]
-                }]
+
+                :series [{:data [["eu" 0]
+                                 ["oc" 1]
+                                 ["af" 2]
+                                 ["as" 3]
+                                 ["na" 4]
+                                 ["sa" 5]]
+                          ;:map  "custom/world-continents" 
+                          :name "Tons produced" 
+                          :states {:hover {:color "#BADA55"}}
+                          :dataLabels {:enabled true
+                                       :format "{point.name}"}}]}]
 
     (js/Highcharts.mapChart (r/dom-node this)
-                            (clj->js config))) )
+                            (clj->js config))))
 
 (defn map-container
   [map-options]

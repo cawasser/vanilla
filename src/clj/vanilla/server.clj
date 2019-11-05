@@ -5,7 +5,8 @@
               [vanilla.sankey-service]
               [vanilla.bubble-service]
               [vanilla.network-service]
-              [vanilla.stoplight-service])
+              [vanilla.stoplight-service]
+              [vanilla.usage-24-hour-service])
     (:gen-class))
 
 (def datasources
@@ -53,7 +54,14 @@
    {:name :health-and-status-data
     :read-fn :vanilla.stoplight-service/fetch-data
     :schedule {:in    [0 :seconds]
-               :every [10 :seconds]}}])
+               :every [10 :seconds]}}
+
+   {:name :usage-24-hour-service
+    :read-fn :vanilla.usage-24-hour-service/fetch-data}])
+   ;:schedule {:in    [0 :seconds]
+   ;           :every [5 :seconds]}}
+
+
 
 
 

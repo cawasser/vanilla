@@ -14,7 +14,10 @@
             [vanilla.widgets.org-chart]
             [vanilla.widgets.pie-chart]
             [vanilla.widgets.vari-pie-chart]
-            [vanilla.widgets.sankey-chart]))
+            [vanilla.widgets.sankey-chart]
+            [vanilla.widgets.rose-chart]
+            [vanilla.widgets.sankey-chart]
+            [vanilla.widgets.heatmap-chart]))
 
 
 
@@ -90,3 +93,23 @@
         [:div.column.is-one-third {:style {:height "80%"}}
          [mc/make-chart (get-config right-chart) data options]]]])))
 
+
+
+(defn build-widget [{:keys [name basis type chart-types]}]
+  ;(.log js/console (str "building widget " name " of " type
+  ;                      " //// " basis "/" chart-types))
+
+  (condp = basis
+    :chart (make-widget type (get-config type))
+
+    :stacked-chart (do
+                     ;(.log js/console (str "calling make-stacked-widget " type
+                     ;                      "/" chart-types))
+                     (make-stacked-widget type chart-types))
+
+    :side-by-side-chart (do
+                          ;(.log js/console (str "calling make-side-by-side-widget " type
+                          ;                      "/" chart-types))
+                          (make-side-by-side-widget type chart-types))
+
+    ()))
