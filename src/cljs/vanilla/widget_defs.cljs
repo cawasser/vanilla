@@ -165,4 +165,16 @@
                :name        :health-and-status-widget
                :data-source :health-and-status-data
                :options     {:viz/title        "Status"
-                             :viz/banner-color "aqua"}}])
+                             :viz/banner-color "aqua"}}
+
+              {:name        :spectrum-rose-widget
+               :basis       :chart
+               :type        :rose-chart
+               :data-source :usage-24-hour-service
+               :options     {:viz/title        "Channels (rose)"
+                             :viz/banner-color "pink"
+                             :viz/line-width   0.5
+                             :viz/animation    false
+                             :viz/style-name   "widget"
+                             :viz/tooltip      {:followPointer true}
+                             :viz/icon         "timeline"}}])

@@ -20,7 +20,9 @@
 
                  ; get version data
                  [trptcolin/versioneer "0.2.0"]
-                 [cljs-ajax "0.7.2"]]
+                 [cljs-ajax "0.7.2"]
+
+                 [org.clojure/core.match "0.3.0"]]
 
   :min-lein-version "2.6.1"
 
