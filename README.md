@@ -28,7 +28,24 @@ this adds another .js dependency. Also, slowed down the update speed of the serv
 > 0.1.7-SNAPSHOT. added maps and tweaked stoplight to use buttons (better looking). 
 this incorporates gwp-map-widget and stoplight changes
 
+> 0.2.0-SNAPSHOT. dashboard-clj has been pulled into the project for added flexibility
+this version also supports '/version' which gets the version number from the server 
+
 ## Development
+
+
+#### adding new Highcharts chart types
+
+1.
+1.
+1.
+
+#### adding new widget types
+
+1. develop code necessary to implement the new widget type 
+1. add the widget definition data structure to [cljs/vanilla/widget-defs.cljs]()
+
+#### running in 'development mode' 
 
 - Start server `lein run`
 - Start figwheel `lein figwheel`

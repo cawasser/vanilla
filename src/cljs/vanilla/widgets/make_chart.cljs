@@ -103,13 +103,15 @@
   (let [chart-type (-> chart-config :chart/type)
         dat        (if (instance? Atom data) @data data)
         converted  (get-conversion chart-type dat options)
-        ret        (if converted (assoc chart-config :series converted) chart-config)]
+        ret        (if converted
+                     (assoc chart-config :series converted)
+                     chart-config)]
 
     ;(.log js/console (str "merge-configs " chart-type
-                          ;" //// (chart-config) " chart-config
-                          ;" //// (data) " data
-                          ;" //// (converted)" converted
-                          ;" //// (ret)" ret)]
+    ;                      " //// (chart-config) " chart-config
+    ;                      " //// (data) " data
+    ;                      " //// (converted)" converted
+    ;                      " //// (ret)" ret))
 
     ret))
 
