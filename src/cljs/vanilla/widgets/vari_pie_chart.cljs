@@ -17,8 +17,6 @@
                                                      :format  (get options :viz/labelFormat "")}}}})
 
 
-
-
 ;;;;;;;;;;;;;;
 ;
 ; these functions will convert the data from the current format into
