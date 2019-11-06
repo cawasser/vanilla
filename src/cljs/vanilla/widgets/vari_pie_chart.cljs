@@ -25,7 +25,7 @@
 ; what the chart type actually wants. This may involve adding
 ; data to the :series, or rearranging the contents
 
-(defn- process-data [data slice-at]
+(defn- process-dataa [data slice-at]
 
   (.log js/console "vari-pie process-data" (str data))
   (.log js/console "VARI-PROCESSED-DATA: " (str (map #(conj % (rand 100) false) data)))
@@ -43,7 +43,7 @@
 
   (.log js/console (str "vari-pie/convert-x-y " chart-type))
 
-  (process-data (get-in data [:data (get-in options [:src/extract])])
+  (process-dataa (get-in data [:data (get-in options [:src/extract])])
                 (get-in options [:viz/slice-at])))
 
 
@@ -54,7 +54,7 @@
                        " //// " data " //// " options
                        " //// " (get-in data [:data :series 0 :data])))
 
-  (process-data (get-in data [:data :series 0 :data] [])
+  (process-dataa (get-in data [:data :series 0 :data] [])
                 (get-in options [:viz/slice-at])))
 
 

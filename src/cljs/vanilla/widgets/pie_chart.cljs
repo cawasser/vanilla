@@ -27,7 +27,7 @@
 
 (defn- process-data [data slice-at]
 
-  (.log js/console "pie process-data" (str data))
+  ; (.log js/console "pie process-data" (str data))
 
   [{:colorByPoint true
     :keys         ["name" "y" "selected" "sliced"]
@@ -37,7 +37,7 @@
 (defn convert-x-y
   [chart-type data options]
 
-  (.log js/console (str "pie/convert-x-y " chart-type))
+  ; (.log js/console (str "pie/convert-x-y " chart-type))
 
   (process-data (get-in data [:data (get-in options [:src/extract])])
                 (get-in options [:viz/slice-at])))
@@ -46,9 +46,9 @@
 (defn convert-name-y
   [chart-type data options]
 
-  (.log js/console (str "pie/convert-name-y " chart-type
-                       " //// " data " //// " options
-                       " //// " (get-in data [:data :series 0 :data])))
+  ; (.log js/console (str "pie/convert-name-y " chart-type
+  ;                      " //// " data " //// " options
+  ;                      " //// " (get-in data [:data :series 0 :data])))
 
   (process-data (get-in data [:data :series 0 :data] [])
                 (get-in options [:viz/slice-at])))
