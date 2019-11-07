@@ -16,8 +16,6 @@
 
 
 
-
-
 (def dashboard {:layout  :responsive-grid-layout
                 :options {:layout-opts {:cols {:lg 6 :md 4 :sm 2 :xs 1 :xxs 1}}}
                 :widgets (mapv #(merge % (get wlo/widget-layout (:name %))) defs/widgets)})
@@ -83,7 +81,6 @@
       [:footer.modal-card-foot
        [:button.button.is-success {:on-click #(reset! is-active false)} "Add"]
        [:button.button {:on-click #(reset! is-active false)} "Cancel"]]]]))
-
 
 
 (defn get-version []
