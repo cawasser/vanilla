@@ -107,11 +107,11 @@
                      (assoc chart-config :series converted)
                      chart-config)]
 
-    ;(.log js/console (str "merge-configs " chart-type
+    (.log js/console (str "merge-configs " chart-type
     ;                      " //// (chart-config) " chart-config
     ;                      " //// (data) " data
-    ;                      " //// (converted)" converted
-    ;                      " //// (ret)" ret))
+                          " //// (converted)" converted
+                          " //// (ret)" ret))
 
     ret))
 
@@ -163,9 +163,9 @@
         chart-type      (-> chart-config :chart/type)
         chart-reg-entry (get type-registry chart-type {})]
 
-    (.log js/console (str "MAKE-chart " chart-type
-                         " //// (chart-config)" chart-config
-                         " ////// (chart-reg-entry)" chart-reg-entry))
+    ;(.log js/console (str "MAKE-chart " chart-type
+    ;                     " //// (chart-config)" chart-config
+    ;                     " ////// (chart-reg-entry)" chart-reg-entry))
 
     (reagent/create-class
       {:reagent-render
