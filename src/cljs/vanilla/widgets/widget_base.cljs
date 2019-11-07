@@ -14,6 +14,7 @@
             [vanilla.widgets.org-chart]
             [vanilla.widgets.pie-chart]
             [vanilla.widgets.sankey-chart]
+            [vanilla.widgets.scatter-chart]
             [vanilla.widgets.rose-chart]
             [vanilla.widgets.sankey-chart]
             [vanilla.widgets.heatmap-chart]))

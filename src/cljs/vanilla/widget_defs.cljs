@@ -177,4 +177,16 @@
                              :viz/animation    false
                              :viz/style-name   "widget"
                              :viz/tooltip      {:followPointer true}
+                             :viz/icon         "timeline"}}
+
+              {:name        :scatter-widget
+               :basis       :chart
+               :type        :scatter-chart
+               :data-source :scatter-service-data
+               :options     {:viz/title        "Scatter"
+                             :viz/banner-color "purple"
+                             :viz/line-width   0.5
+                             :viz/animation    false
+                             :viz/style-name   "widget"
+                             :viz/tooltip      {:followPointer true}
                              :viz/icon         "timeline"}}])

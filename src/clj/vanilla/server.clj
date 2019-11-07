@@ -6,6 +6,7 @@
               [vanilla.bubble-service]
               [vanilla.network-service]
               [vanilla.stoplight-service]
+              [vanilla.scatter-service]
               [vanilla.usage-24-hour-service])
     (:gen-class))
 
@@ -55,6 +56,9 @@
     :read-fn :vanilla.stoplight-service/fetch-data
     :schedule {:in    [0 :seconds]
                :every [10 :seconds]}}
+
+   {:name :scatter-service-data
+    :read-fn :vanilla.scatter-service/fetch-data}
 
    {:name :usage-24-hour-service
     :read-fn :vanilla.usage-24-hour-service/fetch-data}])

@@ -69,4 +69,8 @@
    :spectrum-rose-widget      {:layout-opts
                                {:position {:lg {:x 4 :y 18 :w 2 :h 3}
                                            :md {:x 4 :y 18 :w 2 :h 3}
-                                           :sm {:x 0 :y 18 :w 2 :h 3 :static true}}}}})
+                                           :sm {:x 0 :y 18 :w 2 :h 3 :static true}}}}
+   :scatter-widget   {:layout-opts
+                      {:position {:lg {:x 4 :y 21 :w 2 :h 2}
+                                  :md {:x 4 :y 21 :w 2 :h 2}
+                                  :sm {:x 0 :y 21 :w 2 :h 2 :static true}}}}})
