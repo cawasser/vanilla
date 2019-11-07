@@ -83,6 +83,17 @@
                              :viz/labelFormat  "{point.name}"
                              :viz/slice-at     20}}
 
+              {:name        :vari-pie-widget
+               :basis       :chart
+               :type        :vari-pie-chart
+               :data-source :usage-data
+               :options     {:viz/title        "Usage Data (vari-pie)"
+                             :viz/banner-color "red"
+                             :viz/animation    false
+                             :viz/dataLabels   true
+                             :viz/labelFormat  "{point.name}"
+                             :viz/slice-at     20}}
+
               {:name        :sankey-widget
                :basis       :chart
                :type        :sankey-chart
