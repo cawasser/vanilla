@@ -28,6 +28,7 @@
                    [:bar-widget "/images/bar-widget.png" "Bar"]
                    [:column-widget "/images/column-widget.png" "Column"]
                    [:pie-widget "/images/pie-widget.png" "Pie"]
+                   [:vari-pie-widget "/images/vari-pie-widget.png" "Variable Pie"]
                    [:rose-widget "/images/rose-widget.png" "Wind Rose"]
                    [:stoplight-widget "/images/stoplight-widget.png" "Stoplight"]
                    [:map-widget "/images/map-widget.png" "Map"]
