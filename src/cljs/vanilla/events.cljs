@@ -30,9 +30,15 @@
 (rf/register-sub
   :version
   (fn [db _]
-    (.log js/console (str ":version " @db))
+    ;(.log js/console (str ":version " @db))
     (reaction (get @db :version))))
 
+
+(rf/register-sub
+  :services
+  (fn [db _]
+    ;(.log js/console (str ":services " @db))
+    (reaction (get @db :services))))
 
 
 
@@ -42,5 +48,13 @@
 (rf/register-handler
   :set-version
   (fn [db [_ version]]
-    (.log js/console (str ":set-version " version))
+    ;(.log js/console (str ":set-version " version))
     (assoc db :version (:version version))))
+
+
+(rf/register-handler
+  :set-services
+  (fn [db [_ services]]
+    ;(.log js/console (str ":set-services " services))
+    (assoc db :services (:services services))))
+
