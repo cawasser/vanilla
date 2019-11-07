@@ -31,6 +31,10 @@ this incorporates gwp-map-widget and stoplight changes
 > 0.2.0-SNAPSHOT. dashboard-clj has been pulled into the project for added flexibility
 this version also supports '/version' which gets the version number from the server 
 
+> 0.2.1-SNAPSHOT. supports '/services' which gets metadata on available data sources 
+from the server and present this data in a model-card so the user can (one day) pick 
+a new data source and widget to add to their "personalized" dashboard
+
 ## Development
 
 
