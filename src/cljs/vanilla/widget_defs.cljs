@@ -87,12 +87,13 @@
                :basis       :chart
                :type        :vari-pie-chart
                :data-source :usage-data
-               :options     {:viz/title        "Usage Data (vari-pie)"
-                             :viz/banner-color "red"
-                             :viz/animation    false
-                             :viz/dataLabels   true
-                             :viz/labelFormat  "{point.name}"
-                             :viz/slice-at     20}}
+               :options     {:viz/title             "Usage Data (vari-pie)"
+                             :viz/banner-color      "red"
+                             :viz/banner-text-color "white"
+                             :viz/animation         false
+                             :viz/dataLabels        true
+                             :viz/labelFormat       "{point.name}"
+                             :viz/slice-at          20}}
 
               {:name        :sankey-widget
                :basis       :chart
@@ -105,14 +106,14 @@
                              :viz/labelFormat       "{point.name}"
                              :viz/animation         false}}
 
-              {:name        :time-widget
-               :basis       :simple
-               :type        :simple-text
-               :data-source :current-time
-               :options     {:viz/title        "Current Time"
-                             :viz/banner-color "lightblue"
-                             :viz/style        {}
-                             :viz/height       "100px"}}
+              ;{:name        :time-widget
+              ; :basis       :simple
+              ; :type        :simple-text
+              ; :data-source :current-time
+              ; :options     {:viz/title        "Current Time"
+              ;               :viz/banner-color "lightblue"
+              ;               :viz/style        {}
+              ;               :viz/height       "100px"}}
 
               {:name        :spectrum-dual-widget
                :basis       :stacked-chart
@@ -126,25 +127,25 @@
                              :viz/style-name   "widget"
                              :viz/tooltip      {:followPointer true}}}
 
-              {:type        :map-container
-               :name        :map-widget
+              {:type    :map-container
+               :name    :map-widget
                ;:data-source :current-time
-               :options     {:viz/title        "Map Widget"
-                             :viz/banner-color "lightblue"
-                             :viz/style        {}
-                             :viz/height       "500px"}}
+               :options {:viz/title        "Map Widget"
+                         :viz/banner-color "lightblue"
+                         :viz/style        {}
+                         :viz/height       "500px"}}
 
-              {:name        :heatmap-widget
-               :basis       :chart
-               :type        :heatmap-chart
+              {:name    :heatmap-widget
+               :basis   :chart
+               :type    :heatmap-chart
                ;:data-source :spectrum-traces
-               :options     {:viz/title        "Heat Map"
-                             :viz/banner-color "lightgreen"
-                             :viz/line-width   0.5
-                             :viz/animation    false
-                             :viz/style-name   "widget"
-                             :viz/tooltip      {:followPointer true}
-                             :viz/icon         "timeline"}}
+               :options {:viz/title        "Heat Map"
+                         :viz/banner-color "lightgreen"
+                         :viz/line-width   0.5
+                         :viz/animation    false
+                         :viz/style-name   "widget"
+                         :viz/tooltip      {:followPointer true}
+                         :viz/icon         "timeline"}}
 
               {:name        :usage-side-by-side-widget
                :basis       :side-by-side-chart
