@@ -35,6 +35,9 @@ this version also supports '/version' which gets the version number from the ser
 from the server and present this data in a model-card so the user can (one day) pick 
 a new data source and widget to add to their "personalized" dashboard
 
+> 0.2.1-DEMO. update layout to better support November 2019 Product Owner demo. No
+new widgets, just revised default layout
+
 ## Development
 
 
