@@ -14,7 +14,8 @@
 
 (defn start-dashboard[]
   (prn "server starting")
-  (dash/start deps/datasources {:port (Integer. (or (env :port) 5000))}))
+  (dash/start deps/datasources {:port (Integer. (or (env :port) 5000))
+                                :nrepl-port (Integer. (or (env :nrepl-port) 7000))}))
 
 (defn -main [& [port]]
   (start-dashboard))
