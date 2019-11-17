@@ -1,4 +1,4 @@
-(defproject vanilla "0.2.1-DEMO"
+(defproject vanilla "0.2.2-SNAPSHOT"
   :description "Vanilla Dashboard - a simple dashboard built on dashboard-clj"
   :url ""
   :dependencies [[org.clojure/clojure "1.8.0"]
@@ -23,7 +23,10 @@
                  [trptcolin/versioneer "0.2.0"]
                  [cljs-ajax "0.7.2"]
 
-                 [org.clojure/core.match "0.3.0"]]
+                 [org.clojure/core.match "0.3.0"]
+
+                 [com.layerware/hugsql "0.5.1"]
+                 [org.xerial/sqlite-jdbc "3.25.2"]]
 
   :min-lein-version "2.6.1"
 
@@ -81,7 +84,8 @@
              ;; don't do this, instead we do the opposite, running figwheel from
              ;; an nREPL process, see
              ;; https://github.com/bhauman/lein-figwheel/wiki/Using-the-Figwheel-REPL-within-NRepl
-             ;; :nrepl-port 7888
+
+             :nrepl-port 7002
 
              ;; To be able to open files in your editor from the heads up display
              ;; you will need to put a script on your path.
