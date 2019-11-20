@@ -26,7 +26,8 @@
                  [org.clojure/core.match "0.3.0"]
 
                  [com.layerware/hugsql "0.5.1"]
-                 [org.xerial/sqlite-jdbc "3.25.2"]]
+                 [org.xerial/sqlite-jdbc "3.25.2"]
+                 [seancorfield/next.jdbc "1.0.0-beta1"]]
 
   :min-lein-version "2.6.1"
 
