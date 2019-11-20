@@ -18,7 +18,7 @@
 
 
 
-(def ^:private vanilla-db
+(def vanilla-db
   "SQLite database connection spec."
   {:dbtype "sqlite" :dbname "vanilla_db"})
 
@@ -46,20 +46,15 @@
 
   (hugsql/def-sqlvec-fns "sql/queries.sql")
 
-  (create-users-table-sqlvec vanilla-db)
-  (create-users-table vanilla-db)
+  (create-services-table-sqlvec vanilla-db)
+  (create-services-table vanilla-db)
+
+  (create-service! vanilla-db {:id    "1000" :name ":spectrum-traces" :ret_types "[:x-y]"
+                               :doc_string "returns power over frequency"})
 
 
-  (create-user! vanilla-db {:id    "1000" :first_name "Chris" :last_name "Wasser"
-                            :email "wasser@vanilla.org" :pass "123456"})
+  (get-services vanilla-db)
 
-
-  (get-users vanilla-db)
-  (get-user vanilla-db {:id "1000"})
-  (get-user vanilla-db {:id "2000"})
-
-  (delete-user! vanilla-db {:id "1000"})
-
-  (drop-users-table vanilla-db)
+  (drop-services-table vanilla-db)
 
   ())

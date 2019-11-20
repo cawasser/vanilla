@@ -46,7 +46,7 @@
 (defn service-list [services]
   [:ul
    (for [s services]
-     ^{:key s }[:li (str (:name s))])])
+     ^{:key s }[:li (str (:name s) "     " (:doc_string s))])])
 
 
 (defn widget-card [name img]
