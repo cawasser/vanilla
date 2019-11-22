@@ -49,11 +49,16 @@
   (create-services-table-sqlvec vanilla-db)
   (create-services-table vanilla-db)
 
-  (create-service! vanilla-db {:id    "1000" :name ":spectrum-traces" :ret_types "[:x-y]"
-                               :doc_string "returns power over frequency"})
+  (create-service!
+    vanilla-db
+    {:id    "1000" :name ":spectrum-traces" :ret_types "[:x-y]"
+     :doc_string "returns power over frequency"})
+
 
 
   (get-services vanilla-db)
+
+  (delete-service! vanilla-db {:id "1000"})
 
   (drop-services-table vanilla-db)
 
