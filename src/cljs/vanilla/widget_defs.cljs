@@ -182,9 +182,9 @@
               {:name        :scatter-widget
                :basis       :chart
                :type        :scatter-chart
-               :data-source :scatter-service-data
+               :data-source :scatter-service
                :options     {:viz/title        "Scatter"
-                             :viz/banner-color "purple"
+                             :viz/banner-color "white"
                              :viz/line-width   0.5
                              :viz/animation    false
                              :viz/style-name   "widget"
