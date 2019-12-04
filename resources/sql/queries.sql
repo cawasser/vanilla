@@ -23,6 +23,14 @@ VALUES (:id, :name, :ret_types, :doc_string)
 
 
 
+-- :name create-services! :! :n
+-- :doc creates multiple new service record
+INSERT INTO services (id, name, ret_types, doc_string)
+values :tuple*:services
+
+
+
+
 -- :name get-services :? :*
 -- :doc retrieves a service record given the id
 SELECT * FROM services

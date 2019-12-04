@@ -55,6 +55,12 @@
      :doc_string "returns power over frequency"})
 
 
+  (characters/create-services!
+    db
+    {:services
+     [["2000" ":" "[:x-y :x-y-n]" "returns y/z over x"]
+      ["3000" ":" "[:x-y :x-y-n]" "returns y/z over x"]]})
+
 
   (get-services vanilla-db)
 
