@@ -21,20 +21,28 @@
                 :widgets (mapv #(merge % (get wlo/widget-layout (:name %))) defs/widgets)})
 
 
-(def widget-cards [[:line-widget "/images/line-widget.png" "Line"]
-                   [:area-widget "/images/area-widget.png" "Area"]
-                   [:bar-widget "/images/bar-widget.png" "Bar"]
-                   [:column-widget "/images/column-widget.png" "Column"]
-                   [:pie-widget "/images/pie-widget.png" "Pie"]
-                   [:vari-pie-widget "/images/vari-pie-widget.png" "Variable Pie"]
-                   [:rose-widget "/images/rose-widget.png" "Wind Rose"]
-                   [:stoplight-widget "/images/stoplight-widget.png" "Stoplight"]
-                   [:map-widget "/images/map-widget.png" "Map"]
-                   [:sankey-widget "/images/sankey-widget.png" "Sankey"]
-                   [:deps-widget "/images/deps-widget.png" "Dependencies"]
-                   [:network-widget "/images/network-widget.png" "Network"]
-                   [:org-widget "/images/org-widget.png" "Org Chart"]
-                   [:heatmap-widget "/images/heatmap-widget.png" "Heatmap"]])
+(def widget-cards
+  [{:keywrd :line-widget, :ret_types [:data-format/x-y], :icon "/images/line-widget.png", :label "Line"}
+   {:keywrd :area-widget, :ret_types [:data-format/x-y], :icon "/images/area-widget.png", :label "Area"}
+   {:keywrd :bar-widget, :ret_types [:data-format/x-y], :icon "/images/bar-widget.png", :label "Bar"}
+   {:keywrd :column-widget, :ret_types [:data-format/x-y], :icon "/images/column-widget.png", :label "Column"}
+   {:keywrd :pie-widget, :ret_types [:data-format/x-y], :icon "/images/pie-widget.png", :label "Pie"}
+   {:keywrd :vari-pie-widget,
+    :ret_types [:data-format/x-y-n],
+    :icon "/images/vari-pie-widget.png",
+    :label "Variable Pie"}
+   {:keywrd :rose-widget, :ret_types [:data-format/x-y-n], :icon "/images/rose-widget.png", :label "Wind Rose"}
+   {:keywrd :stoplight-widget,
+    :ret_types [:data-format/entity],
+    :icon "/images/stoplight-widget.png",
+    :label "Stoplight"}
+   {:keywrd :map-widget, :ret_types [:data-format/lat-lon-n], :icon "/images/map-widget.png", :label "Map"}
+   {:keywrd :sankey-widget, :ret_types [:data-format/x-y], :icon "/images/sankey-widget.png", :label "Sankey"}
+   {:keywrd :deps-widget, :ret_types [:data-format/x-y], :icon "/images/deps-widget.png", :label "Dependencies"}
+   {:keywrd :network-widget, :ret_types [:data-format/x-y], :icon "/images/network-widget.png", :label "Network"}
+   {:keywrd :org-widget, :ret_types [:data-format/x-y], :icon "/images/org-widget.png", :label "Org Chart"}
+   {:keywrd :heatmap-widget, :ret_types [:data-format/x-y-n], :icon "/images/heatmap-widget.png", :label "Heatmap"}])
+
 
 
 (defn get-services []
@@ -43,10 +51,50 @@
                     :handler #(rf/dispatch-sync [:set-services %])}))
 
 
-(defn service-list [services]
-  [:ul
-   (for [s services]
-     ^{:key s }[:li (str (:name s) "     " (:doc_string s))])])
+
+(defn- selected-service [services selected]
+  (let [ret-val (first (filter #(= selected (:name %)) services))]
+
+    (.log js/console (str "selected-service " services
+                       ", selected " selected
+                       ", ret-val " ret-val))
+
+    ret-val))
+
+
+(defn- filter-widgets [widgets selected]
+  (.log js/console (str "filter-widgets " selected
+                     ", ret_types " (keyword (:ret_types selected))))
+
+  (let [ret-val (filter #(if (some #{(keyword (:ret_types selected))}
+                               (:ret_types %)) true false) widgets)]
+
+    (.log js/console (str "filter-widgets " selected
+                       ", ret_types " (:ret_types selected)
+                       ", ret-val " ret-val))
+
+    ret-val))
+
+
+
+
+(defn service-list [services selected]
+  [:div.container
+   [:table-container
+    [:table.is-hoverable
+     [:thead
+      [:tr [:th "Name"] [:th "Description"]]]
+     [:tbody
+      (doall
+        (for [{:keys [name doc_string]} @services]
+          (do
+            ^{:key name}
+            [:tr {:class (if (= @selected name) "is-selected" "")
+                  :style {:background-color (if (= @selected name) "lightgreen" "")}
+                  :on-click #(do
+                               (reset! selected name)
+                               (.log js/console (str "selected: " @selected)))}
+             [:td name] [:td doc_string]])))]]]])
 
 
 (defn widget-card [name img]
@@ -59,28 +107,44 @@
 
 
 
+(defn widget-list [widgets s]
+  (let [widget-cards (filter-widgets widgets s)]
+
+    (.log js/console (str "widget-list " widgets
+                       ", selected " s
+                       ", cards " widget-cards))
+    [:table>tbody
+     [:tr
+      (for [{:keys [keywrd icon name]} widget-cards]
+        ^{:key keywrd}[:td [widget-card name icon]])]]))
+
+
+
 (defn add-widget-model [is-active]
-  (let [services (rf/subscribe [:services])]
-    [:div.modal (if @is-active {:class "is-active"})
-     [:div.modal-background]
-     [:div.modal-card
-      [:header.modal-card-head
-       [:p.modal-card-title "Add Data Source"]
-       [:button.delete {:aria-label "close"
-                        :on-click #(reset! is-active false)}]]
+  (let [services (rf/subscribe [:services])
+        selected (r/atom "")]
+    (fn []
+      [:div.modal (if @is-active {:class "is-active"})
+       [:div.modal-background]
+       [:div.modal-card
+        [:header.modal-card-head
+         [:p.modal-card-title "Add Data Source"]
+         ;[:p @selected]
+         ;[:p @services]
+         [:button.delete {:aria-label "close"
+                          :on-click #(reset! is-active false)}]]
 
-      [:section.modal-card-body
-       [service-list @services]]
+        [:section.modal-card-body
+         [service-list services selected]]
 
-      [:section.modal-card-body
-       [:table>tbody
-        [:tr
-         (for [[id img name] widget-cards]
-           ^{:key id}[:td [widget-card name img]])]]]
+        (.log js/console (str "add-widget-model " (selected-service @services @selected)))
 
-      [:footer.modal-card-foot
-       [:button.button.is-success {:on-click #(reset! is-active false)} "Add"]
-       [:button.button {:on-click #(reset! is-active false)} "Cancel"]]]]))
+        [:section.modal-card-body
+         [widget-list widget-cards (selected-service @services @selected)]]
+
+        [:footer.modal-card-foot
+         [:button.button.is-success {:on-click #(reset! is-active false)} "Add"]
+         [:button.button {:on-click #(reset! is-active false)} "Cancel"]]]])))
 
 
 (defn get-version []

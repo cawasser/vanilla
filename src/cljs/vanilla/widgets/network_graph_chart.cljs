@@ -32,7 +32,7 @@
 ;
 (mc/register-type
   :network-chart {:chart-options     {:chart/type              :network-chart
-                                      :chart/supported-formats [:data-format/from-to :data-format/form-to-n]
+                                      :chart/supported-formats [:data-format/from-to :data-format/from-to-n]
                                       :chart                   {:type "networkgraph"}
                                       :plotOptions             {:keys ["from", "to"]}
                                       :series                  {:dataLabels {:linkFormat ""}}}
