@@ -12,20 +12,20 @@
 
 (def datasources
   [{:name     :spectrum-traces
-    :read-fn  :vanilla.fetcher/spectrum-traces
-    :schedule {:in    [0 :seconds]
-               :every [10 :seconds]}}
+    :read-fn  :vanilla.fetcher/spectrum-traces}
+    ;:schedule {:in    [0 :seconds]
+    ;           :every [10 :seconds]}}
 
    {:name     :usage-data
-    :read-fn  :vanilla.fetcher/usage-data
-    :schedule {:in    [0 :seconds]
-               :every [15 :seconds]}}
+    :read-fn  :vanilla.fetcher/usage-data}
+    ;:schedule {:in    [0 :seconds]
+    ;           :every [15 :seconds]}}
 
    {:name     :current-time
     :read-fn  :vanilla.fetcher/current-time
-    :params   []
-    :schedule {:in    [0 :seconds]
-               :every [5 :seconds]}}
+    :params   []}
+    ;:schedule {:in    [0 :seconds]
+    ;           :every [5 :seconds]}}
 
    {:name :sankey-service
     :read-fn :vanilla.sankey-service/fetch-data}
@@ -43,19 +43,19 @@
     ;           :every [5 :seconds]}}
 
    {:name     :power-data
-    :read-fn  :vanilla.fetcher/power-data
-    :schedule {:in    [0 :seconds]
-               :every [30 :seconds]}}
+    :read-fn  :vanilla.fetcher/power-data}
+    ;:schedule {:in    [0 :seconds]
+    ;           :every [30 :seconds]}}
 
    {:name     :heatmap-data
-    :read-fn  :vanilla.fetcher/heatmap-data
-    :schedule {:in    [0 :seconds]
-               :every [10 :seconds]}}
+    :read-fn  :vanilla.fetcher/heatmap-data}
+    ;:schedule {:in    [0 :seconds]
+    ;           :every [10 :seconds]}}
 
    {:name :health-and-status-data
-    :read-fn :vanilla.stoplight-service/fetch-data
-    :schedule {:in    [0 :seconds]
-               :every [10 :seconds]}}
+    :read-fn :vanilla.stoplight-service/fetch-data}
+    ;:schedule {:in    [0 :seconds]
+    ;           :every [10 :seconds]}}
 
    {:name :scatter-service-data
     :read-fn :vanilla.scatter-service/fetch-data}

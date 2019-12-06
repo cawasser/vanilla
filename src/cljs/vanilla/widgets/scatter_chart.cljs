@@ -18,11 +18,11 @@
    :yAxis       {:title {:text          (get-in data [:data :src/y-title ] "y-axis")
                          :allowDecimals (get options :viz/y-allowDecimals false)}}
 
-   :legend      {:align         "left"
-                 :verticalAlign "top"
-                 :layout        "vertical"
-                 :x 100
-                 :y 70
+   :legend      {:align         "right"
+                 :verticalAlign "bottom"
+                 :layout        "horizontal"
+                 :x 0
+                 :y -50
                  :floating true
                  :borderWidth 1}
 
@@ -41,9 +41,7 @@
                                       :chart/supported-formats [:data-format/x-y]
                                       :chart                   {:type "scatter"
                                                                 :zoomType "xy"}
-                                      :yAxis                   {
-                                                                :title  {:align "high"}
-                                                                :labels {:overflow "justify"}}
+                                      :yAxis                   {:labels {:overflow "justify"}}
                                       :series                  {}}
 
 
