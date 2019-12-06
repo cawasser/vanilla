@@ -50,4 +50,7 @@
     ;           :every [10 :seconds]}}
 
    {:name :usage-24-hour-service
-    :read-fn :vanilla.usage-24-hour-service/fetch-data}])
+    :read-fn :vanilla.usage-24-hour-service/fetch-data}
+
+   {:name :scatter-service-data
+    :read-fn :vanilla.scatter-service/fetch-data}])

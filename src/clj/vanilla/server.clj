@@ -7,9 +7,11 @@
               [vanilla.network-service]
               [vanilla.stoplight-service]
               [vanilla.usage-24-hour-service]
-              [vanilla.service-deps :as deps]
               [vanilla.scatter-service]
-              [vanilla.usage-24-hour-service])
+              [vanilla.usage-24-hour-service]
+
+              [vanilla.service-deps :as deps])
+
     (:gen-class))
 
 
