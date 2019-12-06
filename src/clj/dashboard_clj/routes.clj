@@ -8,7 +8,9 @@
             [clojure.data.json :as json]
 
             ; version number support
-            [trptcolin.versioneer.core :as version])
+            [trptcolin.versioneer.core :as version]
+
+            [vanilla.url-handlers :as h])
   (:gen-class))
 
 
@@ -25,6 +27,11 @@
                                             "vanilla"
                                             "vanilla"
                                             "version number not found")}))})
+
+  (GET "/services" _
+    {:status 200
+     :headers {"Content-Type" "text/json; charset=utf-8"}
+     :body (str (json/write-str {:services (h/get-services)}))})
 
   (resources "/"))
 
