@@ -6,6 +6,8 @@ This single-page application (SPA) provides a number of graphical widgets based 
 
 [look here](docs/history.md)
 
+> 0.2.2-SNAPSHOT. added scatter chart
+
 ## Development
 
 - [Adding new chart types](docs/adding-new-chart-types.md)

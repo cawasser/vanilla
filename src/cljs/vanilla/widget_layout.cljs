@@ -81,7 +81,13 @@
    :spectrum-column-widget    {:layout-opts
                                {:position {:lg {:x 4 :y 20 :w 2 :h 2}
                                            :md {:x 4 :y 20 :w 2 :h 2}
-                                           :sm {:x 4 :y 20 :w 2 :h 2 :static true}}}}})
+                                           :sm {:x 4 :y 20 :w 2 :h 2 :static true}}}}
+
+   ; row 8
+   :scatter-widget            {:layout-opts
+                               {:position {:lg {:x 0 :y 21 :w 2 :h 2}
+                                           :md {:x 0 :y 21 :w 2 :h 2}
+                                           :sm {:x 0 :y 21 :w 2 :h 2 :static true}}}}})
 
 
 
