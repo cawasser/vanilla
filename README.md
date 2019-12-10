@@ -1,5 +1,10 @@
 # vanilla
 
+[![contributors](https://img.shields.io/github/contributors/cawasser/vanilla)](https://github.com/cawasser/vanilla/graphs/contributors)
+[![activity](https://img.shields.io/github/commit-activity/m/cawasser/vanilla)](https://github.com/cawasser/vanilla/pulse)
+[![clojure](https://img.shields.io/badge/made%20with-Clojure-blue.svg?logo=clojure)](https://clojure.org/)
+
+    
 This version provides a number of graphical widgets based on [Highcharts](https://highcharts.com)
 
 ## History
