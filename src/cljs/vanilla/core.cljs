@@ -3,6 +3,8 @@
     [reagent.core :as r]
     [re-frame.core :as rf]
     [dashboard-clj.core :as d]
+    [dashboard-clj.events]
+    [dashboard-clj.subscriptions :as subs]
     [dashboard-clj.layouts.grid-layout-responsive :as grid]
     [vanilla.widgets.widget-base :as wb]
     [vanilla.widgets.simple-text]
@@ -12,13 +14,45 @@
     [vanilla.widget-defs :as defs]
     [vanilla.widget-layout :as wlo]
     [ajax.core :refer [GET POST] :as ajax]
-    [vanilla.widgets.heatmap-chart]))
+
+    [dashboard-clj.layouts.core :as layout]))
+
+
+(def default-layout {:layout-opts
+                     {:position {:lg {:x 0 :y 0 :w 4 :h 4}
+                                 :md {:x 0 :y 0 :w 4 :h 4}
+                                 :sm {:x 0 :y 0 :w 4 :h 4 :static true}}}})
 
 
 
-(def dashboard {:layout  :responsive-grid-layout
-                :options {:layout-opts {:cols {:lg 6 :md 4 :sm 2 :xs 1 :xxs 1}}}
-                :widgets (mapv #(merge % (get wlo/widget-layout (:name %))) defs/widgets)})
+
+(defn add-widget [widget]
+  ;(.log js/console (str "add-widget " widget
+  ;                   ", merged " (merge default-layout widget)))
+  ;
+  (rf/dispatch-sync [:add-widget (merge widget default-layout)]))
+
+
+
+
+
+(defn add-canned-widget []
+  ;(.log js/console "add-canned-widget")
+  (add-widget {:name        :bubble-widget
+               :basis       :chart
+               :type        :bubble-chart
+               :data-source :bubble-service
+               :options     {:viz/title             "Bubble"
+                             :viz/banner-color      "darkgreen"
+                             :viz/banner-text-color "white"
+                             :viz/dataLabels        true
+                             :viz/labelFormat       "{point.name}"
+                             :viz/lineWidth         0
+                             :viz/animation         false
+                             :viz/style-name        "widget"
+                             :viz/data-labels       true}}))
+
+
 
 
 (def widget-cards
@@ -27,15 +61,15 @@
    {:keywrd :bar-widget, :ret_types [:data-format/x-y], :icon "/images/bar-widget.png", :label "Bar"}
    {:keywrd :column-widget, :ret_types [:data-format/x-y], :icon "/images/column-widget.png", :label "Column"}
    {:keywrd :pie-widget, :ret_types [:data-format/x-y], :icon "/images/pie-widget.png", :label "Pie"}
-   {:keywrd :vari-pie-widget,
+   {:keywrd    :vari-pie-widget,
     :ret_types [:data-format/x-y-n],
-    :icon "/images/vari-pie-widget.png",
-    :label "Variable Pie"}
+    :icon      "/images/vari-pie-widget.png",
+    :label     "Variable Pie"}
    {:keywrd :rose-widget, :ret_types [:data-format/x-y-n], :icon "/images/rose-widget.png", :label "Wind Rose"}
-   {:keywrd :stoplight-widget,
+   {:keywrd    :stoplight-widget,
     :ret_types [:data-format/entity],
-    :icon "/images/stoplight-widget.png",
-    :label "Stoplight"}
+    :icon      "/images/stoplight-widget.png",
+    :label     "Stoplight"}
    {:keywrd :map-widget, :ret_types [:data-format/lat-lon-n], :icon "/images/map-widget.png", :label "Map"}
    {:keywrd :sankey-widget, :ret_types [:data-format/x-y], :icon "/images/sankey-widget.png", :label "Sankey"}
    {:keywrd :deps-widget, :ret_types [:data-format/x-y], :icon "/images/deps-widget.png", :label "Dependencies"}
@@ -46,9 +80,9 @@
 
 
 (defn get-services []
-  (GET "/services" {:headers {"Accept" "application/transit+json"}
+  (GET "/services" {:headers         {"Accept" "application/transit+json"}
                     :response-format (ajax/json-response-format {:keywords? true})
-                    :handler #(rf/dispatch-sync [:set-services %])}))
+                    :handler         #(rf/dispatch-sync [:set-services %])}))
 
 
 
@@ -89,8 +123,8 @@
         (for [{:keys [name doc_string]} @services]
           (do
             ^{:key name}
-            [:tr {:class (if (= @selected name) "is-selected" "")
-                  :style {:background-color (if (= @selected name) "lightgreen" "")}
+            [:tr {:class    (if (= @selected name) "is-selected" "")
+                  :style    {:background-color (if (= @selected name) "lightgreen" "")}
                   :on-click #(do
                                (reset! selected name)
                                (.log js/console (str "selected: " @selected)))}
@@ -116,11 +150,11 @@
     [:table>tbody
      [:tr
       (for [{:keys [keywrd icon name]} widget-cards]
-        ^{:key keywrd}[:td [widget-card name icon]])]]))
+        ^{:key keywrd} [:td [widget-card name icon]])]]))
 
 
 
-(defn add-widget-model [is-active]
+(defn add-widget-modal [is-active]
   (let [services (rf/subscribe [:services])
         selected (r/atom "")]
     (fn []
@@ -132,12 +166,12 @@
          ;[:p @selected]
          ;[:p @services]
          [:button.delete {:aria-label "close"
-                          :on-click #(reset! is-active false)}]]
+                          :on-click   #(reset! is-active false)}]]
 
         [:section.modal-card-body
          [service-list services selected]]
 
-        (.log js/console (str "add-widget-model " (selected-service @services @selected)))
+        ;(.log js/console (str "add-widget-modal " (selected-service @services @selected)))
 
         [:section.modal-card-body
          [widget-list widget-cards (selected-service @services @selected)]]
@@ -148,9 +182,9 @@
 
 
 (defn get-version []
-  (GET "/version" {:headers {"Accept" "application/transit+json"}
+  (GET "/version" {:headers         {"Accept" "application/transit+json"}
                    :response-format (ajax/json-response-format {:keywords? true})
-                   :handler #(rf/dispatch-sync [:set-version %])}))
+                   :handler         #(rf/dispatch-sync [:set-version %])}))
 
 
 (defn version-number []
@@ -161,22 +195,41 @@
        [:div.level-left.has-text-left
         [:h7.subtitle.is-6 @version]]
        [:div.level-right.has-text-right
-        [:button.button.is-link {:on-click #(swap! is-active not)} "Add"]]
-       [add-widget-model is-active]])))
+        [:button.button.is-link {:on-click #(swap! is-active not)} "Add"]
+        [:button.button.is-link {:on-click #(add-canned-widget)} "widget"]]
+       [add-widget-modal is-active]])))
+
+
+(defn- widgets-log []
+  [:p (str "widgets " @(rf/subscribe [:widgets]))])
+
+(defn- widgets-grid []
+  (let [layout (rf/subscribe [:layout])
+        options (rf/subscribe [:options])
+        widgets (rf/subscribe [:widgets])]
+    (fn []
+      (layout/setup-layout @layout @options @widgets))))
 
 
 
 (defn home-page []
-     (.log js/console "home-page")
-     [:div.container>div.content
-      [version-number]])
+  [:div.container>div.content
+   [version-number]
+   ;[widgets-log]
+   [widgets-grid]])
+
 
 
 
 
 
 (defn start-dashboard []
-  (rf/dispatch-sync [:initialize])
+  (rf/dispatch-sync [:initialize
+                     :responsive-grid-layout
+                     {:layout-opts {:cols {:lg 8 :md 4 :sm 2 :xs 1 :xxs 1}}}
+                     (mapv #(merge % (get wlo/widget-layout (:name %))) defs/widgets)])
+
+
 
   ; build all the required widgets
 
@@ -186,10 +239,10 @@
   (get-version)
   (get-services)
 
-  (d/register-global-app-state-subscription)
+  (subs/register-global-app-state-subscription)             ; TODO eliminate register-global-app-state-subscription
   (d/connect-to-data-sources)
-  (r/render home-page (.getElementById js/document "app"))
-  (d/start-dashboard dashboard "dashboard"))
+  (r/render home-page (.getElementById js/document "app")))
+;(d/start-dashboard dashboard "dashboard"))
 
 
 (start-dashboard)

@@ -97,8 +97,8 @@
 
 
 (defn build-widget [{:keys [name basis type chart-types]}]
-  ;(.log js/console (str "building widget " name " of " type
-  ;                      " //// " basis "/" chart-types))
+  (.log js/console (str "building widget " name " of " type
+                        " //// " basis "/" chart-types))
 
   (condp = basis
     :chart (make-widget type (get-config type))
