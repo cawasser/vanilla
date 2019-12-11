@@ -1,0 +1,87 @@
+links:
+  The FC4 Framework: https://fundingcircle.github.io/fc4-framework/
+  Structurizr Express: https://structurizr.com/express
+---
+type: Component
+scope: Web Application
+description: The system context diagram for my software system.
+
+elements:
+- type: Software System
+  name: System
+  description: whole system
+  containers:
+  - type: Container
+    name: Database
+    description: Stores user and widget data
+    technology: MySQL
+    tags: data
+    position: '900,1300'
+  - type: Container
+    name: Single Page Application
+    description: Provides view and user functionality
+    technology: Clojurescript
+    tags: app
+    position: '900,50'
+  - type: Container
+    name: Web Application
+    description: our main system
+    components:
+    - type: Component
+      name: Dashboard
+      description: provides configurable overview and renders widgets
+      technology: ClojureScript, Reframe
+      tags: dash
+      position: '1700,400'
+    - type: Component
+      name: Sign in
+      description: Handle user login
+      technology: tbd
+      tags: sign
+      position: '100,400'
+    - type: Component
+      name: Widgets
+      description: contains all possible widgets available to display
+      technology: Highcharts, CLojurescript, DashboardCLJ
+      tags: widget
+      position: '1700,900'
+
+relationships:
+- source: Dashboard
+  description: renders and serves HTML
+  destination: Single Page Application
+- source: Dashboard
+  description: configures and displays
+  destination: Widgets
+- source: Sign in
+  description: Provide user configuration
+  destination: Dashboard
+- source: Sign in
+  description: Validates user login
+  destination: Database
+- source: Single Page Application
+  description: Makes json calls to
+  destination: Sign in
+- source: Widgets
+  description: Subscribes to data updates with ReFrame
+  destination: Database
+
+styles:
+- type: element
+  tag: app
+  background: '#1facff'
+  shape: WebBrowser
+- type: element
+  tag: data
+  background: '#1047fc'
+  shape: Cylinder
+- type: element
+  tag: sign
+  background: '#d43f10'
+  border: Dashed
+  color: '#ffffff'
+  fontSize: '30'
+  opacity: '70'
+  shape: RoundedBox
+
+size: A5_Landscape
