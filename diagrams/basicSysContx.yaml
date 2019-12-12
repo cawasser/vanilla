@@ -3,8 +3,8 @@ links:
   Structurizr Express: https://structurizr.com/express
 ---
 type: System Context
-scope: My Software System
-description: The system context diagram for my software system.
+scope: Vanilla
+description: The system context diagram for the BH vanilla project.
 
 elements:
 - type: Person
@@ -12,20 +12,21 @@ elements:
   description: The person using our software
   position: '325,50'
 - type: Software System
-  name: My Software System
-  position: '1000,700'
-- type: Software System
   name: Other System
   description: Important backup system
+  tags: other
   position: '1700,1300'
+- type: Software System
+  name: Vanilla
+  position: '1000,700'
 
 relationships:
-- source: My Software System
-  description: calls via json
-  destination: Other System
 - source: User
   description: uses
-  destination: My Software System
+  destination: Vanilla
+- source: Vanilla
+  description: calls via json
+  destination: Other System
 
 styles:
 - type: element
@@ -46,6 +47,14 @@ styles:
   tag: Software System
   background: '#c0c0c0'
   border: Dashed
+  shape: RoundedBox
+- type: element
+  tag: other
+  background: '#d43f10'
+  border: Dashed
+  color: '#ffffff'
+  fontSize: '30'
+  opacity: '70'
   shape: RoundedBox
 - type: relationship
   tag: Relationship

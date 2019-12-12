@@ -3,8 +3,8 @@ links:
   Structurizr Express: https://structurizr.com/express
 ---
 type: Container
-scope: My Software System
-description: The system context diagram for my software system.
+scope: Vanilla
+description: The system context diagram for the BH Vanilla.
 
 elements:
 - type: Person
@@ -13,7 +13,7 @@ elements:
   tags: user
   position: '725,50'
 - type: Software System
-  name: My Software System
+  name: Vanilla
   description: system
   containers:
   - type: Container

@@ -4,7 +4,7 @@ links:
 ---
 type: Component
 scope: Web Application
-description: The system context diagram for my software system.
+description: The system context diagram for Vanilla.
 
 elements:
 - type: Software System
@@ -22,7 +22,7 @@ elements:
     description: Provides view and user functionality
     technology: Clojurescript
     tags: app
-    position: '900,50'
+    position: '900,100'
   - type: Container
     name: Web Application
     description: our main system
