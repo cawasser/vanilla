@@ -16,13 +16,21 @@
 
 (def grid-layout-adapter (r/adapt-react-class js/ReactGridLayout))
 
+
+
 (defn widget-wrapper[w]
   [:div {:key (:name w) :_grid (get-in w [:layout-opts :position]) :class "widget" :style (:style w)}
    (widget-common/setup-widget w)])
 
+
+
+
 (layout-common/register-layout
  :grid-layout
  (fn [widgets options]
+
+   ;(.log js/console (str ":grid-layout"))
+
    [grid-layout-adapter (merge layout-defaults (:layout-opts options))
     (doall (for [widget  widgets]
              (widget-wrapper widget)))]))

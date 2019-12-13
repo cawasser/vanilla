@@ -89,23 +89,23 @@
 (defn- selected-service [services selected]
   (let [ret-val (first (filter #(= selected (:name %)) services))]
 
-    (.log js/console (str "selected-service " services
-                       ", selected " selected
-                       ", ret-val " ret-val))
+    ;(.log js/console (str "selected-service " services
+    ;                   ", selected " selected
+    ;                   ", ret-val " ret-val))
 
     ret-val))
 
 
 (defn- filter-widgets [widgets selected]
-  (.log js/console (str "filter-widgets " selected
-                     ", ret_types " (keyword (:ret_types selected))))
+  ;(.log js/console (str "filter-widgets " selected
+  ;                   ", ret_types " (keyword (:ret_types selected))))
 
   (let [ret-val (filter #(if (some #{(keyword (:ret_types selected))}
                                (:ret_types %)) true false) widgets)]
 
-    (.log js/console (str "filter-widgets " selected
-                       ", ret_types " (:ret_types selected)
-                       ", ret-val " ret-val))
+    ;(.log js/console (str "filter-widgets " selected
+    ;                   ", ret_types " (:ret_types selected)
+    ;                   ", ret-val " ret-val))
 
     ret-val))
 
@@ -126,8 +126,8 @@
             [:tr {:class    (if (= @selected name) "is-selected" "")
                   :style    {:background-color (if (= @selected name) "lightgreen" "")}
                   :on-click #(do
-                               (reset! selected name)
-                               (.log js/console (str "selected: " @selected)))}
+                               (reset! selected name))}
+                               ;(.log js/console (str "selected: " @selected)))}
              [:td name] [:td doc_string]])))]]]])
 
 
@@ -144,9 +144,9 @@
 (defn widget-list [widgets s]
   (let [widget-cards (filter-widgets widgets s)]
 
-    (.log js/console (str "widget-list " widgets
-                       ", selected " s
-                       ", cards " widget-cards))
+    ;(.log js/console (str "widget-list " widgets
+    ;                   ", selected " s
+    ;                   ", cards " widget-cards))
     [:table>tbody
      [:tr
       (for [{:keys [keywrd icon name]} widget-cards]
@@ -208,7 +208,8 @@
         options (rf/subscribe [:options])
         widgets (rf/subscribe [:widgets])]
     (fn []
-      (layout/setup-layout @layout @options @widgets))))
+      ; TODO - setup the layout manager first, the use the
+      [layout/setup-layout @layout @options @widgets])))
 
 
 

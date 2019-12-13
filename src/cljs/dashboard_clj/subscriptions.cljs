@@ -17,7 +17,7 @@
   :widgets
   (fn [db _]
     (reaction
-      (.log js/console ":widgets subscription")
+      ;(.log js/console ":widgets subscription")
       (get @db :widgets))))
 
 

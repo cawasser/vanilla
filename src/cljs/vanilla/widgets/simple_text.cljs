@@ -9,7 +9,7 @@
   (fn [data options]
     ;(.log js/console ":simple-text" (str data) (str options))
 
-    [basic/basic-widget data options
+    [basic/basic-widget :simple-text data options
 
      [:div {:style {:width "100%"
                     :text-align :center

@@ -8,7 +8,7 @@
   :initialize
   (fn
     [db [_ layout options widgets]]
-    (.log js/console ":initialize handler")
+    ;(.log js/console ":initialize handler")
     (merge db {:data-sources {}
                :layout layout
                :options options
@@ -23,23 +23,54 @@
 
 
 
+(defn- widget-exists? [v m]
+  (= (:name m) v))
 
 (rf/register-handler
   :add-widget
   (fn [app-state [_ new-widget]]
     (let [orig (:widgets app-state)
           c (conj orig new-widget)
-          ret-val (assoc app-state :widgets (conj (:widgets app-state) new-widget))]
+          ret-val (assoc app-state :widgets (conj (:widgets app-state) new-widget))
+          fnd (map (partial widget-exists? (:name new-widget)) orig)]
 
-      (.log js/console (str ":add-widget handler " new-widget
-                         " //// orig " orig
-                         " //// new " (:widgets ret-val)))
+      ;(.log js/console (str "widget exists? " (:name new-widget) " / " fnd " / " (some true? fnd)))
 
-      (.log js/console (str "calling build-widget " new-widget))
+      (if (some true? fnd)
+        (do
+          ;(.log js/console (str "not adding the widget " fnd))
+          app-state)
 
-      (wb/build-widget new-widget)
+        (do
+          ;(.log js/console (str ":add-widget handler " new-widget
+          ;                   " //// orig " orig
+          ;                   " //// found " fnd
+          ;                   " //// new " (:widgets ret-val)))
+
+          ;(.log js/console (str "calling build-widget " new-widget))
+
+          ; HACK!
+          (wb/build-widget new-widget) ; TODO - should registry widget "types" just like chart "types"
+
+          ret-val)))))
+
+
+
+(rf/register-handler
+  :remove-widget
+  (fn [app-state [_ widget-id]]
+
+    (let [ret-val (assoc app-state :widgets (remove #(= (:name %) widget-id) (:widgets app-state)))]
+
+      ;(.log js/console (str ":remove-widget handler " widget-id " //// " (:widgets ret-val)))
 
       ret-val)))
 
 
 
+
+(rf/register-handler
+  :update-widget-layout
+  (fn [app-state [_ new-layout]]
+    ; TODO - get new layout and update widgets that changed (new-layout)
+    app-state))

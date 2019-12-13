@@ -47,7 +47,7 @@
   (fn [data options]
     ;(.log js/console ":simple-text" (str data) (str options))
 
-    [basic/basic-widget data options
+    [basic/basic-widget :map-container data options
 
      [:div {:style {:width "100%" :height "100%"}}
       [map-container]]]))

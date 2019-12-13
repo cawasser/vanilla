@@ -12,15 +12,20 @@
 
 
 (defn calculate-layout [widgets]
-  (into {}
-        (for [brp   [:lg :md, :sm :xs :xxs]
-              :let  [brp-pos
-                     (into [] (for [widget widgets
-                                    :let [pos (get-in widget [:layout-opts :position brp])]
-                                    :when (not (nil? pos))]
-                                (merge pos {:i (:name widget )})))]
-              :when (not-empty brp-pos)]
-          {brp brp-pos})))
+  (let [ret-val (into {}
+                  (for [brp   [:lg :md, :sm :xs :xxs]
+                        :let  [brp-pos
+                               (into [] (for [widget widgets
+                                              :let [pos (get-in widget [:layout-opts :position brp])]
+                                              :when (not (nil? pos))]
+                                          (merge pos {:i (:name widget)})))]
+                        :when (not-empty brp-pos)]
+                    {brp brp-pos}))]
+
+    (.log js/console (str "calculate-layout (responsive) " ret-val))
+
+    ret-val))
+
 
 (def default-layout-opts {:className "layout"})
 
@@ -33,6 +38,9 @@
 (layout-common/register-layout
  :responsive-grid-layout
  (fn [widgets options]
+
+   ;(.log js/console (str ":responsive-grid-layout"))
+
    [responsive-grid-layout-adapter
     (merge default-layout-opts (:layout-opts options) {:layouts (calculate-layout widgets)})
     (doall (for [widget  widgets]
