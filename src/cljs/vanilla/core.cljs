@@ -60,7 +60,8 @@
    {:keywrd :area-widget, :ret_types [:data-format/x-y], :icon "/images/area-widget.png", :label "Area"}
    {:keywrd :bar-widget, :ret_types [:data-format/x-y], :icon "/images/bar-widget.png", :label "Bar"}
    {:keywrd :column-widget, :ret_types [:data-format/x-y], :icon "/images/column-widget.png", :label "Column"}
-   {:keywrd :pie-widget, :ret_types [:data-format/x-y], :icon "/images/pie-widget.png", :label "Pie"}
+   {:keywrd :pie-widget, :ret_types [:data-format/x-y :data-format/name-y], :icon "/images/pie-widget.png", :label "Pie"}
+   {:keywrd :bubble-widget, :ret_types [:data-format/x-y-n], :icon "/images/bubble-widget.png", :label "Bubble"}
    {:keywrd    :vari-pie-widget,
     :ret_types [:data-format/x-y-n],
     :icon      "/images/vari-pie-widget.png",
@@ -71,11 +72,12 @@
     :icon      "/images/stoplight-widget.png",
     :label     "Stoplight"}
    {:keywrd :map-widget, :ret_types [:data-format/lat-lon-n], :icon "/images/map-widget.png", :label "Map"}
-   {:keywrd :sankey-widget, :ret_types [:data-format/x-y], :icon "/images/sankey-widget.png", :label "Sankey"}
-   {:keywrd :deps-widget, :ret_types [:data-format/x-y], :icon "/images/deps-widget.png", :label "Dependencies"}
-   {:keywrd :network-widget, :ret_types [:data-format/x-y], :icon "/images/network-widget.png", :label "Network"}
-   {:keywrd :org-widget, :ret_types [:data-format/x-y], :icon "/images/org-widget.png", :label "Org Chart"}
-   {:keywrd :heatmap-widget, :ret_types [:data-format/x-y-n], :icon "/images/heatmap-widget.png", :label "Heatmap"}])
+   {:keywrd :sankey-widget, :ret_types [:data-format/x-y :data-format/from-to :data-format/form-to-n], :icon "/images/sankey-widget.png", :label "Sankey"}
+   {:keywrd :deps-widget, :ret_types [:data-format/x-y :data-format/from-to :data-format/form-to-n], :icon "/images/deps-widget.png", :label "Dependencies"}
+   {:keywrd :network-widget, :ret_types [:data-format/x-y :data-format/from-to :data-format/form-to-n], :icon "/images/network-widget.png", :label "Network"}
+   {:keywrd :org-widget, :ret_types [:data-format/x-y :data-format/from-to :data-format/form-to-n], :icon "/images/org-widget.png", :label "Org Chart"}
+   {:keywrd :heatmap-widget, :ret_types [:data-format/x-y-n], :icon "/images/heatmap-widget.png", :label "Heatmap"}
+   {:keywrd :scatter-widget, :ret_types [:data-format/x-y], :icon "/images/scatter-widget.png", :label "Scatter"}])
 
 
 
@@ -89,8 +91,8 @@
 (defn- selected-service [services selected]
   (let [ret-val (first (filter #(= selected (:name %)) services))]
 
-    ;(.log js/console (str "selected-service " services
-    ;                   ", selected " selected
+    (.log js/console (str "selected-service " services
+                       ", selected " selected))
     ;                   ", ret-val " ret-val))
 
     ret-val))
@@ -104,7 +106,7 @@
                                (:ret_types %)) true false) widgets)]
 
     ;(.log js/console (str "filter-widgets " selected
-    ;                   ", ret_types " (:ret_types selected)
+    ;                   ", ret_types " (keyword (:ret_types selected))
     ;                   ", ret-val " ret-val))
 
     ret-val))
@@ -156,15 +158,15 @@
 
 (defn add-widget-modal [is-active]
   (let [services (rf/subscribe [:services])
-        selected (r/atom "")]
+        selected (r/atom (:name (first @services)))] ;(r/atom "")]
     (fn []
       [:div.modal (if @is-active {:class "is-active"})
        [:div.modal-background]
        [:div.modal-card
         [:header.modal-card-head
          [:p.modal-card-title "Add Data Source"]
-         ;[:p @selected]
-         ;[:p @services]
+         ;[:p (str "selected " @selected)]
+         ;[:p (str @services)]
          [:button.delete {:aria-label "close"
                           :on-click   #(reset! is-active false)}]]
 
@@ -177,7 +179,9 @@
          [widget-list widget-cards (selected-service @services @selected)]]
 
         [:footer.modal-card-foot
-         [:button.button.is-success {:on-click #(reset! is-active false)} "Add"]
+         [:button.button.is-success {:on-click #(do
+                                                  ;(add-widget)
+                                                  (reset! is-active false))} "Add"]
          [:button.button {:on-click #(reset! is-active false)} "Cancel"]]]])))
 
 

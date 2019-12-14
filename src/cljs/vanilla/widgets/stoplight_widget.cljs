@@ -41,7 +41,7 @@
 
     ;(.log js/console (str ":stoplight-widget " data ", " options))
 
-    [basic/basic-widget data options
+    [basic/basic-widget :stop-light-widget data options
 
      [:div.container
       [:table-container

@@ -45,33 +45,89 @@
 (comment
 
   (hugsql/def-sqlvec-fns "sql/queries.sql")
-
   (create-services-table-sqlvec vanilla-db)
+
+
+
   (create-services-table vanilla-db)
 
   (create-service!
     vanilla-db
-    {:id         "1000" :keyword ":spectrum-traces"
+    {:id         "1000"
+     :keyword    ":spectrum-traces"
      :name       "Spectrum"
      :ret_types  "data-format/x-y"
+     :read_fn    ":vanilla.fetcher/spectrum-traces"
      :doc_string "returns power over frequency"})
 
 
   (create-services!
     vanilla-db
     {:services
-     [["2000" ":usage-data" "Service Usage"
-       "data-format/x-y-n" "returns usage data over time"]
-      ["3000" ":sankey-service" "Interdependency"
-       "data-format/x-y-n"
-       "returns interdependencies between countries"]]})
+     [["1000" ":spectrum-traces" "Spectrum Traces"
+       "data-format/x-y" "vanilla.fetcher/spectrum-traces"
+       "returns power over frequency"]
 
+      ["2000" ":usage-data" "Usage Data"
+       "data-format/x-y-n" "vanilla.fetcher/usage-data"
+       "returns usage data over time"]
+
+      ["3000" ":sankey-service" "Relationship Data"
+       "data-format/x-y-n" "vanilla.sankey-service/fetch-data"
+       "returns interdependencies between countries"]
+
+      ["4000" ":bubble-service" "Bubble Data"
+       "data-format/x-y-n" "vanilla.bubble-service/fetch-data"
+       "returns x-y-n data for Fruits, Countries and MLB teams"]
+
+      ["5000" ":network-service" "Network Data"
+       "data-format/from-to" "vanilla.network-service/fetch-data"
+       "returns interconnectivity data"]
+
+      ["6000" "power-data" "Power Data"
+       "data-format/name-y" "vanilla.fetcher/power-data"
+       "returns quantity of fruit sold"]
+
+      ["7000" "heatmap-data" "Heatmap Data"
+       "data-format/x-y-n" "vanilla.fetcher/heatmap-data"
+       "returns quantity of fruit sold per country"]
+
+      ["8000" "health-and-status-data" "Health and Status"
+       "data-format/entity" "vanilla.stoplight-service/fetch-data"
+       "returns green/yellow/red status for a collection of items"]
+
+      ["9000" "12-hour-usage-data" "12-hour Usage Data"
+       "data-format/x-y-n" "vanilla.usage-24-hour-service/fetch-data"
+       "returns quantity of fruit sold per hour"]
+
+      ["10000" "scatter-service-data" "Scatter Data"
+       "data-format/x-y" "vanilla.scatter-service/fetch-data"
+       "returns height and weight for a sample of females and males"]]})
+
+
+  (create-services!
+    vanilla-db
+    {:services
+     [["4000" ":bubble-service" "Bubble Data"
+       "data-format/x-y-n" "vanilla.bubble-service/fetch-data"
+       "returns x-y-n data for Fruits, Countries and MLB teams"]]})
 
   (get-services vanilla-db)
 
+
+
+
+
+
+
+  (delete-all-services! vanilla-db)
   (delete-service! vanilla-db {:id "1000"})
-  (delete-service! vanilla-db {:id "2000"})
-  (delete-service! vanilla-db {:id "3000"})
+  (delete-service! vanilla-db {:id "4000"})
+  (delete-service! vanilla-db {:id "7000"})
+
+
+
+
 
   (drop-services-table vanilla-db)
 
@@ -87,20 +143,21 @@
      {:keywrd :bar-widget, :ret_types [:data-format/x-y], :icon "/images/bar-widget.png", :label "Bar"}
      {:keywrd :column-widget, :ret_types [:data-format/x-y], :icon "/images/column-widget.png", :label "Column"}
      {:keywrd :pie-widget, :ret_types [:data-format/x-y], :icon "/images/pie-widget.png", :label "Pie"}
-     {:keywrd :vari-pie-widget,
+     {:keywrd :bubble-widget, :ret_types [:data-format/x-y-n], :icon "/images/bubble-widget.png", :label "Bubble"}
+     {:keywrd    :vari-pie-widget,
       :ret_types [:data-format/x-y-n],
-      :icon "/images/vari-pie-widget.png",
-      :label "Variable Pie"}
+      :icon      "/images/vari-pie-widget.png",
+      :label     "Variable Pie"}
      {:keywrd :rose-widget, :ret_types [:data-format/x-y-n], :icon "/images/rose-widget.png", :label "Wind Rose"}
-     {:keywrd :stoplight-widget,
+     {:keywrd    :stoplight-widget,
       :ret_types [:data-format/entity],
-      :icon "/images/stoplight-widget.png",
-      :label "Stoplight"}
+      :icon      "/images/stoplight-widget.png",
+      :label     "Stoplight"}
      {:keywrd :map-widget, :ret_types [:data-format/lat-lon-n], :icon "/images/map-widget.png", :label "Map"}
-     {:keywrd :sankey-widget, :ret_types [:data-format/x-y], :icon "/images/sankey-widget.png", :label "Sankey"}
-     {:keywrd :deps-widget, :ret_types [:data-format/x-y], :icon "/images/deps-widget.png", :label "Dependencies"}
-     {:keywrd :network-widget, :ret_types [:data-format/x-y], :icon "/images/network-widget.png", :label "Network"}
-     {:keywrd :org-widget, :ret_types [:data-format/x-y], :icon "/images/org-widget.png", :label "Org Chart"}
+     {:keywrd :sankey-widget, :ret_types [:data-format/x-y :data-format/from-to], :icon "/images/sankey-widget.png", :label "Sankey"}
+     {:keywrd :deps-widget, :ret_types [:data-format/x-y :data-format/from-to], :icon "/images/deps-widget.png", :label "Dependencies"}
+     {:keywrd :network-widget, :ret_types [:data-format/x-y :data-format/from-to], :icon "/images/network-widget.png", :label "Network"}
+     {:keywrd :org-widget, :ret_types [:data-format/x-y :data-format/from-to], :icon "/images/org-widget.png", :label "Org Chart"}
      {:keywrd :heatmap-widget, :ret_types [:data-format/x-y-n], :icon "/images/heatmap-widget.png", :label "Heatmap"}])
 
   (def s (get-services vanilla-db))
@@ -135,10 +192,10 @@
 
 
 
-  (def s-test {:id "1000",
-               :keyword ":spectrum-traces",
-               :name "Spectrum",
-               :ret_types "data-format/x-y",
+  (def s-test {:id         "1000",
+               :keyword    ":spectrum-traces",
+               :name       "Spectrum",
+               :ret_types  "data-format/x-y",
                :doc_string "returns power over frequency"})
 
 

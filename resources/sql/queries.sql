@@ -7,6 +7,7 @@ create table services (
   keyword         VARCHAR(30),
   name            VARCHAR(30),
   ret_types       VARCHAR(30),
+  read_fn         VARCHAR(128),
   doc_string      VARCHAR(300))
 
 
@@ -20,13 +21,13 @@ drop table if exists services
 -- :doc creates a new service record
 INSERT INTO services
 (id, keyword, name, ret_types, doc_string)
-VALUES (:id, :keyword, :name, :ret_types, :doc_string)
+VALUES (:id, :keyword, :name, :ret_types, :read_fn, :doc_string)
 
 
 
 -- :name create-services! :! :n
 -- :doc creates multiple new service record
-INSERT INTO services (id, keyword, name, ret_types, doc_string)
+INSERT INTO services (id, keyword, name, ret_types, read_fn, doc_string)
 values :tuple*:services
 
 
@@ -40,3 +41,8 @@ SELECT * FROM services
 -- :name delete-service! :! :n
 -- :doc deletes a service record given the id
 DELETE FROM services WHERE id = :id
+
+
+-- :name delete-all-services! :! :n
+-- :doc deletes all service records
+DELETE FROM services
