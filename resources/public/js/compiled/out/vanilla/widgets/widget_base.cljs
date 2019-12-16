@@ -21,6 +21,8 @@
             [vanilla.widgets.heatmap-chart]))
 
 
+(def widget-struct-registry (atom {}))
+
 
 (defn get-config [type]
   (let [config (get-in @mc/type-registry [type :chart-options] {})]
@@ -30,7 +32,18 @@
     config))
 
 
-(defn make-widget [name id chart-config]
+(defn get-widget [widget-name]
+  (let [widget (widget-name @widget-struct-registry)]
+
+    (.log js/console (str "widget-common/get-widget " widget-name
+                       " //// " widget))
+
+    widget))
+
+
+
+
+(defn make-widget [id chart-config]
 
   ;(.log js/console (str "make-widget " id ", " chart-config))
 
@@ -40,12 +53,14 @@
 
     (fn [data options]
 
-      [basic/basic-widget name data options
+      (.log js/console (str "in widget " id))
+
+      [basic/basic-widget data options
        [:div {:style {:width "95%" :height "100%"}}
         [mc/make-chart chart-config data options]]])))
 
 
-(defn make-stacked-widget [name id [top-chart bottom-chart]]
+(defn make-stacked-widget [id [top-chart bottom-chart]]
 
   ;(.log js/console (str "make-stacked-widget " id
   ;                      "/" top-chart "/" bottom-chart))
@@ -60,7 +75,7 @@
       ;                      " //// (data)" data
       ;                      " //// (options)" options))
 
-      [basic/basic-widget name data options
+      [basic/basic-widget data options
 
        [:div {:style {:width "95%" :height "65%"}}
         [mc/make-chart (get-config top-chart) data options]
@@ -69,7 +84,7 @@
          [mc/make-chart (get-config bottom-chart) data options]]]])))
 
 
-(defn make-side-by-side-widget [name id [left-chart right-chart]]
+(defn make-side-by-side-widget [id [left-chart right-chart]]
 
   ;(.log js/console (str "make-side-by-side-widget " id
   ;                      "/" left-chart "/" right-chart))
@@ -84,7 +99,7 @@
       ;                      " //// (data)" data
       ;                      " //// (options)" options))
 
-      [basic/basic-widget name data options
+      [basic/basic-widget data options
 
        [:div.columns {:style {:height "100%" :width "100%" :marginTop "10px"}}
 
@@ -96,21 +111,26 @@
 
 
 
-(defn build-widget [{:keys [name basis type chart-types]}]
-  ;(.log js/console (str "building widget " name " of " type
-  ;                      " //// " basis " //// " chart-types))
+(defn build-widget [{:keys [name basis type chart-types] :as widget}]
+  (.log js/console (str "building widget " name " of " type
+                     " //// " basis "/" chart-types
+                     " //// widget " widget))
+
+  ; TODO - widget (the raw data struct) needs to be stored someplace so the layout has access to it
+
+  (swap! widget-struct-registry assoc type widget)
 
   (condp = basis
-    :chart (make-widget name type (get-config type))
+    :chart (make-widget type (get-config type))
 
     :stacked-chart (do
                      ;(.log js/console (str "calling make-stacked-widget " type
                      ;                      "/" chart-types))
-                     (make-stacked-widget name type chart-types))
+                     (make-stacked-widget type chart-types))
 
     :side-by-side-chart (do
                           ;(.log js/console (str "calling make-side-by-side-widget " type
                           ;                      "/" chart-types))
-                          (make-side-by-side-widget name type chart-types))
+                          (make-side-by-side-widget type chart-types))
 
     ()))
