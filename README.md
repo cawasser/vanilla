@@ -3,7 +3,7 @@
 [![contributors](https://img.shields.io/github/contributors/cawasser/vanilla)](https://github.com/cawasser/vanilla/graphs/contributors)
 [![activity](https://img.shields.io/github/commit-activity/m/cawasser/vanilla)](https://github.com/cawasser/vanilla/pulse)
 [![clojure](https://img.shields.io/badge/made%20with-Clojure-blue.svg?logo=clojure)](https://clojure.org/)
-[![version](https://img.shields.io/github/v/tag/cawasser/vanilla)]
+[![version](https://img.shields.io/github/v/tag/cawasser/vanilla)](https://github.com/cawasser/vanilla/tags)
 
     
 This version provides a number of graphical widgets based on [Highcharts](https://highcharts.com)
