@@ -121,6 +121,7 @@
 
 
   (delete-all-services! vanilla-db)
+
   (delete-service! vanilla-db {:id "1000"})
   (delete-service! vanilla-db {:id "4000"})
   (delete-service! vanilla-db {:id "7000"})

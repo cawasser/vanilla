@@ -30,6 +30,7 @@
   ;(.log js/console (str "add-widget " widget
   ;                   ", merged " (merge default-layout widget)))
   ;
+
   (rf/dispatch-sync [:add-widget (merge widget default-layout)]))
 
 
@@ -239,12 +240,17 @@
   ; build all the required widgets
 
   ;(.log js/console (str "building widgets " widgets))
+
+  ; TODO: eliminate widget-base/build-widgets (personalization instead)
   (doall (map wb/build-widget defs/widgets))
 
   (get-version)
   (get-services)
 
-  (subs/register-global-app-state-subscription)             ; TODO eliminate register-global-app-state-subscription
+  ; TODO eliminate register-global-app-state-subscription (attach subscription in add-widget)
+  (subs/register-global-app-state-subscription)
+
+
   (d/connect-to-data-sources)
   (r/render home-page (.getElementById js/document "app")))
 ;(d/start-dashboard dashboard "dashboard"))

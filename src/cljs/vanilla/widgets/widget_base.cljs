@@ -34,9 +34,11 @@
 
   ;(.log js/console (str "make-widget " id ", " chart-config))
 
+  ; TODO: widget-common/register-widget becomes the set of open widgets (NOT default widgets)
+
   (widget-common/register-widget
 
-    id
+    id  ; TODO: register-widget with the :name not the :id kind
 
     (fn [data options]
 
@@ -99,6 +101,8 @@
 (defn build-widget [{:keys [name basis type chart-types]}]
   ;(.log js/console (str "building widget " name " of " type
   ;                      " //// " basis " //// " chart-types))
+
+  ; TODO: build-widget needs to
 
   (condp = basis
     :chart (make-widget name type (get-config type))

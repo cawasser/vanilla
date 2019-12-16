@@ -50,7 +50,12 @@
           ;(.log js/console (str "calling build-widget " new-widget))
 
           ; HACK!
-          (wb/build-widget new-widget) ; TODO - should registry widget "types" just like chart "types"
+
+          ; TODO: hook up subscription
+
+          ; TODO - should registry widget "types" just like chart "types"
+
+          (wb/build-widget new-widget)
 
           ret-val)))))
 
