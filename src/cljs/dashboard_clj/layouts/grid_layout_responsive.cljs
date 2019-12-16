@@ -18,11 +18,12 @@
                                (into [] (for [widget widgets
                                               :let [pos (get-in widget [:layout-opts :position brp])]
                                               :when (not (nil? pos))]
-                                          (merge pos {:i (:name widget)})))]
+                                          (merge pos {:i (:type widget)})))]
                         :when (not-empty brp-pos)]
                     {brp brp-pos}))]
 
-    (.log js/console (str "calculate-layout (responsive) " ret-val))
+    (.log js/console (str "calculate-layout (responsive) " widgets
+                       " //// ret-val " ret-val))
 
     ret-val))
 
@@ -45,3 +46,25 @@
     (merge default-layout-opts (:layout-opts options) {:layouts (calculate-layout widgets)})
     (doall (for [widget  widgets]
              (widget-wrapper widget)))]))
+
+
+
+;calculate-layout (responsive) [{:name :bubble-widget,
+;                                :basis :chart,
+;                                :type :bubble-chart,
+;                                :data-source :bubble-service,
+;                                :options {:viz/title "Bubble",
+;                                          :viz/banner-color "darkgreen",
+;                                          :viz/banner-text-color "white",
+;                                          :viz/dataLabels true,
+;                                          :viz/labelFormat "{point.name}",
+;                                          :viz/lineWidth 0,
+;                                          :viz/animation false,
+;                                          :viz/data-labels true},
+;                                :layout-opts {:position {:lg {:x 0, :y 0, :w 4, :h 4},
+;                                                         :md {:x 0, :y 0, :w 4, :h 4},
+;                                                         :sm {:x 0, :y 0, :w 4, :h 4, :static true}}}}]
+;//// ret-val {:lg [{:x 0, :y 0, :w 4, :h 4, :i :bubble-chart}],
+;              :md [{:x 0, :y 0, :w 4, :h 4, :i :bubble-chart}],
+;              :sm [{:x 0, :y 0, :w 4, :h 4, :static true, :i :bubble-chart}]}
+

@@ -12,12 +12,16 @@
 
 
 
+(defn get-widget [name]
+  (name @widget-store))
+
 
 (defn setup-widget [{:keys [data-source type options]}]
 
-  ;(.log js/console (str "setup-widget " data-source
-  ;                   " //// type " type
-  ;                   " //// options " options))
+  (.log js/console (str "setup-widget " type
+                     " //// from-store " (get @widget-store type)
+  ;                   " //// data-source " data-source
+                     " //// options " options))
 
   (if data-source
     (let [data (rf/subscribe [:app-db data-source])]

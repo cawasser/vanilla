@@ -42,10 +42,10 @@
           app-state)
 
         (do
-          ;(.log js/console (str ":add-widget handler " new-widget
-          ;                   " //// orig " orig
-          ;                   " //// found " fnd
-          ;                   " //// new " (:widgets ret-val)))
+          (.log js/console (str ":add-widget handler " new-widget
+                             " //// orig " orig
+                             " //// found " fnd
+                             " //// new " (:widgets ret-val)))
 
           ;(.log js/console (str "calling build-widget " new-widget))
 
