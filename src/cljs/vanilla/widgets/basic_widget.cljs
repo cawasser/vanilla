@@ -15,7 +15,9 @@
 
 (defn basic-widget [name data options custom-content]
 
-  ;(.log js/console (str "basic-widget " name " of " type))
+  (.log js/console (str "basic-widget " options
+                     " //// custom-content " custom-content
+                     " //// name " name))
 
   [:div {:class "vanilla.widgets.line-chart container"
          :style {:height (get options :viz/height "100%")
