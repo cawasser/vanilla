@@ -53,7 +53,8 @@
 
     (fn [data options]
 
-      (.log js/console (str "in widget " id))
+      (.log js/console (str "in widget " id
+                         " //// options " options))
 
       [basic/basic-widget data options
        [:div {:style {:width "95%" :height "100%"}}
