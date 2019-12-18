@@ -32,7 +32,7 @@
       [:button.delete.is-large {:style {:margin-right "10px"}
                                 :on-click #(do
                                              (.log js/console
-                                                   (str "Close widget "))
+                                                   (str "Close widget " name))
                                              (rf/dispatch [:remove-widget name]))}]]]]; name))}]]]]
 
 

@@ -219,7 +219,7 @@
 (defn start-dashboard []
   (rf/dispatch-sync [:initialize
                      :responsive-grid-layout
-                     {:layout-opts {:cols {:lg 8 :md 4 :sm 2 :xs 1 :xxs 1}}}
+                     {:layout-opts {:cols {:lg 6 :md 4 :sm 2 :xs 1 :xxs 1}}}
                      []])
                      ;(mapv #(merge % (get wlo/widget-layout (:name %))) defs/widgets)])
 

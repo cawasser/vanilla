@@ -43,7 +43,7 @@
 
 
 
-(defn make-widget [id chart-config]
+(defn make-widget [name id chart-config]
 
   ;(.log js/console (str "make-widget " id ", " chart-config))
 
@@ -53,10 +53,10 @@
 
     (fn [data options]
 
-      (.log js/console (str "in widget " id
+      (.log js/console (str "in widget " id " / " name
                          " //// options " options))
 
-      [basic/basic-widget data options
+      [basic/basic-widget name data options
        [:div {:style {:width "95%" :height "100%"}}
         [mc/make-chart chart-config data options]]])))
 
@@ -122,7 +122,7 @@
   (swap! widget-struct-registry assoc type widget)
 
   (condp = basis
-    :chart (make-widget type (get-config type))
+    :chart (make-widget name type (get-config type))
 
     :stacked-chart (do
                      ;(.log js/console (str "calling make-stacked-widget " type
