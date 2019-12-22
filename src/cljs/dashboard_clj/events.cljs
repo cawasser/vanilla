@@ -8,7 +8,7 @@
   :initialize
   (fn
     [db [_ layout options widgets]]
-    ;(.log js/console ":initialize handler")
+    (.log js/console (str ":initialize handler " widgets))
     (merge db {:data-sources {}
                :layout layout
                :options options

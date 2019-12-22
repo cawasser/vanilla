@@ -182,7 +182,7 @@
   (let [version (rf/subscribe [:version])
         is-active (r/atom false)]
     (fn []
-      [:container.level
+      [:container.level {:width "100%"}
        [:div.level-left.has-text-left
         [:h7.subtitle.is-6 @version]]
        [:div.level-right.has-text-right
@@ -196,19 +196,21 @@
 
 
 (defn- widgets-grid []
-  (let [layout (rf/subscribe [:layout])
+  (let [layout-name (rf/subscribe [:layout])
         options (rf/subscribe [:options])
         widgets (rf/subscribe [:widgets])]
     (fn []
       ; TODO - setup the layout manager first, the use the
-      [layout/setup-layout @layout @options @widgets])))
+      [layout/setup-layout @layout-name @options @widgets])))
 
 
 
 (defn home-page []
-  [:div.container>div.content
-   [version-number]
-   ;[widgets-log]
+  [:div {:width "100%"}
+   ;[:div.container
+    [:div.content {:width "100%"}
+     [version-number]]
+     ;[widgets-log]
    [widgets-grid]])
 
 
@@ -220,7 +222,8 @@
   (rf/dispatch-sync [:initialize
                      :responsive-grid-layout
                      {:layout-opts {:cols {:lg 6 :md 4 :sm 2 :xs 1 :xxs 1}}}
-                     []])
+                     defs/widgets])
+                     ;[]])
                      ;(mapv #(merge % (get wlo/widget-layout (:name %))) defs/widgets)])
 
 
