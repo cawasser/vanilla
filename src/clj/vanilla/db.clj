@@ -13,10 +13,7 @@
                       (repeatedly #(+ 5.0
                                       (rand 5)))))}
    {:name   "trace-3"
-    :data (into []
-                (take 200
-                      (repeatedly #(+ 5.0
-                                      (rand 5)))))}])
+    :data (into [] (take 200 (repeatedly #(+ 5.0 (rand 5)))))}])
 
 (defn usage-data []
   [{:keys ["name" "y" "selected" "sliced"]

@@ -1,7 +1,8 @@
 (ns dashboard-clj.events
   (:require-macros [reagent.ratom :refer [reaction]])
   (:require [re-frame.core :as rf]
-            [vanilla.widgets.widget-base :as wb]))
+            [vanilla.widgets.widget-base :as wb]
+            [dashboard-clj.layouts.grid-layout :as l]))
 
 
 (rf/register-handler
@@ -77,5 +78,7 @@
 (rf/register-handler
   :update-widget-layout
   (fn [app-state [_ new-layout]]
+
+
     ; TODO - get new layout and update widgets that changed (new-layout)
     app-state))

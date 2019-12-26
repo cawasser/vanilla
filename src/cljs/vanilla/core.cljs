@@ -19,6 +19,10 @@
     [dashboard-clj.layouts.core :as layout]))
 
 
+
+(enable-console-print!)
+
+
 (def default-layout {:layout-opts
                      {:position {:lg {:x 0 :y 0 :w 4 :h 4}
                                  :md {:x 0 :y 0 :w 4 :h 4}

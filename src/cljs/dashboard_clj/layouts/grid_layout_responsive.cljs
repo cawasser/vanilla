@@ -40,7 +40,7 @@
 
 
 (defn widget-wrapper[w]
-  [:div {:key (:name w) :class "widget"}
+  [:div {:key (:name w) :class "widget "}
    (widget-common/setup-widget w)])
 
 
