@@ -52,6 +52,8 @@
 
 
 
+(enable-console-print!)
+
 
 
 
