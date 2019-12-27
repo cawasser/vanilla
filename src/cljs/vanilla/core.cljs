@@ -15,6 +15,8 @@
     [vanilla.widgets.heatmap-chart]))
 
 
+(enable-console-print!)
+
 
 (def dashboard {:layout  :responsive-grid-layout
                 :options {:layout-opts {:cols {:lg 6 :md 4 :sm 2 :xs 1 :xxs 1}}}
