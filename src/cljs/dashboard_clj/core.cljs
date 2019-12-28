@@ -13,9 +13,9 @@
     (asyncm/go-loop []
       (let [{:keys [event id ?data send-fn]} (async/<! ch-recv)]
 
-        (prn "received some data " event
-          " //// id " id
-          " //// data " ?data)
+        ;(prn "received some data " event
+        ;  " //// id " id
+        ;  " //// data " ?data)
 
         (when (= (get ?data 0) :data-source/event)
           (let [[_ [ds-name ds-data]] ?data]

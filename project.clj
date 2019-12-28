@@ -142,17 +142,17 @@
                                            [jonase/eastwood "0.3.5"]
                                            [lein-doo "0.1.11"]
                                            [lein-figwheel "0.5.19"]]
-                            :cljsbuild {:builds {:app {:source-paths ["src/cljs" "src/cljc"]
+                            :cljsbuild {:builds {:app {:source-paths ["src/cljs" "src/cljc" "env/dev/cljs"]
                                                        :figwheel {:on-jsload "vanilla.core/start-dashboard"}
                                                        :compiler {:output-dir "target/cljsbuild/public/js/out"
                                                                   :closure-defines {"re_frame.trace.trace_enabled_QMARK_" true
                                                                                     "day8.re_frame.tracing.trace_enabled_QMARK_"  true}
                                                                   :optimizations :none
                                                                   :preloads [day8.re-frame-10x.preload]
-                                                                  :output-to "target/cljsbuild/public/js/compiled/app.js"
-                                                                  :asset-path "resources/public/js/compiled/out"
+                                                                  :output-to "target/cljsbuild/public/js/app.js"
+                                                                  :asset-path "js/out";"resources/public/js/compiled/out"
                                                                   :source-map true
-                                                                  :main vanilla.core ;"grid-play.app"
+                                                                  :main "vanilla.app" ;vanilla.core ;"grid-play.app"
                                                                   :pretty-print true
                                                                   :infer-externs true ;?
                                                                   :closure-warnings {:externs-validation :off  ;?

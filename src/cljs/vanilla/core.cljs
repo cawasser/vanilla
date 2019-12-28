@@ -206,9 +206,9 @@
 
 (defn home-page []
   [:div {:width "100%"}
-   ;[:div.container
+   [:div.container
     [:div.content {:width "100%"}
-     [version-number]]
+     [version-number]]]
      ;[widgets-log]
    [widgets-grid]])
 
@@ -217,7 +217,7 @@
 
 
 
-(defn -start-dashboard []
+(defn start-dashboard []
 
   (prn  "calling :next-id ")
   (rf/dispatch-sync [:next-id 1])
@@ -236,4 +236,4 @@
   (r/render home-page (.getElementById js/document "app")))
 
 
-(start-dashboard)
+;(start-dashboard)
