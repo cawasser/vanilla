@@ -3,20 +3,18 @@
     [reagent.core :as r]
     [re-frame.core :as rf]
     [dashboard-clj.core :as d]
-    [dashboard-clj.events]
-    [dashboard-clj.subscriptions :as subs]
-    [dashboard-clj.layouts.grid-layout-responsive :as grid]
     [vanilla.widget-cards :as cards]
     [vanilla.widgets.widget-base :as wb]
     [vanilla.widgets.simple-text]
     [vanilla.widgets.stoplight-widget]
     [vanilla.widgets.map]
     [vanilla.events]
+    [vanilla.subscriptions :as subs]
     [vanilla.widget-defs :as defs]
     [vanilla.widget-layout :as wlo]
     [ajax.core :refer [GET POST] :as ajax]
 
-    [dashboard-clj.layouts.core :as layout]))
+    [vanilla.grid :as grid]))
 
 
 
@@ -32,21 +30,15 @@
 
 
 (defn add-widget [widget-name]
-  (.log js/console (str "add-widget " widget-name))
+  (prn "add-widget " widget-name))
 
-  (let [widget (wb/get-widget widget-name)]
-
-    (.log js/console (str "add-widget " widget
-                       " //// merged " (merge default-layout widget)))
-
-    (rf/dispatch-sync [:add-widget (merge widget default-layout)])))
 
 
 
 
 
 (defn add-canned-widget []
-  (.log js/console "add-canned-widget")
+  (prn "add-canned-widget")
 
   (add-widget :bubble-chart))
 
@@ -69,23 +61,23 @@
 (defn- selected-service [services selected]
   (let [ret-val (first (filter #(= selected (:name %)) services))]
 
-    ;(.log js/console (str "selected-service " services
-    ;                   " //// selected " selected))
-    ;                   " //// ret-val " ret-val))
+    ;(prn "selected-service " services
+    ;  " //// selected " selected
+    ;  " //// ret-val " ret-val)
 
     ret-val))
 
 
 (defn- filter-widgets [widgets selected]
-  ;(.log js/console (str "filter-widgets " selected
-  ;                   " //// ret_types " (keyword (:ret_types selected))))
+  ;(prn "filter-widgets " selected
+  ;  " //// ret_types " (keyword (:ret_types selected)))
 
   (let [ret-val (filter #(if (some #{(keyword (:ret_types selected))}
                                (:ret_types %)) true false) widgets)]
 
-    ;(.log js/console (str "filter-widgets " selected
-    ;                   " //// ret_types " (keyword (:ret_types selected))
-    ;                   " //// ret-val " ret-val))
+    ;(prn (str "filter-widgets " selected
+    ;       " //// ret_types " (keyword (:ret_types selected))
+    ;       " //// ret-val " ret-val))
 
     ret-val))
 
@@ -107,7 +99,7 @@
                   :style    {:background-color (if (= @selected name) "lightgreen" "")}
                   :on-click #(do
                                (reset! selected name))}
-             ;(.log js/console (str "selected: " @selected)))}
+             ;(prn "selected: " @selected)
              [:td name] [:td doc_string]])))]]]])
 
 
@@ -115,8 +107,8 @@
   [:div.card {:class    (if (= @chosen-widget keywrd) "is-selected" "")
               :style    {:background-color (if (= @chosen-widget keywrd) "lightgreen" "")}
               :on-click #(do
-                           (.log js/console (str "widget-card " name
-                                              " //// chosen-widget " @chosen-widget))
+                           ;(prn "widget-card " name
+                           ;  " //// chosen-widget " @chosen-widget)
 
                            (reset! chosen-widget keywrd))}
    [:div.image
@@ -130,10 +122,10 @@
 (defn widget-list [widgets s chosen-widget]
   (let [widget-cards (filter-widgets widgets s)]
 
-    ;(.log js/console (str "widget-list " widgets
-    ;                   " //// selected " s
-    ;                   " //// chosen-widget " @chosen-widget))
-    ;" //// cards " widget-cards))
+    ;(prn "widget-list " widgets
+    ;  " //// selected " s
+    ;  " //// chosen-widget " @chosen-widget
+    ;  " //// cards " widget-cards)
 
     [:table>tbody
      [:tr
@@ -164,14 +156,14 @@
         [:section.modal-card-body
          [service-list services selected]]
 
-        ;(.log js/console (str "add-widget-modal " (selected-service @services @selected)))
+        ;(prn "add-widget-modal " (selected-service @services @selected))
 
         [:section.modal-card-body
          [widget-list cards/widget-cards (selected-service @services @selected) chosen-widget]]
 
         [:footer.modal-card-foot
          [:button.button.is-success {:on-click #(do
-                                                  (.log js/console (str "adding widget " @chosen-widget))
+                                                  (prn "adding widget " @chosen-widget)
                                                   (add-widget @chosen-widget)
                                                   (reset! is-active false))} "Add"]
 
@@ -193,7 +185,8 @@
         [:h7.subtitle.is-6 @version]]
        [:div.level-right.has-text-right
         [:button.button.is-link {:on-click #(swap! is-active not)} "Add"]
-        [:button.button.is-link {:on-click #(add-canned-widget)} "widget"]]
+        [:button.button.is-link {:on-click #(add-canned-widget)} "widget"]
+        [:p "working"]]
        [add-widget-modal is-active]])))
 
 
@@ -201,13 +194,13 @@
   [:p (str "widgets " @(rf/subscribe [:widgets]))])
 
 
-(defn- widgets-grid []
-  (let [layout-name (rf/subscribe [:layout])
-        options (rf/subscribe [:options])
-        widgets (rf/subscribe [:widgets])]
-    (fn []
-      ; TODO - setup the layout manager first, the use the
-      [layout/setup-layout @layout-name @options @widgets])))
+(defn- widgets-grid [])
+  ;(let [layout-name (rf/subscribe [:layout])
+  ;      options (rf/subscribe [:options])
+  ;      widgets (rf/subscribe [:widgets])]
+  ;  (fn []
+  ;    ; TODO - setup the layout manager first, the use the
+  ;    [layout/setup-layout @layout-name @options @widgets])))
 
 
 
@@ -224,22 +217,13 @@
 
 
 
-(defn start-dashboard []
-  (rf/dispatch-sync [:initialize
-                     :responsive-grid-layout
-                     {:layout-opts {:cols {:lg 6 :md 4 :sm 2 :xs 1 :xxs 1}}}
-                     defs/widgets])
-                     ;[]])
-                     ;(mapv #(merge % (get wlo/widget-layout (:name %))) defs/widgets)])
+(defn -start-dashboard []
 
+  (prn  "calling :next-id ")
+  (rf/dispatch-sync [:next-id 1])
 
-
-  ; build all the required widgets
-
-  ;(.log js/console (str "building widgets " widgets))
-
-  ; TODO: eliminate widget-base/build-widgets (personalization instead)
-  (doall (map wb/build-widget defs/widgets))
+  (prn "calling :initialize")
+  (rf/dispatch-sync [:initialize])
 
   (get-version)
   (get-services)
@@ -250,7 +234,6 @@
 
   (d/connect-to-data-sources)
   (r/render home-page (.getElementById js/document "app")))
-;(d/start-dashboard dashboard "dashboard"))
 
 
 (start-dashboard)

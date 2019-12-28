@@ -1,48 +1,76 @@
 (ns vanilla.events
-  (:require-macros [reagent.ratom :refer [reaction]])
-  (:require [re-frame.core :as rf]))
+  (:require [re-frame.core :as rf]
+            [day8.re-frame.tracing :refer-macros [fn-traced]]
+            [ajax.core :as ajax]
+            [vanilla.update-layout :as u]))
 
 
-;;;;;;;;;;;;;;;;;;;;;;;
-;
-; NOTE!
-;
-; this is a fairly old version of re-frame (0.7.0), driven by
-; the dashboard-clj code, which itself, pretty old. We are
-; continuing to use this version to simplify the functional
-; upgrades we plan to make to dashboard-clj. Adding more re-frame
-; is currently a lower priority.
-;
-; Unfortunately, in the meantime, if you look at the current re-frame docs
-; you will find code that DOES NOT WORK in 0.7.0. re-frame has undergone
-; significant changes between 0.7.0 and 0.10.x (as of 2019-11-03). Be Aware!
-;
-; When we finally upgrade re-frame, this notice should be removed.
-;
-;;;;;;;;;;;;;;;;;;;;;;;
+; widget management
+
+
+(rf/register-handler
+  :initialize
+  (fn
+    [db [_ layout options widgets]]
+    (prn (str ":initialize handler " widgets))
+    (merge db {:data-sources {}})))
 
 
 
-
-
-; subscriptions
-
-(rf/register-sub
-  :version
-  (fn [db _]
-    ;(.log js/console (str ":version " @db))
-    (reaction (get @db :version))))
-
-
-(rf/register-sub
-  :services
-  (fn [db _]
-    ;(.log js/console (str ":services " @db))
-    (reaction (get @db :services))))
+(rf/register-handler
+  :update-data-source
+  (fn [app-state [_ data-source new-val]]
+    (assoc-in  app-state [:data-sources data-source] new-val)))
 
 
 
-; handlers
+
+(rf/reg-event-db
+  :next-id
+  (fn-traced [db [_ id]]
+    (assoc db :next-id id)))
+
+
+(rf/reg-event-db
+  :init-widgets
+  (fn-traced [db [_ widgets]]
+    (prn (str ":init-widgets " widgets))
+    (assoc db
+      :widgets widgets
+      :next-id (inc (count widgets)))))
+
+
+(rf/reg-event-db
+  :add-widget
+  (fn-traced [db [_ new-widget]]
+    (let [next-id (:next-id db)
+          named-widget (assoc new-widget :key (str next-id))]
+
+      (do
+        (prn ":add-widget " named-widget)
+        (assoc db
+          :widgets (conj (:widgets db) named-widget)
+          :next-id (inc next-id))))))
+
+
+
+(rf/reg-event-db
+  :remove-widget
+  (fn-traced [db [_ widget-id]]
+    (assoc db :widgets (remove #(= (:key %) widget-id) (:widgets db)))))
+
+
+
+(rf/reg-event-db
+  :update-layout
+  (fn-traced [db [_ layout]]
+    (prn (str ":update-layout " layout))
+    (assoc db :widgets (u/update-layout (:widgets db) (u/reduce-layouts layout)))))
+
+
+
+
+; support services
 
 
 (rf/register-handler

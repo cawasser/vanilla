@@ -143,7 +143,7 @@
                                            [lein-doo "0.1.11"]
                                            [lein-figwheel "0.5.19"]]
                             :cljsbuild {:builds {:app {:source-paths ["src/cljs" "src/cljc"]
-                                                       :figwheel {:on-jsload "vanilla.core/mount-components"}
+                                                       :figwheel {:on-jsload "vanilla.core/start-dashboard"}
                                                        :compiler {:output-dir "target/cljsbuild/public/js/out"
                                                                   :closure-defines {"re_frame.trace.trace_enabled_QMARK_" true
                                                                                     "day8.re_frame.tracing.trace_enabled_QMARK_"  true}
