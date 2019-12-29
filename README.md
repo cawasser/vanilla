@@ -13,7 +13,7 @@ also adds re-frame-10x
 
 - [Adding new chart types](docs/adding-new-chart-types.md)
 - [Adding new widget types](docs/adding-new-widget-types.md)
-- [Running the Code in 'Development Mode'](development-mode.md)
+- [Running the Code in 'Development Mode'](docs/development-mode.md)
 - [Deploy to Docker](docs/deploy-to-docker.md)
 - [Deploy to AWS](docs/deploy-to-aws.md)
 
