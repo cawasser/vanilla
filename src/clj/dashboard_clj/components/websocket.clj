@@ -37,6 +37,7 @@
       (async/go-loop []
         (let [event (async/<! ch-out)]
           (doseq [cid (:any @connected-uids)]
+            (prn "sending " event " to " cid)
             (send-fn cid event))
           (recur)))
 
