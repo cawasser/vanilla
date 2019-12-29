@@ -34,3 +34,6 @@ a new data source and widget to add to their "personalized" dashboard
 > 0.2.1-DEMO. update layout to better support November 2019 Product Owner demo. No
 new widgets, just revised default layout
 
+> 0.2.2-SNAPSHOT. added scatter chart
+
+
