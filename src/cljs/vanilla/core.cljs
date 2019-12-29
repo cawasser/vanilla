@@ -4,17 +4,30 @@
     [re-frame.core :as rf]
     [dashboard-clj.core :as d]
     [vanilla.widget-cards :as cards]
-    [vanilla.widgets.widget-base :as wb]
-    [vanilla.widgets.simple-text]
-    [vanilla.widgets.stoplight-widget]
-    [vanilla.widgets.map]
     [vanilla.events]
     [vanilla.subscriptions :as subs]
     [vanilla.widget-defs :as defs]
     [vanilla.widget-layout :as wlo]
     [ajax.core :refer [GET POST] :as ajax]
 
-    [vanilla.grid :as grid]))
+    [vanilla.grid :as grid]
+
+    ; needed to register all the highcharts types
+    [vanilla.widgets.area-chart]))
+    ;[vanilla.widgets.bar-chart]
+    ;[vanilla.widgets.bubble-chart]
+    ;[vanilla.widgets.column-chart]
+    ;[vanilla.widgets.line-chart]
+    ;[vanilla.widgets.network-graph-chart]
+    ;[vanilla.widgets.org-chart]
+    ;[vanilla.widgets.pie-chart]
+    ;[vanilla.widgets.vari-pie-chart]
+    ;[vanilla.widgets.sankey-chart]
+    ;[vanilla.widgets.scatter-chart]
+    ;[vanilla.widgets.rose-chart]
+    ;[vanilla.widgets.sankey-chart]
+    ;[vanilla.widgets.heatmap-chart]))
+
 
 
 
@@ -249,6 +262,7 @@
   ; TODO eliminate register-global-app-state-subscription (attach subscription in add-widget)
   (subs/register-global-app-state-subscription)
 
+  (vanilla.widgets.area-chart/register-type)
 
   (d/connect-to-data-sources)
   (r/render home-page (.getElementById js/document "app")))

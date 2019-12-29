@@ -7,7 +7,7 @@
 (rf/reg-sub
   :version
   (fn [db _]
-    (prn (str ":version " db))
+    ;(prn (str ":version " db))
     (get db :version)))
 
 
@@ -15,7 +15,7 @@
 (rf/reg-sub
   :services
   (fn [db _]
-    (prn (str ":services " db))
+    ;(prn (str ":services " db))
     (get db :services)))
 
 
@@ -41,3 +41,11 @@
     (fn [db [sid & db-path]]
       (get-in db (flatten [:data-sources db-path])))))
 
+
+
+
+(rf/reg-sub
+  :hc-type
+  (fn [db [_ type]]
+    (prn ":hc-type subscription " type)
+    (get-in db [:hc-type type])))

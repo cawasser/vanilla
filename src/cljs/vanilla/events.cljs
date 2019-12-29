@@ -8,20 +8,20 @@
 ; widget management
 
 
-(rf/register-handler
+(rf/reg-event-db
   :initialize
   (fn
     [db [_ layout options widgets]]
     (prn (str ":initialize handler " widgets))
-    (merge db {:data-sources {}})))
+    (merge db {:data-sources {}
+               :hc-type {}})))
 
 
 
-(rf/register-handler
+(rf/reg-event-db
   :update-data-source
   (fn [app-state [_ data-source new-val]]
     (assoc-in  app-state [:data-sources data-source] new-val)))
-
 
 
 
@@ -70,17 +70,28 @@
 
 
 
+; highcharts types
+
+(rf/reg-event-db
+  :register-hc-type
+  (fn-traced [db [_ type type-fn]]
+    (prn "registering highcharts type " type)
+    (assoc-in db [:hc-type type] type-fn)))
+
+
+
+
 ; support services
 
 
-(rf/register-handler
+(rf/reg-event-db
   :set-version
   (fn [db [_ version]]
     ;(.log js/console (str ":set-version " version))
     (assoc db :version (:version version))))
 
 
-(rf/register-handler
+(rf/reg-event-db
   :set-services
   (fn [db [_ services]]
     ;(.log js/console (str ":set-services " services))

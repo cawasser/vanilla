@@ -1,8 +1,6 @@
 (ns vanilla.widgets.basic-widget
   (:require [reagent.core :as r]
-            [reagent.ratom :refer-macros [reaction]]
-            [re-frame.core :as rf]
-            [dashboard-clj.widgets.core :as widget-common]))
+            [re-frame.core :as rf]))
 
 
 
