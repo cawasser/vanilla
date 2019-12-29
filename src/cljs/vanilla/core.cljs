@@ -209,8 +209,7 @@
         [:h7.subtitle.is-6 @version]]
        [:div.level-right.has-text-right
         [:button.button.is-link {:on-click #(swap! is-active not)} "Add"]
-        [:button.button.is-link {:on-click #(add-canned-widget)} "widget"]
-        [:p "working"]]
+        [:button.button.is-link {:on-click #(add-canned-widget)} "widget"]]
        [add-widget-modal is-active]])))
 
 
@@ -220,15 +219,15 @@
 
 
 
-(def width 1200)
-(def height 300)
-(def rows 10)
+(def width 1536)
+(def height 1024)
+(def rows 50)
 (defn- widgets-grid []
   [grid/Grid {:id          "dashboard-widget-grid"
               :cols        {:lg 12 :md 10 :sm 6 :xs 4 :xxs 2}
               :width       width
               :row-height  (/ height rows)
-              :breakpoints {:lg 1200 :md 996 :sm 768 :xs 480 :xxs 0}
+              :breakpoints {:lg 2048 :md 1024 :sm 768 :xs 480 :xxs 0}
               :data        @(rf/subscribe [:widgets])
               :on-change   #();prn (str "layout change. prev " %1 " //// new " %2))
               :item-props  {:class "widget-component"}}])
