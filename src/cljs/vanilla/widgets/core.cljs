@@ -17,7 +17,7 @@
 
 (defn make-widget [name id chart-config]
 
-  (prn "make-widget " name "of type " id ", " chart-config)
+  ;(prn "make-widget " name "of type " id ", " chart-config)
 
   ;(widget-common/register-widget
   ;
@@ -25,10 +25,10 @@
   ;
   (fn [data options]
 
-    (prn "in widget " id " / " name
-      ;" //// data " data
-      " //// options " options
-      " //// chart-config " chart-config)
+    ;(prn "in widget " id " / " name
+    ;  ;" //// data " data
+    ;  " //// options " options
+    ;  " //// chart-config " chart-config)
 
     [basic/basic-widget name data options
      [:div {:style {:width "95%" :height "100%"}}
@@ -92,10 +92,10 @@
 
   (let [chart-config @(rf/subscribe [:hc-type type])]
 
-    (prn "building widget " key " of " type
-      " //// " basis "/" chart-types
-      " //// chart-config " chart-config
-      " //// widget " widget)
+    ;(prn "building widget " key " of " type
+    ;  " //// " basis "/" chart-types
+    ;  " //// chart-config " chart-config
+    ;  " //// widget " widget)
 
 
     (condp = basis
@@ -117,10 +117,10 @@
 
 (defn setup-widget [{:keys [key data-source type options] :as props}]
 
-  (prn "setup-widget " key "/" type
-                     " //// data-source " data-source
-                     " //// options " options
-                     " //// props " props)
+  ;(prn "setup-widget " key "/" type
+  ;                   " //// data-source " data-source
+  ;                   " //// options " options
+  ;                   " //// props " props)
 
   ; TODO: connect data-source once services are running
   ;(if data-source

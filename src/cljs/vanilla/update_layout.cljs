@@ -2,7 +2,7 @@
 
 
 (defn- apply-updates [new-layout widget]
-  (prn new-layout)
+  ;(prn "apply layout " new-layout)
   (-> widget
     (assoc-in [:data-grid :x] (:x new-layout))
     (assoc-in [:data-grid :y] (:y new-layout))

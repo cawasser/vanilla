@@ -36,7 +36,7 @@
 
 
 (defn add-widget [new-widget]
-  (prn "add-widget " new-widget)
+  ;(prn "add-widget " new-widget)
 
   (rf/dispatch [:add-widget new-widget]))
 
@@ -46,7 +46,7 @@
 
 
 (defn add-canned-widget []
-  (prn "add-canned-widget")
+  ;(prn "add-canned-widget")
 
   (add-widget (grid/new-widget)))
 
@@ -181,7 +181,7 @@
 
         [:footer.modal-card-foot
          [:button.button.is-success {:on-click #(do
-                                                  (prn "adding widget " @chosen-widget)
+                                                  ;(prn "adding widget " @chosen-widget)
                                                   (add-widget @chosen-widget)
                                                   (reset! is-active false))} "Add"]
 
@@ -249,10 +249,10 @@
 
 (defn start-dashboard []
 
-  (prn  "calling :next-id ")
+  ;(prn  "calling :next-id ")
   (rf/dispatch-sync [:next-id 1])
 
-  (prn "calling :initialize")
+  ;(prn "calling :initialize")
   (rf/dispatch-sync [:initialize])
 
   (get-version)

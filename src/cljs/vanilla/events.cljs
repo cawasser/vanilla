@@ -12,7 +12,7 @@
   :initialize
   (fn
     [db [_ layout options widgets]]
-    (prn (str ":initialize handler " widgets))
+    ;(prn (str ":initialize handler " widgets))
     (merge db {:data-sources {}
                :hc-type {}})))
 
@@ -34,7 +34,7 @@
 (rf/reg-event-db
   :init-widgets
   (fn-traced [db [_ widgets]]
-    (prn (str ":init-widgets " widgets))
+    ;(prn (str ":init-widgets " widgets))
     (assoc db
       :widgets widgets
       :next-id (inc (count widgets)))))
@@ -47,7 +47,7 @@
           named-widget (assoc new-widget :key (str next-id))]
 
       (do
-        (prn ":add-widget " named-widget)
+        ;(prn ":add-widget " named-widget)
         (assoc db
           :widgets (conj (:widgets db) named-widget)
           :next-id (inc next-id))))))
@@ -64,7 +64,7 @@
 (rf/reg-event-db
   :update-layout
   (fn-traced [db [_ layout]]
-    (prn (str ":update-layout " layout))
+    ;(prn (str ":update-layout " layout))
     (assoc db :widgets (u/update-layout (:widgets db) (u/reduce-layouts layout)))))
 
 
@@ -75,7 +75,7 @@
 (rf/reg-event-db
   :register-hc-type
   (fn-traced [db [_ type type-fn]]
-    (prn "registering highcharts type " type)
+    ;(prn "registering highcharts type " type)
     (assoc-in db [:hc-type type] type-fn)))
 
 

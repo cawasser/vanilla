@@ -47,5 +47,5 @@
 (rf/reg-sub
   :hc-type
   (fn [db [_ type]]
-    (prn ":hc-type subscription " type)
+    ;(prn ":hc-type subscription " type)
     (get-in db [:hc-type type])))

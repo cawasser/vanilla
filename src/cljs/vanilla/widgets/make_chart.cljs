@@ -144,8 +144,8 @@
 
   [id registry-data]
 
-  (prn "register-type " id
-      " //// (registry-data)" registry-data)
+  ;(prn "register-type " id
+  ;    " //// (registry-data)" registry-data)
 
   (rf/dispatch [:register-hc-type id registry-data]))
 
@@ -161,9 +161,9 @@
         chart-type      (-> chart-config :chart-options :chart/type)
         chart-reg-entry @(rf/subscribe [:hc-type chart-type])]
 
-    (prn "MAKE-chart " chart-type
-      " //// (chart-config)" chart-config
-      " ////// (chart-reg-entry)" chart-reg-entry)
+    ;(prn "MAKE-chart " chart-type
+    ;  " //// (chart-config)" chart-config
+    ;  " ////// (chart-reg-entry)" chart-reg-entry)
 
     (reagent/create-class
       {:reagent-render
