@@ -1,7 +1,5 @@
 (ns vanilla.widgets.scatter-chart
-  (:require [reagent.core :as r]
-            [reagent.ratom :refer-macros [reaction]]
-            [vanilla.widgets.make-chart :as mc]))
+  (:require [vanilla.widgets.make-chart :as mc]))
 
 (defn plot-options
   [chart-config data options]
@@ -36,18 +34,19 @@
 ;
 ; register all the data stuff so we have access to it
 ;
-(mc/register-type
-  :scatter-chart {:chart-options     {:chart/type              :scatter-chart
-                                      :chart/supported-formats [:data-format/x-y]
-                                      :chart                   {:type "scatter"
-                                                                :zoomType "xy"}
-                                      :yAxis                   {:labels {:overflow "justify"}}
-                                      :series                  {}}
+(defn register-type []
+  (mc/register-type
+    :scatter-chart {:chart-options     {:chart/type              :scatter-chart
+                                        :chart/supported-formats [:data-format/x-y]
+                                        :chart                   {:type "scatter"
+                                                                  :zoomType "xy"}
+                                        :yAxis                   {:labels {:overflow "justify"}}
+                                        :series                  {}}
 
 
-                  :merge-plot-option {:default plot-options}
+                    :merge-plot-option {:default plot-options}
 
-                  :conversions       {:default mc/default-conversion}})
+                    :conversions       {:default mc/default-conversion}}))
 
 
 

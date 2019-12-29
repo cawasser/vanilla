@@ -1,8 +1,5 @@
 (ns vanilla.widgets.vari-pie-chart
-  (:require [reagent.core :as r]
-            [reagent.ratom :refer-macros [reaction]]
-            [vanilla.widgets.make-chart :as mc]
-            [vanilla.widgets.util :as util]))
+  (:require [vanilla.widgets.make-chart :as mc]))
 
 
 
@@ -63,16 +60,17 @@
 ;
 ; register all the data stuff so we have access to it
 ;
-(mc/register-type
-  :vari-pie-chart {:chart-options     {:chart/type              :vari-pie-chart
-                                       :chart/supported-formats [:data-format/name-y :data-format/x-y]
-                                       :chart                   {:type  "variablepie"
-                                                                 :style {:labels {:fontFamily "monospace"
-                                                                                  :color      "#FFFFFF"}}}}
-                   :merge-plot-option {:default plot-options}
+(defn register-type []
+  (mc/register-type
+    :vari-pie-chart {:chart-options     {:chart/type              :vari-pie-chart
+                                         :chart/supported-formats [:data-format/name-y :data-format/x-y]
+                                         :chart                   {:type  "variablepie"
+                                                                   :style {:labels {:fontFamily "monospace"
+                                                                                    :color      "#FFFFFF"}}}}
+                     :merge-plot-option {:default plot-options}
 
-                   :conversions       {:data-format/x-y convert-x-y
-                                       :default         convert-name-y}})
+                     :conversions       {:data-format/x-y convert-x-y
+                                         :default         convert-name-y}}))
 
 
 

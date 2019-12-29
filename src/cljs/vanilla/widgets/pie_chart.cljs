@@ -58,17 +58,18 @@
 ;
 ; register all the data stuff so we have access to it
 ;
-(mc/register-type
-  :pie-chart {:chart-options     {:chart/type              :pie-chart
-                                  :chart/supported-formats [:data-format/name-y :data-format/x-y]
-                                  :chart                   {:type  "pie"
-                                                            :style {:labels {:fontFamily "monospace"
-                                                                             :color      "#FFFFFF"}}}}
+(defn register-type []
+  (mc/register-type
+    :pie-chart {:chart-options     {:chart/type              :pie-chart
+                                    :chart/supported-formats [:data-format/name-y :data-format/x-y]
+                                    :chart                   {:type  "pie"
+                                                              :style {:labels {:fontFamily "monospace"
+                                                                               :color      "#FFFFFF"}}}}
 
-              :merge-plot-option {:default plot-options}
+                :merge-plot-option {:default plot-options}
 
-              :conversions       {:data-format/x-y convert-x-y
-                                  :default         convert-name-y}})
+                :conversions       {:data-format/x-y convert-x-y
+                                    :default         convert-name-y}}))
 
 
 

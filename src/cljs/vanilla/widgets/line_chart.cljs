@@ -44,17 +44,18 @@
 ;
 ; register all the data stuff so we have access to it
 ;
-(mc/register-type
-  :line-chart {:chart-options     {:chart/type              :line-chart
-                                   :chart/supported-formats [:data-format/y :data-format/x-y]
-                                   :chart                   {:type     "line"
-                                                             :zoomType "x"}
-                                   :yAxis                   {:min    0
-                                                             :title  {:align "high"}
-                                                             :labels {:overflow "justify"}}}
+(defn register-type []
+  (mc/register-type
+    :line-chart {:chart-options     {:chart/type              :line-chart
+                                     :chart/supported-formats [:data-format/y :data-format/x-y]
+                                     :chart                   {:type     "line"
+                                                               :zoomType "x"}
+                                     :yAxis                   {:min    0
+                                                               :title  {:align "high"}
+                                                               :labels {:overflow "justify"}}}
 
-               :merge-plot-option {:data_format/x-y plot-options-x-y
-                                   :default         plot-options-y}
+                 :merge-plot-option {:data_format/x-y plot-options-x-y
+                                     :default         plot-options-y}
 
-               :conversions       {:default mc/default-conversion}})
+                 :conversions       {:default mc/default-conversion}}))
 

@@ -1,7 +1,5 @@
 (ns vanilla.widgets.bar-chart
-  (:require [reagent.core :as r]
-            [reagent.ratom :refer-macros [reaction]]
-            [vanilla.widgets.make-chart :as mc]))
+  (:require [vanilla.widgets.make-chart :as mc]))
 
 
 
@@ -41,17 +39,18 @@
 ;
 ; register all the data stuff so we have access to it
 ;
-(mc/register-type
-  :bar-chart {:chart-options     {:chart/type              :bar-chart
-                                  :chart/supported-formats [:data-format/y :data-format/x-y]
-                                  :chart                   {:type     "bar"
-                                                            :zoomType "x"}
-                                  :yAxis                   {:min    0
-                                                            :title  {:align "high"}
-                                                            :labels {:overflow "justify"}}}
+(defn register-type []
+  (mc/register-type
+    :bar-chart {:chart-options     {:chart/type              :bar-chart
+                                    :chart/supported-formats [:data-format/y :data-format/x-y]
+                                    :chart                   {:type     "bar"
+                                                              :zoomType "x"}
+                                    :yAxis                   {:min    0
+                                                              :title  {:align "high"}
+                                                              :labels {:overflow "justify"}}}
 
-              :merge-plot-option {:default plot-options}
+                :merge-plot-option {:default plot-options}
 
-              :conversions       {:data-format/name-y convert-pie-to-bar
-                                  :default mc/default-conversion}})
+                :conversions       {:data-format/name-y convert-pie-to-bar
+                                    :default mc/default-conversion}}))
 

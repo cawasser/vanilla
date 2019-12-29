@@ -1,7 +1,5 @@
 (ns vanilla.widgets.area-chart
-  (:require [reagent.core :as r]
-            [reagent.ratom :refer-macros [reaction]]
-            [vanilla.widgets.make-chart :as mc]))
+  (:require [vanilla.widgets.make-chart :as mc]))
 
 
 

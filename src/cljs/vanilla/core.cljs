@@ -13,20 +13,20 @@
     [vanilla.grid :as grid]
 
     ; needed to register all the highcharts types
-    [vanilla.widgets.area-chart]))
-    ;[vanilla.widgets.bar-chart]
-    ;[vanilla.widgets.bubble-chart]
-    ;[vanilla.widgets.column-chart]
-    ;[vanilla.widgets.line-chart]
-    ;[vanilla.widgets.network-graph-chart]
-    ;[vanilla.widgets.org-chart]
-    ;[vanilla.widgets.pie-chart]
-    ;[vanilla.widgets.vari-pie-chart]
-    ;[vanilla.widgets.sankey-chart]
-    ;[vanilla.widgets.scatter-chart]
-    ;[vanilla.widgets.rose-chart]
-    ;[vanilla.widgets.sankey-chart]
-    ;[vanilla.widgets.heatmap-chart]))
+    [vanilla.widgets.area-chart]
+    [vanilla.widgets.bar-chart]
+    [vanilla.widgets.bubble-chart]
+    [vanilla.widgets.column-chart]
+    [vanilla.widgets.dependency-chart]
+    [vanilla.widgets.heatmap-chart]
+    [vanilla.widgets.line-chart]
+    [vanilla.widgets.network-graph-chart]
+    [vanilla.widgets.org-chart]
+    [vanilla.widgets.pie-chart]
+    [vanilla.widgets.rose-chart]
+    [vanilla.widgets.sankey-chart]
+    [vanilla.widgets.scatter-chart]
+    [vanilla.widgets.vari-pie-chart]))
 
 
 
@@ -262,7 +262,21 @@
   ; TODO eliminate register-global-app-state-subscription (attach subscription in add-widget)
   (subs/register-global-app-state-subscription)
 
+  ; TODO: replace individual HC registration calls with the data from the server
   (vanilla.widgets.area-chart/register-type)
+  (vanilla.widgets.bar-chart/register-type)
+  (vanilla.widgets.bubble-chart/register-type)
+  (vanilla.widgets.column-chart/register-type)
+  (vanilla.widgets.dependency-chart/register-type)
+  (vanilla.widgets.heatmap-chart/register-type)
+  (vanilla.widgets.line-chart/register-type)
+  (vanilla.widgets.network-graph-chart/register-type)
+  (vanilla.widgets.org-chart/register-type)
+  (vanilla.widgets.pie-chart/register-type)
+  (vanilla.widgets.rose-chart/register-type)
+  (vanilla.widgets.sankey-chart/register-type)
+  (vanilla.widgets.scatter-chart/register-type)
+  (vanilla.widgets.vari-pie-chart/register-type)
 
   (d/connect-to-data-sources)
   (r/render home-page (.getElementById js/document "app")))
