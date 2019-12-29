@@ -123,24 +123,24 @@
   ;                   " //// props " props)
 
   ; TODO: connect data-source once services are running
-  ;(if data-source
-  ;  (let [data (rf/subscribe [:app-db data-source])]
-  ;
-  ;    (prn "attaching data " data-source
-  ;      " //// data "@data)
-  ;
-  ;    [(build-widget props)
-  ;     @data
-  ;     options])
+  (if data-source
+    (let [data (rf/subscribe [:app-db data-source])]
 
-  ((build-widget props)
-   {:data
-    {:title       "Spectrum Traces"
-     :data-format :data-format/y
-     :series      [{:name "trace-1"
-                    :data (into [] (take 200 (repeatedly #(+ 5.0 (rand 5)))))}
-                   {:name "trace-2"
-                    :data (into [] (take 200 (repeatedly #(+ 5.0 (rand 5)))))}
-                   {:name "trace-3"
-                    :data (into [] (take 200 (repeatedly #(+ 5.0 (rand 5)))))}]}}
-   options))
+      ;(prn "attaching data " data-source
+      ;  " //// data "@data)
+
+      [(build-widget props)
+       @data
+       options])
+
+    ((build-widget props)
+     {:data
+      {:title       "Dummy Data"
+       :data-format :data-format/y
+       :series      [{:name "dummy-1"
+                      :data (into [] (take 200 (repeatedly #(+ 5.0 (rand 5)))))}
+                     {:name "dummy-2"
+                      :data (into [] (take 200 (repeatedly #(+ 5.0 (rand 5)))))}
+                     {:name "dummy-3"
+                      :data (into [] (take 200 (repeatedly #(+ 5.0 (rand 5)))))}]}}
+     options)))

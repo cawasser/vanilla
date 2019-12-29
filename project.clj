@@ -1,4 +1,4 @@
-(defproject vanilla "0.2.2-SQLITE-A/R 002"
+(defproject vanilla "0.2.2-SQLITE-A/R 003"
   :description "Vanilla Dashboard - a simple dashboard built on dashboard-clj"
   :url ""
 
@@ -58,8 +58,8 @@
                  [radicalzephyr/ring.middleware.logger "0.6.0"]
                  ;[org.immutant/scheduling "2.1.3"]
                  [org.immutant/scheduling "2.1.10"]
-                 ;[com.taoensso/sente "1.8.1"]
-                 [com.taoensso/sente "1.15.0"]
+                 [com.taoensso/sente "1.8.1"]
+                 ;[com.taoensso/sente "1.15.0"]
                  ;[http-kit "2.1.19"]
                  [http-kit "2.3.0"]
                  ;[compojure "1.5.0"]
