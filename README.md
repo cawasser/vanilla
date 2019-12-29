@@ -22,8 +22,8 @@ also adds re-frame-10x
 
 
 #### see also
-[cdk-clj](https://www.youtube.com/watch?v=TbDmupZyuXk)
-[Watch the video from the 2019 Conj!](https://github.com/StediInc/cdk-clj)
+- [cdk-clj](https://www.youtube.com/watch?v=TbDmupZyuXk)
+- [Watch the video from the 2019 Conj!](https://github.com/StediInc/cdk-clj)
 
 
 ## User Guide
