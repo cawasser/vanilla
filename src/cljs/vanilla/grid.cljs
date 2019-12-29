@@ -12,11 +12,11 @@
 (def x-y-range 5)
 (def w-h-range 4)
 
-(def widgets [{:key 1 :data-grid {:x 0 :y 0 :w 3 :h 3} :style {:background-color "green"
-                                                               :color            "white"}}
-              {:key 2 :data-grid {:x 0 :y 3 :w 3 :h 3} :style {:background-color "gray"
-                                                               :color            "white"}}
-              {:key 3 :data-grid {:x 2 :y 0 :w 3 :h 3} :style {:background-color "lightsalmon"}}])
+;(def widgets [{:key 1 :data-grid {:x 0 :y 0 :w 3 :h 3} :style {:background-color "green"
+;                                                               :color            "white"}}
+;              {:key 2 :data-grid {:x 0 :y 3 :w 3 :h 3} :style {:background-color "gray"
+;                                                               :color            "white"}}
+;              {:key 3 :data-grid {:x 2 :y 0 :w 3 :h 3} :style {:background-color "lightsalmon"}}])
 
 (def new-layout {:data-grid {:x 0 :y 0 :w 4 :h 4} :style {:background-color "purple"
                                                           :color            "white"}})
@@ -77,21 +77,6 @@
 
 
 
-(defn GridItem [props data]
-
-  (prn (str "GridItem " props " //// " data))
-
-  [:div
-   (merge props
-     {:class "grid-toolbar"})
-   [:span.text {:on-click      #(do
-                                  (prn (str "remove-widget " data))
-                                  (rf/dispatch [:remove-widget data]))
-                :on-mouse-down #(prn "on-mouse-down")}
-    data]])
-
-
-
 
 (defn Grid
   [args]
@@ -125,8 +110,5 @@
                                                  :draggableHandle ".grid-toolbar"
                                                  :draggableCancel ".grid-content"
                                                  :breakpoints     breakpoints
-                                                 ;:onResize        (partial onLayoutChange on-change data)
-                                                 ;:onDrag          (partial onLayoutChange on-change data)
                                                  :onLayoutChange  (partial onLayoutChange on-change data)}]
-          ;(mapv #(GridItem % (:key %)) data)
           (mapv #(widget-wrapper % (:key %)) data))])}))
