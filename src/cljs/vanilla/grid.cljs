@@ -3,7 +3,8 @@
     [reagent.core :as r]
     [re-frame.core :as rf]
     [vanilla.events]
-    [cljsjs.react-grid-layout]))
+    [cljsjs.react-grid-layout]
+    [vanilla.widgets.core :as widget]))
 
 
 
@@ -23,33 +24,57 @@
 
 
 (defn new-widget []
-  (let [[b t] (get colors (rand-int 3))
-        n-w (merge-with clojure.set/union
-              (assoc-in {} [:data-grid :x] (rand-int x-y-range))
-              (assoc-in {} [:data-grid :y] (rand-int x-y-range))
-              (assoc-in {} [:data-grid :w] (inc (rand-int w-h-range)))
-              (assoc-in {} [:data-grid :h] (inc (rand-int w-h-range)))
-              (assoc {} :style {:background-color b
-                                :color            t}))]
+  (let [[b t] (get colors (rand-int 3))]
 
-    (prn "new-widget " n-w)
-
-    n-w))
-
-
+    {:data-grid   {:x 0 :y 4 :w 5 :h 9}
+     :basis       :chart
+     :type        :area-chart
+     :data-source :spectrum-traces
+     :options     {:viz/title             "Channels (area)"
+                   :viz/allowDecimals     false
+                   :viz/x-title           "frequency"
+                   :viz/y-title           "power"
+                   :viz/banner-color      b
+                   :viz/banner-text-color t
+                   :viz/style-name        "widget"
+                   :viz/animation         false
+                   :viz/tooltip           {:followPointer true}}
+     :layout-opts {:position {:lg {:x 0 :y 4 :w 2 :h 3}
+                              :md {:x 0 :y 2 :w 2 :h 3}
+                              :sm {:x 0 :y 0 :w 1 :h 2 :static true}}}}))
 
 
 
 (defn onLayoutChange [on-change prev new]
   ;; note the need to convert the callbacks from js objects
 
-  (prn "onLayoutChange " on-change
-    " //// prev " prev
-    " //// new " (js->clj new :keywordize-keys true))
+  ;(prn "onLayoutChange " on-change
+  ;  " //// prev " prev
+  ;  " //// new " (js->clj new :keywordize-keys true))
 
-  ; TODO: save the updated positions into the widgets
+  (rf/dispatch [:update-layout (js->clj new :keywordize-keys true)])
 
   (on-change prev (js->clj new :keywordize-keys true)))
+
+
+
+(defn widget-wrapper [props data]
+
+  ;(prn "widget-wrapper..." props
+  ;  " //// data " data)
+
+  (let [content (widget/setup-widget props)]
+
+    ;(prn (str "widget-wrapper " props
+    ;       " //// data " data
+    ;       " //// content " content))
+
+    [:div
+     (merge props {:class "widget grid-toolbar"
+                   :style {:background-color (get-in props [:options :viz/banner-color] "yellow")
+                           :color            (get-in props [:options :viz/banner-text-color] "black")}})
+     content]))
+
 
 
 (defn GridItem [props data]
@@ -57,13 +82,16 @@
   (prn (str "GridItem " props " //// " data))
 
   [:div
-   (merge {:data-grid (:layouts props)}
+   (merge props
      {:class "grid-toolbar"})
-   [:span.text {:on-click #(do
-                             (prn (str "remove-widget " data))
-                             (rf/dispatch [:remove-widget data]))
+   [:span.text {:on-click      #(do
+                                  (prn (str "remove-widget " data))
+                                  (rf/dispatch [:remove-widget data]))
                 :on-mouse-down #(prn "on-mouse-down")}
     data]])
+
+
+
 
 (defn Grid
   [args]
@@ -81,9 +109,10 @@
      :reagent-render
      (fn [{:keys [id data width row-height cols breakpoints item-props on-change empty-text] :as props}]
 
-       (prn (str "grid render " widgets
-              " //// item-props" item-props
-              " //// data " data))
+       ;(prn (str "grid render args " args
+       ;       " //// props " props
+       ;       " //// item-props" item-props
+       ;       " //// data " data))
 
        [:div.grid-container
         (into [:> js/ReactGridLayout.Responsive {:id              id
@@ -96,5 +125,8 @@
                                                  :draggableHandle ".grid-toolbar"
                                                  :draggableCancel ".grid-content"
                                                  :breakpoints     breakpoints
+                                                 ;:onResize        (partial onLayoutChange on-change data)
+                                                 ;:onDrag          (partial onLayoutChange on-change data)
                                                  :onLayoutChange  (partial onLayoutChange on-change data)}]
-          (mapv #(GridItem % (:key %)) data))])}))
+          ;(mapv #(GridItem % (:key %)) data)
+          (mapv #(widget-wrapper % (:key %)) data))])}))

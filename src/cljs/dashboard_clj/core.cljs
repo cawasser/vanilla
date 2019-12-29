@@ -8,8 +8,8 @@
 
 
 (defn connect-to-data-sources []
-  ; TODO: is TIHS the problem? "{:type :auto}"
   (let [{:keys  [chsk ch-recv send-fn state]} (sente/make-channel-socket! "/chsk" {:type :auto})]
+
     (asyncm/go-loop []
       (let [{:keys [event id ?data send-fn]} (async/<! ch-recv)]
 

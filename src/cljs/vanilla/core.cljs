@@ -21,16 +21,11 @@
 (enable-console-print!)
 
 
-(def default-layout {:layout-opts
-                     {:position {:lg {:x 0 :y 0 :w 4 :h 4}
-                                 :md {:x 0 :y 0 :w 4 :h 4}
-                                 :sm {:x 0 :y 0 :w 4 :h 4 :static true}}}})
 
+(defn add-widget [new-widget]
+  (prn "add-widget " new-widget)
 
-
-
-(defn add-widget [widget-name]
-  (prn "add-widget " widget-name))
+  (rf/dispatch [:add-widget new-widget]))
 
 
 
@@ -40,7 +35,8 @@
 (defn add-canned-widget []
   (prn "add-canned-widget")
 
-  (add-widget :bubble-chart))
+  (add-widget (grid/new-widget)))
+
 
 
 
@@ -49,7 +45,11 @@
 
 
 
-
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;
+; SERVICES LIST NUMBER
+;
+;
 
 (defn get-services []
   (GET "/services" {:headers         {"Accept" "application/transit+json"}
@@ -58,6 +58,11 @@
 
 
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;
+; SERVICES AND WIDGET PICKER
+;
+;
 (defn- selected-service [services selected]
   (let [ret-val (first (filter #(= selected (:name %)) services))]
 
@@ -170,6 +175,12 @@
          [:button.button {:on-click #(reset! is-active false)} "Cancel"]]]])))
 
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;
+; VERSION NUMBER
+;
+;
+
 (defn get-version []
   (GET "/version" {:headers         {"Accept" "application/transit+json"}
                    :response-format (ajax/json-response-format {:keywords? true})
@@ -194,13 +205,20 @@
   [:p (str "widgets " @(rf/subscribe [:widgets]))])
 
 
-(defn- widgets-grid [])
-  ;(let [layout-name (rf/subscribe [:layout])
-  ;      options (rf/subscribe [:options])
-  ;      widgets (rf/subscribe [:widgets])]
-  ;  (fn []
-  ;    ; TODO - setup the layout manager first, the use the
-  ;    [layout/setup-layout @layout-name @options @widgets])))
+
+
+(def width 1200)
+(def height 300)
+(def rows 10)
+(defn- widgets-grid []
+  [grid/Grid {:id          "dashboard-widget-grid"
+              :cols        {:lg 12 :md 10 :sm 6 :xs 4 :xxs 2}
+              :width       width
+              :row-height  (/ height rows)
+              :breakpoints {:lg 1200 :md 996 :sm 768 :xs 480 :xxs 0}
+              :data        @(rf/subscribe [:widgets])
+              :on-change   #();prn (str "layout change. prev " %1 " //// new " %2))
+              :item-props  {:class "widget-component"}}])
 
 
 
