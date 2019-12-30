@@ -7,7 +7,6 @@
     [vanilla.events]
     [vanilla.subscriptions :as subs]
     [vanilla.widget-defs :as defs]
-    [vanilla.widget-layout :as wlo]
     [ajax.core :refer [GET POST] :as ajax]
 
     [vanilla.grid :as grid]
@@ -34,7 +33,6 @@
 (enable-console-print!)
 
 
-
 (defn add-widget [new-widget]
   ;(prn "add-widget " new-widget)
 
@@ -43,14 +41,28 @@
 
 
 
+;;;;;;;;;;;;;;;;;;;;;
+;
+; HACK
+;
+; TODO - remove dummy "new-widget stuff
 
+(def next-widget-idx (atom 0))
 
 (defn add-canned-widget []
-  ;(prn "add-canned-widget")
+  (let [rand-widget (get defs/widgets @next-widget-idx)]
 
-  (add-widget (grid/new-widget)))
+    ;(prn "add-canned-widget " rand-widget ", " @next-widget-idx, ", " (count defs/widgets))
+
+    (add-widget (grid/fixup-new-widget rand-widget))
+    (if (< @next-widget-idx (dec (count defs/widgets)))
+      (swap! next-widget-idx inc)
+      (reset! next-widget-idx 0))))
 
 
+;;;;;;;;;;;;;;;;;;;;;
+;
+; END HACK
 
 
 (enable-console-print!)

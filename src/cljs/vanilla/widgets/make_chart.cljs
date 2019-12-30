@@ -19,9 +19,9 @@
         pc-fn           (get-in chart-reg-entry [:merge-plot-option format-type]
                                 (get-in chart-reg-entry [:merge-plot-option :default]))]
 
-    ; (prn "plot-config " chart-type
-    ;                      " ///// (format-type)" format-type
-    ;                      " ///// (pc-fn)" pc-fn)
+    ;(prn "plot-config " chart-type
+    ; " ///// (format-type)" format-type
+    ; " ///// (pc-fn)" pc-fn)
 
     (if pc-fn
       (pc-fn chart-config data options))))
@@ -36,11 +36,11 @@
         ret             (conv-fn chart-type data options)]
 
     ;(prn "get-conversion " chart-type "/" format-type
-    ;                      " //// (data)" data
-    ;                      " //// (chart-reg-entry)" chart-reg-entry
-    ;                      " //// (conversions)" conversions
-    ;                      " //// (conv-fn)" conv-fn
-    ;                      " //// (ret)" ret)
+    ;  " //// (data)" data
+    ;  " //// (chart-reg-entry)" chart-reg-entry
+    ;  " //// (conversions)" conversions
+    ;  " //// (conv-fn)" conv-fn
+    ;  " //// (ret)" ret)
 
     ret))
 
@@ -59,8 +59,8 @@
   [chart-config data options]
 
   ;(prn "make-config " (-> chart-config :chart-options :chart/type)
-  ;     " //// (chart-config)" chart-config
-  ;     " ///// (data)" data)
+  ;  " //// (chart-config)" chart-config
+  ;  " ///// (data)" data)
 
   (let [chart-type   (-> chart-config :chart-options :chart/type)
         data-config  (if (instance? Atom data) @data data)
@@ -98,18 +98,18 @@
 
 (defn- merge-configs [chart-config data options]
 
-  (let [chart-type (-> chart-config :chart-options :chart/type)
+  (let [chart-type (-> chart-config :chart/type)
         dat        (if (instance? Atom data) @data data)
         converted  (get-conversion chart-type dat options)
         ret        (if converted
                      (assoc chart-config :series converted)
                      chart-config)]
 
-    ;(.log js/console (str "merge-configs " chart-type
-    ;                      " //// (chart-config) " chart-config
-    ;                      " //// (data) " data
-    ;                      " //// (converted)" converted
-    ;                      " //// (ret)" ret)]
+    ;(prn "merge-configs " chart-type
+    ;  " //// (chart-config) " chart-config
+    ;  " //// (data) " data
+    ;  " //// (converted)" converted
+    ;  " //// (ret)" ret)
 
     ret))
 
@@ -128,9 +128,9 @@
 (defn default-conversion [chart-type data options]
   (let [ret (get-in data [:data :series])]
 
-    ;(.log js/console (str "default-conversion " chart-type
-    ;                      " //// (data) " data
-    ;                      " //// (ret)" ret))
+    ;(prn "default-conversion " chart-type
+    ;  " //// (data) " data
+    ;  " //// (ret)" ret)
 
     ret))
 
@@ -145,7 +145,7 @@
   [id registry-data]
 
   ;(prn "register-type " id
-  ;    " //// (registry-data)" registry-data)
+  ; " //// (registry-data)" registry-data)
 
   (rf/dispatch [:register-hc-type id registry-data]))
 
@@ -191,8 +191,6 @@
            ;  " //// chart-reg-entry " chart-reg-entry
            ;  " //// base-config " base-config
            ;  " //// (all-config)" all-configs)
-             ;" //// (props)" (reagent/props this))
-             ;" //// (new-args)" new-args)
 
            (js/Highcharts.Chart. (reagent/dom-node this)
              (clj->js all-configs))))})))

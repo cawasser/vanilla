@@ -14,9 +14,9 @@
 (defn sankey-conversion
   [chart-type data options]
 
-  ;(.log js/console (str "sankey-conversion " chart-type
-  ;                      " //// (data)" data
-  ;                      " //// (options)" options))
+  ;(prn "sankey-conversion " chart-type
+  ;  " //// (data)" data
+  ;  " //// (options)" options)
 
   [{:keys (get-in data [:data :src/keys] [])
     :data (get-in data [:data :series 0 :data])}])

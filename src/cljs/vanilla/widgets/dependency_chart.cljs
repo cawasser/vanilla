@@ -14,9 +14,9 @@
 (defn dependency-conversion
   [chart-type data options]
 
-  ;(.log js/console (str "dependency-conversion " chart-type
-  ;                      " //// (data)" data
-  ;                      " //// (options)" options))
+  ;(prn "dependency-conversion " chart-type
+  ;  " //// (data)" data
+  ;  " //// (options)" options)
 
   [{:keys       (get-in data [:data :src/keys] [])
     :dataLabels {:color    "#333"

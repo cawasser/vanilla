@@ -19,10 +19,6 @@
 
   ;(prn "make-widget " name "of type " id ", " chart-config)
 
-  ;(widget-common/register-widget
-  ;
-  ;  id
-  ;
   (fn [data options]
 
     ;(prn "in widget " id " / " name
@@ -40,10 +36,6 @@
 ;
 ;  ;(prn (str "make-stacked-widget " id
 ;  ;                      "/" top-chart "/" bottom-chart))
-;
-;  (widget-common/register-widget
-;
-;    id
 ;
 ;    (fn [data options]
 ;
@@ -64,10 +56,6 @@
 ;
 ;  ;(prn (str "make-side-by-side-widget " id
 ;  ;                      "/" left-chart "/" right-chart))
-;
-;  (widget-common/register-widget
-;
-;    id
 ;
 ;    (fn [data options]
 ;
@@ -129,18 +117,6 @@
       ;(prn "attaching data " data-source
       ;  " //// data "@data)
 
-      [(build-widget props)
-       @data
-       options])
+      [(build-widget props) @data options])
 
-    ((build-widget props)
-     {:data
-      {:title       "Dummy Data"
-       :data-format :data-format/y
-       :series      [{:name "dummy-1"
-                      :data (into [] (take 200 (repeatedly #(+ 5.0 (rand 5)))))}
-                     {:name "dummy-2"
-                      :data (into [] (take 200 (repeatedly #(+ 5.0 (rand 5)))))}
-                     {:name "dummy-3"
-                      :data (into [] (take 200 (repeatedly #(+ 5.0 (rand 5)))))}]}}
-     options)))
+    ((build-widget props) {} options)))

@@ -4,9 +4,9 @@
 
 (def datasources
   [{:name     :spectrum-traces
-    :read-fn  :vanilla.fetcher/spectrum-traces
-    :schedule {:in    [0 :seconds]
-               :every [10 :seconds]}}
+    :read-fn  :vanilla.fetcher/spectrum-traces}
+    ;:schedule {:in    [0 :seconds]
+    ;           :every [10 :seconds]}}
 
    {:name     :usage-data
     :read-fn  :vanilla.fetcher/usage-data}

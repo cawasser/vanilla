@@ -75,6 +75,8 @@
                                     :y             25
                                     :symbolHeight  280}
                          :plotOptions             {}
+
+                         ; TODO: migrate :heatmap-data to server
                          :series                  [{:name        "Fruit Production per Continent"
                                                     :borderWidth 1
                                                     :data        [[0 0 10] [0 1 19] [0 2 8] [0 3 24] [0 4 67] [0 5 12] [0 6 0]

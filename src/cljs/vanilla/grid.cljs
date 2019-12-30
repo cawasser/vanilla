@@ -23,25 +23,8 @@
 
 
 
-(defn new-widget []
-  (let [[b t] (get colors (rand-int 3))]
-
-    {:data-grid   {:x 0 :y 4 :w 5 :h 9}
-     :basis       :chart
-     :type        :area-chart
-     :data-source :spectrum-traces
-     :options     {:viz/title             "Channels (area)"
-                   :viz/allowDecimals     false
-                   :viz/x-title           "frequency"
-                   :viz/y-title           "power"
-                   :viz/banner-color      b
-                   :viz/banner-text-color t
-                   :viz/style-name        "widget"
-                   :viz/animation         false
-                   :viz/tooltip           {:followPointer true}}
-     :layout-opts {:position {:lg {:x 0 :y 4 :w 2 :h 3}
-                              :md {:x 0 :y 2 :w 2 :h 3}
-                              :sm {:x 0 :y 0 :w 1 :h 2 :static true}}}}))
+(defn fixup-new-widget [widget]
+  (merge widget {:data-grid {:x 0 :y 0 :w 5 :h 15}}))
 
 
 

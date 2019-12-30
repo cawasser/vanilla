@@ -2,6 +2,31 @@
 
 
 (def widgets [
+              ; 1
+              {:name        :sankey-widget
+               :basis       :chart
+               :type        :sankey-chart
+               :data-source :sankey-service
+               :options     {:viz/title             "Sankey"
+                             :viz/banner-color      "darkmagenta"
+                             :viz/banner-text-color "white"
+                             :viz/dataLabels        true
+                             :viz/labelFormat       "{point.name}"
+                             :viz/animation         false}}
+
+              ; 2
+              {:name        :dependency-widget
+               :basis       :chart
+               :type        :dependency-chart
+               :data-source :sankey-service
+               :options     {:viz/title             "Dependency Wheel"
+                             :viz/banner-color      "crimson"
+                             :viz/banner-text-color "white"
+                             :viz/dataLabels        true
+                             :viz/animation         false}}
+
+
+              ; 3
               {:name        :spectrum-area-widget
                :basis       :chart
                :type        :area-chart
@@ -14,11 +39,9 @@
                              :viz/banner-text-color "white"
                              :viz/style-name        "widget"
                              :viz/animation         false
-                             :viz/tooltip           {:followPointer true}}
-               :layout-opts {:position {:lg {:x 0 :y 7 :w 2 :h 3}
-                                        :md {:x 0 :y 7 :w 2 :h 3}
-                                        :sm {:x 0 :y 7 :w 2 :h 3 :static true}}}}
+                             :viz/tooltip           {:followPointer true}}}
 
+              ; 4
               {:name        :bubble-widget
                :basis       :chart
                :type        :bubble-chart
@@ -30,11 +53,9 @@
                              :viz/labelFormat       "{point.name}"
                              :viz/lineWidth         0
                              :viz/animation         false
-                             :viz/data-labels       true}
-               :layout-opts {:position {:lg {:x 2 :y 4 :w 2 :h 3}
-                                        :md {:x 2 :y 4 :w 2 :h 3}
-                                        :sm {:x 2 :y 4 :w 2 :h 3 :static true}}}}
+                             :viz/data-labels       true}}
 
+              ; 5
               {:name        :spectrum-column-widget
                :basis       :chart
                :type        :column-chart
@@ -45,11 +66,9 @@
                              :viz/animation    false
                              :viz/style-name   "widget"
                              :viz/tooltip      {:followPointer true}
-                             :viz/icon         "timeline"}
-               :layout-opts {:position {:lg {:x 4 :y 20 :w 2 :h 2}
-                                        :md {:x 4 :y 20 :w 2 :h 2}
-                                        :sm {:x 4 :y 20 :w 2 :h 2 :static true}}}}
+                             :viz/icon         "timeline"}}
 
+              ; 6
               {:name        :spectrum-line-widget
                :basis       :chart
                :type        :line-chart
@@ -60,11 +79,9 @@
                              :viz/animation    false
                              :viz/style-name   "widget"
                              :viz/tooltip      {:followPointer true}
-                             :viz/icon         "timeline"}
-               :layout-opts {:position {:lg {:x 4 :y 10 :w 2 :h 3}
-                                        :md {:x 4 :y 10 :w 2 :h 3}
-                                        :sm {:x 0 :y 10 :w 2 :h 3 :static true}}}}
+                             :viz/icon         "timeline"}}
 
+              ; 7
               {:name        :network-widget
                :basis       :chart
                :type        :network-chart
@@ -73,11 +90,9 @@
                              :viz/banner-color      "black"
                              :viz/banner-text-color "white"
                              :viz/animation         false
-                             :viz/data-labels       true}
-               :layout-opts {:position {:lg {:x 0 :y 0 :w 3 :h 4}
-                                        :md {:x 0 :y 0 :w 3 :h 4}
-                                        :sm {:x 0 :y 0 :w 3 :h 4 :static true}}}}
+                             :viz/data-labels       true}}
 
+              ; 8
               {:name        :org-widget
                :basis       :chart
                :type        :org-chart
@@ -85,11 +100,9 @@
                :options     {:viz/title        "Network (org chart)"
                              :viz/banner-color "darkgray"
                              :viz/animation    false
-                             :viz/data-labels  true}
-               :layout-opts {:position {:lg {:x 3 :y 0 :w 3 :h 4}
-                                        :md {:x 3 :y 0 :w 3 :h 4}
-                                        :sm {:x 3 :y 0 :w 3 :h 4 :static true}}}}
+                             :viz/data-labels  true}}
 
+              ; 9
               {:name        :pie-widget
                :basis       :chart
                :type        :pie-chart
@@ -99,11 +112,9 @@
                              :viz/animation    false
                              :viz/dataLabels   true
                              :viz/labelFormat  "{point.name}"
-                             :viz/slice-at     20}
-               :layout-opts {:position {:lg {:x 2 :y 7 :w 2 :h 3}
-                                        :md {:x 2 :y 7 :w 2 :h 3}
-                                        :sm {:x 2 :y 7 :w 2 :h 3 :static true}}}}
+                             :viz/slice-at     20}}
 
+              ; 10
               {:name        :vari-pie-widget
                :basis       :chart
                :type        :vari-pie-chart
@@ -114,24 +125,8 @@
                              :viz/animation         false
                              :viz/dataLabels        true
                              :viz/labelFormat       "{point.name}"
-                             :viz/slice-at          20}
-               :layout-opts {:position {:lg {:x 4 :y 7 :w 2 :h 3}
-                                        :md {:x 4 :y 7 :w 2 :h 3}
-                                        :sm {:x 4 :y 7 :w 2 :h 3 :static true}}}}
+                             :viz/slice-at          20}}
 
-              {:name        :sankey-widget
-               :basis       :chart
-               :type        :sankey-chart
-               :data-source :sankey-service
-               :options     {:viz/title             "Sankey"
-                             :viz/banner-color      "darkmagenta"
-                             :viz/banner-text-color "white"
-                             :viz/dataLabels        true
-                             :viz/labelFormat       "{point.name}"
-                             :viz/animation         false}
-               :layout-opts {:position {:lg {:x 0 :y 17 :w 3 :h 3}
-                                        :md {:x 0 :y 17 :w 3 :h 3}
-                                        :sm {:x 0 :y 17 :w 3 :h 3 :static true}}}}
 
               ;{:name        :time-widget
               ; :basis       :simple
@@ -142,32 +137,29 @@
               ;               :viz/style        {}
               ;               :viz/height       "100px"}}
 
-              {:name        :spectrum-dual-widget
-               :basis       :stacked-chart
-               :type        :line-column-stack
-               :chart-types [:line-chart :column-chart]
-               :data-source :spectrum-traces
-               :options     {:viz/title        "Channels (stacked)"
-                             :viz/banner-color "lightsalmon"
-                             :viz/line-width   0.5
-                             :viz/animation    false
-                             :viz/style-name   "widget"
-                             :viz/tooltip      {:followPointer true}}
-               :layout-opts {:position {:lg {:x 0 :y 10 :w 4 :h 3}
-                                        :md {:x 0 :y 10 :w 4 :h 3}
-                                        :sm {:x 0 :y 10 :w 4 :h 3 :static true}}}}
+              ; TODO - init :stacked-chart correctly
+              ;{:name        :spectrum-dual-widget
+              ; :basis       :stacked-chart
+              ; :type        :line-column-stack
+              ; :chart-types [:line-chart :column-chart]
+              ; :data-source :spectrum-traces
+              ; :options     {:viz/title        "Channels (stacked)"
+              ;               :viz/banner-color "lightsalmon"
+              ;               :viz/line-width   0.5
+              ;               :viz/animation    false
+              ;               :viz/style-name   "widget"
+              ;               :viz/tooltip      {:followPointer true}}}
 
-              {:name    :map-widget
-               :type    :map-container
-               ;:data-source :current-time
-               :options {:viz/title        "Map Widget"
-                         :viz/banner-color "lightblue"
-                         :viz/style        {}
-                         :viz/height       "500px"}
-               :layout-opts {:position {:lg {:x 0 :y 13 :w 2 :h 4}
-                                        :md {:x 0 :y 13 :w 2 :h 4}
-                                        :sm {:x 0 :y 13 :w 2 :h 4 :static true}}}}
+              ; TODO - init :map-container correctly
+              ;{:name    :map-widget
+              ; :type    :map-container
+              ; ;:data-source :current-time
+              ; :options {:viz/title        "Map Widget"
+              ;           :viz/banner-color "lightblue"
+              ;           :viz/style        {}
+              ;           :viz/height       "500px"}}
 
+              ; 11
               {:name    :heatmap-widget
                :basis   :chart
                :type    :heatmap-chart
@@ -178,52 +170,33 @@
                          :viz/animation    false
                          :viz/style-name   "widget"
                          :viz/tooltip      {:followPointer true}
-                         :viz/icon         "timeline"}
-               :layout-opts {:position {:lg {:x 2 :y 13 :w 4 :h 4}
-                                        :md {:x 2 :y 13 :w 4 :h 4}
-                                        :sm {:x 2 :y 13 :w 4 :h 4 :static true}}}}
+                         :viz/icon         "timeline"}}
 
-              {:name        :usage-side-by-side-widget
-               :basis       :side-by-side-chart
-               :type        :bar-pie-sbs
-               :chart-types [:bar-chart :pie-chart]
-               :data-source :usage-data
-               :options     {:viz/title             "Usage Data (side-by-side)"
-                             :viz/banner-color      "lavender"
-                             :viz/banner-text-color "black"
-                             :viz/line-width        0.5
-                             :viz/style-name        "widget"
-                             :viz/animation         false
-                             :viz/dataLabels        true
-                             :viz/labelFormat       "{point.name}"
-                             :viz/tooltip           {:followPointer true}}
-               :layout-opts {:position {:lg {:x 0 :y 20 :w 4 :h 2}
-                                        :md {:x 0 :y 20 :w 4 :h 2}
-                                        :sm {:x 0 :y 20 :w 2 :h 2 :static true}}}}
+              ; TODO - inint :side-by-side-chart correctlt
+              ;{:name        :usage-side-by-side-widget
+              ; :basis       :side-by-side-chart
+              ; :type        :bar-pie-sbs
+              ; :chart-types [:bar-chart :pie-chart]
+              ; :data-source :usage-data
+              ; :options     {:viz/title             "Usage Data (side-by-side)"
+              ;               :viz/banner-color      "lavender"
+              ;               :viz/banner-text-color "black"
+              ;               :viz/line-width        0.5
+              ;               :viz/style-name        "widget"
+              ;               :viz/animation         false
+              ;               :viz/dataLabels        true
+              ;               :viz/labelFormat       "{point.name}"
+              ;               :viz/tooltip           {:followPointer true}}}
 
-              {:name        :dependency-widget
-               :basis       :chart
-               :type        :dependency-chart
-               :data-source :sankey-service
-               :options     {:viz/title             "Dependency Wheel"
-                             :viz/banner-color      "crimson"
-                             :viz/banner-text-color "white"
-                             :viz/dataLabels        true
-                             :viz/animation         false}
-               :layout-opts {:position {:lg {:x 3 :y 17 :w 3 :h 3}
-                                        :md {:x 3 :y 17 :w 3 :h 3}
-                                        :sm {:x 0 :y 17 :w 3 :h 3 :static true}}}}
+              ; TODO - init :simple correctly
+              ;{:type        :stoplight-widget
+              ; :basis       :simple
+              ; :name        :health-and-status-widget
+              ; :data-source :health-and-status-data
+              ; :options     {:viz/title        "Status"
+              ;               :viz/banner-color "aqua"}}
 
-              {:type        :stoplight-widget
-               :basis       :simple
-               :name        :health-and-status-widget
-               :data-source :health-and-status-data
-               :options     {:viz/title        "Status"
-                             :viz/banner-color "aqua"}
-               :layout-opts {:position {:lg {:x 0 :y 4 :w 2 :h 3}
-                                        :md {:x 0 :y 4 :w 2 :h 3}
-                                        :sm {:x 0 :y 4 :w 2 :h 3 :static true}}}}
-
+              ; 12
               {:name        :spectrum-rose-widget
                :basis       :chart
                :type        :rose-chart
@@ -234,11 +207,9 @@
                              :viz/animation    false
                              :viz/style-name   "widget"
                              :viz/tooltip      {:followPointer true}
-                             :viz/icon         "timeline"}
-               :layout-opts {:position {:lg {:x 4 :y 4 :w 2 :h 3}
-                                        :md {:x 4 :y 4 :w 2 :h 3}
-                                        :sm {:x 4 :y 4 :w 2 :h 3 :static true}}}}
+                             :viz/icon         "timeline"}}
 
+              ; 13
               {:name        :scatter-widget
                :basis       :chart
                :type        :scatter-chart
@@ -250,8 +221,5 @@
                              :viz/animation    false
                              :viz/style-name   "widget"
                              :viz/tooltip      {:followPointer true}
-                             :viz/icon         "timeline"}
-               :layout-opts {:position {:lg {:x 0 :y 21 :w 2 :h 2}
-                                        :md {:x 0 :y 21 :w 2 :h 2}
-                                        :sm {:x 0 :y 21 :w 2 :h 2 :static true}}}}])
+                             :viz/icon         "timeline"}}])
 
