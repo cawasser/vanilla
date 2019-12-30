@@ -9,6 +9,9 @@ This single-page application (SPA) provides a number of graphical widgets based 
 > 0.2.2-SQLITE-A/R 002. replacing dashboard-clj library with a more flexible widget mechanism, still based on react-grid-layout.
 also adds re-frame-10x
 
+> 0.2.2-SQLITE-A/R 003. all the basic highcharts types cn be added "manually" with the widget button. can't turn on the service
+updates yet - every update causes all the widgets to refresh. next - wire in the source/widget picker and remove the "widget" button
+
 ## Development
 
 - [Adding new chart types](docs/adding-new-chart-types.md)
