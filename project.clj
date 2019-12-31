@@ -1,4 +1,4 @@
-(defproject vanilla "0.2.2-SQLITE-A/R 003"
+(defproject vanilla "0.2.2-SQLITE-A/R 004"
   :description "Vanilla Dashboard - a simple dashboard built on dashboard-clj"
   :url ""
 

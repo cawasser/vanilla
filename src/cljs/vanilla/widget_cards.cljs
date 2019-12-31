@@ -4,99 +4,51 @@
 
 
 (def widget-cards
-  [{:keywrd :line-widget,
-    :ret_types [:data-format/x-y],
-    :icon "/images/line-widget.png",
-    :label "Line"
+  [{:keywrd :line-widget
     :dummy-name :line-chart}
 
-   {:keywrd :area-widget,
-    :ret_types [:data-format/x-y],
-    :icon "/images/area-widget.png",
-    :label "Area"
+   {:keywrd :area-widget
     :dummy-name :area-chart}
 
-   {:keywrd :bar-widget,
-    :ret_types [:data-format/x-y],
-    :icon "/images/bar-widget.png",
-    :label "Bar"
-    :dummy-name :none}
+   {:keywrd :bar-widget
+    :dummy-name :bar-chart}
 
-   {:keywrd :column-widget,
-    :ret_types [:data-format/x-y],
-    :icon "/images/column-widget.png",
-    :label "Column"
+   {:keywrd :column-widget
     :dummy-name :column-chart}
 
-   {:keywrd :pie-widget,
-    :ret_types [:data-format/x-y :data-format/name-y],
-    :icon "/images/pie-widget.png",
-    :label "Pie"
+   {:keywrd :pie-widget
     :dummy-name :pie-chart}
 
-   {:keywrd :bubble-widget,
-    :ret_types [:data-format/x-y-n],
-    :icon "/images/bubble-widget.png",
-    :label "Bubble"
+   {:keywrd :bubble-widget
     :dummy-name :bubble-chart}
 
-   {:keywrd    :vari-pie-widget,
-    :ret_types [:data-format/x-y-n],
-    :icon      "/images/vari-pie-widget.png",
-    :label     "Variable Pie"
+   {:keywrd    :vari-pie-widget
     :dummy-name :vari-pie-chart}
 
-   {:keywrd :rose-widget,
-    :ret_types [:data-format/x-y-n],
-    :icon "/images/rose-widget.png",
-    :label "Wind Rose"
+   {:keywrd :rose-widget
     :dummy-name :rose-chart}
 
-   {:keywrd    :stoplight-widget,
-    :ret_types [:data-format/entity],
-    :icon      "/images/stoplight-widget.png",
-    :label     "Stoplight"
+   {:keywrd    :stoplight-widget
     :dummy-name :stoplight-widget}
 
-   {:keywrd :map-widget,
-    :ret_types [:data-format/lat-lon-n],
-    :icon "/images/map-widget.png",
-    :label "Map"
+   {:keywrd :map-widget
     :dummy-name :map-container}
 
-   {:keywrd :sankey-widget,
-    :ret_types [:data-format/x-y :data-format/from-to :data-format/form-to-n],
-    :icon "/images/sankey-widget.png",
-    :label "Sankey"
+   {:keywrd :sankey-widget
     :dummy-name :sankey-chart}
 
-   {:keywrd :deps-widget,
-    :ret_types [:data-format/x-y :data-format/from-to :data-format/form-to-n],
-    :icon "/images/deps-widget.png",
-    :label "Dependencies"
+   {:keywrd :deps-widget
     :dummy-name :dependency-chart}
 
-   {:keywrd :network-widget,
-    :ret_types [:data-format/x-y :data-format/from-to :data-format/form-to-n],
-    :icon "/images/network-widget.png",
-    :label "Network"
+   {:keywrd :network-widget
     :dummy-name :network-chart}
 
-   {:keywrd :org-widget,
-    :ret_types [:data-format/x-y :data-format/from-to :data-format/form-to-n],
-    :icon "/images/org-widget.png",
-    :label "Org Chart"
+   {:keywrd :org-widget
     :dummy-name :org-chart}
 
 
-   {:keywrd :heatmap-widget,
-    :ret_types [:data-format/x-y-n],
-    :icon "/images/heatmap-widget.png",
-    :label "Heatmap"
+   {:keywrd :heatmap-widget
     :dummy-name :heatmap-chart}
 
-   {:keywrd :scatter-widget,
-    :ret_types [:data-format/x-y],
-    :icon "/images/scatter-widget.png",
-    :label "Scatter"
+   {:keywrd :scatter-widget
     :dummy-name :scatter-chart}])

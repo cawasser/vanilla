@@ -9,6 +9,8 @@
     [vanilla.widget-defs :as defs]
     [ajax.core :refer [GET POST] :as ajax]
 
+    [vanilla.add-widget-model :as modal]
+
     [vanilla.grid :as grid]
 
     ; needed to register all the highcharts types
@@ -33,31 +35,25 @@
 (enable-console-print!)
 
 
-(defn add-widget [new-widget]
-  ;(prn "add-widget " new-widget)
-
-  (rf/dispatch [:add-widget new-widget]))
-
-
 
 
 ;;;;;;;;;;;;;;;;;;;;;
 ;
 ; HACK
 ;
-; TODO - remove dummy "new-widget stuff
+; TODO - remove dummy "new-widget" stuff
 
 (def next-widget-idx (atom 0))
 
-(defn add-canned-widget []
-  (let [rand-widget (get defs/widgets @next-widget-idx)]
-
-    ;(prn "add-canned-widget " rand-widget ", " @next-widget-idx, ", " (count defs/widgets))
-
-    (add-widget (grid/fixup-new-widget rand-widget))
-    (if (< @next-widget-idx (dec (count defs/widgets)))
-      (swap! next-widget-idx inc)
-      (reset! next-widget-idx 0))))
+(defn add-canned-widget [])
+  ;(let [rand-widget (get defs/widgets @next-widget-idx)]
+  ;
+  ;  ;(prn "add-canned-widget " rand-widget ", " @next-widget-idx, ", " (count defs/widgets))
+  ;
+  ;  (add-widget (grid/fixup-new-widget rand-widget))
+  ;  (if (< @next-widget-idx (dec (count defs/widgets)))
+  ;    (swap! next-widget-idx inc)
+  ;    (reset! next-widget-idx 0))))
 
 
 ;;;;;;;;;;;;;;;;;;;;;
@@ -83,122 +79,6 @@
 
 
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;
-; SERVICES AND WIDGET PICKER
-;
-;
-(defn- selected-service [services selected]
-  (let [ret-val (first (filter #(= selected (:name %)) services))]
-
-    ;(prn "selected-service " services
-    ;  " //// selected " selected
-    ;  " //// ret-val " ret-val)
-
-    ret-val))
-
-
-(defn- filter-widgets [widgets selected]
-  ;(prn "filter-widgets " selected
-  ;  " //// ret_types " (keyword (:ret_types selected)))
-
-  (let [ret-val (filter #(if (some #{(keyword (:ret_types selected))}
-                               (:ret_types %)) true false) widgets)]
-
-    ;(prn (str "filter-widgets " selected
-    ;       " //// ret_types " (keyword (:ret_types selected))
-    ;       " //// ret-val " ret-val))
-
-    ret-val))
-
-
-
-
-(defn service-list [services selected]
-  [:div.container
-   [:table-container
-    [:table.is-hoverable
-     [:thead
-      [:tr [:th "Name"] [:th "Description"]]]
-     [:tbody
-      (doall
-        (for [{:keys [name doc_string]} @services]
-          (do
-            ^{:key name}
-            [:tr {:class    (if (= @selected name) "is-selected" "")
-                  :style    {:background-color (if (= @selected name) "lightgreen" "")}
-                  :on-click #(do
-                               (reset! selected name))}
-             ;(prn "selected: " @selected)
-             [:td name] [:td doc_string]])))]]]])
-
-
-(defn widget-card [keywrd label img chosen-widget]
-  [:div.card {:class    (if (= @chosen-widget keywrd) "is-selected" "")
-              :style    {:background-color (if (= @chosen-widget keywrd) "lightgreen" "")}
-              :on-click #(do
-                           ;(prn "widget-card " name
-                           ;  " //// chosen-widget " @chosen-widget)
-
-                           (reset! chosen-widget keywrd))}
-   [:div.image
-    [:figure.image.is-128x128
-     [:img {:src img}]]]
-   [:div.card-content
-    [:p.subtitle.is-7.has-text-centered label]]])
-
-
-
-(defn widget-list [widgets s chosen-widget]
-  (let [widget-cards (filter-widgets widgets s)]
-
-    ;(prn "widget-list " widgets
-    ;  " //// selected " s
-    ;  " //// chosen-widget " @chosen-widget
-    ;  " //// cards " widget-cards)
-
-    [:table>tbody
-     [:tr
-
-      ; TODO - HACK!!!! using dummy-name to get at the correct widget
-
-      (for [{:keys [dummy-name icon label]} widget-cards]
-        ^{:key dummy-name} [:td
-                            [widget-card dummy-name label icon chosen-widget]])]]))
-
-
-
-(defn add-widget-modal [is-active]
-  (let [services (rf/subscribe [:services])
-        selected (r/atom (:name (first @services)))
-        chosen-widget (r/atom {})]                          ;(r/atom "")]
-    (fn []
-      [:div.modal (if @is-active {:class "is-active"})
-       [:div.modal-background]
-       [:div.modal-card
-        [:header.modal-card-head
-         [:p.modal-card-title "Add Data Source"]
-         ;[:p (str "selected " @selected)]
-         ;[:p (str @services)]
-         [:button.delete {:aria-label "close"
-                          :on-click   #(reset! is-active false)}]]
-
-        [:section.modal-card-body
-         [service-list services selected]]
-
-        ;(prn "add-widget-modal " (selected-service @services @selected))
-
-        [:section.modal-card-body
-         [widget-list cards/widget-cards (selected-service @services @selected) chosen-widget]]
-
-        [:footer.modal-card-foot
-         [:button.button.is-success {:on-click #(do
-                                                  ;(prn "adding widget " @chosen-widget)
-                                                  (add-widget @chosen-widget)
-                                                  (reset! is-active false))} "Add"]
-
-         [:button.button {:on-click #(reset! is-active false)} "Cancel"]]]])))
-
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;
@@ -210,24 +90,6 @@
   (GET "/version" {:headers         {"Accept" "application/transit+json"}
                    :response-format (ajax/json-response-format {:keywords? true})
                    :handler         #(rf/dispatch-sync [:set-version %])}))
-
-
-(defn version-number []
-  (let [version (rf/subscribe [:version])
-        is-active (r/atom false)]
-    (fn []
-      [:container.level {:width "100%"}
-       [:div.level-left.has-text-left
-        [:h7.subtitle.is-6 @version]]
-       [:div.level-right.has-text-right
-        [:button.button.is-link {:on-click #(swap! is-active not)} "Add"]
-        [:button.button.is-link {:on-click #(add-canned-widget)} "widget"]]
-       [add-widget-modal is-active]])))
-
-
-(defn- widgets-log []
-  [:p (str "widgets " @(rf/subscribe [:widgets]))])
-
 
 
 
@@ -250,12 +112,8 @@
   [:div {:width "100%"}
    [:div.container
     [:div.content {:width "100%"}
-     [version-number]]]
-     ;[widgets-log]
+     [modal/version-number]]]
    [widgets-grid]])
-
-
-
 
 
 
@@ -288,6 +146,9 @@
   (vanilla.widgets.sankey-chart/register-type)
   (vanilla.widgets.scatter-chart/register-type)
   (vanilla.widgets.vari-pie-chart/register-type)
+
+  (doseq [w defs/widgets]
+    (rf/dispatch-sync [:widget-type w]))
 
   (d/connect-to-data-sources)
   (r/render home-page (.getElementById js/document "app")))

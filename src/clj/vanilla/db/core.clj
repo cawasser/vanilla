@@ -64,23 +64,23 @@
   (create-services!
     vanilla-db
     {:services
-     [["1000" ":spectrum-traces" "Spectrum Traces"
+     [["1000" "spectrum-traces" "Spectrum Traces"
        "data-format/x-y" "vanilla.fetcher/spectrum-traces"
        "returns power over frequency"]
 
-      ["2000" ":usage-data" "Usage Data"
+      ["2000" "usage-data" "Usage Data"
        "data-format/x-y-n" "vanilla.fetcher/usage-data"
        "returns usage data over time"]
 
-      ["3000" ":sankey-service" "Relationship Data"
+      ["3000" "sankey-service" "Relationship Data"
        "data-format/x-y-n" "vanilla.sankey-service/fetch-data"
        "returns interdependencies between countries"]
 
-      ["4000" ":bubble-service" "Bubble Data"
+      ["4000" "bubble-service" "Bubble Data"
        "data-format/x-y-n" "vanilla.bubble-service/fetch-data"
        "returns x-y-n data for Fruits, Countries and MLB teams"]
 
-      ["5000" ":network-service" "Network Data"
+      ["5000" "network-service" "Network Data"
        "data-format/from-to" "vanilla.network-service/fetch-data"
        "returns interconnectivity data"]
 
@@ -108,7 +108,7 @@
   (create-services!
     vanilla-db
     {:services
-     [["4000" ":bubble-service" "Bubble Data"
+     [["4000" "bubble-service" "Bubble Data"
        "data-format/x-y-n" "vanilla.bubble-service/fetch-data"
        "returns x-y-n data for Fruits, Countries and MLB teams"]]})
 
