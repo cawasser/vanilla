@@ -13,25 +13,19 @@ This single-page application (SPA) provides a number of graphical widgets based 
 > updates yet - every update causes all the widgets to refresh. next - wire in the source/widget picker and remove the "widget" button
 
 > 0.2.2-SQLITE-A/R 004. source/widget picker "works." many of the source/widget combos work, but there are
-> some issues (Relationship (network) and Sankey fail, for example)
+> some issues (Relationship (network) and Sankey fail, for example). This is due to the service descriptions not proving a VECTOR of
+> :data-format types. Need to implement that in SQLite, among other updates
 
 
 ## Roadmap
 
-> improve compatibility with the :data-formats
-
-> user pick colors and title
-
-> move some of the viz stuff (labels, etc) to the service definition/data-message to make more declarative
-
-> figure out how to let the user pick the charts in a stacked or side-by-side
-
-> migrate the widget defs to the server and load them dynamically (can this be done with a push from the server?
-> that way the client will get the updates as soon as we put them on the server-farm)
-
-> Login
-
-> generative testing of the client
+- improve chart conversions between the various :data-format/<>
+- user picker for colors and title, using \[cljsjs/react-color "2.13.8-0"\] [link](http://casesandberg.github.io/react-color/)
+- move some of the viz stuff (labels, etc) to the service definition/data-message to make more declarative
+- figure out how to let the user pick the charts in a stacked or side-by-side
+- migrate the widget defs to the server and load them dynamically (can this be done with a push from the server? that way the client will get the updates as soon as we put them on the server-farm)
+- Login
+- generative testing of the client
 
 
 ## Development

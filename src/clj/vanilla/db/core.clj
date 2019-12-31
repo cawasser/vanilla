@@ -73,7 +73,7 @@
        "returns usage data over time"]
 
       ["3000" "sankey-service" "Relationship Data"
-       "data-format/x-y-n" "vanilla.sankey-service/fetch-data"
+       "[data-format/x-y-n data-format/from-to]" "vanilla.sankey-service/fetch-data"
        "returns interdependencies between countries"]
 
       ["4000" "bubble-service" "Bubble Data"
@@ -81,7 +81,7 @@
        "returns x-y-n data for Fruits, Countries and MLB teams"]
 
       ["5000" "network-service" "Network Data"
-       "data-format/from-to" "vanilla.network-service/fetch-data"
+       "[data-format/x-y-n data-format/from-to]" "vanilla.network-service/fetch-data"
        "returns interconnectivity data"]
 
       ["6000" "power-data" "Power Data"
@@ -96,7 +96,7 @@
        "data-format/entity" "vanilla.stoplight-service/fetch-data"
        "returns green/yellow/red status for a collection of items"]
 
-      ["9000" "12-hour-usage-data" "12-hour Usage Data"
+      ["9000" "usage-24-hour-service" "12-hour Usage Data"
        "data-format/x-y-n" "vanilla.usage-24-hour-service/fetch-data"
        "returns quantity of fruit sold per hour"]
 

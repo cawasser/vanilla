@@ -2,12 +2,13 @@
     (:require [dashboard-clj.core :as dash]
               [environ.core :refer [env]]
               [vanilla.fetcher]
-              [vanilla.sankey-service]
+
               [vanilla.bubble-service]
+              [vanilla.heatmap-service]
               [vanilla.network-service]
-              [vanilla.stoplight-service]
-              [vanilla.usage-24-hour-service]
+              [vanilla.sankey-service]
               [vanilla.scatter-service]
+              [vanilla.stoplight-service]
               [vanilla.usage-24-hour-service]
 
               [vanilla.service-deps :as deps])

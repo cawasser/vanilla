@@ -40,7 +40,7 @@
     ;           :every [30 :seconds]}}
 
    {:name     :heatmap-data
-    :read-fn  :vanilla.fetcher/heatmap-data}
+    :read-fn  :vanilla.heatmap-service/fetch-data}
     ;:schedule {:in    [0 :seconds]
     ;           :every [10 :seconds]}}
 
