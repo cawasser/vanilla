@@ -3,7 +3,6 @@
     [reagent.core :as r]
     [re-frame.core :as rf]
     [dashboard-clj.core :as d]
-    [vanilla.widget-cards :as cards]
     [vanilla.events]
     [vanilla.subscriptions :as subs]
     [vanilla.widget-defs :as defs]

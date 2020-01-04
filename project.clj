@@ -1,4 +1,4 @@
-(defproject vanilla "0.2.2-SQLITE-A/R 004"
+(defproject vanilla "0.2.2-SQLITE-A.R 004"
   :description "Vanilla Dashboard - a simple dashboard built on dashboard-clj"
   :url ""
 
@@ -10,9 +10,7 @@
                  [conman "0.8.4"]
 
                  [day8.re-frame/http-fx "0.1.6"]
-                 ;[cprop "0.1.14"]
                  [cprop "0.1.15"]
-                 ;[expound "0.8.1"]
                  [expound "0.8.2"]
 
                  [funcool/struct "1.4.0"]
@@ -39,37 +37,27 @@
                  [ring-webjars "0.2.0"]
                  [ring/ring-core "1.8.0"]
                  [ring/ring-defaults "0.3.2"]
-                 ;[selmer "1.12.17"]
                  [selmer "1.12.18"]
 
-                 ;[cljsjs/react-grid-layout "0.16.6-0"]
                  [cljsjs/react-grid-layout "0.17.1-0"]
 
                  [trptcolin/versioneer "0.2.0"]
 
                  ; for vanilla (matching versions)
-                 ;[environ "1.0.2"]
                  [environ "1.1.0"]
-                 ;[ring "1.4.0"]
                  [ring "1.8.0"]
-                 ;[bk/ring-gzip "0.1.1"]
                  [bk/ring-gzip "0.3.0"]
-                 ;[ring.middleware.logger "0.5.0"]
                  [radicalzephyr/ring.middleware.logger "0.6.0"]
-                 ;[org.immutant/scheduling "2.1.3"]
                  [org.immutant/scheduling "2.1.10"]
                  [com.taoensso/sente "1.8.1"]
-                 ;[com.taoensso/sente "1.15.0"]
-                 ;[http-kit "2.1.19"]
+                 [com.stuartsierra/component "0.4.0"]
                  [http-kit "2.3.0"]
-                 ;[compojure "1.5.0"]
                  [compojure "1.6.1"]
                  [org.clojure/core.match "0.3.0"]
                  [com.layerware/hugsql "0.5.1"]
-                 ;[org.xerial/sqlite-jdbc "3.25.2"]
                  [org.xerial/sqlite-jdbc "3.30.1"]
-                 ;[seancorfield/next.jdbc "1.0.0-beta1"]
-                 [seancorfield/next.jdbc "1.0.12"]]
+                 [seancorfield/next.jdbc "1.0.12"]
+                 [org.clojure/tools.nrepl "0.2.13"]]
 
   :min-lein-version "2.6.1"
 
@@ -93,20 +81,21 @@
   :profiles {:uberjar {:omit-source true
                        :prep-tasks ["compile" ["cljsbuild" "once" "min"]]
                        :dependencies [[day8.re-frame/tracing-stubs "0.5.3"]]
-                       :cljsbuild{:builds
-                                  {:min
-                                   {:source-paths ["src/cljc" "src/cljs"]
-                                    :compiler
-                                                  {:output-dir "target/cljsbuild/public/js/compiled"
-                                                   :output-to "target/cljsbuild/public/js/compiled/app.js"
-                                                   :source-map "target/cljsbuild/public/js/compiled/app.js.map"
-                                                   :optimizations :advanced
-                                                   :pretty-print false
-                                                   :infer-externs true
-                                                   :closure-warnings {:externs-validation :off
-                                                                      :non-standard-jsdoc :off}
-                                                   :externs ["react/externs/react.js"
-                                                             "externs.js"]}}}}
+                       :cljsbuild {:builds
+                                   {:min
+                                    {:source-paths ["src/cljc" "src/cljs"]
+                                     :compiler
+                                                   {:output-dir "target/cljsbuild/public/js/compiled"
+                                                    :output-to "target/cljsbuild/public/js/compiled/app.js"
+                                                    :source-map "target/cljsbuild/public/js/compiled/app.js.map"
+                                                    :asset-path "js/out"
+                                                    :optimizations :advanced
+                                                    :pretty-print false
+                                                    :infer-externs true
+                                                    :closure-warnings {:externs-validation :off
+                                                                       :non-standard-jsdoc :off}
+                                                    :externs ["react/externs/react.js"
+                                                              "externs.js"]}}}}
                        :aot :all
                        :uberjar-name "vanilla.jar"
                        :source-paths ["env/prod/clj"]
@@ -116,21 +105,18 @@
              :test          [:project/dev :project/test :profiles/test]
 
              :project/dev  {:jvm-opts ["-Dconf=dev-config.edn"]
-                            :dependencies [;[binaryage/devtools "0.9.10"]
-                                           [binaryage/devtools "0.9.11"]
+                            :dependencies [[binaryage/devtools "0.9.11"]
                                            [cider/piggieback "0.4.2"]
                                            [doo "0.1.11"]
                                            [figwheel-sidecar "0.5.19"]
                                            [pjstadig/humane-test-output "0.10.0"]
                                            [prone "2019-07-08"]
-                                           ;[day8.re-frame/re-frame-10x "0.4.3"]
-                                           ;[day8.re-frame/tracing "0.5.1"]
                                            [day8.re-frame/re-frame-10x "0.4.5"]
                                            [day8.re-frame/tracing "0.5.3"]
                                            [ring/ring-devel "1.8.0"]
                                            [ring/ring-mock "0.4.0"]
 
-                                           ;form original
+                                           ;from original
                                            [figwheel "0.5.2"]
                                            [pjstadig/humane-test-output "0.10.0"]
                                            [com.cemerick/piggieback "0.2.2"]
@@ -142,23 +128,25 @@
                                            [jonase/eastwood "0.3.5"]
                                            [lein-doo "0.1.11"]
                                            [lein-figwheel "0.5.19"]]
-                            :cljsbuild {:builds {:app {:source-paths ["src/cljs" "src/cljc" "env/dev/cljs"]
-                                                       :figwheel {:on-jsload "vanilla.core/start-dashboard"}
-                                                       :compiler {:output-dir "target/cljsbuild/public/js/out"
-                                                                  :closure-defines {"re_frame.trace.trace_enabled_QMARK_" true
-                                                                                    "day8.re_frame.tracing.trace_enabled_QMARK_"  true}
-                                                                  :optimizations :none
-                                                                  :preloads [day8.re-frame-10x.preload]
-                                                                  :output-to "target/cljsbuild/public/js/app.js"
-                                                                  :asset-path "js/out";"resources/public/js/compiled/out"
-                                                                  :source-map true
-                                                                  :main "vanilla.app" ;vanilla.core ;"grid-play.app"
-                                                                  :pretty-print true
-                                                                  :infer-externs true ;?
-                                                                  :closure-warnings {:externs-validation :off  ;?
-                                                                                     :non-standard-jsdoc :off} ;?
-                                                                  :externs ["react/externs/react.js"
-                                                                            "externs.js"]}}}}
+                            :cljsbuild {:builds
+                                        {:app
+                                         {:source-paths ["src/cljs" "env/dev/cljs"]
+                                          :figwheel {:on-jsload "vanilla.core/start-dashboard"}
+                                          :compiler {:output-dir "target/cljsbuild/public/js/out"
+                                                     :closure-defines {"re_frame.trace.trace_enabled_QMARK_" true
+                                                                       "day8.re_frame.tracing.trace_enabled_QMARK_"  true}
+                                                     :optimizations :none
+                                                     :preloads [day8.re-frame-10x.preload]
+                                                     :output-to "target/cljsbuild/public/js/app.js"
+                                                     :asset-path "js/out";"resources/public/js/compiled/out"
+                                                     :source-map true
+                                                     :main "vanilla.app"
+                                                     :pretty-print true
+                                                     :infer-externs true
+                                                     :closure-warnings {:externs-validation :off
+                                                                        :non-standard-jsdoc :off}
+                                                     :externs ["react/externs/react.js"
+                                                               "externs.js"]}}}}
 
 
                             :doo {:build "test"}
@@ -174,11 +162,10 @@
                             {:builds
                              {:test
                               {:source-paths ["src/cljc" "src/cljs" "test/cljs"]
-                               :compiler
-                                             {:output-to "target/test.js"
-                                              :main "grid-play.doo-runner"
-                                              :optimizations :whitespace
-                                              :pretty-print true}}}}}
+                               :compiler {:output-to "target/test.js"
+                                          :main "grid-play.doo-runner"
+                                          :optimizations :whitespace
+                                          :pretty-print true}}}}}
 
              :profiles/dev {}
              :profiles/test {}})
