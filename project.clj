@@ -1,4 +1,4 @@
-(defproject vanilla "0.2.2-SQLITE-A.R 004"
+(defproject vanilla "0.2.2-SQLITE-A.R 005"
   :description "Vanilla Dashboard - a simple dashboard built on dashboard-clj"
   :url ""
 
@@ -83,12 +83,13 @@
                        :dependencies [[day8.re-frame/tracing-stubs "0.5.3"]]
                        :cljsbuild {:builds
                                    {:min
-                                    {:source-paths ["src/cljc" "src/cljs"]
+                                    {:source-paths ["src/cljc" "src/cljs" "env/prod/cljs"]
                                      :compiler
                                                    {:output-dir "target/cljsbuild/public/js/compiled"
                                                     :output-to "target/cljsbuild/public/js/compiled/app.js"
                                                     :source-map "target/cljsbuild/public/js/compiled/app.js.map"
                                                     :asset-path "js/out"
+                                                    :main "vanilla.app"
                                                     :optimizations :advanced
                                                     :pretty-print false
                                                     :infer-externs true
@@ -132,12 +133,12 @@
                                         {:app
                                          {:source-paths ["src/cljs" "env/dev/cljs"]
                                           :figwheel {:on-jsload "vanilla.core/start-dashboard"}
-                                          :compiler {:output-dir "target/cljsbuild/public/js/out"
+                                          :compiler {:output-dir "target/cljsbuild/public/js/compiled"
                                                      :closure-defines {"re_frame.trace.trace_enabled_QMARK_" true
                                                                        "day8.re_frame.tracing.trace_enabled_QMARK_"  true}
                                                      :optimizations :none
                                                      :preloads [day8.re-frame-10x.preload]
-                                                     :output-to "target/cljsbuild/public/js/app.js"
+                                                     :output-to "target/cljsbuild/public/js/compiled/app.js"
                                                      :asset-path "js/out";"resources/public/js/compiled/out"
                                                      :source-map true
                                                      :main "vanilla.app"
