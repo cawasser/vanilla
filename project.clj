@@ -88,7 +88,7 @@
                                                    {:output-dir "target/cljsbuild/public/js/compiled"
                                                     :output-to "target/cljsbuild/public/js/compiled/app.js"
                                                     :source-map "target/cljsbuild/public/js/compiled/app.js.map"
-                                                    :asset-path "js/out"
+                                                    :asset-path "js/compiled"
                                                     :main "vanilla.app"
                                                     :optimizations :advanced
                                                     :pretty-print false
@@ -139,7 +139,7 @@
                                                      :optimizations :none
                                                      :preloads [day8.re-frame-10x.preload]
                                                      :output-to "target/cljsbuild/public/js/compiled/app.js"
-                                                     :asset-path "js/out";"resources/public/js/compiled/out"
+                                                     :asset-path "js/compiled";"resources/public/js/compiled/out"
                                                      :source-map true
                                                      :main "vanilla.app"
                                                      :pretty-print true
@@ -170,9 +170,3 @@
 
              :profiles/dev {}
              :profiles/test {}})
-
-
-
-
-
-
