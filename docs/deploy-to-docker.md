@@ -6,7 +6,7 @@ Create a deployable uberjar:
 
 ### Testing the Uberjar
 
-    java -jar target/uberjar/vanilla.jar` 
+    java -jar target/uberjar/vanilla.jar
 
 will run the application from the uberjar. go to http://localhost:5000
 
@@ -32,7 +32,7 @@ Check to see that it is running. run:
 
     docker ps 
 
-...and look for your image in the list.
+Then look for your image in the list.
 
 Finally, connect to the running image, but point the browser at:
 
