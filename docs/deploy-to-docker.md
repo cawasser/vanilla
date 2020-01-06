@@ -6,20 +6,20 @@ Create a deployable uberjar:
 
 ### Testing the Uberjar
 
-    java -jar target/uberjar/vanilla.jar` will run the application form the uberjar
+    java -jar target/uberjar/vanilla.jar` 
 
-go to http://localhost:5000
+will run the application from the uberjar. go to http://localhost:5000
 
 ## Creating the Docker image
 
-Build the Docker image (the dot _is_ important):
+Build the Docker image (NOTE: the dot _is_ important):
 
-    docker build -t alloc-ui . 
+    docker build -t vanilla . 
 
 
 Then, run the image in Docker:
 
-    docker run -d -p 3500:5000 alloc-ui 
+    docker run -d -p 3500:5000 vanilla 
 
 The `-d` flag tells docker to disconnect form the running 
 process, so you will be sent back to the command prompt and
