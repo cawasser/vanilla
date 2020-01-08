@@ -12,17 +12,8 @@ This single-page application (SPA) provides a number of graphical widgets based 
 
 [look here](docs/history.md)
 
-> 0.2.2-SQLITE-A/R 002. replacing dashboard-clj library with a more flexible widget mechanism, still based on react-grid-layout.
-> also adds re-frame-10x
-
-> 0.2.2-SQLITE-A/R 003. all the basic highcharts types can be added "manually" with the widget button. can't turn on the service
-> updates yet - every update causes all the widgets to refresh. next - wire in the source/widget picker and remove the "widget" button
-
-> 0.2.2-SQLITE-A/R 004. source/widget picker "works." many of the source/widget combos work, but there are
-> some issues (Relationship (network) and Sankey fail, for example). This is due to the service descriptions not proving a VECTOR of
-> :data-format types. Need to implement that in SQLite, among other updates
-
-> 0.2.2-SQLITE-A.R 005. updates to get both [Figwheel](https://github.com/bhauman/lein-figwheel) and [Uberjar](https://stackoverflow.com/questions/11947037/what-is-an-uber-jar) working
+> 0.3.0-SNAPSHOT. Basic working version with Add/Remove Widgets. Some of the widget/data-source combination don't work
+> but there are such wide-spread changes, we need ot draw the line somewhere
 
 
 ## Roadmap

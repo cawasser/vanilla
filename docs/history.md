@@ -1,5 +1,8 @@
 # History
 
+
+## 0.1.x
+
 > 0.1.0-SNAPSHOT - initial baseline directly from [lein-dashboard](https://github.com/multunus/dashboard-clj/blob/master/docs/setting-up-dashboards.md)
 
 > 0.1.1-SNAPSHOT - basic dashboard working. playing now with returning 
@@ -24,6 +27,9 @@ this adds another .js dependency. Also, slowed down the update speed of the serv
 > 0.1.7-SNAPSHOT. added maps and tweaked stoplight to use buttons (better looking). 
 this incorporates gwp-map-widget and stoplight changes
 
+
+## 0.2.x
+
 > 0.2.0-SNAPSHOT. dashboard-clj has been pulled into the project for added flexibility
 this version also supports '/version' which gets the version number from the server 
 
@@ -36,4 +42,18 @@ new widgets, just revised default layout
 
 > 0.2.2-SNAPSHOT. added scatter chart
 
+
+## The road to Add/Remove Widgets
+
+> 0.2.2-SQLITE-A/R 002. replacing dashboard-clj library with a more flexible widget mechanism, still based on react-grid-layout.
+> also adds re-frame-10x
+
+> 0.2.2-SQLITE-A/R 003. all the basic highcharts types can be added "manually" with the widget button. can't turn on the service
+> updates yet - every update causes all the widgets to refresh. next - wire in the source/widget picker and remove the "widget" button
+
+> 0.2.2-SQLITE-A/R 004. source/widget picker "works." many of the source/widget combos work, but there are
+> some issues (Relationship (network) and Sankey fail, for example). This is due to the service descriptions not proving a VECTOR of
+> :data-format types. Need to implement that in SQLite, among other updates
+
+> 0.2.2-SQLITE-A.R 005. updates to get both [Figwheel](https://github.com/bhauman/lein-figwheel) and [Uberjar](https://stackoverflow.com/questions/11947037/what-is-an-uber-jar) working
 
