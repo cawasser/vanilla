@@ -30,13 +30,14 @@
 ;
 ; register all the data stuff so we have access to it
 ;
-(mc/register-type
-  :org-chart {:chart-options     {:chart/type              :org-chart
-                                  :chart/supported-formats [:data-format/from-to :data-format/form-to-n]
-                                  :chart                   {:type "organization"}
-                                  :plotOptions             {:keys ["from", "to"]}
-                                  :series                  {:dataLabels {:linkFormat ""}}}
+(defn register-type []
+  (mc/register-type
+    :org-chart {:chart-options     {:chart/type              :org-chart
+                                    :chart/supported-formats [:data-format/from-to :data-format/form-to-n]
+                                    :chart                   {:type "organization"}
+                                    :plotOptions             {:keys ["from", "to"]}
+                                    :series                  {:dataLabels {:linkFormat ""}}}
 
-              :merge-plot-option {:default plot-options}
+                :merge-plot-option {:default plot-options}
 
-              :conversions       {:default convert}})
+                :conversions       {:default convert}}))

@@ -1,5 +1,5 @@
 (ns vanilla.url-handlers
-  (:require [vanilla.service-deps :as deps]))
+  (:require [vanilla.db.core :as db]))
 
 
 ;;;;;;;;;;;;;;;;
@@ -8,6 +8,6 @@
 
 
 (defn get-services []
-  deps/datasources)
+  (db/get-services db/vanilla-db))
 
 

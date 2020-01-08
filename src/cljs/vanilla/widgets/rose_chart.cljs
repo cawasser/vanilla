@@ -35,17 +35,18 @@
 ;
 ; register all the data stuff so we have access to it
 ;
-(mc/register-type
-  :rose-chart {:chart-options     {:chart/type              :rose-chart
-                                   :chart/supported-formats [:data-format/y :data-format/x-y]
-                                   :chart                   {:type     "column"
-                                                             :polar    "true"
-                                                             :zoomType "x"}
-                                   :yAxis                   {:min    0
-                                                             :title  {:align "high"}
-                                                             :labels {:overflow "justify"}}}
+(defn register-type []
+  (mc/register-type
+    :rose-chart {:chart-options     {:chart/type              :rose-chart
+                                     :chart/supported-formats [:data-format/y :data-format/x-y]
+                                     :chart                   {:type     "column"
+                                                               :polar    "true"
+                                                               :zoomType "x"}
+                                     :yAxis                   {:min    0
+                                                               :title  {:align "high"}
+                                                               :labels {:overflow "justify"}}}
 
-               :merge-plot-option {:default plot-options}
+                 :merge-plot-option {:default plot-options}
 
-               :conversions       {:default mc/default-conversion}})
+                 :conversions       {:default mc/default-conversion}}))
 

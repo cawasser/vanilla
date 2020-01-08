@@ -1,12 +1,10 @@
 (ns vanilla.widgets.make-chart
   (:require [reagent.core :as reagent]
-            [reagent.ratom :refer-macros [reaction]]
-            [dashboard-clj.widgets.core :as widget-common]
+            [re-frame.core :as rf]
             [vanilla.widgets.util :as util]))
 
 
 
-(defonce type-registry (atom {}))
 
 (declare default-conversion)
 
@@ -16,14 +14,14 @@
 ;
 ;
 (defn- plot-config [chart-type chart-config data options]
-  (let [chart-reg-entry (get @type-registry chart-type {})
+  (let [chart-reg-entry @(rf/subscribe [:hc-type chart-type])
         format-type     (get-in data [:data :data-format])
         pc-fn           (get-in chart-reg-entry [:merge-plot-option format-type]
                                 (get-in chart-reg-entry [:merge-plot-option :default]))]
 
-    ; (.log js/console (str "plot-config " chart-type
-    ;                      " ///// (format-type)" format-type
-    ;                      " ///// (pc-fn)" pc-fn))
+    ;(prn "plot-config " chart-type
+    ; " ///// (format-type)" format-type
+    ; " ///// (pc-fn)" pc-fn)
 
     (if pc-fn
       (pc-fn chart-config data options))))
@@ -31,18 +29,18 @@
 
 
 (defn- get-conversion [chart-type data options]
-  (let [chart-reg-entry (get @type-registry chart-type {})
+  (let [chart-reg-entry @(rf/subscribe [:hc-type chart-type])
         format-type     (get-in data [:data :data-format])
         conversions     (get chart-reg-entry :conversions)
         conv-fn         (get conversions format-type (get conversions :default default-conversion))
         ret             (conv-fn chart-type data options)]
 
-    ;(.log js/console (str "get-conversion " chart-type "/" format-type
-    ;                      " //// (data)" data
-    ;                      " //// (chart-reg-entry)" chart-reg-entry
-    ;                      " //// (conversions)" conversions
-    ;                      " //// (conv-fn)" conv-fn
-    ;                      " //// (ret)" ret))
+    ;(prn "get-conversion " chart-type "/" format-type
+    ;  " //// (data)" data
+    ;  " //// (chart-reg-entry)" chart-reg-entry
+    ;  " //// (conversions)" conversions
+    ;  " //// (conv-fn)" conv-fn
+    ;  " //// (ret)" ret)
 
     ret))
 
@@ -60,11 +58,11 @@
 
   [chart-config data options]
 
-;   (.log js/console (str "make-config " (-> chart-config :chart/type)
-;                        " //// (chart-config)" chart-config
-;                        " ///// (data)" data))
+  ;(prn "make-config " (-> chart-config :chart-options :chart/type)
+  ;  " //// (chart-config)" chart-config
+  ;  " ///// (data)" data)
 
-  (let [chart-type   (-> chart-config :chart/type)
+  (let [chart-type   (-> chart-config :chart-options :chart/type)
         data-config  (if (instance? Atom data) @data data)
         base-config  {:title       {:text  (get options :viz/chart-title "")
                                     :style {:labels {:fontFamily "monospace"
@@ -82,14 +80,14 @@
 
         final-config (util/deep-merge-with
                        util/combine
-                       base-config plot-config chart-config)]
+                       base-config plot-config (-> chart-config :chart-options))]
 
-    ;(.log js/console (str "make-config " chart-type
-    ;                     " //// (data)" data-config
-    ;                     " //// (base-config)" base-config
-    ;                     " //// (plot-config)" plot-config
-    ;                     " //// (chart-config)" chart-config
-    ;                     " //// (final-config)" final-config))
+    ;(prn "make-config after " chart-type
+    ;  " //// (chart-config)" chart-config
+    ;  " //// (data)" data-config
+    ;  " //// (base-config)" base-config
+    ;  " //// (plot-config)" plot-config
+    ;  " //// (final-config)" final-config)
 
     final-config))
 
@@ -107,11 +105,11 @@
                      (assoc chart-config :series converted)
                      chart-config)]
 
-    ;(.log js/console (str "merge-configs " chart-type
-    ;                      " //// (chart-config) " chart-config
-    ;                      " //// (data) " data
-    ;                      " //// (converted)" converted
-    ;                      " //// (ret)" ret)]
+    ;(prn "merge-configs " chart-type
+    ;  " //// (chart-config) " chart-config
+    ;  " //// (data) " data
+    ;  " //// (converted)" converted
+    ;  " //// (ret)" ret)
 
     ret))
 
@@ -130,9 +128,9 @@
 (defn default-conversion [chart-type data options]
   (let [ret (get-in data [:data :series])]
 
-    ;(.log js/console (str "default-conversion " chart-type
-    ;                      " //// (data) " data
-    ;                      " //// (ret)" ret))
+    ;(prn "default-conversion " chart-type
+    ;  " //// (data) " data
+    ;  " //// (ret)" ret)
 
     ret))
 
@@ -146,10 +144,10 @@
 
   [id registry-data]
 
-;   (.log js/console (str "register-type " id
-;                        " //// (registry-data)" registry-data))
+  ;(prn "register-type " id
+  ; " //// (registry-data)" registry-data)
 
-  (swap! type-registry assoc id registry-data))
+  (rf/dispatch [:register-hc-type id registry-data]))
 
 
 
@@ -160,12 +158,12 @@
   [chart-config data options]
 
   (let [dom-node        (reagent/atom nil)
-        chart-type      (-> chart-config :chart/type)
-        chart-reg-entry (get type-registry chart-type {})]
+        chart-type      (-> chart-config :chart-options :chart/type)
+        chart-reg-entry @(rf/subscribe [:hc-type chart-type])]
 
-    ;(.log js/console (str "MAKE-chart " chart-type
-    ;                     " //// (chart-config)" chart-config
-    ;                     " ////// (chart-reg-entry)" chart-reg-entry))
+    ;(prn "MAKE-chart " chart-type
+    ;  " //// (chart-config)" chart-config
+    ;  " ////// (chart-reg-entry)" chart-reg-entry)
 
     (reagent/create-class
       {:reagent-render
@@ -177,27 +175,25 @@
        (fn [this]
          (let [node (reagent/dom-node this)]
 
-           ;(.log js/console (str "component-did-mount " chart-type))
+           ;(prn "component-did-mount " chart-type)
 
            (reset! dom-node node)))
 
        :component-did-update
        (fn [this old-argv]
-         (let [new-args    (rest (reagent/argv this))
-               new-data    (js->clj (second new-args))
+         (let [new-args (rest (reagent/argv this))
+               new-data (js->clj (second new-args))
                base-config (make-config chart-config new-data options)
                all-configs (merge-configs base-config new-data options)]
 
-           ;(.log js/console (str "component-did-update " chart-type
-           ;                      " //// (all-config)" all-configs))
-           ;                      " //// (props)" (reagent/props this)
-           ;                      " //// (new-args)" new-args
-           ;" //// (new-data)" (if (instance? Atom new-data)
-           ;                     @new-data
-           ;                     new-data)))
+           ;(prn "component-did-update " chart-type
+           ;  " //// chart-config " chart-config
+           ;  " //// chart-reg-entry " chart-reg-entry
+           ;  " //// base-config " base-config
+           ;  " //// (all-config)" all-configs)
 
            (js/Highcharts.Chart. (reagent/dom-node this)
-                                 (clj->js all-configs))))})))
+             (clj->js all-configs))))})))
 
 ;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;

@@ -1,29 +1,63 @@
-(defproject vanilla "0.2.2-SNAPSHOT"
+(defproject vanilla "0.3.0-SNAPSHOT"
   :description "Vanilla Dashboard - a simple dashboard built on dashboard-clj"
   :url ""
-  :dependencies [[org.clojure/clojure "1.8.0"]
-                 [org.clojure/clojurescript "1.8.40" :scope "provided"]
-                 [environ "1.0.2"]
 
-                 ;for dashboard-clj
-                 [ring "1.4.0"]
-                 [ring/ring-defaults "0.2.0"]
-                 [bk/ring-gzip "0.1.1"]
-                 [ring.middleware.logger "0.5.0"]
-                 [org.immutant/scheduling "2.1.3"]
-                 [com.taoensso/sente "1.8.1"]
-                 [com.stuartsierra/component "0.3.1"]
-                 [reagent "0.6.0-alpha"]
-                 [re-frame "0.7.0"]
-                 [cljsjs/react-grid-layout "0.12.4-0"]
-                 [http-kit "2.1.19"]
-                 [compojure "1.5.0"]
+  :dependencies [[ch.qos.logback/logback-classic "1.2.3"]
+                 [cheshire "5.9.0"]
+                 [cljs-ajax "0.8.0"]
+                 [clojure.java-time "0.3.2"]
+                 [com.cognitect/transit-clj "0.8.319"]
+                 [conman "0.8.4"]
 
-                 ; get version data
+                 [day8.re-frame/http-fx "0.1.6"]
+                 [cprop "0.1.15"]
+                 [expound "0.8.2"]
+
+                 [funcool/struct "1.4.0"]
+                 [luminus-jetty "0.1.7"]
+                 [luminus-migrations "0.6.6"]
+                 [luminus-transit "0.1.2"]
+                 [luminus/ring-ttl-session "0.3.3"]
+                 [markdown-clj "1.10.0"]
+                 [metosin/muuntaja "0.6.6"]
+                 [metosin/reitit "0.3.10"]
+                 [metosin/ring-http-response "0.9.1"]
+                 [mount "0.1.16"]
+                 [nrepl "0.6.0"]
+                 [org.clojure/clojure "1.10.1"]
+                 [org.clojure/clojurescript "1.10.597" :scope "provided"]
+                 [org.clojure/tools.cli "0.4.2"]
+                 [org.clojure/tools.logging "0.5.0"]
+                 [org.webjars.npm/bulma "0.8.0"]
+                 [org.webjars.npm/material-icons "0.3.1"]
+                 [org.webjars/webjars-locator "0.38"]
+                 [org.xerial/sqlite-jdbc "3.28.0"]
+                 [re-frame "0.10.9"]
+                 [reagent "0.9.0-rc3"]
+                 [ring-webjars "0.2.0"]
+                 [ring/ring-core "1.8.0"]
+                 [ring/ring-defaults "0.3.2"]
+                 [selmer "1.12.18"]
+
+                 [cljsjs/react-grid-layout "0.17.1-0"]
+
                  [trptcolin/versioneer "0.2.0"]
-                 [cljs-ajax "0.7.2"]
 
-                 [org.clojure/core.match "0.3.0"]]
+                 ; for vanilla (matching versions)
+                 [environ "1.1.0"]
+                 [ring "1.8.0"]
+                 [bk/ring-gzip "0.3.0"]
+                 [radicalzephyr/ring.middleware.logger "0.6.0"]
+                 [org.immutant/scheduling "2.1.10"]
+                 [com.taoensso/sente "1.8.1"]
+                 [com.stuartsierra/component "0.4.0"]
+                 [http-kit "2.3.0"]
+                 [compojure "1.6.1"]
+                 [org.clojure/core.match "0.3.0"]
+                 [com.layerware/hugsql "0.5.1"]
+                 [org.xerial/sqlite-jdbc "3.30.1"]
+                 [seancorfield/next.jdbc "1.0.12"]
+                 [org.clojure/tools.nrepl "0.2.13"]]
 
   :min-lein-version "2.6.1"
 
@@ -32,105 +66,107 @@
   :resource-paths ["resources" "target/cljsbuild" "resources/public/libs"]
   :target-path "target/%s/"
 
-  :clean-targets ^{:protect false} [:target-path :compile-path "resources/public/js"]
-
-  :uberjar-name "vanilla.jar"
-
-  ;; Use `lein run` if you just want to start a HTTP server, without figwheel
-  :main vanilla.server
-
-  ;; nREPL by default starts in the :main namespace, we want to start in `user`
-  ;; because that's where our development helper functions like (run) and
-  ;; (browser-repl) live.
-  :repl-options {:init-ns user}
+  :main ^:skip-aot vanilla.server
 
   :plugins [[lein-cljsbuild "1.1.7"]]
+  :clean-targets ^{:protect false} [:target-path :compile-path "resources/public/js"]
 
-  :cljsbuild {:builds
-              {:app
-               {:source-paths ["src/cljs"]
+  :figwheel {:http-server-root "public"
+             :server-logfile "log/figwheel-logfile.log"
+             :server-port 3469
+             :nrepl-port 7002
+             :css-dirs ["resources/public/css"]
+             :nrepl-middleware [cider.piggieback/wrap-cljs-repl]}
 
-                :figwheel     true
-                ;; Alternatively, you can configure a function to run every time figwheel reloads.
-                ;; :figwheel {:on-jsload "vanilla.core/on-figwheel-reload"}
+  :profiles {:uberjar {:omit-source true
+                       :prep-tasks ["compile" ["cljsbuild" "once" "min"]]
+                       :dependencies [[day8.re-frame/tracing-stubs "0.5.3"]]
+                       :cljsbuild {:builds
+                                   {:min
+                                    {:source-paths ["src/cljc" "src/cljs" "env/prod/cljs"]
+                                     :compiler
+                                                   {:output-dir "target/cljsbuild/public/js/compiled"
+                                                    :output-to "target/cljsbuild/public/js/compiled/app.js"
+                                                    :source-map "target/cljsbuild/public/js/compiled/app.js.map"
+                                                    :asset-path "js/compiled"
+                                                    :main "vanilla.app"
+                                                    :optimizations :advanced
+                                                    :pretty-print false
+                                                    :infer-externs true
+                                                    :closure-warnings {:externs-validation :off
+                                                                       :non-standard-jsdoc :off}
+                                                    :externs ["react/externs/react.js"
+                                                              "externs.js"]}}}}
+                       :aot :all
+                       :uberjar-name "vanilla.jar"
+                       :source-paths ["env/prod/clj"]
+                       :resource-paths ["env/prod/resources"]}
 
-                :compiler     {:main                 vanilla.core
-                               :externs              ["externs.js"]
-                               :asset-path           "js/compiled/out"
-                               :output-to            "resources/public/js/compiled/app.js"
-                               :output-dir           "resources/public/js/compiled/out"
-                               :source-map-timestamp true}}}}
+             :dev           [:project/dev :profiles/dev]
+             :test          [:project/dev :project/test :profiles/test]
 
-  ;; When running figwheel from nREPL, figwheel will read this configuration
-  ;; stanza, but it will read it without passing through leiningen's profile
-  ;; merging. So don't put a :figwheel section under the :dev profile, it will
-  ;; not be picked up, instead configure figwheel here on the top level.
+             :project/dev  {:jvm-opts ["-Dconf=dev-config.edn"]
+                            :dependencies [[binaryage/devtools "0.9.11"]
+                                           [cider/piggieback "0.4.2"]
+                                           [doo "0.1.11"]
+                                           [figwheel-sidecar "0.5.19"]
+                                           [pjstadig/humane-test-output "0.10.0"]
+                                           [prone "2019-07-08"]
+                                           [day8.re-frame/re-frame-10x "0.4.5"]
+                                           [day8.re-frame/tracing "0.5.3"]
+                                           [ring/ring-devel "1.8.0"]
+                                           [ring/ring-mock "0.4.0"]
 
-  :figwheel {;; :http-server-root "public"       ;; serve static assets from resources/public/
-             :server-port    3469                           ;; default
-             ;; :server-ip "127.0.0.1"           ;; default
-             :css-dirs       ["resources/public/css"]       ;; watch and update CSS
+                                           ;from original
+                                           [figwheel "0.5.2"]
+                                           [pjstadig/humane-test-output "0.10.0"]
+                                           [com.cemerick/piggieback "0.2.2"]
+                                           [org.clojure/tools.nrepl "0.2.13"]
+                                           [org.clojure/tools.namespace "0.3.1"]
+                                           [org.clojure/java.classpath "0.3.0"]]
 
-             ;; Instead of booting a separate server on its own port, we embed
-             ;; the server ring handler inside figwheel's http-kit server, so
-             ;; assets and API endpoints can all be accessed on the same host
-             ;; and port. If you prefer a separate server process then take this
-             ;; out and start the server with `lein run`.
+                            :plugins      [[com.jakemccrary/lein-test-refresh "0.24.1"]
+                                           [jonase/eastwood "0.3.5"]
+                                           [lein-doo "0.1.11"]
+                                           [lein-figwheel "0.5.19"]]
+                            :cljsbuild {:builds
+                                        {:app
+                                         {:source-paths ["src/cljs" "env/dev/cljs"]
+                                          :figwheel {:on-jsload "vanilla.core/start-dashboard"}
+                                          :compiler {:output-dir "target/cljsbuild/public/js/compiled"
+                                                     :closure-defines {"re_frame.trace.trace_enabled_QMARK_" true
+                                                                       "day8.re_frame.tracing.trace_enabled_QMARK_"  true}
+                                                     :optimizations :none
+                                                     :preloads [day8.re-frame-10x.preload]
+                                                     :output-to "target/cljsbuild/public/js/compiled/app.js"
+                                                     :asset-path "js/compiled";"resources/public/js/compiled/out"
+                                                     :source-map true
+                                                     :main "vanilla.app"
+                                                     :pretty-print true
+                                                     :infer-externs true
+                                                     :closure-warnings {:externs-validation :off
+                                                                        :non-standard-jsdoc :off}
+                                                     :externs ["react/externs/react.js"
+                                                               "externs.js"]}}}}
 
-             ;; Start an nREPL server into the running figwheel process. We
-             ;; don't do this, instead we do the opposite, running figwheel from
-             ;; an nREPL process, see
-             ;; https://github.com/bhauman/lein-figwheel/wiki/Using-the-Figwheel-REPL-within-NRepl
-             ;; :nrepl-port 7888
 
-             ;; To be able to open files in your editor from the heads up display
-             ;; you will need to put a script on your path.
-             ;; that script will have to take a file path and a line number
-             ;; ie. in  ~/bin/myfile-opener
-             ;; #! /bin/sh
-             ;; emacsclient -n +$2 $1
-             ;;
-             ;; :open-file-command "myfile-opener"
+                            :doo {:build "test"}
+                            :source-paths ["env/dev/clj"]
+                            :resource-paths ["env/dev/resources"]
+                            :repl-options {:init-ns user}
+                            :injections [(require 'pjstadig.humane-test-output)
+                                         (pjstadig.humane-test-output/activate!)]}
 
-             :server-logfile "log/figwheel.log"}
+             :project/test {:jvm-opts ["-Dconf=test-config.edn"]
+                            :resource-paths ["env/test/resources"]
+                            :cljsbuild
+                            {:builds
+                             {:test
+                              {:source-paths ["src/cljc" "src/cljs" "test/cljs"]
+                               :compiler {:output-to "target/test.js"
+                                          :main "grid-play.doo-runner"
+                                          :optimizations :whitespace
+                                          :pretty-print true}}}}}
 
-  :doo {:build "test"}
-
-  :profiles {:dev     {:source-paths ["dev"]
-                       :dependencies [[binaryage/devtools "0.9.10"]
-                                      [figwheel "0.5.2"]
-                                      [figwheel-sidecar "0.5.2"]
-                                      [pjstadig/humane-test-output "0.10.0"]
-                                      [prone "2019-07-08"]
-                                      [com.cemerick/piggieback "0.2.2"]
-                                      [org.clojure/tools.nrepl "0.2.13"]
-                                      [org.clojure/tools.namespace "0.3.1"]
-                                      [org.clojure/java.classpath "0.3.0"]]
-
-                       :plugins      [[lein-figwheel "0.5.2"]
-                                      [lein-doo "0.1.6"]]
-
-                       :cljsbuild    {:builds
-                                      {:test
-                                       {:source-paths ["src/cljs" "test/cljs"]
-                                        :compiler     {:output-to     "resources/public/js/compiled/testable.js"
-                                                       :main          vanilla.test-runner
-                                                       :optimizations :none}}}}}
-
-             :uberjar {:omit-source  true
-                       :prep-tasks   ["compile" ["cljsbuild" "once" "min"]]
-                       :cljsbuild    {:builds
-                                      {:min
-                                       {:source-paths ["src/cljc" "src/cljs"]
-                                        :compiler     {:output-dir       "target/cljsbuild/public/js/compiled"
-                                                       :output-to        "target/cljsbuild/public/js/compiled/app.js"
-                                                       :source-map       "target/cljsbuild/public/js/compiled/app.js.map"
-                                                       :optimizations    :advanced
-                                                       :pretty-print     false
-                                                       :externs          ["externs.js"]
-                                                       :infer-externs    true
-                                                       :closure-warnings {:externs-validation :off
-                                                                          :non-standard-jsdoc :off}}}}}
-
-                       :aot          :all
-                       :uberjar-name "vanilla.jar"}})
+             :profiles/dev {}
+             :profiles/test {}})

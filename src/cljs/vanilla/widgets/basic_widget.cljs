@@ -1,7 +1,6 @@
 (ns vanilla.widgets.basic-widget
   (:require [reagent.core :as r]
-            [reagent.ratom :refer-macros [reaction]]
-            [dashboard-clj.widgets.core :as widget-common]))
+            [re-frame.core :as rf]))
 
 
 
@@ -12,9 +11,11 @@
 
 
 
-(defn basic-widget [data options custom-content]
+(defn basic-widget [name data options custom-content]
 
-  ;(.log js/console (str "basic-widget " name " of " type))
+  ;(.log js/console (str "basic-widget " options
+  ;                   " //// custom-content " custom-content
+  ;                   " //// name " name))
 
   [:div {:class "vanilla.widgets.line-chart container"
          :style {:height (get options :viz/height "100%")
@@ -29,8 +30,10 @@
        (get options :viz/title)]]
      [:div.level-right.has-text-centered
       [:button.delete.is-large {:style {:margin-right "10px"}
-                                :on-click #(.log js/console
-                                                 (str "Close widget "))}]]]]; name))}]]]]
+                                :on-click #(do
+                                             ;(.log js/console
+                                             ;      (str "Close widget " name))
+                                             (rf/dispatch [:remove-widget name]))}]]]]; name))}]]]]
 
 
    [:div {:class (str (get options :viz/style-name "widget"))

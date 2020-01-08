@@ -26,18 +26,19 @@
 ;
 ; register all the data stuff so we have access to it
 ;
-(mc/register-type
-  :bubble-chart {:chart-options     {:chart/type              :bubble-chart
-                                     :chart/supported-formats [:data-format/x-y-n :data-format/x-y-e]
-                                     :chart                   {:type "bubble"}
-                                     :yAxis                   {:min    0
-                                                               :title  {:align "high"}
-                                                               :labels {:overflow "justify"}}
-                                     :series                  {:dataLabels {:format "{point.name}"}}}
+(defn register-type []
+  (mc/register-type
+    :bubble-chart {:chart-options     {:chart/type              :bubble-chart
+                                       :chart/supported-formats [:data-format/x-y-n :data-format/x-y-e]
+                                       :chart                   {:type "bubble"}
+                                       :yAxis                   {:min    0
+                                                                 :title  {:align "high"}
+                                                                 :labels {:overflow "justify"}}
+                                       :series                  {:dataLabels {:format "{point.name}"}}}
 
 
-                 :merge-plot-option {:default plot-options}
+                   :merge-plot-option {:default plot-options}
 
-                 :conversions       {:default mc/default-conversion}})
+                   :conversions       {:default mc/default-conversion}}))
 
 

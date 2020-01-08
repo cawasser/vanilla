@@ -1,7 +1,5 @@
 (ns vanilla.widgets.area-chart
-  (:require [reagent.core :as r]
-            [reagent.ratom :refer-macros [reaction]]
-            [vanilla.widgets.make-chart :as mc]))
+  (:require [vanilla.widgets.make-chart :as mc]))
 
 
 
@@ -25,15 +23,16 @@
 ;
 ; register all the data stuff so we have access to it
 ;
-(mc/register-type
-  :area-chart {:chart-options     {:chart/type              :area-chart
-                                   :chart/supported-formats [:data-format/y :data-format/x-y]
-                                   :chart                   {:type     "area"
-                                                             :zoomType "x"}
-                                   :yAxis                   {:min    0
-                                                             :title  {:align "high"}
-                                                             :labels {:overflow "justify"}}}
+(defn register-type []
+  (mc/register-type
+    :area-chart {:chart-options     {:chart/type              :area-chart
+                                     :chart/supported-formats [:data-format/y :data-format/x-y]
+                                     :chart                   {:type     "area"
+                                                               :zoomType "x"}
+                                     :yAxis                   {:min    0
+                                                               :title  {:align "high"}
+                                                               :labels {:overflow "justify"}}}
 
-               :merge-plot-option {:default plot-options}
+                 :merge-plot-option {:default plot-options}
 
-               :conversions       {:default mc/default-conversion}})
+                 :conversions       {:default mc/default-conversion}}))
