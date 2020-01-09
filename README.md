@@ -57,10 +57,11 @@ This single-page application (SPA) provides a number of graphical widgets based 
  This will generate the file: 
 
  ```
- ./docs/uberjar.html
+ ./docs/uberdoc.html
  ```
 
-
+Here is the document it generates:
+[marginalia-uberdoc](./docs/uberdoc.html)
 
 
 #### see also
