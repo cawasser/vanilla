@@ -68,7 +68,8 @@
 
   :main ^:skip-aot vanilla.server
 
-  :plugins [[lein-cljsbuild "1.1.7"]]
+  :plugins [[lein-cljsbuild "1.1.7"]
+            [lein-marginalia "0.9.1"]]
   :clean-targets ^{:protect false} [:target-path :compile-path "resources/public/js"]
 
   :figwheel {:http-server-root "public"
@@ -128,7 +129,8 @@
                             :plugins      [[com.jakemccrary/lein-test-refresh "0.24.1"]
                                            [jonase/eastwood "0.3.5"]
                                            [lein-doo "0.1.11"]
-                                           [lein-figwheel "0.5.19"]]
+                                           [lein-figwheel "0.5.19"]
+                                           [lein-marginalia "0.9.1"]]
                             :cljsbuild {:builds
                                         {:app
                                          {:source-paths ["src/cljs" "env/dev/cljs"]
