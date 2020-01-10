@@ -1,6 +1,42 @@
-(ns vanilla.add-widget-model
+(ns vanilla.add-widget-modal
   (:require [reagent.core :as r]
-            [re-frame.core :as rf]))
+            [re-frame.core :as rf]
+            [day8.re-frame.tracing :refer-macros [fn-traced]]
+            [cljsjs.react-color :as picker]))
+
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;
+; events and subscriptions
+;
+;
+
+(rf/reg-event-db
+  :chosen-bg-color
+  (fn-traced [db [_ color]]
+    (assoc db :chosen-bg-color color)))
+
+(rf/reg-event-db
+  :chosen-txt-color
+  (fn-traced [db [_ color]]
+    (assoc db :chosen-txt-color color)))
+
+
+
+(rf/reg-sub
+  :chosen-bg-color
+  (fn [db _]
+    (:chosen-bg-color db)))
+
+(rf/reg-sub
+  :chosen-txt-color
+  (fn [db _]
+    (:chosen-txt-color db)))
+
+;
+;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
 
@@ -66,7 +102,7 @@
                   :style    {:background-color (if (= (:name selected) name) "lightgreen" "")}
                   :on-click #(do
                                (rf/dispatch [:selected-service (selected-service services name)]))}
-             [:td name] [:td doc_string]])))]]]])
+             [:td.is-7 name] [:td.is-7 doc_string]])))]]]])
 
 
 
@@ -105,12 +141,35 @@
                       [widget-card name label icon chosen-widget]])]]))
 
 
+(defn color-picker []
+  (let [chosen-bg-color  @(rf/subscribe [:chosen-bg-color])
+        chosen-txt-color @(rf/subscribe [:chosen-txt-color])
+        swatch           {:style {:padding      "5px"
+                                  :background   "#fff"
+                                  :borderRadius "1px"
+                                  :boxShadow    "0 0 0 1px rgba(0,0,0,.1)"
+                                  :display      "inline-block"
+                                  :cursor       "pointer"}
+                          :on-click #()}]
+    [:div swatch
+     [:div {:style {:width        "36px"
+                    :height       "14px"
+                    :borderRadius "2px"
+                    :background   (str "rgba(" (:r chosen-bg-color) "," (:g chosen-bg-color)
+                                    "," (:b chosen-bg-color) "," (:a chosen-bg-color) ")")}}]
+     [:p.is-7 "Title Color"]]))
+
+
+
+(defn labeled-radio [group label]
+  [:label [:radio-button {:ng-model group} group false label]
+   (str label "    ")])
 
 (defn add-widget-modal [is-active]
-  (let [services (rf/subscribe [:services])
-        selected (rf/subscribe [:selected-service])
+  (let [services      (rf/subscribe [:services])
+        selected      (rf/subscribe [:selected-service])
         chosen-widget (r/atom {})
-        widget-cards (rf/subscribe [:all-widget-types])]
+        widget-cards  (rf/subscribe [:all-widget-types])]
     (fn []
       [:div.modal (if @is-active {:class "is-active"})
        [:div.modal-background]
@@ -120,9 +179,9 @@
          [:button.delete {:aria-label "close"
                           :on-click   #(reset! is-active false)}]]
 
-        [:section.model-card-body
-         [:p (str "selected " @selected)]
-         [:p (str "widget " @chosen-widget)]]
+        ;[:section.model-card-body
+        ; [:p (str "selected " @selected)]
+        ; [:p (str "widget " @chosen-widget)]]
 
         [:section.modal-card-body
          [service-list @services @selected]]
@@ -131,17 +190,29 @@
          [widget-list @widget-cards @selected chosen-widget]]
 
         [:footer.modal-card-foot
-         [:button.button.is-success {:on-click #(do
-                                                  ;(prn "picked widget " @chosen-widget @selected)
-                                                  (add-widget @chosen-widget @selected)
-                                                  (reset! is-active false))} "Add"]
+         [:div {:width "100%"}
+          [:container.level {:width "100%"}
+           [:div.level-left.has-text-left
+            [:button.button.is-success {:on-click #(do
+                                                     ;(prn "picked widget " @chosen-widget @selected)
+                                                     (add-widget @chosen-widget @selected)
+                                                     (reset! is-active false))} "Add"]
 
-         [:button.button {:on-click #(reset! is-active false)} "Cancel"]]]])))
+            [:button.button {:on-click #(reset! is-active false)} "Cancel"]]
+           [:div.level-right.has-text-right
+            [color-picker]
+            [:div.control
+             [:radio-button.radio {:ng-model "txt-color"} "txt-color" false "white"]
+             [:radio-button.radio {:ng-model "txt-color"} "txt-color" false "black"]]]]]]]])))
+
+             ;[:label.radio [:input {:type "radio" :name "text-color"}] "white"]
+             ;[:label.radio [:input {:type "radio" :name "text-color" :checked true}] "black"]]]]]]]])))
+
 
 
 
 (defn version-number []
-  (let [version (rf/subscribe [:version])
+  (let [version   (rf/subscribe [:version])
         is-active (r/atom false)]
     (fn []
       [:container.level {:width "100%"}
