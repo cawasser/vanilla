@@ -59,8 +59,8 @@ Highcharts-based content is defined in Vanilla in a single namespace with 3 spec
 At a minimum, `register-type` *must* return a hash-map with the following keys:
 
 
- key | content/usage
------|--------------
+ key              | content/usage
+------------------|--------------
  `:chart-options` | hash-map of minimal keys to send to Highcharts. (see [minimum chart-options]())
  `:merge-plot-options` | hash-map defining "callout" functions to handle different `:/data-format` scenarios for creatins the correct `:plot-options`
  `:conversions` | hash-map defining "callout" functions to handle different `:/data-format` conversion scenarios
