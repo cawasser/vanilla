@@ -78,6 +78,8 @@ Highcharts-based content is defined in Vanilla in a single namespace with 3 spec
 
 #### Minimum :chart-options
 
+key | content/usage
+----|--------------
 `:chart/type` | a keyword used to name this specific chart type(e.g., `:bar-chart`)
 `:chart/supported-formats` | a vector of `:data-format/*` keywords, defining the formats this charts can show (e.g., `[:data-format/y :data-format/x-y]`)
 `:chart` | a hash-map of keys common for all possible instances. At a minimum it must define `:type` (e.g., `{:type "bar"`)
@@ -85,22 +87,31 @@ Highcharts-based content is defined in Vanilla in a single namespace with 3 spec
 
 
 
-### plot-options
+### plot-options (pending Bl-xxx)
 
-`plot-options`, regardless of what you name it,
+The purpose of `plot-options`, regardless of what you name it, is to provide the correct :plot-options key/hash-map
+when working with a `:data-format` other than the default for the chart type. For example, `bar-chart` is designed
+to support `:data-format/x-y`. But it can also work with `:data-format\y`, but only by parsing the data source hash-map and
+extracting appropriate data to build the correct `:plot-options`. This function (or functions if you support many kinds of  
+`:data-format`s) provide that data manipulations.
 
 
-> The make-chart namespace provides a default implementation: `default-plot-options` which returns
+> The `make-chart` namespace provides a default implementation: `default-plot-options` which returns
 > an empty hash-map if this is sufficient
 
 > At a minimum, a function *must* be defined for the `:default` case
 
-###
+### conversion (pending Bl-xxx)
+
+The purpose of `conversion`, regardless of what you name it, is to provide the correct :plot-options key/hash-map
+when working with a `:data-format` other than the default for the chart type. For example, `bar-chart` is designed
+to support `:data-format/x-y`. But it can also work with `:data-format\y`, but only by parsing the data source hash-map and
+extracting appropriate data to build the correct `[:data :series]`. This function (or functions if you support many kinds of  
+`:data-format`s) provide that data manipulations.
 
 
-> The make-chart namespace provides a default implementation: `default-conversion` which returns
+> The make-chart namespace provides a default implementation, `default-conversion`, which returns
 > an the unmodified value of `[:data :series]` for cases where the widget already understands and
-> expects the data from the server to be in the correct format
-> (see [Managing Data Formats](managing-data-formats.md))
+> expects the data from the server to be in the correct format (see [Managing Data Formats](managing-data-formats.md))
 
 > At a minimum, a function *MUST* be defined for the `:default` case
