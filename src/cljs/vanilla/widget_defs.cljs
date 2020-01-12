@@ -1,6 +1,9 @@
 (ns vanilla.widget-defs)
 
 
+(def black {:r 0x00 :g 0x00 :b 0x00 :a 1})
+(def white {:r 0xff :g 0xff :b 0xff :a 1})
+
 (def widgets [
               {:name      :area-widget
                :basis     :chart
@@ -14,7 +17,7 @@
                            :viz/x-title           "frequency"
                            :viz/y-title           "power"
                            :viz/banner-color      {:r 0x00 :g 0x00 :b 0xff :a 1}
-                           :viz/banner-text-color "white"
+                           :viz/banner-text-color white
                            :viz/style-name        "widget"
                            :viz/animation         false
                            :viz/tooltip           {:followPointer true}}}
@@ -42,7 +45,7 @@
                :label     "Bubble"
                :options   {:viz/title             "Bubble"
                            :viz/banner-color      {:r 0x00 :g 0x64 :b 0x00 :a 1}
-                           :viz/banner-text-color "white"
+                           :viz/banner-text-color white
                            :viz/dataLabels        true
                            :viz/labelFormat       "{point.name}"
                            :viz/lineWidth         0
@@ -72,7 +75,7 @@
                :label     "Dependencies"
                :options   {:viz/title             "Dependency Wheel"
                            :viz/banner-color      {:r 0xdc :g 0x14 :b 0x3c :a 1}
-                           :viz/banner-text-color "white"
+                           :viz/banner-text-color white
                            :viz/dataLabels        true
                            :viz/animation         false}}
 
@@ -115,7 +118,7 @@
                :label     "Network"
                :options   {:viz/title             "Network (network)"
                            :viz/banner-color      {:r 0x00 :g 0x00 :b 0x00 :a 1}
-                           :viz/banner-text-color "white"
+                           :viz/banner-text-color white
                            :viz/animation         false
                            :viz/data-labels       true}}
 
@@ -169,7 +172,7 @@
                :label     "Sankey"
                :options   {:viz/title             "Sankey"
                            :viz/banner-color      {:r 0x8b :g 0x00 :b 0x8b :a 1}
-                           :viz/banner-text-color "white"
+                           :viz/banner-text-color white
                            :viz/dataLabels        true
                            :viz/labelFormat       "{point.name}"
                            :viz/animation         false}}
@@ -183,7 +186,7 @@
                :label     "Scatter"
                :options   {:viz/title             "Scatter"
                            :viz/banner-color      {:r 0x90 :g 0x00 :b 0x80 :a 1}
-                           :viz/banner-text-color "white"
+                           :viz/banner-text-color white
                            :viz/line-width        0.5
                            :viz/animation         false
                            :viz/style-name        "widget"
@@ -199,7 +202,7 @@
                :label     "Variable Pie"
                :options   {:viz/title             "Usage Data (vari-pie)"
                            :viz/banner-color      {:r 0xff :g 0x00 :b 0x00 :a 1}
-                           :viz/banner-text-color "white"
+                           :viz/banner-text-color white
                            :viz/animation         false
                            :viz/dataLabels        true
                            :viz/labelFormat       "{point.name}"
@@ -216,18 +219,6 @@
 ;               :viz/style        {}
 ;               :viz/height       "100px"}}
 
-; TODO - init :stacked-chart correctly
-;{:name        :dual-widget
-; :basis       :stacked-chart
-; :type        :line-column-stack
-; :chart-types [:line-chart :column-chart]
-; :data-source :spectrum-traces
-; :options     {:viz/title        "Channels (stacked)"
-;               :viz/banner-color "lightsalmon"
-;               :viz/line-width   0.5
-;               :viz/animation    false
-;               :viz/style-name   "widget"
-;               :viz/tooltip      {:followPointer true}}}
 
 ; TODO - init :map-container correctly
 ;{:name    :map-widget
@@ -241,21 +232,6 @@
 ;           :viz/style        {}
 ;           :viz/height       "500px"}}
 
-; TODO - inint :side-by-side-chart correctlt
-;{:name        :side-by-side-widget
-; :basis       :side-by-side-chart
-; :type        :bar-pie-sbs
-; :chart-types [:bar-chart :pie-chart]
-; :data-source :usage-data
-; :options     {:viz/title             "Usage Data (side-by-side)"
-;               :viz/banner-color      "lavender"
-;               :viz/banner-text-color "black"
-;               :viz/line-width        0.5
-;               :viz/style-name        "widget"
-;               :viz/animation         false
-;               :viz/dataLabels        true
-;               :viz/labelFormat       "{point.name}"
-;               :viz/tooltip           {:followPointer true}}}
 
 ; TODO - init :simple correctly
 ;{:type        :stoplight-widget
@@ -285,7 +261,7 @@
                              :viz/x-title           "frequency"
                              :viz/y-title           "power"
                              :viz/banner-color      "blue"
-                             :viz/banner-text-color "white"
+                             :viz/banner-text-color white
                              :viz/style-name        "widget"
                              :viz/animation         false
                              :viz/tooltip           {:followPointer true}}}
