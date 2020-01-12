@@ -12,27 +12,25 @@
 ;
 ;
 
+(defn update-header-color [id color widget]
+  (prn "update-header-color " id color widget)
+  (if (= id (:key widget))
+    (assoc-in widget [:options :viz/banner-color] color)
+    widget))
+
+
 (rf/reg-event-db
-  :chosen-bg-color
-  (fn-traced [db [_ color]]
-    (assoc db :chosen-bg-color color)))
+  :update-header-color
+  (fn-traced [db [_ widget-id color]]
+    (assoc db :widgets (map #(partial (update-header-color widget-id color %)) (:widgets db)))))
+
 
 (rf/reg-event-db
-  :chosen-txt-color
-  (fn-traced [db [_ color]]
-    (assoc db :chosen-txt-color color)))
+  :update-title-color
+  (fn-traced [db [_ widget-id color]]
+    (assoc-in db [widget-id :options :viz/banner-text-color] color)))
 
 
-
-(rf/reg-sub
-  :chosen-bg-color
-  (fn [db _]
-    (:chosen-bg-color db)))
-
-(rf/reg-sub
-  :chosen-txt-color
-  (fn [db _]
-    (:chosen-txt-color db)))
 
 ;
 ;
@@ -44,25 +42,20 @@
 
 
 
-(defn change-header-color [is-active chosen-color orig-color]
-
+(defn change-header-color [is-active id chosen-color]
   (fn []
     [:div.modal (if @is-active {:class "is-active"})
      [:div.modal-background]
      [:div.modal-card
       [:section.modal-card-body {:on-click #(do
                                               (reset! is-active false)
-                                              (prn "show-header-picker " @is-active)
                                               (.stopPropagation %))}
-
        [:> js/ReactColor.CompactPicker
         {:color @chosen-color
-         :onChangeComplete (fn [color evt]
+         :onChangeComplete (fn [color _]
                              (reset! chosen-color (:rgb (js->clj color :keywordize-keys true)))
-                             (reset! is-active false)
-
-                             (prn "new color! " (:rgb (js->clj color :keywordize-keys true))
-                               " //// " @chosen-color))}]]]]))
+                             (rf/dispatch-sync [:update-header-color id @chosen-color])
+                             (reset! is-active false))}]]]]))
 
 
 
@@ -94,9 +87,6 @@
 
     (fn []
 
-      (prn "basic-widget " name
-        " //// chosen-color " (rgba @chosen-color))
-
       [:div {:class "vanilla.widgets.line-chart container"
              :style {:height (get options :viz/height "100%")
                      :width "100%"}}
@@ -104,11 +94,9 @@
         [:container.level {:style {:background-color (rgba @chosen-color)}
                            :on-click #(do
                                         (swap! show-header-picker not)
-                                        (prn "show-header-picker " @show-header-picker)
                                         (.stopPropagation %))}
 
-
-         [change-header-color show-header-picker chosen-color {:r 150 :g 150 :b 150 :a 1}]
+         [change-header-color show-header-picker name chosen-color]
 
          [:div.level-left.has-text-left
           [:h3 {:class "title"
@@ -120,10 +108,7 @@
 
          [:div.level-right.has-text-centered
           [:button.delete.is-large {:style {:margin-right "10px"}
-                                     :on-click #(do
-                                                  ;(.log js/console
-                                                  ;      (str "Close widget " name))
-                                                  (rf/dispatch [:remove-widget name]))}]]]]; name))}]]]]
+                                     :on-click #(rf/dispatch [:remove-widget name])}]]]]
 
 
        [:div {:class (str (get options :viz/style-name "widget"))
