@@ -1,42 +1,6 @@
 (ns vanilla.add-widget-modal
   (:require [reagent.core :as r]
-            [re-frame.core :as rf]
-            [day8.re-frame.tracing :refer-macros [fn-traced]]
-            [cljsjs.react-color :as picker]))
-
-
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;
-; events and subscriptions
-;
-;
-
-(rf/reg-event-db
-  :chosen-bg-color
-  (fn-traced [db [_ color]]
-    (assoc db :chosen-bg-color color)))
-
-(rf/reg-event-db
-  :chosen-txt-color
-  (fn-traced [db [_ color]]
-    (assoc db :chosen-txt-color color)))
-
-
-
-(rf/reg-sub
-  :chosen-bg-color
-  (fn [db _]
-    (:chosen-bg-color db)))
-
-(rf/reg-sub
-  :chosen-txt-color
-  (fn [db _]
-    (:chosen-txt-color db)))
-
-;
-;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+            [re-frame.core :as rf]))
 
 
 
@@ -102,7 +66,7 @@
                   :style    {:background-color (if (= (:name selected) name) "lightgreen" "")}
                   :on-click #(do
                                (rf/dispatch [:selected-service (selected-service services name)]))}
-             [:td.is-7 name] [:td.is-7 doc_string]])))]]]])
+             [:td name] [:td doc_string]])))]]]])
 
 
 
@@ -141,29 +105,6 @@
                       [widget-card name label icon chosen-widget]])]]))
 
 
-(defn color-picker []
-  (let [chosen-bg-color  @(rf/subscribe [:chosen-bg-color])
-        chosen-txt-color @(rf/subscribe [:chosen-txt-color])
-        swatch           {:style {:padding      "5px"
-                                  :background   "#fff"
-                                  :borderRadius "1px"
-                                  :boxShadow    "0 0 0 1px rgba(0,0,0,.1)"
-                                  :display      "inline-block"
-                                  :cursor       "pointer"}
-                          :on-click #()}]
-    [:div swatch
-     [:div {:style {:width        "36px"
-                    :height       "14px"
-                    :borderRadius "2px"
-                    :background   (str "rgba(" (:r chosen-bg-color) "," (:g chosen-bg-color)
-                                    "," (:b chosen-bg-color) "," (:a chosen-bg-color) ")")}}]
-     [:p.is-7 "Title Color"]]))
-
-
-
-(defn labeled-radio [group label]
-  [:label [:radio-button {:ng-model group} group false label]
-   (str label "    ")])
 
 (defn add-widget-modal [is-active]
   (let [services      (rf/subscribe [:services])
@@ -190,23 +131,11 @@
          [widget-list @widget-cards @selected chosen-widget]]
 
         [:footer.modal-card-foot
-         [:div {:width "100%"}
-          [:container.level {:width "100%"}
-           [:div.level-left.has-text-left
-            [:button.button.is-success {:on-click #(do
-                                                     ;(prn "picked widget " @chosen-widget @selected)
-                                                     (add-widget @chosen-widget @selected)
-                                                     (reset! is-active false))} "Add"]
-
-            [:button.button {:on-click #(reset! is-active false)} "Cancel"]]
-           [:div.level-right.has-text-right
-            [color-picker]
-            [:div.control
-             [:radio-button.radio {:ng-model "txt-color"} "txt-color" false "white"]
-             [:radio-button.radio {:ng-model "txt-color"} "txt-color" false "black"]]]]]]]])))
-
-             ;[:label.radio [:input {:type "radio" :name "text-color"}] "white"]
-             ;[:label.radio [:input {:type "radio" :name "text-color" :checked true}] "black"]]]]]]]])))
+         [:button.button.is-success {:on-click #(do
+                                                  ;(prn "picked widget " @chosen-widget @selected)
+                                                  (add-widget @chosen-widget @selected)
+                                                  (reset! is-active false))} "Add"]
+         [:button.button {:on-click #(reset! is-active false)} "Cancel"]]]])))
 
 
 
@@ -217,7 +146,7 @@
     (fn []
       [:container.level {:width "100%"}
        [:div.level-left.has-text-left
-        [:h7.subtitle.is-6 @version]]
+        [:h6.subtitle.is-6 @version]]
        [:div.level-right.has-text-right
         [:button.button.is-link {:on-click #(swap! is-active not)} "Add"]]
        ;[:button.button.is-link {:on-click #(add-canned-widget)} "widget"]]
