@@ -56,17 +56,33 @@ Highcharts-based content is defined in Vanilla in a single namespace with 3 spec
 ### register-type
 
 `register-type` adds the basic chart definition to a registry, making it available for use in widget.
-At a minimum, `register-type` *must* return a hash-map with the following keys:
+
+
+`register-type` *must* call (make-chart/register-chart) with 2 parameters:
+
+1. A keyword that serves as the name for this chart type. This name is used to retrieve the corresponding hash-map from the registry
+2. A hash-map that defines the following keys:
 
 
  key              | content/usage
 ------------------|--------------
- `:chart-options` | hash-map of minimal keys to send to Highcharts. (see [minimum chart-options]())
+ `:chart-options` | hash-map of minimal keys to send to Highcharts. (see *Minimum :chart-options*)
  `:merge-plot-options` | hash-map defining "callout" functions to handle different `:/data-format` scenarios for creatins the correct `:plot-options`
  `:conversions` | hash-map defining "callout" functions to handle different `:/data-format` conversion scenarios
 
 
 > The `register-type` function *MUST* defined.
+
+
+
+
+#### Minimum :chart-options
+
+`:chart/type` | a keyword used to name this specific chart type(e.g., `:bar-chart`)
+`:chart/supported-formats` | a vector of `:data-format/*` keywords, defining the formats this charts can show (e.g., `[:data-format/y :data-format/x-y]`)
+`:chart` | a hash-map of keys common for all possible instances. At a minimum it must define `:type` (e.g., `{:type "bar"`)
+
+
 
 
 ### plot-options
@@ -87,4 +103,4 @@ At a minimum, `register-type` *must* return a hash-map with the following keys:
 > expects the data from the server to be in the correct format
 > (see [Managing Data Formats](managing-data-formats.md))
 
-> At a minimum, a function *must* be defined for the `:default` case
+> At a minimum, a function *MUST* be defined for the `:default` case
