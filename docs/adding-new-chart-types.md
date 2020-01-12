@@ -62,13 +62,10 @@ At a minimum, `register-type` *must* return a hash-map with the following keys:
 -----------------------|---------------------------------------------------------------------------
  `:chart-options`      | hash-map of minimal keys to send to Highcharts.
                        | (see [minimum chart-options]())
------------------------|---------------------------------------------------------------------------
  `:merge-plot-options` | hash-map defining "callout" functions to handle different `:/data-format`
                        | scenarios for creatins the correct `:plot-options`
------------------------|---------------------------------------------------------------------------
  `:conversions`        | hash-map defining "callout" functions to handle different `:/data-format`
                        | conversion scenarios
------------------------|---------------------------------------------------------------------------
 
 
 > The `register-type` function *MUST* defined.
