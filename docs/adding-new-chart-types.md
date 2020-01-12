@@ -47,23 +47,42 @@ operation (see `:component-did-update` in [make-chart/make-chart](../src/cljs/va
 Highcharts-based content is defined in Vanilla in a single namespace with 3 specific functions:
 
 1. `(defn register-type [])` (required)
-2. `(defn plot-option [chart-config data options])` (optional)
-3. `(defn conversion [ chart-config data options])` (optional)
+2. `(defn plot-option [chart-config data options])` (optional, multiple implementations supported)
+3. `(defn conversion [ chart-config data options])` (optional, multiple implementations supported)
 
 > Note: `(plot-options ...)` and `(conversion ...)` can actually be named _anything_ you like as they
 > are attached to the registration as parameter, much like callbacks.
 
 ### register-type
 
-`(register-type)` adds
+`register-type` adds the basic chart definition to a registry, making it available for use in widget.
+At a minimum, `register-type` *must* return a hash-map with the following keys:
 
-> The `register-type` function *MUST* defind.
+
+|-----------------------|---------------------------------------------------------------------------|
+| `:chart-options`      | hash-map of minimal keys to send to Highcharts.                           |
+|                       | (see [minimum chart-options]())                                           |
+|-----------------------|---------------------------------------------------------------------------|
+| `:merge-plot-options` | hash-map defining "callout" functions to handle different `:/data-format` |
+|                       | scenarios for creatins the correct `:plot-options`                        |
+|-----------------------|---------------------------------------------------------------------------|
+| `:conversions`        | hash-map defining "callout" functions to handle different `:/data-format` |
+|                       | conversion scenarios                                                      |
+|-----------------------|---------------------------------------------------------------------------|
+
+
+> The `register-type` function *MUST* defined.
 
 
 ### plot-options
 
+`plot-options`, regardless of what you name it,
+
+
 > The make-chart namespace provides a default implementation: `default-plot-options` which returns
 > an empty hash-map if this is sufficient
+
+> At a minimum, a function *must* be defined for the `:default` case
 
 ###
 
@@ -72,3 +91,5 @@ Highcharts-based content is defined in Vanilla in a single namespace with 3 spec
 > an the unmodified value of `[:data :series]` for cases where the widget already understands and
 > expects the data from the server to be in the correct format
 > (see [Managing Data Formats](managing-data-formats.md))
+
+> At a minimum, a function *must* be defined for the `:default` case
