@@ -15,20 +15,20 @@ This single-page application (SPA) provides a number of graphical widgets based 
 > 0.3.0-SNAPSHOT. Basic working version with Add/Remove Widgets. Some of the widget/data-source combination don't work
 > but there are such wide-spread changes, we need to draw the line somewhere
 
-> 0.3.1-SNAPSHOT. clicking on a widget header allows for chagning the header color. SImilarly, clicking on the title  
+> 0.3.1-SNAPSHOT. clicking on a widget header allows for changing the header color. Similarly, clicking on the title
 > text allow the user to change the color of the text
 
 ## Roadmap
 
 ### Client-side
 
-- [] improve chart conversions between the various :data-format/<> types
+- [ ] improve chart conversions between the various :data-format/<> types
 - [x] user picker for colors and title, using \[cljsjs/react-color "2.13.8-0"\] [link](http://casesandberg.github.io/react-color/)
-- [] move some of the viz stuff (labels, etc) to the service definition/data-message to make more declarative (mix-in? where?)
-- [] figure out how to let the user pick the charts in a stacked or side-by-side (DROPPED)
-- [] migrate the widget defs to the server and load them dynamically (can this be done with a push from the server? that way the client will get the updates as soon as we put them on the server-farm)
-- [] login
-- [] generative testing of the client
+- [ ] move some of the viz stuff (labels, etc) to the service definition/data-message to make more declarative (mix-in? where?)
+- [ ] figure out how to let the user pick the charts in a stacked or side-by-side (DROPPED)
+- [ ] migrate the widget defs to the server and load them dynamically (can this be done with a push from the server? that way the client will get the updates as soon as we put them on the server-farm)
+- [ ] login
+- [ ] generative testing of the client
 
 ### Services-side
 - login
@@ -63,6 +63,7 @@ This single-page application (SPA) provides a number of graphical widgets based 
  ```
 
 Here is the document it generates:
+
 [marginalia-uberdoc](./docs/uberdoc.html)
 
 
