@@ -144,7 +144,7 @@
   (let [version   (rf/subscribe [:version])
         is-active (r/atom false)]
     (fn []
-      [:container.level {:width "100%"}
+      [:div.container.level.is-fluid {:width "100%"}
        [:div.level-left.has-text-left
         [:h6.subtitle.is-6 @version]]
        [:div.level-right.has-text-right
