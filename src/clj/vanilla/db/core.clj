@@ -114,8 +114,20 @@
 
   (get-services vanilla-db)
 
+  (create-layout-table vanilla-db)
 
-
+  ;(create-layout!
+  ;  vanilla-db
+  ;  {:key         "1"
+  ;   :name        :area-widget
+  ;   :ret_types   [:data-format/x-y-n]
+  ;   :basis       :chart
+  ;   :data-source :spectrum-traces
+  ;   :type        :area-chart
+  ;   :icon        "/images/area-widget.png"
+  ;   :label       "Area"
+  ;   :data-grid   {:x 0 :y 0 :w 4 :h 14}
+  ;   :options     {:viz/title    "Channels (area)"}})
 
 
 

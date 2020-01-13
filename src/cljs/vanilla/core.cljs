@@ -35,16 +35,16 @@
 
 (defn test-layout [
                   {:widgets {
-                      {:ret_types   [:data-format/x-y-n]}
-                      {:key         "1"}
-                      {:name        :area-widget}
-                      {:basis       :chart}
-                      {:data-source :spectrum-traces}
-                      {:type        :area-chart}
-                      {:icon        "/images/area-widget.png"}
-                      {:label       "Area"}
-                      {:data-grid   {[:x 0] [:y 0] [:w 4] [:h 14]}}
-                      {:options     {:viz/title             "Channels (area)"
+                      :key         "1"
+                      :name        :area-widget
+                      :ret_types   [:data-format/x-y-n]
+                      :basis       :chart
+                      :data-source :spectrum-traces
+                      :type        :area-chart
+                      :icon        "/images/area-widget.png"
+                      :label       "Area"
+                      :data-grid   {:x 0 :y 0 :w 4 :h 14}
+                      :options     {:viz/title             "Channels (area)"
                                      :viz/allowDecimals     false
                                      :viz/x-title           "frequency"
                                      :viz/y-title           "power"
@@ -52,7 +52,7 @@
                                      :viz/banner-text-color "white"
                                      :viz/style-name        "widget"
                                      :viz/animation         false
-                                     :viz/tooltip           {:followPointer true}}}}}])
+                                     :viz/tooltip           {:followPointer true}}}}])
 
 
 
