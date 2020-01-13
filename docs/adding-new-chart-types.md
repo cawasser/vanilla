@@ -39,7 +39,7 @@ For example, Bar Chart is basically:
 ```
 
 Notice that the data is not defined in this structure. The data is merged in as part of the rendering
-operation (see `:component-did-update` in [make-chart/make-chart](../src/cljs/vanilla/widgets/make_chart.cljs))
+operation (see `:component-did-update` in [`(make-chart/make-chart)`](../src/cljs/vanilla/widgets/make_chart.cljs))
 
 
 ## API
@@ -53,7 +53,7 @@ Highcharts-based content is defined in Vanilla in a single namespace with 3 spec
 > Note: `(plot-options ...)` and `(conversion ...)` can actually be named _anything_ you like as they
 > are attached to the registration as parameter, much like callbacks.
 
-### register-type
+### register-type (pending Bl-xxx)
 
 `register-type` adds the basic chart definition to a registry, making it available for use in widget.
 
@@ -89,7 +89,7 @@ key | content/usage
 
 ### plot-options (pending Bl-xxx)
 
-The purpose of `plot-options`, regardless of what you name it, is to provide the correct :plot-options key/hash-map
+The purpose of `plot-options`, regardless of what you name it, is to provide the correct `:plot-options` key/hash-map
 when working with a `:data-format` other than the default for the chart type. For example, `bar-chart` is designed
 to support `:data-format/x-y`. But it can also work with `:data-format\y`, but only by parsing the data source hash-map and
 extracting appropriate data to build the correct `:plot-options`. This function (or functions if you support many kinds of  
@@ -103,11 +103,11 @@ extracting appropriate data to build the correct `:plot-options`. This function 
 
 ### conversion (pending Bl-xxx)
 
-The purpose of `conversion`, regardless of what you name it, is to provide the correct :plot-options key/hash-map
+The purpose of `conversion`, regardless of what you name it, is to provide the correct `[:data :series]` key/hash-map
 when working with a `:data-format` other than the default for the chart type. For example, `bar-chart` is designed
 to support `:data-format/x-y`. But it can also work with `:data-format\y`, but only by parsing the data source hash-map and
-extracting appropriate data to build the correct `[:data :series]`. This function (or functions if you support many kinds of  
-`:data-format`s) provide that data manipulations.
+extracting appropriate data to build the correct `[:data :series]`. This function (or functions if you support many kinds  
+of `:data-format`s) provide that data manipulations.
 
 
 > The make-chart namespace provides a default implementation, `default-conversion`, which returns
