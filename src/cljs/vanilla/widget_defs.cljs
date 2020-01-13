@@ -164,7 +164,7 @@
                :basis     :chart
                :type      :sankey-chart
                ;:data-source :sankey-service
-               :ret_types [:data-format/from-to-n :data-format/from-to-e :data-format/x-y-n :data-format/x-y-e]
+               :ret_types [:data-format/from-to-n :data-format/from-to-e]
                :icon      "/images/sankey-widget.png"
                :label     "Sankey"
                :options   {:viz/title             "Sankey"

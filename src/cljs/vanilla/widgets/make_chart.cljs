@@ -31,16 +31,18 @@
 (defn- get-conversion [chart-type data options]
   (let [chart-reg-entry @(rf/subscribe [:hc-type chart-type])
         format-type     (get-in data [:data :data-format])
-        conversions     (get chart-reg-entry :conversions)
+        conversions     (:conversions chart-reg-entry)
         conv-fn         (get conversions format-type (get conversions :default default-conversion))
-        ret             (conv-fn chart-type data options)]
+        ret             (if data
+                          (conv-fn chart-type data options)
+                          [])]
 
-    ;(prn "get-conversion " chart-type "/" format-type
-    ;  " //// (data)" data
-    ;  " //// (chart-reg-entry)" chart-reg-entry
-    ;  " //// (conversions)" conversions
-    ;  " //// (conv-fn)" conv-fn
-    ;  " //// (ret)" ret)
+    (prn "get-conversion " chart-type "/" format-type
+;      " //// (data)" data
+      " //// (chart-reg-entry) " chart-reg-entry
+      " //// (conversions) " conversions
+      " //// (conv-fn) " conv-fn
+      " //// (ret) " ret)
 
     ret))
 
@@ -105,11 +107,12 @@
                      (assoc chart-config :series converted)
                      chart-config)]
 
-    ;(prn "merge-configs " chart-type
-    ;  " //// (chart-config) " chart-config
-    ;  " //// (data) " data
-    ;  " //// (converted)" converted
-    ;  " //// (ret)" ret)
+    (prn "merge-configs " chart-type
+      " //// (chart-config) " chart-config
+      " //// (data) " data
+      " //// (converted)" converted
+      " //// (ret)" ret)
+
 
     ret))
 
@@ -133,6 +136,19 @@
     ;  " //// (ret)" ret)
 
     ret))
+
+(defn add-the-n-conversion [chart-type data options]
+  (let [source (get-in data [:data :series 0 :data])
+        ret (mapv (fn [[x y]] [x y 1]) source)]
+
+    (prn "add-the-n-conversion " chart-type
+      " //// (source) " source
+      " //// (ret)" ret)
+
+    [{:data ret}]))
+
+
+
 
 
 (defn register-type
@@ -203,5 +219,16 @@
 ;;;;;;;;;;;;;;;;;
 
 (comment
+
+  {:chart-options {:chart/type :dependency-chart,
+                   :chart/supported-formats [:data-format/from-to-n :data-format/from-to-e :data-format/from-to],
+                   :chart {:type "dependencywheel"},
+                   :plot-options {:dataLabels {:color "#333",
+                                               :textPath {:enabled true, :attributes {:dy 5}},
+                                               :distance 10},
+                                  :size "95%"}},
+   :merge-plot-option {:default ""},
+   :conversions {:default "",
+                 :data-format/from-to ""}}
 
   ())

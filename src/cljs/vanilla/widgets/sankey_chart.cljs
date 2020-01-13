@@ -31,7 +31,7 @@
   (mc/register-type
     :sankey-chart {:chart-options
                    {:chart/type              :sankey-chart
-                    :chart/supported-formats [:data-format/from-to-n :data-format/from-to-e :data-format/x-y-n :data-format/x-y-e]
+                    :chart/supported-formats [:data-format/from-to-n :data-format/from-to-e]
                     :chart                   {:type "sankey"}}
 
                    :merge-plot-option
