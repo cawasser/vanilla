@@ -33,6 +33,29 @@
 
 (enable-console-print!)
 
+(defn test-layout [
+                  {:widgets {
+                      {:ret_types   [:data-format/x-y-n]}
+                      {:key         "1"}
+                      {:name        :area-widget}
+                      {:basis       :chart}
+                      {:data-source :spectrum-traces}
+                      {:type        :area-chart}
+                      {:icon        "/images/area-widget.png"}
+                      {:label       "Area"}
+                      {:data-grid   {[:x 0] [:y 0] [:w 4] [:h 14]}}
+                      {:options     {:viz/title             "Channels (area)"
+                                     :viz/allowDecimals     false
+                                     :viz/x-title           "frequency"
+                                     :viz/y-title           "power"
+                                     :viz/banner-color      "blue"
+                                     :viz/banner-text-color "white"
+                                     :viz/style-name        "widget"
+                                     :viz/animation         false
+                                     :viz/tooltip           {:followPointer true}}}}}])
+
+
+
 
 
 
@@ -101,7 +124,8 @@
               :width       width
               :row-height  (/ height rows)
               :breakpoints {:lg 2048 :md 1024 :sm 768 :xs 480 :xxs 0}
-              :data        @(rf/subscribe [:widgets])
+              :data        [test-layout]
+              ;:data        @(rf/subscribe [:widgets])
               :on-change   #();prn (str "layout change. prev " %1 " //// new " %2))
               :item-props  {:class "widget-component"}}])
 
