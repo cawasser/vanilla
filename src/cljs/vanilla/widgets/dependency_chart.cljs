@@ -36,7 +36,7 @@
   (mc/register-type
     :dependency-chart {:chart-options
                        {:chart/type              :dependency-chart
-                        :chart/supported-formats [:data-format/from-to :data-format/from-to-n]
+                        :chart/supported-formats [:data-format/from-to-n :data-format/from-to-e :data-format/from-to]
                         :chart                   {:type "dependencywheel"}}
 
                        :merge-plot-option

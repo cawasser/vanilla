@@ -5,7 +5,7 @@
   (prn "Heatmap Service")
 
   {:title "Heatmap Data"
-   :data-format :data-format/x-y-z
+   :data-format :data-format/x-y-n
 
    :series  [{:name        "Fruit Production per Continent"
               :borderWidth 1

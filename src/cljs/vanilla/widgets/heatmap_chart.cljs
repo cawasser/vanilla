@@ -49,7 +49,7 @@
   (mc/register-type
     :heatmap-chart
     {:chart-options     {:chart/type              :heatmap-chart
-                         :chart/supported-formats [:data-format/y :data-format/x-y]
+                         :chart/supported-formats [:data-format/x-y-n :data-format/x-y-e :data-format/lat-lon-n :data-format/lat-lon-e]
                          :chart                   {:type            "heatmap"
                                                    :zoomType        "x"
                                                    :marginTop       40

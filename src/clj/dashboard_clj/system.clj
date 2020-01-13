@@ -15,7 +15,7 @@
    :server (component/using (webserver/new-webserver routes/->http-handler http-port) [:websocket])
    :scheduler (scheduler/new-scheduler data-sources)
    ; TODO - reactivate nrepl for development
-   ; :nrepl (nrepl/start-server :port nrepl-port)
+   :nrepl (nrepl/start-server :port nrepl-port)
    :database (db/setup-database)))
 
 (defn start [http-port nrepl-port data-sources]

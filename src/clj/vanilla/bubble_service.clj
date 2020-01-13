@@ -5,7 +5,7 @@
   (prn "Bubble Service")
 
   {:title "Bubble Data"
-   :data-format :x-y-z
+   :data-format :x-y-n
 
    ; notice how we can mix formats - some data sets can be maps,
    ; while others can be vectors with the keys in a separate key,

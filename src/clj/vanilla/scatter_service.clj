@@ -4,7 +4,7 @@
   (prn "Scatter Service Data")
 
   {:title       "Scatter Service Data"
-   :data-format :data-format/x-y
+   :data-format [:data-format/x-y]
    :src/x-title "Height (cm)"
    :src/y-title "Weight (kg)"
 

@@ -5,7 +5,7 @@
   (prn "Spectrum Traces")
 
   {:title           "Spectrum Traces"
-   :data-format     :data-format/y
+   :data-format     :data-format/x-y
    :series          (db/spectrum-data)
    :src/chart-title "dB"
    :src/x-title     "frequency"
@@ -35,14 +35,14 @@
   (prn "Power Data")
 
   {:title       "Power Data"
-   :data-format :data-format/x-y
+   :data-format :data-format/label-y
    :series      (db/power-data)})
 
 (defn heatmap-data []
   (prn "Heatmap Data")
 
   {:title       "Heatmap Data"
-   :data-format :data-format/lat-lon-n
+   :data-format :data-format/x-y-n
    :series      (db/heatmap-data)})
 
 ;

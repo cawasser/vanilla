@@ -17,6 +17,20 @@
                  :area   {:dataLabels {:enabled (get options :viz/dataLabels false)
                                        :format  (get options :viz/labelFormat "")}}}})
 
+;;;;;;;;      y -> x-y conversion function (y-conversion)   ;;;;;;;;;;;;;
+
+(defn y-conversion [chart-type d options]
+  (let [s (get-in d [:data :series])
+        ret (for [{:keys [name data]} s]
+              (assoc {}
+                :name name
+                :data (into []
+                            (for [x-val (range 0 (count data))]
+                              [x-val (get data x-val) 1]))))]
+
+    (prn "y-conversion " ret)
+    (into [] ret)))
+
 
 
 ;;;;;;;;;;;;;;
@@ -26,7 +40,7 @@
 (defn register-type []
   (mc/register-type
     :area-chart {:chart-options     {:chart/type              :area-chart
-                                     :chart/supported-formats [:data-format/y :data-format/x-y]
+                                     :chart/supported-formats [:data-format/x-y :data-format/y]
                                      :chart                   {:type     "area"
                                                                :zoomType "x"}
                                      :yAxis                   {:min    0
@@ -35,4 +49,5 @@
 
                  :merge-plot-option {:default plot-options}
 
-                 :conversions       {:default mc/default-conversion}}))
+                 :conversions       {:default mc/default-conversion
+                                     :data-format/y y-conversion}}))

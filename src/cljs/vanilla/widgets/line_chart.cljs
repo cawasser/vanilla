@@ -47,7 +47,7 @@
 (defn register-type []
   (mc/register-type
     :line-chart {:chart-options     {:chart/type              :line-chart
-                                     :chart/supported-formats [:data-format/y :data-format/x-y]
+                                     :chart/supported-formats [:data-format/x-y :data-format/y]
                                      :chart                   {:type     "line"
                                                                :zoomType "x"}
                                      :yAxis                   {:min    0

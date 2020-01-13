@@ -6,7 +6,7 @@ create table services (
   id              VARCHAR(20) PRIMARY KEY,
   keyword         VARCHAR(30),
   name            VARCHAR(30),
-  ret_types       VARCHAR(30),
+  ret_type        VARCHAR(30),
   read_fn         VARCHAR(128),
   doc_string      VARCHAR(300));
 
@@ -21,13 +21,13 @@ drop table if exists services;
 -- :doc creates a new service record
 INSERT INTO services
 (id, keyword, name, ret_types, doc_string)
-VALUES (:id, :keyword, :name, :ret_types, :read_fn, :doc_string);
+VALUES (:id, :keyword, :name, :ret_type, :read_fn, :doc_string);
 
 
 
 -- :name create-services! :! :n
 -- :doc creates multiple new service record
-INSERT INTO services (id, keyword, name, ret_types, read_fn, doc_string)
+INSERT INTO services (id, keyword, name, ret_type, read_fn, doc_string)
 values :tuple*:services;
 
 

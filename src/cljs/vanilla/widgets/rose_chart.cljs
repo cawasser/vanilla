@@ -38,7 +38,7 @@
 (defn register-type []
   (mc/register-type
     :rose-chart {:chart-options     {:chart/type              :rose-chart
-                                     :chart/supported-formats [:data-format/y :data-format/x-y]
+                                     :chart/supported-formats [:data-format/label-y :data-format/e-y]
                                      :chart                   {:type     "column"
                                                                :polar    "true"
                                                                :zoomType "x"}

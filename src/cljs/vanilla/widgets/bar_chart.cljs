@@ -42,7 +42,7 @@
 (defn register-type []
   (mc/register-type
     :bar-chart {:chart-options     {:chart/type              :bar-chart
-                                    :chart/supported-formats [:data-format/y :data-format/x-y]
+                                    :chart/supported-formats [:data-format/x-y :data-format/y]
                                     :chart                   {:type     "bar"
                                                               :zoomType "x"}
                                     :yAxis                   {:min    0

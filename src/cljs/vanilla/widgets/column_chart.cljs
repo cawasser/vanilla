@@ -29,7 +29,7 @@
 (defn register-type []
   (mc/register-type
     :column-chart {:chart-options     {:chart/type              :column-chart
-                                       :chart/supported-formats [:data-format/y :data-format/x-y]
+                                       :chart/supported-formats [:data-format/x-y :data-format/y]
                                        :chart                   {:type     "column"
                                                                  :zoomType "x"}
                                        :yAxis                   {:min    0
