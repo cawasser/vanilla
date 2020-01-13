@@ -8,6 +8,8 @@
     [vanilla.widget-defs :as defs]
     [ajax.core :refer [GET POST] :as ajax]
 
+    [day8.re-frame.tracing :refer-macros [fn-traced]]
+
     [vanilla.add-widget-model :as modal]
 
     [vanilla.grid :as grid]
@@ -33,28 +35,40 @@
 
 (enable-console-print!)
 
-(defn test-layout [
-                  {:widgets {
-                      :key         "1"
-                      :name        :area-widget
-                      :ret_types   [:data-format/x-y-n]
-                      :basis       :chart
-                      :data-source :spectrum-traces
-                      :type        :area-chart
-                      :icon        "/images/area-widget.png"
-                      :label       "Area"
-                      :data-grid   {:x 0 :y 0 :w 4 :h 14}
-                      :options     {:viz/title             "Channels (area)"
-                                     :viz/allowDecimals     false
-                                     :viz/x-title           "frequency"
-                                     :viz/y-title           "power"
-                                     :viz/banner-color      "blue"
-                                     :viz/banner-text-color "white"
-                                     :viz/style-name        "widget"
-                                     :viz/animation         false
-                                     :viz/tooltip           {:followPointer true}}}}])
+
+;add a new event that just takes a widget vector
+(rf/reg-event-db
+  :add-all-widgets
+  (fn-traced [db [_ new-widget-vector]]
+     (let [next-id (get-in new-widget-vector [:key])]
+
+       (do
+         (prn ":add-all-widgets ///" new-widget-vector)
+
+         (assoc db
+           :widgets (conj (:widgets db) new-widget-vector)
+           :next-id (inc next-id))))))
 
 
+(def test-layout
+    {:ret_types [:data-format/x-y]
+      :key "1"
+      :name :area-widget
+      :basis :chart
+      :data-source :spectrum-traces
+      :type :area-chart
+      :icon "/images/area-widget.png"
+      :label "Area"
+      :data-grid {:x 0, :y 0, :w 5, :h 15}
+      :options {:viz/style-name "widget"
+                :viz/y-title "power"
+                :viz/x-title "frequency"
+                :viz/allowDecimals false
+                :viz/banner-color "blue"
+                :viz/tooltip {:followPointer true}
+                :viz/title "Channels (area)"
+                :viz/banner-text-color "white"
+                :viz/animation false}})
 
 
 
@@ -124,8 +138,8 @@
               :width       width
               :row-height  (/ height rows)
               :breakpoints {:lg 2048 :md 1024 :sm 768 :xs 480 :xxs 0}
-              :data        [test-layout]
-              ;:data        @(rf/subscribe [:widgets])
+              ;:data        [test-layout]
+              :data        @(rf/subscribe [:widgets])
               :on-change   #();prn (str "layout change. prev " %1 " //// new " %2))
               :item-props  {:class "widget-component"}}])
 
@@ -174,6 +188,11 @@
     (rf/dispatch-sync [:widget-type w]))
 
   (d/connect-to-data-sources)
+
+  ;(rf/dispatch [:add-widget :area-widget :spectrum-traces])
+  ;(rf/dispatch [:add-widget :bubble-widget :bubble-service])
+  (rf/dispatch [:add-all-widgets test-layout])
+
   (r/render home-page (.getElementById js/document "app")))
 
 
