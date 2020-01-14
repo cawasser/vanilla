@@ -8,7 +8,7 @@
     [vanilla.widget-defs :as defs]
     [ajax.core :refer [GET POST] :as ajax]
 
-    [vanilla.add-widget-model :as modal]
+    [vanilla.add-widget-modal :as modal]
 
     [vanilla.grid :as grid]
 
