@@ -1,4 +1,4 @@
-(defproject vanilla "0.3.0-SNAPSHOT"
+(defproject vanilla "0.3.1-SNAPSHOT"
   :description "Vanilla Dashboard - a simple dashboard built on dashboard-clj"
   :url ""
 
@@ -57,7 +57,9 @@
                  [com.layerware/hugsql "0.5.1"]
                  [org.xerial/sqlite-jdbc "3.30.1"]
                  [seancorfield/next.jdbc "1.0.12"]
-                 [org.clojure/tools.nrepl "0.2.13"]]
+                 [org.clojure/tools.nrepl "0.2.13"]
+
+                 [cljsjs/react-color "2.13.8-0"]]
 
   :min-lein-version "2.6.1"
 
