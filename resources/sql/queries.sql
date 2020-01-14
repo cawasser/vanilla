@@ -57,17 +57,28 @@ DELETE FROM services;
 -- :result :raw
 -- :doc Create widget layout table
 create table layout (
-  id              VARCHAR(20) PRIMARY KEY,
-  username        VARCHAR(30),
-  name            VARCHAR(30),
-  ret_types       VARCHAR(30),
-  basis           VARCHAR(30),
-  data_source     VARCHAR(30),
-  type            VARCHAR(30),
-  icon            VARCHAR(30),
-  label           VARCHAR(30),
-  data_grid       VARCHAR(30),
-  options         VARCHAR(128));
+  id                    VARCHAR(20) PRIMARY KEY,
+  username              VARCHAR(30),
+  name                  VARCHAR(30),
+  ret_types             VARCHAR(30),
+  basis                 VARCHAR(30),
+  data_source           VARCHAR(30),
+  type                  VARCHAR(30),
+  icon                  VARCHAR(30),
+  label                 VARCHAR(30),
+  data_grid             VARCHAR(30),
+  viz_style-name        VARCHAR(30),
+  viz_y-title           VARCHAR(30),
+  viz_x-title           VARCHAR(30),
+  viz_line-width        VARCHAR(30),
+  viz_data-labels       VARCHAR(30),
+  viz_label-format      VARCHAR(30),
+  viz_allow-decimals     VARCHAR(30),
+  viz_banner-color      VARCHAR(30),
+  viz_title             VARCHAR(30),
+  viz_icon              VARCHAR(30),
+  viz_slice-format      VARCHAR(30),
+  viz_banner-text-color VARCHAR(30),);
 
 
 
@@ -79,8 +90,14 @@ drop table if exists layout;
 -- :name create-layout! :! :n
 -- :doc creates a new layout record
 INSERT INTO services
-(id, username, name, ret_types, basis, data_source, type, icon, label, data_grid, options)
-VALUES (:id, :username, :name, :ret_types, :basis, :data_source, :type, :icon, :label, :data_grid, :options);
+(id, username, name, ret_types, basis, data_source, type, icon, label, data_grid,
+    viz_style-name, viz_y-title, viz_x-title, viz_line-width, viz_data-labels,
+    viz_label-format, viz_allow-decimals, viz_banner-color, viz_title, viz_icon,
+    viz_slice-format, viz_banner-text-color)
+VALUES (:id, :username, :name, :ret_types, :basis, :data_source, :type, :icon, :label, :data_grid,
+        :viz_style-name, :viz_y-title, :viz_x-title, :viz_line-width, :viz_data-labels,
+        :viz_label-format, :viz_allow-decimals, :viz_banner-color, :viz_title, :viz_icon,
+        :viz_slice-format, :viz_banner-text-color);
 
 
 -- :name get-layout :? :*

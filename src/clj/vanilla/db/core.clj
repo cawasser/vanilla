@@ -114,24 +114,6 @@
 
   (get-services vanilla-db)
 
-  (create-layout-table vanilla-db)
-
-  ;(create-layout!
-  ;  vanilla-db
-  ;  {:key         "1"
-  ;   :name        :area-widget
-  ;   :ret_types   [:data-format/x-y-n]
-  ;   :basis       :chart
-  ;   :data-source :spectrum-traces
-  ;   :type        :area-chart
-  ;   :icon        "/images/area-widget.png"
-  ;   :label       "Area"
-  ;   :data-grid   {:x 0 :y 0 :w 4 :h 14}
-  ;   :options     {:viz/title    "Channels (area)"}})
-
-
-
-
   (delete-all-services! vanilla-db)
 
   (delete-service! vanilla-db {:id "1000"})
@@ -143,6 +125,51 @@
 
 
   (drop-services-table vanilla-db)
+
+  ())
+
+
+; ***Layout table rich comment***
+(comment
+
+  (create-layout-table vanilla-db)
+
+  ;ret_types needs square brackets around it
+  ;data-grid needs curly braces around it
+  ;viz_tooltip(redundant) = {:followPointer true}
+  ;viz_animation(redundant) = false, defaults to false though
+  (create-layout!
+    vanilla-db
+    {:key         "1"
+     :name        :area-widget
+     :ret_types   :data-format/x-y-n
+     :basis       :chart
+     :data-source :spectrum-traces
+     :type        :area-chart
+     :icon        "/images/area-widget.png"
+     :label       "Area"
+     :data-grid   ":x 0 :y 0 :w 4 :h 14"
+     :viz_style-name        "widget"
+     :viz_y-title           "power"
+     :viz_x-title           "frequency"
+     :viz_line-width        NA
+     :viz_data-labels       NA
+     :viz_label-format      NA
+     :viz_allow-decimals    false
+     :viz_banner-color      "blue"
+     :viz_title             "Channels (area)"
+     :viz_icon              NA
+     :viz_slice-format      NA
+     :viz_banner-text-color "white"})
+
+
+  (get-layout vanilla-db)
+
+  (delete-all-layouts! vanilla-db)
+
+  (delete-layout! vanilla-db {:id "1"})
+
+  (drop-layout-table vanilla-db)
 
   ())
 
