@@ -87,7 +87,7 @@ key | content/usage
 
 
 
-### plot-options (pending Bl-xxx)
+### plot-options (pending Bl-137)
 
 The purpose of `plot-options`, regardless of what you name it, is to provide the correct `:plot-options` key/hash-map
 when working with a `:data-format` other than the default for the chart type. For example, `bar-chart` is designed
@@ -101,7 +101,7 @@ extracting appropriate data to build the correct `:plot-options`. This function 
 
 > At a minimum, a function *must* be defined for the `:default` case
 
-### conversion (pending Bl-xxx)
+### conversion (pending Bl-137)
 
 The purpose of `conversion`, regardless of what you name it, is to provide the correct `[:data :series]` key/hash-map
 when working with a `:data-format` other than the default for the chart type. For example, `bar-chart` is designed
