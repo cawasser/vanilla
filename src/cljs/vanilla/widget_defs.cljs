@@ -19,6 +19,16 @@
                            :viz/animation         false
                            :viz/tooltip           {:followPointer true}}}
 
+              {:name        :stoplight-widget
+               :basis       :simple
+               :type        :stoplight-chart
+               :data-source :health-and-status-data
+               :ret_types   [:data-format/entity]
+               :icon        "/images/stoplight-widget.png"
+               :label       "Stoplight"
+               :options     {:viz/title        "Status"
+                             :viz/banner-color "aqua"}}
+
               {:name      :bar-widget
                :basis     :chart
                :type      :bar-chart

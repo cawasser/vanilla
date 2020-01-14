@@ -13,7 +13,8 @@
 ;(prn "register-widget " type
 ;  " //// w " w))
 
-
+(defn build-simple [type data options]
+  (get widget-store type))
 
 (defn make-widget [name id chart-config]
 
@@ -30,6 +31,20 @@
      [:div {:style {:width "95%" :height "100%"}}
       [mc/make-chart chart-config data options]]]))
 
+
+(defn make-simple-widget [name id]
+
+  (prn "make-simple-widget " name "of type " id ".")
+
+  (fn [data options]
+
+    ;(prn "in widget " id " / " name
+    ;  ;" //// data " data
+    ;  " //// options " options)
+
+    [basic/basic-widget name data options
+     [:div {:style {:width "95%" :height "100%"}}
+      [build-simple id data options]]]))
 
 
 ;(defn make-stacked-widget [id [top-chart bottom-chart]]
@@ -88,6 +103,8 @@
 
     (condp = basis
       :chart (make-widget key type chart-config)
+
+      :simple (make-simple-widget key type)
 
       ;:stacked-chart (do
       ;                 ;(prn (str "calling make-stacked-widget " type
