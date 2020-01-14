@@ -57,7 +57,7 @@
      :keyword    ":spectrum-traces"
      :name       "Spectrum"
      :ret_types  "data-format/x-y"
-     :read_fn    ":vanilla.fetcher/spectrum-traces"
+     :read_fn    ":vanilla.spectrum-traces-service/spectrum-traces"
      :doc_string "returns power over frequency"})
 
 
@@ -65,7 +65,7 @@
     vanilla-db
     {:services
      [["1000" "spectrum-traces" "Spectrum Traces"
-       "data-format/x-y" "vanilla.fetcher/spectrum-traces"
+       "data-format/x-y" "vanilla.spectrum-traces-service/spectrum-traces"
        "returns power over frequency"]
 
       ["2000" "usage-data" "Usage Data"

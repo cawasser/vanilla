@@ -10,6 +10,7 @@
               [vanilla.scatter-service]
               [vanilla.stoplight-service]
               [vanilla.usage-24-hour-service]
+              [vanilla.spectrum-traces-service]
 
               [vanilla.service-deps :as deps])
 

@@ -4,7 +4,7 @@
 
 (def datasources
   [{:name     :spectrum-traces
-    :read-fn  :vanilla.fetcher/spectrum-traces}
+    :read-fn  :vanilla.spectrum-traces-service/fetch-data}
     ;:schedule {:in    [0 :seconds]
     ;           :every [10 :seconds]}}
 
