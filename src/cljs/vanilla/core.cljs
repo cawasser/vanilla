@@ -40,14 +40,14 @@
 (rf/reg-event-db
   :add-all-widgets
   (fn-traced [db [_ new-widget-vector]]
-     (let [next-id (get-in new-widget-vector [:key])]
+     ;(let [next-id (get-in new-widget-vector [:key])]
 
        (do
          (prn ":add-all-widgets ///" new-widget-vector)
 
          (assoc db
-           :widgets (conj (:widgets db) new-widget-vector)
-           :next-id (inc next-id))))))
+           :widgets (conj (:widgets db) new-widget-vector)))))
+           ;:next-id (inc next-id))))))
 
 
 (def test-layout
@@ -59,7 +59,7 @@
       :type :area-chart
       :icon "/images/area-widget.png"
       :label "Area"
-      :data-grid {:x 0, :y 0, :w 5, :h 15}
+      :data-grid {:x 0, :y 0, :w 4, :h 15}
       :options {:viz/style-name "widget"
                 :viz/y-title "power"
                 :viz/x-title "frequency"
@@ -69,6 +69,24 @@
                 :viz/title "Channels (area)"
                 :viz/banner-text-color "white"
                 :viz/animation false}})
+
+    ;{:ret_types [:data-format/x-y-n]
+    ;  :key "2"
+    ;  :name :bubble-widget
+    ;  :basis :chart
+    ;  :data-source :bubble-service
+    ;  :type :bubble-chart
+    ;  :icon "/images/bubble-widget.png"
+    ;  :label "Bubble"
+    ;  :data-grid {:x 4, :y 0, :w 5, :h 15}
+    ;  :options {:viz/title "Bubble"
+    ;            :viz/banner-color "darkgreen"
+    ;            :viz/banner-text-color "white"
+    ;            :viz/dataLabels true
+    ;            :viz/labelFormat "{point.name}"
+    ;            :viz/lineWidth 0
+    ;            :viz/animation false
+    ;            :viz/data-labels true}}])
 
 
 
@@ -138,7 +156,6 @@
               :width       width
               :row-height  (/ height rows)
               :breakpoints {:lg 2048 :md 1024 :sm 768 :xs 480 :xxs 0}
-              ;:data        [test-layout]
               :data        @(rf/subscribe [:widgets])
               :on-change   #();prn (str "layout change. prev " %1 " //// new " %2))
               :item-props  {:class "widget-component"}}])
