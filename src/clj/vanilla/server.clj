@@ -1,6 +1,6 @@
 (ns vanilla.server
     (:require [dashboard-clj.core :as dash]
-              [environ.core :refer [env]]
+              [vanilla.environment]
               [vanilla.fetcher]
 
               [vanilla.bubble-service]
@@ -19,8 +19,7 @@
 
 (defn start-dashboard[]
   (prn "server starting")
-  (dash/start deps/datasources {:port (Integer. (or (env :port) 5000))
-                                :nrepl-port (Integer. (or (env :nrepl-port) 7000))}))
+  (dash/start deps/datasources))
 
 (defn -main [& [port]]
   (start-dashboard))
