@@ -57,3 +57,8 @@ new widgets, just revised default layout
 
 > 0.2.2-SQLITE-A.R 005. updates to get both [Figwheel](https://github.com/bhauman/lein-figwheel) and [Uberjar](https://stackoverflow.com/questions/11947037/what-is-an-uber-jar) working
 
+> 0.3.0-SNAPSHOT. Basic working version with Add/Remove Widgets. Some of the widget/data-source combination don't work
+> but there are such wide-spread changes, we need to draw the line somewhere
+
+> 0.3.1-SNAPSHOT. clicking on a widget header allows for changing the header color. Similarly, clicking on the title
+> text allow the user to change the color of the text
