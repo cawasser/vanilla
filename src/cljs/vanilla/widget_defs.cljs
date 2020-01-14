@@ -21,7 +21,8 @@
 
               {:name        :stoplight-widget
                :basis       :simple
-               :type        :stoplight-chart
+               :type        :stoplight-widget
+               :build-fn    vanilla.widgets.stoplight-widget/make-widget
                :data-source :health-and-status-data
                :ret_types   [:data-format/entity]
                :icon        "/images/stoplight-widget.png"
@@ -59,19 +60,19 @@
                            :viz/animation         false
                            :viz/data-labels       true}}
 
-              {:name        :column-widget
-               :basis       :chart
-               :type        :column-chart
+              {:name      :column-widget
+               :basis     :chart
+               :type      :column-chart
                ;:data-source :spectrum-traces
-               :ret_types   [:data-format/x-y]
-               :icon        "/images/column-widget.png"
-               :label       "Column"
-               :options     {:viz/title        "Channels (column)"
-                             :viz/banner-color "yellow"
-                             :viz/line-width   0.5
-                             :viz/animation    false
-                             :viz/style-name   "widget"
-                             :viz/tooltip      {:followPointer true}}}
+               :ret_types [:data-format/x-y]
+               :icon      "/images/column-widget.png"
+               :label     "Column"
+               :options   {:viz/title        "Channels (column)"
+                           :viz/banner-color "yellow"
+                           :viz/line-width   0.5
+                           :viz/animation    false
+                           :viz/style-name   "widget"
+                           :viz/tooltip      {:followPointer true}}}
 
               {:name      :dependency-widget
                :basis     :chart

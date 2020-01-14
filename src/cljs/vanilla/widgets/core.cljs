@@ -3,18 +3,20 @@
             [vanilla.widgets.basic-widget :as basic]
             [vanilla.widgets.make-chart :as mc]))
 
-(def widget-store (atom {}))
+;(def widget-store (atom {}))
 
 ; TODO - is having a widget registry even worth doing?
 
-(defn register-widget [name w]
-  (swap! widget-store assoc name w))
+;(defn register-widget [name w]
+;  (swap! widget-store assoc name w))
 
 ;(prn "register-widget " type
 ;  " //// w " w))
 
-(defn build-simple [type data options]
-  (get widget-store type))
+;(defn build-simple [type data options]
+;  (get widget-store type))
+;
+
 
 (defn make-widget [name id chart-config]
 
@@ -32,62 +34,22 @@
       [mc/make-chart chart-config data options]]]))
 
 
-(defn make-simple-widget [name id]
-
-  (prn "make-simple-widget " name "of type " id ".")
-
-  (fn [data options]
-
-    ;(prn "in widget " id " / " name
-    ;  ;" //// data " data
-    ;  " //// options " options)
-
-    [basic/basic-widget name data options
-     [:div {:style {:width "95%" :height "100%"}}
-      [build-simple id data options]]]))
 
 
-;(defn make-stacked-widget [id [top-chart bottom-chart]]
-;
-;  ;(prn (str "make-stacked-widget " id
-;  ;                      "/" top-chart "/" bottom-chart))
-;
-;    (fn [data options]
-;
-;      ;(prn (str "composing stacked-chart " id
-;      ;                      " //// (data)" data
-;      ;                      " //// (options)" options))
-;
-;      [basic/basic-widget data options
-;
-;       [:div {:style {:width "95%" :height "65%"}}
-;        [mc/make-chart (get-config top-chart) data options]
-;
-;        [:div {:style {:width "100%" :height "65%"}}
-;         [mc/make-chart (get-config bottom-chart) data options]]]])))
-;
-;
-;(defn make-side-by-side-widget [id [left-chart right-chart]]
-;
-;  ;(prn (str "make-side-by-side-widget " id
-;  ;                      "/" left-chart "/" right-chart))
-;
-;    (fn [data options]
-;
-;      ;(prn (str "side-by-side-chart " id "/" left-chart "/" right-chart
-;      ;                      " //// (data)" data
-;      ;                      " //// (options)" options))
-;
-;      [basic/basic-widget data options
-;
-;       [:div.columns {:style {:height "100%" :width "100%" :marginTop "10px"}}
-;
-;        [:div.column.is-two-thirds {:style {:height "80%"}}
-;         [mc/make-chart (get-config left-chart) data options]]
-;
-;        [:div.column.is-one-third {:style {:height "80%"}}
-;         [mc/make-chart (get-config right-chart) data options]]]])))
-;
+(defn make-simple-widget [name type]
+
+  (let [widget @(rf/subscribe [:widget-type type])
+        build-fn (:build-fn widget)]
+
+    (prn "make-simple-widget " name "of type " type
+      " //// widget " widget
+      " //// build-fn " build-fn)
+
+    (fn [data options]
+
+      [basic/basic-widget name data options
+       [:div.container
+        (build-fn name data options)]])))
 
 
 
@@ -104,19 +66,7 @@
     (condp = basis
       :chart (make-widget key type chart-config)
 
-      :simple (make-simple-widget key type)
-
-      ;:stacked-chart (do
-      ;                 ;(prn (str "calling make-stacked-widget " type
-      ;                 ;                      "/" chart-types))
-      ;                 (make-stacked-widget type chart-types))
-      ;
-      ;:side-by-side-chart (do
-      ;                      ;(prn (str "calling make-side-by-side-widget " type
-      ;                      ;                      "/" chart-types))
-      ;                      (make-side-by-side-widget type chart-types))
-
-      ())))
+      :simple (make-simple-widget key type))))
 
 
 
@@ -127,7 +77,6 @@
   ;                   " //// options " options
   ;                   " //// props " props)
 
-  ; TODO: connect data-source once services are running
   (if data-source
     (let [data (rf/subscribe [:app-db data-source])]
 
