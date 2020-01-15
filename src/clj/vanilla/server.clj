@@ -1,7 +1,6 @@
 (ns vanilla.server
     (:require [dashboard-clj.core :as dash]
               [vanilla.environment]
-              [vanilla.fetcher]
 
               [vanilla.bubble-service]
               [vanilla.heatmap-service]
