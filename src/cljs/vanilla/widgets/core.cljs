@@ -69,7 +69,6 @@
       :simple (make-simple-widget key type))))
 
 
-
 (defn setup-widget [{:keys [key data-source type options] :as props}]
 
   ;(prn "setup-widget " key "/" type

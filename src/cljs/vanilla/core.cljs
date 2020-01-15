@@ -15,6 +15,7 @@
     ; needed to register all the highcharts types
     [vanilla.widgets.area-chart]
     [vanilla.widgets.stoplight-widget]
+    [vanilla.widgets.simple-text]
     [vanilla.widgets.bar-chart]
     [vanilla.widgets.bubble-chart]
     [vanilla.widgets.column-chart]
@@ -133,7 +134,6 @@
 
   ; TODO: replace individual HC registration calls with the data from the server
   (vanilla.widgets.area-chart/register-type)
-  ;(vanilla.widgets.stoplight-widget/register-type)
   (vanilla.widgets.bar-chart/register-type)
   (vanilla.widgets.bubble-chart/register-type)
   (vanilla.widgets.column-chart/register-type)

@@ -33,6 +33,17 @@
                :options     {:viz/title        "Status"
                              :viz/banner-color {:r 0x00 :g 0xff :b 0xff :a 1}}}
 
+              {:name        :simple-text-widget
+               :basis       :simple
+               :type        :simple-text-widget
+               :build-fn    vanilla.widgets.simple-text/make-widget
+               :data-source :health-and-status-data
+               :ret_types   [:data-format/entity]
+               :icon        "/images/simple-text-widget.png"
+               :label       "simple-text"
+               :options     {:viz/title        "Message"
+                             :viz/banner-color {:r 0x00 :g 0xff :b 0xff :a 1}}}
+
               {:name      :bar-widget
                :basis     :chart
                :type      :bar-chart

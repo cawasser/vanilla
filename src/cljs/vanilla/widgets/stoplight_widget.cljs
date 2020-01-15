@@ -1,7 +1,5 @@
 (ns vanilla.widgets.stoplight-widget
   (:require [reagent.core :as r :refer [atom]]
-    ;[dashboard-clj.widgets.core :as widget-common]
-            [vanilla.widgets.core :as widget-common]
             [vanilla.widgets.basic-widget :as basic]))
 
 
