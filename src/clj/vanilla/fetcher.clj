@@ -38,12 +38,12 @@
 ;   :data-format :data-format/x-y
 ;   :series      (db/power-data)})
 
-(defn heatmap-data []
-  (prn "Heatmap Data")
-
-  {:title       "Heatmap Data"
-   :data-format :data-format/lat-lon-n
-   :series      (db/heatmap-data)})
+;(defn heatmap-data []
+;  (prn "Heatmap Data")
+;
+;  {:title       "Heatmap Data"
+;   :data-format :data-format/lat-lon-n
+;   :series      (db/heatmap-data)})
 
 ;
 ; Use this function to create a Combo Chart

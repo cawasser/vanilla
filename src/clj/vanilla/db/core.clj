@@ -89,7 +89,7 @@
        "returns quantity of fruit sold"]
 
       ["7000" "heatmap-data" "Heatmap Data"
-       "data-format/x-y-n" "vanilla.fetcher/heatmap-data"
+       "data-format/x-y-n" "vanilla.heatmap-service/heatmap-data"
        "returns quantity of fruit sold per country"]
 
       ["8000" "health-and-status-data" "Health and Status"

@@ -42,11 +42,11 @@
 ; The second key "lat" is the latitude of the locations
 ; The third key "value" is the percentage of used resources at the location
 
-(defn heatmap-data []
-  [{:name   "heatmap-1"
-    :data {:long (take 2000 (repeatedly #(+ -180 (rand 360))))
-           :lat  (take 2000 (repeatedly #(+ -90 (rand 180))))
-           :value (take 2000 (repeatedly #(+ 10.99999 (rand 50.99999))))}}])
+;(defn heatmap-data []
+;  [{:name   "heatmap-1"
+;    :data {:long (take 2000 (repeatedly #(+ -180 (rand 360))))
+;           :lat  (take 2000 (repeatedly #(+ -90 (rand 180))))
+;           :value (take 2000 (repeatedly #(+ 10.99999 (rand 50.99999))))}}])
 ;
 ; This function returns a data structure that shows the percentage free/used of a resource pool.
 ; The structure is returned as a map.
