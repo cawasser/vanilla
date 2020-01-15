@@ -57,7 +57,7 @@
      :keyword    ":spectrum-traces"
      :name       "Spectrum"
      :ret_types  "data-format/x-y"
-     :read_fn    ":vanilla.fetcher/spectrum-traces"
+     :read_fn    ":vanilla.spectrum-traces-service/spectrum-traces"
      :doc_string "returns power over frequency"})
 
 
@@ -65,11 +65,11 @@
     vanilla-db
     {:services
      [["1000" "spectrum-traces" "Spectrum Traces"
-       "data-format/x-y" "vanilla.fetcher/spectrum-traces"
+       "data-format/x-y" "vanilla.spectrum-traces-service/spectrum-traces"
        "returns power over frequency"]
 
       ["2000" "usage-data" "Usage Data"
-       "data-format/x-y-n" "vanilla.fetcher/usage-data"
+       "data-format/x-y-n" "vanilla.usage-data-service/usage-data"
        "returns usage data over time"]
 
       ["3000" "sankey-service" "Relationship Data"
@@ -85,11 +85,11 @@
        "returns interconnectivity data"]
 
       ["6000" "power-data" "Power Data"
-       "data-format/name-y" "vanilla.fetcher/power-data"
+       "data-format/name-y" "vanilla.power-data-service/power-data"
        "returns quantity of fruit sold"]
 
       ["7000" "heatmap-data" "Heatmap Data"
-       "data-format/x-y-n" "vanilla.fetcher/heatmap-data"
+       "data-format/x-y-n" "vanilla.heatmap-service/heatmap-data"
        "returns quantity of fruit sold per country"]
 
       ["8000" "health-and-status-data" "Health and Status"
