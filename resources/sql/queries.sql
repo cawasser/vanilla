@@ -60,25 +60,25 @@ create table layout (
   id                    VARCHAR(20) PRIMARY KEY,
   username              VARCHAR(30),
   name                  VARCHAR(30),
-  ret_types             VARCHAR(30),
+  ret_types             BLOB(30),
   basis                 VARCHAR(30),
   data_source           VARCHAR(30),
   type                  VARCHAR(30),
   icon                  VARCHAR(30),
   label                 VARCHAR(30),
-  data_grid             VARCHAR(30),
-  viz_style-name        VARCHAR(30),
-  viz_y-title           VARCHAR(30),
-  viz_x-title           VARCHAR(30),
-  viz_line-width        VARCHAR(30),
-  viz_data-labels       VARCHAR(30),
-  viz_label-format      VARCHAR(30),
-  viz_allow-decimals     VARCHAR(30),
-  viz_banner-color      VARCHAR(30),
+  data_grid             BLOB(30),
+  viz_style_name        VARCHAR(30),
+  viz_y_title           VARCHAR(30),
+  viz_x_title           VARCHAR(30),
+  viz_line_width        VARCHAR(30),
+  viz_data_labels       VARCHAR(30),
+  viz_label_format      VARCHAR(30),
+  viz_allow_decimals    VARCHAR(30),
+  viz_banner_color      VARCHAR(30),
   viz_title             VARCHAR(30),
   viz_icon              VARCHAR(30),
-  viz_slice-format      VARCHAR(30),
-  viz_banner-text-color VARCHAR(30),);
+  viz_slice_format      VARCHAR(30),
+  viz_banner_text_color VARCHAR(30));
 
 
 
@@ -89,15 +89,15 @@ drop table if exists layout;
 
 -- :name create-layout! :! :n
 -- :doc creates a new layout record
-INSERT INTO services
+INSERT INTO layout
 (id, username, name, ret_types, basis, data_source, type, icon, label, data_grid,
-    viz_style-name, viz_y-title, viz_x-title, viz_line-width, viz_data-labels,
-    viz_label-format, viz_allow-decimals, viz_banner-color, viz_title, viz_icon,
-    viz_slice-format, viz_banner-text-color)
+    viz_style_name, viz_y_title, viz_x_title, viz_line_width, viz_data_labels,
+    viz_label_format, viz_allow_decimals, viz_banner_color, viz_title, viz_icon,
+    viz_slice_format, viz_banner_text_color)
 VALUES (:id, :username, :name, :ret_types, :basis, :data_source, :type, :icon, :label, :data_grid,
-        :viz_style-name, :viz_y-title, :viz_x-title, :viz_line-width, :viz_data-labels,
-        :viz_label-format, :viz_allow-decimals, :viz_banner-color, :viz_title, :viz_icon,
-        :viz_slice-format, :viz_banner-text-color);
+        :viz_style_name, :viz_y_title, :viz_x_title, :viz_line_width, :viz_data_labels,
+        :viz_label_format, :viz_allow_decimals, :viz_banner_color, :viz_title, :viz_icon,
+        :viz_slice_format, :viz_banner_text_color);
 
 
 -- :name get-layout :? :*

@@ -10,7 +10,7 @@
 
     [day8.re-frame.tracing :refer-macros [fn-traced]]
 
-    [vanilla.add-widget-model :as modal]
+    [vanilla.add-widget-modal :as modal]
 
     [vanilla.grid :as grid]
 
@@ -64,7 +64,7 @@
                 :viz/y-title "power"
                 :viz/x-title "frequency"
                 :viz/allowDecimals false
-                :viz/banner-color "blue"
+                :viz/banner-color {:r 0x00 :g 0x00 :b 0xff :a 1}
                 :viz/tooltip {:followPointer true}
                 :viz/title "Channels (area)"
                 :viz/banner-text-color "white"

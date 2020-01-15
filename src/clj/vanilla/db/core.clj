@@ -140,27 +140,29 @@
   ;viz_animation(redundant) = false, defaults to false though
   (create-layout!
     vanilla-db
-    {:key         "1"
+    {:id          "123456"
+     :username    "APaine"
+     :key         "1"
      :name        :area-widget
-     :ret_types   :data-format/x-y-n
+     :ret_types   [:data-format/x-y-n]
      :basis       :chart
-     :data-source :spectrum-traces
+     :data_source :spectrum-traces
      :type        :area-chart
      :icon        "/images/area-widget.png"
      :label       "Area"
-     :data-grid   ":x 0 :y 0 :w 4 :h 14"
-     :viz_style-name        "widget"
-     :viz_y-title           "power"
-     :viz_x-title           "frequency"
-     :viz_line-width        NA
-     :viz_data-labels       NA
-     :viz_label-format      NA
-     :viz_allow-decimals    false
-     :viz_banner-color      "blue"
+     :data_grid   {:x 0 :y 0 :w 4 :h 14}
+     :viz_style_name        "widget"
+     :viz_y_title           "power"
+     :viz_x_title           "frequency"
+     :viz_line_width        "NA"
+     :viz_data_labels       "NA"
+     :viz_label_format      "NA"
+     :viz_allow_decimals    false
+     :viz_banner_color      {:r 0x00 :g 0x00 :b 0xff :a 1}
      :viz_title             "Channels (area)"
-     :viz_icon              NA
-     :viz_slice-format      NA
-     :viz_banner-text-color "white"})
+     :viz_icon              "NA"
+     :viz_slice_format      "NA"
+     :viz_banner_text_color {:r 255, :g 255, :b 255, :a 1}})
 
 
   (get-layout vanilla-db)
