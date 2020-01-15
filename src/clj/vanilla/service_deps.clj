@@ -14,7 +14,7 @@
     ;           :every [15 :seconds]}}
 
    {:name     :current-time
-    :read-fn  :vanilla.fetcher/current-time}
+    :read-fn  :vanilla.current-time-service/fetch-data}
     ;:params   []
     ;:schedule {:in    [0 :seconds]
     ;           :every [5 :seconds]}}

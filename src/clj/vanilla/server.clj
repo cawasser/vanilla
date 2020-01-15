@@ -12,6 +12,7 @@
               [vanilla.usage-24-hour-service]
               [vanilla.spectrum-traces-service]
               [vanilla.usage-data-service]
+              [vanilla.current-time-service]
 
               [vanilla.service-deps :as deps])
 
