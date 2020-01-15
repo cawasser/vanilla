@@ -35,7 +35,7 @@
    ;           :every [5 :seconds]}}
 
    {:name     :power-data
-    :read-fn  :vanilla.fetcher/power-data}
+    :read-fn  :vanilla.power-data-service/fetch-data}
     ;:schedule {:in    [0 :seconds]
     ;           :every [30 :seconds]}}
 

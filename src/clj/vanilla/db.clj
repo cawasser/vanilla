@@ -31,10 +31,10 @@
 ; The first key "frequency" is a representation of the frequency value
 ; The second key "power" is a representation of the power value in dBm
 
-(defn power-data []
-  [{:name   "dBM-1"
-    :data {:frequency (with-precision 1 (range 7900 8400 0.1))
-           :power (take 5000 (repeatedly #(+ -200 (rand 150))))}}])
+;(defn power-data []
+;  [{:name   "dBM-1"
+;    :data {:frequency (with-precision 1 (range 7900 8400 0.1))
+;           :power (take 5000 (repeatedly #(+ -200 (rand 150))))}}])
 
 ; This function retunrs a data structure that can be used to create a heatmap
 ; The structure is returned as a map of keys in "values" (long, lat & value) with 2000 values

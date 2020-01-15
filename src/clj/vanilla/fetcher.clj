@@ -31,12 +31,12 @@
 
 
 
-(defn power-data []
-  (prn "Power Data")
-
-  {:title       "Power Data"
-   :data-format :data-format/x-y
-   :series      (db/power-data)})
+;(defn power-data []
+;  (prn "Power Data")
+;
+;  {:title       "Power Data"
+;   :data-format :data-format/x-y
+;   :series      (db/power-data)})
 
 (defn heatmap-data []
   (prn "Heatmap Data")

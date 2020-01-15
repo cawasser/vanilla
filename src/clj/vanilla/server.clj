@@ -13,6 +13,7 @@
               [vanilla.spectrum-traces-service]
               [vanilla.usage-data-service]
               [vanilla.current-time-service]
+              [vanilla.power-data-service]
 
               [vanilla.service-deps :as deps])
 
