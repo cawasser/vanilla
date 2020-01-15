@@ -33,6 +33,11 @@
      :headers {"Content-Type" "text/json; charset=utf-8"}
      :body (str (json/write-str {:services (h/get-services)}))})
 
+  (GET "/layout" _
+    {:status 200
+     :headers {"Content-Type" "text/json; charset=utf-8"}
+     :body (str (json/write-str {:layout (h/get-layout)}))})
+
   (resources "/"))
 
 

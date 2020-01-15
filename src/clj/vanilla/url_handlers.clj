@@ -10,4 +10,6 @@
 (defn get-services []
   (db/get-services db/vanilla-db))
 
+(defn get-layout []
+  (db/get-layout db/vanilla-db))
 
