@@ -9,7 +9,7 @@
     ;           :every [10 :seconds]}}
 
    {:name     :usage-data
-    :read-fn  :vanilla.fetcher/usage-data}
+    :read-fn  :vanilla.usage-data-service/fetch-data}
     ;:schedule {:in    [0 :seconds]
     ;           :every [15 :seconds]}}
 

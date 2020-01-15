@@ -11,6 +11,7 @@
               [vanilla.stoplight-service]
               [vanilla.usage-24-hour-service]
               [vanilla.spectrum-traces-service]
+              [vanilla.usage-data-service]
 
               [vanilla.service-deps :as deps])
 

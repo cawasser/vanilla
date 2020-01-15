@@ -15,16 +15,16 @@
 ;   {:name   "trace-3"
 ;    :data (into [] (take 200 (repeatedly #(+ 5.0 (rand 5)))))}])
 
-(defn usage-data []
-  [{:keys ["name" "y" "selected" "sliced"]
-    :data [["Apples" (rand 100)]
-           ["Pears" (rand 100)]
-           ["Oranges" (rand 100)]
-           ["Plums" (rand 100)]
-           ["Bananas" (rand 100)]
-           ["Peaches" (rand 100)]
-           ["Prunes" (rand 100)]
-           ["Avocados" (rand 100)]]}])
+;(defn usage-data []
+;  [{:keys ["name" "y" "selected" "sliced"]
+;    :data [["Apples" (rand 100)]
+;           ["Pears" (rand 100)]
+;           ["Oranges" (rand 100)]
+;           ["Plums" (rand 100)]
+;           ["Bananas" (rand 100)]
+;           ["Peaches" (rand 100)]
+;           ["Prunes" (rand 100)]
+;           ["Avocados" (rand 100)]]}])
 
 ; This function returns a data structure that can be used to create a frequency vs. power line vanilla.widgets.line-chart
 ; The structure is returned as a map of keys in "values" (frequency & power) with 5000 values

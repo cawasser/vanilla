@@ -69,7 +69,7 @@
        "returns power over frequency"]
 
       ["2000" "usage-data" "Usage Data"
-       "data-format/x-y-n" "vanilla.fetcher/usage-data"
+       "data-format/x-y-n" "vanilla.usage-data-service/usage-data"
        "returns usage data over time"]
 
       ["3000" "sankey-service" "Relationship Data"
