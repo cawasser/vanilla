@@ -1,19 +1,19 @@
 (ns vanilla.db)
 
 
-(defn spectrum-data []
-  [{:name   "trace-1"
-    :data (into []
-                (take 200
-                      (repeatedly #(+ 5.0
-                                      (rand 5)))))}
-   {:name   "trace-2"
-    :data (into []
-                (take 200
-                      (repeatedly #(+ 5.0
-                                      (rand 5)))))}
-   {:name   "trace-3"
-    :data (into [] (take 200 (repeatedly #(+ 5.0 (rand 5)))))}])
+;(defn spectrum-data []
+;  [{:name   "trace-1"
+;    :data (into []
+;                (take 200
+;                      (repeatedly #(+ 5.0
+;                                      (rand 5)))))}
+;   {:name   "trace-2"
+;    :data (into []
+;                (take 200
+;                      (repeatedly #(+ 5.0
+;                                      (rand 5)))))}
+;   {:name   "trace-3"
+;    :data (into [] (take 200 (repeatedly #(+ 5.0 (rand 5)))))}])
 
 (defn usage-data []
   [{:keys ["name" "y" "selected" "sliced"]
