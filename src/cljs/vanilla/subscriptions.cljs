@@ -50,7 +50,7 @@
   (rf/reg-sub
     :app-db
     (fn [db [sid & db-path]]
-      (prn ":app-db " db-path)
+      ;(prn ":app-db " db-path)
       (get-in db (flatten [:data-sources db-path])))))
 
 

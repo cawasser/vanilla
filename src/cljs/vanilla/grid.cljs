@@ -64,8 +64,8 @@
                                        :color            (get-in props [:options :viz/banner-text-color] "black")}})
                  content]]
 
-    (prn "widget-wrapper "
-      " //// props " props)
+    ;(prn "widget-wrapper "
+    ;  " //// props " props)
       ;" //// data " data
       ;" //// content " content
       ;" //// ret " ret)
@@ -93,10 +93,10 @@
      :reagent-render
      (fn [{:keys [id data width row-height cols breakpoints item-props on-change empty-text] :as props}]
 
-       (prn (str "grid render args " args
-              " //// props " props
-              " //// item-props" item-props
-              " //// data " data))
+       ;(prn (str "grid render args " args
+       ;       " //// props " props
+       ;       " //// item-props" item-props
+       ;       " //// data " data))
 
        [:div.grid-container
         (into [:> js/ReactGridLayout.Responsive {:id              id

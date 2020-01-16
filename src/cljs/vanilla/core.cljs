@@ -37,15 +37,15 @@
 (enable-console-print!)
 
 
-;TODO make this list over multiple
-;add a new event that just takes a widget vector
+
 (rf/reg-event-db
   :set-layout
   (fn-traced [db [_ layout-data]]
+     (prn ":SET-layout " layout-data)
 
-       (prn ":set-layout " (:layout layout-data))
+     (let [de-stringed (mapv #(into {} (for [[k v] %] [k (edn/read-string v)])) (:layout layout-data))]
 
-       (assoc db :widgets (:layout layout-data))))
+        (assoc db :widgets de-stringed))))
 
 
 (enable-console-print!)
@@ -153,10 +153,6 @@
     (rf/dispatch-sync [:widget-type w]))
 
   (d/connect-to-data-sources)
-
-  ;(rf/dispatch [:add-widget :area-widget :spectrum-traces])
-  ;(rf/dispatch [:add-widget :bubble-widget :bubble-service])
-  ;(rf/dispatch [:add-all-widgets test-layout])
 
   (r/render home-page (.getElementById js/document "app")))
 

@@ -61,9 +61,9 @@
 
 (defn basic-widget [name data options custom-content]
 
-  (prn "basic-widget " name
-    " //// options " options
-    " //// custom-content " custom-content)
+  ;(prn "basic-widget " name
+  ;  " //// options " options
+  ;  " //// custom-content " custom-content)
 
 
   (let [show-title-picker  (r/atom false)
@@ -73,10 +73,10 @@
 
     (fn [name data options custom-content]
 
-      (prn "INSIDE basic-widget " name
-        " //// data " data
-        " //// options " options
-        " //// custom-content " custom-content)
+      ;(prn "INSIDE basic-widget " name
+      ;  " //// data " data
+      ;  " //// options " options
+      ;  " //// custom-content " custom-content)
 
 
       [:div {:class "vanilla.widgets.line-chart container"

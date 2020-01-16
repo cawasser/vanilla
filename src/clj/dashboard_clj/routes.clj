@@ -33,6 +33,8 @@
      :headers {"Content-Type" "text/json; charset=utf-8"}
      :body (str (json/write-str {:services (h/get-services)}))})
 
+
+  ;TODO test removing the write-str here and put the de-string back in url handler
   (GET "/layout" _
     {:status 200
      :headers {"Content-Type" "text/json; charset=utf-8"}
