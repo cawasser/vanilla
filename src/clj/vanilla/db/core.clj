@@ -191,17 +191,24 @@
 
   (get-layout vanilla-db)
 
+  (save-layout! vanilla-db
+                {:layout
+                 [["123" "APaine" ":area-widget" "[:data-format/x-y]"
+                   ":chart" ":spectrum-traces" ":area-chart"
+                   "\"/images/area-widget.png\"" "\"Area\"" "{:x 0, :y 0, :w 4, :h 14}"
+                   "#:viz{:style-name \"widget\", :animation false, :x-title \"frequency\", :banner-text-color {:r 255, :g 255, :b 255, :a 1}, :title \"Channels (area)\", :allowDecimals false, :banner-color {:r 0, :g 0, :b 255, :a 1}, :y-title \"power\", :tooltip {:followPointer true}}"]]})
 
 
-  (get-in (first (get-layout vanilla-db)) [:options])
-  (first (get-layout vanilla-db))
-  (clojure.edn/read-string (get-in (first (get-layout vanilla-db)) [:options]))
-  (map clojure.edn/read-string (map second (first (get-layout vanilla-db))))
-  (map first (first (get-layout vanilla-db)))
-
-  (zipmap (map first (first (get-layout vanilla-db))) (map clojure.edn/read-string (map second (first (get-layout vanilla-db)))))
-
-
+  (save-layout! vanilla-db
+                {:layout
+                 [["123" "APaine" ":area-widget" "[:data-format/x-y]"
+                   ":chart" ":spectrum-traces" ":area-chart"
+                   "\"/images/area-widget.png\"" "\"Area\"" "{:x 0, :y 0, :w 4, :h 14}"
+                   "#:viz{:style-name \"widget\", :animation false, :x-title \"frequency\", :banner-text-color {:r 255, :g 255, :b 255, :a 1}, :title \"Channels (area)\", :allowDecimals false, :banner-color {:r 0, :g 0, :b 255, :a 1}, :y-title \"power\", :tooltip {:followPointer true}}"]
+                 ["213" "APaine" ":bubble-widget" "[:data-format/x-y-n]"
+                  ":chart" ":bubble-service" ":bubble-chart"
+                  "\"/images/bubble-widget.png\"" "\"Bubble\"" "{:x 4, :y 0, :w 5, :h 15}"
+                  "#:viz{:animation false, :labelFormat \"{point.name}\", :banner-text-color {:r 255, :g 255, :b 255, :a 1}, :title \"Bubble\", :dataLabels true, :lineWidth 0, :data-labels true, :banner-color {:r 0, :g 0, :b 255, :a 1}, :tooltip {:followPointer true}}"]]})
 
   (delete-all-layouts! vanilla-db)
 

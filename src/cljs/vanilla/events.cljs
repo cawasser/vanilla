@@ -75,7 +75,9 @@
   :update-layout
   (fn-traced [db [_ layout]]
     ;(prn (str ":update-layout " layout))
+    ;Possibly fire off an rf/dispatch-sync (need to create event-db too still) to save the layout before/after this next line?
     (assoc db :widgets (u/update-layout (:widgets db) (u/reduce-layouts layout)))))
+
 
 
 

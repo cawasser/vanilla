@@ -40,6 +40,11 @@
      :headers {"Content-Type" "text/json; charset=utf-8"}
      :body (str (json/write-str {:layout (h/get-layout)}))})
 
+  (POST "/save-layout" req
+    {:status 200
+     :headers {"Content-Type" "text/json; charset=utf-8"}
+     :body (str (json/write-str {:layout (h/save-layout req)}))})
+
   (resources "/"))
 
 

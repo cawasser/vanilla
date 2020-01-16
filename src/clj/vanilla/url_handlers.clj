@@ -21,3 +21,8 @@
 (defn get-layout []
   (map #(clojure.set/rename-keys % from-sqlite) (db/get-layout db/vanilla-db)))
 
+(defn save-layout [new-layout]
+  (let [renamed (map #(clojure.set/rename-keys % to-sqlite) new-layout)]
+    (prn "SAVE-LAYOUT route: " renamed)
+  (db/save-layout! db/vanilla-db renamed)))
+
