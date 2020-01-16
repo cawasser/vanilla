@@ -9,14 +9,25 @@
             [vanilla.db.core :as db]))
 
 
-(defn ->system [http-port nrepl-port data-sources]
-  (component/system-map
-   :websocket (websocket/new-websocket-server data-sources sente-web-server-adapter {})
-   :server (component/using (webserver/new-webserver routes/->http-handler http-port) [:websocket])
-   :scheduler (scheduler/new-scheduler data-sources)
-   ; TODO - reactivate nrepl for development
-   :nrepl (nrepl/start-server :port nrepl-port)
-   :database (db/setup-database)))
+(defn ->system [http-port nrepl nrepl-port data-sources]
+  (if nrepl
+    (do
+      (prn "starting with nrepl")
+      (component/system-map
+       :websocket (websocket/new-websocket-server data-sources sente-web-server-adapter {})
+       :server (component/using (webserver/new-webserver routes/->http-handler http-port) [:websocket])
+       :scheduler (scheduler/new-scheduler data-sources)
+       :nrepl (nrepl/start-server :port nrepl-port)
+       :database (db/setup-database)))
 
-(defn start [http-port nrepl-port data-sources]
-  (component/start (->system http-port nrepl-port data-sources)))
+    ; don't start an nrepl
+    (component/system-map
+      :websocket (websocket/new-websocket-server data-sources sente-web-server-adapter {})
+      :server (component/using (webserver/new-webserver routes/->http-handler http-port) [:websocket])
+      :scheduler (scheduler/new-scheduler data-sources)
+      :database (db/setup-database))))
+
+
+
+(defn start [http-port nrepl nrepl-port data-sources]
+  (component/start (->system http-port nrepl nrepl-port data-sources)))

@@ -1,4 +1,4 @@
-(ns vanilla.add-widget-model
+(ns vanilla.add-widget-modal
   (:require [reagent.core :as r]
             [re-frame.core :as rf]))
 
@@ -107,10 +107,10 @@
 
 
 (defn add-widget-modal [is-active]
-  (let [services (rf/subscribe [:services])
-        selected (rf/subscribe [:selected-service])
+  (let [services      (rf/subscribe [:services])
+        selected      (rf/subscribe [:selected-service])
         chosen-widget (r/atom {})
-        widget-cards (rf/subscribe [:all-widget-types])]
+        widget-cards  (rf/subscribe [:all-widget-types])]
     (fn []
       [:div.modal (if @is-active {:class "is-active"})
        [:div.modal-background]
@@ -120,9 +120,9 @@
          [:button.delete {:aria-label "close"
                           :on-click   #(reset! is-active false)}]]
 
-        [:section.model-card-body
-         [:p (str "selected " @selected)]
-         [:p (str "widget " @chosen-widget)]]
+        ;[:section.model-card-body
+        ; [:p (str "selected " @selected)]
+        ; [:p (str "widget " @chosen-widget)]]
 
         [:section.modal-card-body
          [service-list @services @selected]]
@@ -135,18 +135,18 @@
                                                   ;(prn "picked widget " @chosen-widget @selected)
                                                   (add-widget @chosen-widget @selected)
                                                   (reset! is-active false))} "Add"]
-
          [:button.button {:on-click #(reset! is-active false)} "Cancel"]]]])))
 
 
 
+
 (defn version-number []
-  (let [version (rf/subscribe [:version])
+  (let [version   (rf/subscribe [:version])
         is-active (r/atom false)]
     (fn []
-      [:container.level {:width "100%"}
+      [:div.container.level.is-fluid {:width "100%"}
        [:div.level-left.has-text-left
-        [:h7.subtitle.is-6 @version]]
+        [:h6.subtitle.is-6 @version]]
        [:div.level-right.has-text-right
         [:button.button.is-link {:on-click #(swap! is-active not)} "Add"]]
        ;[:button.button.is-link {:on-click #(add-canned-widget)} "widget"]]

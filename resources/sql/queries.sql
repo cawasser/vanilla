@@ -20,7 +20,7 @@ drop table if exists services;
 -- :name create-service! :! :n
 -- :doc creates a new service record
 INSERT INTO services
-(id, keyword, name, ret_types, doc_string)
+(id, keyword, name, ret_type, read_fn, doc_string)
 VALUES (:id, :keyword, :name, :ret_type, :read_fn, :doc_string);
 
 

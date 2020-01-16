@@ -1,0 +1,65 @@
+links:
+  The FC4 Framework: https://fundingcircle.github.io/fc4-framework/
+  Structurizr Express: https://structurizr.com/express
+---
+type: System Context
+scope: Vanilla
+description: The system context diagram for the BH vanilla project.
+
+elements:
+- type: Person
+  name: User
+  description: The person using our software
+  position: '325,50'
+- type: Software System
+  name: Other System
+  description: Important backup system
+  tags: other
+  position: '1700,1300'
+- type: Software System
+  name: Vanilla
+  position: '1000,700'
+
+relationships:
+- source: User
+  description: uses
+  destination: Vanilla
+- source: Vanilla
+  description: calls via json
+  destination: Other System
+
+styles:
+- type: element
+  tag: Element
+  background: '#008000'
+  border: Solid
+  description: 'true'
+  fontSize: '25'
+  metadata: 'true'
+  opacity: '100'
+  shape: Box
+- type: element
+  tag: Person
+  background: '#0080c0'
+  color: '#000000'
+  shape: Person
+- type: element
+  tag: Software System
+  background: '#c0c0c0'
+  border: Dashed
+  shape: RoundedBox
+- type: element
+  tag: other
+  background: '#d43f10'
+  border: Dashed
+  color: '#ffffff'
+  fontSize: '30'
+  opacity: '70'
+  shape: RoundedBox
+- type: relationship
+  tag: Relationship
+  color: '#ff0000'
+  dashed: 'true'
+  fontSize: '25'
+
+size: A5_Landscape

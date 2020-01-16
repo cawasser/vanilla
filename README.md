@@ -13,20 +13,23 @@ This single-page application (SPA) provides a number of graphical widgets based 
 [look here](docs/history.md)
 
 > 0.3.0-SNAPSHOT. Basic working version with Add/Remove Widgets. Some of the widget/data-source combination don't work
-> but there are such wide-spread changes, we need ot draw the line somewhere
+> but there are such wide-spread changes, we need to draw the line somewhere
 
+> 0.3.1-SNAPSHOT. clicking on a widget header allows for changing the header color. Similarly, clicking on the title
+> text allow the user to change the color of the text
 
 ## Roadmap
 
 ### Client-side
 
-- improve chart conversions between the various :data-format/<> types
-- user picker for colors and title, using \[cljsjs/react-color "2.13.8-0"\] [link](http://casesandberg.github.io/react-color/)
-- move some of the viz stuff (labels, etc) to the service definition/data-message to make more declarative (mix-in? where?)
-- figure out how to let the user pick the charts in a stacked or side-by-side
-- migrate the widget defs to the server and load them dynamically (can this be done with a push from the server? that way the client will get the updates as soon as we put them on the server-farm)
-- login
-- generative testing of the client
+- [ ] improve chart conversions between the various :data-format/<> types
+- [x] user picker for colors and title, using \[cljsjs/react-color "2.13.8-0"\] [link](http://casesandberg.github.io/react-color/)
+- [ ] move some of the viz stuff (labels, etc) to the service definition/data-message to make more declarative (mix-in? where?)
+- [ ] ~~figure out how to let the user pick the charts in a stacked or side-by-side~~ (DROPPED)
+- [ ] allow widgets to publish/subscribe of user selection events so multiple widgets can work together
+- [ ] migrate the widget defs to the server and load them dynamically (can this be done with a push from the server? that way the client will get the updates as soon as we put them on the server-farm)
+- [ ] login
+- [ ] generative testing of the client
 
 ### Services-side
 - login
@@ -45,6 +48,24 @@ This single-page application (SPA) provides a number of graphical widgets based 
 
 ## Architecture
 
+### Auto-Documentation
+[Marginalia](https://github.com/gdeer81/marginalia) and more specifically [lein-marginalia](https://github.com/gdeer81/lein-marginalia)has been added as a plugin to this project to keep a healthy level of documentation of our codebase and architecture. The plugin essentially scans through the project and creates an html "wiki" of how our project operates. It takes all our in line comments and can be added to easily to explain certain namespaces, functions, or design decisions.
+
+ To run the plugin and generate the aforementioned wiki simply use:
+
+ ```
+ lein marg
+ ```
+
+ This will generate the file: 
+
+ ```
+ ./docs/uberdoc.html
+ ```
+
+Here is the document it generates:
+
+[marginalia-uberdoc](./docs/uberdoc.html)
 
 
 #### see also

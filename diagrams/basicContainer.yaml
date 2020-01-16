@@ -1,0 +1,68 @@
+links:
+  The FC4 Framework: https://fundingcircle.github.io/fc4-framework/
+  Structurizr Express: https://structurizr.com/express
+---
+type: Container
+scope: Vanilla
+description: The system context diagram for the BH Vanilla.
+
+elements:
+- type: Person
+  name: User
+  description: Uses sytem
+  tags: user
+  position: '725,50'
+- type: Software System
+  name: Vanilla
+  description: system
+  containers:
+  - type: Container
+    name: Database
+    description: Backend datastore
+    technology: MySQL
+    tags: data
+    position: '200,1200'
+  - type: Container
+    name: Single Page Webapp
+    description: interactive user gui
+    technology: ClojureScript, Reframe
+    tags: web
+    position: '1100,600'
+  - type: Container
+    name: Web Application
+    description: Serves static content and site code
+    technology: Clojure, AWS, Docker
+    tags: app
+    position: '200,600'
+
+relationships:
+- source: User
+  description: Views and requests data
+  destination: Single Page Webapp
+  tags: userReq
+- source: Web Application
+  description: subcribes to data updates
+  destination: Database
+- source: Web Application
+  description: Delivers browser content
+  destination: Single Page Webapp
+
+styles:
+- type: element
+  tag: data
+  background: '#1047fc'
+  shape: Cylinder
+- type: element
+  tag: user
+  background: '#2374e5'
+  color: '#000000'
+  shape: Person
+- type: relationship
+  tag: Relationship
+- type: relationship
+  tag: userReq
+  color: '#0f792e'
+  dashed: 'true'
+  thickness: '3'
+
+size: A5_Landscape

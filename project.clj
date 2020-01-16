@@ -1,4 +1,4 @@
-(defproject vanilla "0.3.0-SNAPSHOT"
+(defproject vanilla "0.3.1-SNAPSHOT"
   :description "Vanilla Dashboard - a simple dashboard built on dashboard-clj"
   :url ""
 
@@ -57,7 +57,9 @@
                  [com.layerware/hugsql "0.5.1"]
                  [org.xerial/sqlite-jdbc "3.30.1"]
                  [seancorfield/next.jdbc "1.0.12"]
-                 [org.clojure/tools.nrepl "0.2.13"]]
+                 [org.clojure/tools.nrepl "0.2.13"]
+
+                 [cljsjs/react-color "2.13.8-0"]]
 
   :min-lein-version "2.6.1"
 
@@ -68,7 +70,8 @@
 
   :main ^:skip-aot vanilla.server
 
-  :plugins [[lein-cljsbuild "1.1.7"]]
+  :plugins [[lein-cljsbuild "1.1.7"]
+            [lein-marginalia "0.9.1"]]
   :clean-targets ^{:protect false} [:target-path :compile-path "resources/public/js"]
 
   :figwheel {:http-server-root "public"
@@ -128,7 +131,8 @@
                             :plugins      [[com.jakemccrary/lein-test-refresh "0.24.1"]
                                            [jonase/eastwood "0.3.5"]
                                            [lein-doo "0.1.11"]
-                                           [lein-figwheel "0.5.19"]]
+                                           [lein-figwheel "0.5.19"]
+                                           [lein-marginalia "0.9.1"]]
                             :cljsbuild {:builds
                                         {:app
                                          {:source-paths ["src/cljs" "env/dev/cljs"]

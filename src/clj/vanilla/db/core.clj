@@ -7,7 +7,6 @@
 
 
 
-
 ;
 ; https://www.hugsql.org
 ;
@@ -51,6 +50,17 @@
 
 
   (create-services-table-sqlvec vanilla-db)
+  (create-services-table vanilla-db)
+
+
+  (create-service!-sqlvec
+    vanilla-db
+    {:id         "1000"
+     :keyword    "spectrum-traces"
+     :name       "Spectrum"
+     :ret_type  "data-format/x-y"
+     :read_fn    "vanilla.spectrum-traces-service/spectrum-traces"
+     :doc_string "returns power over frequency"})
 
 
   (do
@@ -60,10 +70,10 @@
   (create-service!
     vanilla-db
     {:id         "1000"
-     :keyword    ":spectrum-traces"
+     :keyword    "spectrum-traces"
      :name       "Spectrum"
-     :ret_types  "data-format/x-y"
-     :read_fn    ":vanilla.fetcher/spectrum-traces"
+     :ret_type  "data-format/x-y"
+     :read_fn    "vanilla.spectrum-traces-service/spectrum-traces"
      :doc_string "returns power over frequency"})
 
   ;;;;;;;;;;;;;;;;;;;;;;;
@@ -75,11 +85,11 @@
     vanilla-db
     {:services
      [["1000" "spectrum-traces" "Spectrum Traces"
-       "data-format/x-y" "vanilla.fetcher/spectrum-traces"
+       "data-format/x-y" "vanilla.spectrum-traces-service/spectrum-traces"
        "returns power over frequency"]
 
       ["2000" "usage-data" "Usage Data"
-       "data-format/label-y" "vanilla.fetcher/usage-data"
+       "data-format/label-y" "vanilla.usage-data-service/usage-data"
        "returns usage data over time"]
 
       ["3000" "sankey-service" "Relationship Data"
@@ -95,11 +105,11 @@
        "returns interconnectivity data"]
 
       ["6000" "power-data" "Power Data"
-       "data-format/label-y" "vanilla.fetcher/power-data"
+       "data-format/label-y" "vanilla.power-data-service/power-data"
        "returns quantity of fruit sold"]
 
       ["7000" "heatmap-data" "Heatmap Data"
-       "data-format/x-y-n" "vanilla.fetcher/heatmap-data"
+       "data-format/x-y-n" "vanilla.heatmap-service/heatmap-data"
        "returns quantity of fruit sold per country"]
 
       ["8000" "health-and-status-data" "Health and Status"
@@ -119,7 +129,7 @@
     vanilla-db
     {:services
      [["4000" "bubble-service" "Bubble Data"
-       "data-format/x-y-n" "data-format/x-y-e" "vanilla.bubble-service/fetch-data"
+       "data-format/x-y-n" "vanilla.bubble-service/fetch-data"
        "returns x-y-n data for Fruits, Countries and MLB teams"]]})
 
   (get-services vanilla-db)
