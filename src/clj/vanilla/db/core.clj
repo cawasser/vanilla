@@ -198,6 +198,7 @@
   (clojure.edn/read-string (get-in (first (get-layout vanilla-db)) [:options]))
   (map clojure.edn/read-string (map second (first (get-layout vanilla-db))))
   (map first (first (get-layout vanilla-db)))
+
   (zipmap (map first (first (get-layout vanilla-db))) (map clojure.edn/read-string (map second (first (get-layout vanilla-db)))))
 
 

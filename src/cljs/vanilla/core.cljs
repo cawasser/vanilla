@@ -42,22 +42,10 @@
 (rf/reg-event-db
   :set-layout
   (fn-traced [db [_ layout-data]]
-     (let [widget-list (:layout layout-data)
-           first-widget (first widget-list)
-           keys (map first first-widget)
-           values (map edn/read-string (map second first-widget))
-           new-widget (zipmap keys values)
-           conjed (conj (:widgets db) new-widget)]
 
-       (prn ":set-layout " layout-data
-         ;" //// widget-list " widget-list
-         ;" //// keys " keys
-         ;" //// values " values
-         ;" /// new-widget " new-widget
-         " //// conjed " conjed)
+       (prn ":set-layout " (:layout layout-data))
 
-       (assoc db :widgets (into [] conjed)))))
-
+       (assoc db :widgets (:layout layout-data))))
 
 
 (enable-console-print!)
