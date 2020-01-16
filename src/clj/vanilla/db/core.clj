@@ -101,7 +101,7 @@
        "returns x-y-n data for Fruits, Countries and MLB teams"]
 
       ["5000" "network-service" "Network Data"
-       "data-format/from-to" "data-format/x-y" "vanilla.network-service/fetch-data"
+       "data-format/from-to" "vanilla.network-service/fetch-data"
        "returns interconnectivity data"]
 
       ["6000" "power-data" "Power Data"
@@ -128,9 +128,17 @@
   (create-services!
     vanilla-db
     {:services
-     [["4000" "bubble-service" "Bubble Data"
+     [["9999" "bubble-service" "Bubble Data"
        "data-format/x-y-n" "vanilla.bubble-service/fetch-data"
        "returns x-y-n data for Fruits, Countries and MLB teams"]]})
+  (create-services!-sqlvec
+    vanilla-db
+    {:services
+     [["9999" "bubble-service" "Bubble Data"
+       "data-format/x-y-n" "vanilla.bubble-service/fetch-data"
+       "returns x-y-n data for Fruits, Countries and MLB teams"]]})
+
+  (delete-service! vanilla-db {:id "9999"})
 
   (get-services vanilla-db)
 
