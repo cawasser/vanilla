@@ -141,25 +141,25 @@
 
   (create-layout!
     vanilla-db
-    {:id          "123"
-     :username    "APaine"
+    {:id          "\"123\""
+     :username    "\"APaine\""
      :name        :area-widget
      :ret_types   [:data-format/x-y]
      :basis       :chart
      :data_source :spectrum-traces
      :type        :area-chart
-     :icon        "/images/area-widget.png"
-     :label       "Area"
+     :icon        "\"/images/area-widget.png\""
+     :label       "\"Area\""
      :data_grid   {:x 0 :y 0 :w 4 :h 14}
-     :options     "{:viz/style-name \"widget\",
-                   :viz/y-title \"power\",
-                   :viz/x-title \"frequency\",
-                   :viz/allowDecimals false,
-                   :viz/banner-color {:r 0x00 :g 0x00 :b 0xff :a 1},
-                   :viz/tooltip {:followPointer true},
-                   :viz/title \"Channels (area)\",
-                   :viz/banner-text-color {:r 255, :g 255, :b 255, :a 1},
-                   :viz/animation false}"})
+     :options     {:viz/style-name "widget"
+                   :viz/y-title "power"
+                   :viz/x-title "frequency"
+                   :viz/allowDecimals false
+                   :viz/banner-color {:r 0x00 :g 0x00 :b 0xff :a 1}
+                   :viz/tooltip {:followPointer true}
+                   :viz/title "Channels (area)"
+                   :viz/banner-text-color {:r 255, :g 255, :b 255, :a 1}
+                   :viz/animation false}})
 
   (create-layout!
     vanilla-db
@@ -173,27 +173,31 @@
      :icon        "/images/bubble-widget.png"
      :label       "Bubble"
      :data_grid   {:x 4 :y 0 :w 5 :h 15}
-     :options     "{:viz/banner-color {:r 0x00 :g 0x00 :b 0xff :a 1},
-                   :viz/tooltip {:followPointer true},
-                   :viz/dataLabels true,
-                   :viz/data-labels true,
-                   :viz/labelFormat \"{point.name}\"
+     :options     {:viz/banner-color {:r 0x00 :g 0x00 :b 0xff :a 1}
+                   :viz/tooltip {:followPointer true}
+                   :viz/dataLabels true
+                   :viz/data-labels true
+                   :viz/labelFormat "{point.name}"
                    :viz/lineWidth 0
-                   :viz/title \"Bubble\",
-                   :viz/banner-text-color {:r 255, :g 255, :b 255, :a 1},
-                   :viz/animation false}"})
+                   :viz/title "Bubble"
+                   :viz/banner-text-color {:r 255, :g 255, :b 255, :a 1}
+                   :viz/animation false}})
 
 
   (get-layout vanilla-db)
   (get-in (first (get-layout vanilla-db)) [:options])
   (first (get-layout vanilla-db))
-  (get-in (get-layout vanilla-db) [0 :options])
-  repl-eval vanilla-db
+  (clojure.edn/read-string (get-in (first (get-layout vanilla-db)) [:options]))
+  (map clojure.edn/read-string (map second (first (get-layout vanilla-db))))
+  (map first (first (get-layout vanilla-db)))
+  (zipmap (map first (first (get-layout vanilla-db))) (map clojure.edn/read-string (map second (first (get-layout vanilla-db)))))
+
 
 
   (delete-all-layouts! vanilla-db)
 
   (delete-layout! vanilla-db {:id "123"})
+  (delete-layout! vanilla-db {:id "213"})
 
   (drop-layout-table vanilla-db)
 

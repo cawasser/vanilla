@@ -11,6 +11,7 @@
     [day8.re-frame.tracing :refer-macros [fn-traced]]
 
     [vanilla.add-widget-modal :as modal]
+    [clojure.edn :as edn]
 
     [vanilla.grid :as grid]
 
@@ -36,18 +37,23 @@
 (enable-console-print!)
 
 
+;TODO make this list over multiple
 ;add a new event that just takes a widget vector
 (rf/reg-event-db
-  :add-all-widgets
-  (fn-traced [db [_ new-widget-vector]]
-     ;(let [next-id (get-in new-widget-vector [:key])]
+  :set-layout
+  (fn-traced [db [_ layout-data]]
+     (let [widget-list (:layout layout-data)
+           first-widget (first widget-list)
+           keys (map first first-widget)
+           values (map edn/read-string (map second first-widget))
+           new-widget (zipmap keys values)]
 
        (do
-         (prn ":add-all-widgets ///" new-widget-vector)
+         (prn ":set-layout ///"
+              " /// new-widget: " new-widget)
 
          (assoc db
-           :widgets (conj (:widgets db) new-widget-vector)))))
-           ;:next-id (inc next-id))))))
+           :widgets (conj (:widgets db)  new-widget))))))
 
 
 (def test-layout
@@ -145,6 +151,17 @@
                    :response-format (ajax/json-response-format {:keywords? true})
                    :handler         #(rf/dispatch-sync [:set-version %])}))
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;
+; LAYOUT SAVING
+;
+;
+
+(defn get-layout []
+  (GET "/layout" {:headers          {"Accept" "application/transit+json"}
+                  :response-format  (ajax/json-response-format {:keywords? true})
+                  :handler          #(rf/dispatch-sync [:set-layout %])}))
+
 
 
 (def width 1536)
@@ -181,6 +198,7 @@
 
   (get-version)
   (get-services)
+  (get-layout)
 
   ; TODO eliminate register-global-app-state-subscription (attach subscription in add-widget)
   (subs/register-global-app-state-subscription)
@@ -208,7 +226,7 @@
 
   ;(rf/dispatch [:add-widget :area-widget :spectrum-traces])
   ;(rf/dispatch [:add-widget :bubble-widget :bubble-service])
-  (rf/dispatch [:add-all-widgets test-layout])
+  ;(rf/dispatch [:add-all-widgets test-layout])
 
   (r/render home-page (.getElementById js/document "app")))
 
