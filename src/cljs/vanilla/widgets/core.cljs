@@ -105,17 +105,16 @@
 
 (defn setup-widget [{:keys [key data-source type options] :as props}]
 
-  ;(prn "setup-widget " key "/" type
-  ;                   " //// data-source " data-source
-  ;                   " //// options " options
-  ;                   " //// props " props)
+  (prn "setup-widget " key "/" type
+                     " //// data-source " data-source
+                     " //// options " options
+                     " //// props " props)
 
-  ; TODO: connect data-source once services are running
   (if data-source
     (let [data (rf/subscribe [:app-db data-source])]
 
-      ;(prn "attaching data " data-source
-      ;  " //// data "@data)
+      (prn "attaching data " data-source
+        " //// data "@data)
 
       [(build-widget props) @data options])
 

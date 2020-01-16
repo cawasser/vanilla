@@ -10,7 +10,7 @@
 
 (rf/reg-event-db
   :initialize
-  (fn
+  (fn-traced
     [db _]
     (prn (str ":initialize handler "))
     (merge db {:data-sources {}
@@ -22,7 +22,8 @@
 
 (rf/reg-event-db
   :update-data-source
-  (fn [app-state [_ data-source new-val]]
+  (fn-traced
+    [app-state [_ data-source new-val]]
     (assoc-in  app-state [:data-sources data-source] new-val)))
 
 
@@ -119,14 +120,14 @@
 
 (rf/reg-event-db
   :set-version
-  (fn [db [_ version]]
+  (fn-traced [db [_ version]]
     ;(prn ":set-version " version)
     (assoc db :version (:version version))))
 
 
 (rf/reg-event-db
   :set-services
-  (fn [db [_ services]]
+  (fn-traced [db [_ services]]
     ;(prn ":set-services " services)
     (assoc db :services (:services services))))
 

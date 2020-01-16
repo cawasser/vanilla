@@ -42,8 +42,8 @@
                                        (reset! is-active false)
                                        (.stopPropagation %))}
       [:> js/ReactColor.CompactPicker
-       {:style {:top "5px" :left "10px"}
-        :color @chosen-color
+       {:style            {:top "5px" :left "10px"}
+        :color            @chosen-color
         :onChangeComplete (fn [color _]
                             (reset! chosen-color (:rgb (js->clj color :keywordize-keys true)))
                             (rf/dispatch-sync [:update-color id item @chosen-color])
@@ -61,22 +61,29 @@
 
 (defn basic-widget [name data options custom-content]
 
-  ;(.log js/console (str "basic-widget " options
-  ;                   " //// custom-content " custom-content
-  ;                   " //// name " name))
+  (prn "basic-widget " name
+    " //// options " options
+    " //// custom-content " custom-content)
 
-  (let [show-title-picker (r/atom false)
+
+  (let [show-title-picker  (r/atom false)
         show-header-picker (r/atom false)
-        header-color (r/atom (get options :viz/banner-color {:r 150 :g 150 :b 150 :a 1}))
-        title-color (r/atom (get options :viz/banner-text-color {:r 0 :g 0 :b 0 :a 1}))]
+        header-color       (r/atom (get options :viz/banner-color {:r 150 :g 150 :b 150 :a 1}))
+        title-color        (r/atom (get options :viz/banner-text-color {:r 0 :g 0 :b 0 :a 1}))]
 
-    (fn []
+    (fn [name data options custom-content]
+
+      (prn "INSIDE basic-widget " name
+        " //// data " data
+        " //// options " options
+        " //// custom-content " custom-content)
+
 
       [:div {:class "vanilla.widgets.line-chart container"
              :style {:height (get options :viz/height "100%")
-                     :width "100%"}}
+                     :width  "100%"}}
        [:div {:class "title-wrapper"}
-        [:container.level {:style {:background-color (rgba @header-color)}
+        [:container.level {:style    {:background-color (rgba @header-color)}
                            :on-click #(do
                                         (swap! show-header-picker not)
                                         (.stopPropagation %))}
@@ -85,27 +92,27 @@
          [change-color show-title-picker name :viz/banner-text-color title-color]
 
          [:div.level-left.has-text-left
-          [:h3 {:class "title"
-                :style {:color (rgba @title-color)}
+          [:h3 {:class    "title"
+                :style    {:color (rgba @title-color)}
                 :on-click #(do
                              (swap! show-title-picker not)
                              (.stopPropagation %))}
            (get options :viz/title)]]
 
          [:div.level-right.has-text-centered
-          [:button.delete.is-large {:style {:margin-right "10px"}
-                                     :on-click #(rf/dispatch [:remove-widget name])}]]]]
+          [:button.delete.is-large {:style    {:margin-right "10px"}
+                                    :on-click #(rf/dispatch [:remove-widget name])}]]]]
 
 
-       [:div {:class (str (get options :viz/style-name "widget"))
-              :style {:width "100%"
-                      :height "80%"
-                      :marginRight "50px"
-                      :marginTop "5px"
-                      :cursor :default
-                      :border-style (debug-style options)
-                      :align-items :stretch
-                      :display :flex}
+       [:div {:class         (str (get options :viz/style-name "widget"))
+              :style         {:width        "100%"
+                              :height       "80%"
+                              :marginRight  "50px"
+                              :marginTop    "5px"
+                              :cursor       :default
+                              :border-style (debug-style options)
+                              :align-items  :stretch
+                              :display      :flex}
               :on-mouse-down #(.stopPropagation %)}
 
         custom-content]])))

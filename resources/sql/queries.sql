@@ -57,7 +57,7 @@ DELETE FROM services;
 -- :result :raw
 -- :doc Create widget layout table
 create table layout (
-  id                    VARCHAR(20) PRIMARY KEY,
+  key                   VARCHAR(20) PRIMARY KEY,
   username              VARCHAR(30),
   name                  VARCHAR(30),
   ret_types             BLOB(30),
@@ -93,9 +93,9 @@ drop table if exists layout;
 -- :name create-layout! :! :n
 -- :doc creates a new layout record
 INSERT INTO layout
-    (id, username, name, ret_types, basis, data_source, type, icon,
+    (key, username, name, ret_types, basis, data_source, type, icon,
         label, data_grid, options)
-    VALUES (:id, :username, :name, :ret_types, :basis, :data_source, :type, :icon,
+    VALUES (:key, :username, :name, :ret_types, :basis, :data_source, :type, :icon,
             :label, :data_grid, :options);
 /*
 --INSERT INTO layout
@@ -117,7 +117,7 @@ SELECT * FROM layout;
 
 -- :name delete-layout! :! :n
 -- :doc deletes a layout record given the id
-DELETE FROM layout WHERE id = :id;
+DELETE FROM layout WHERE key = :key;
 
 
 -- :name delete-all-layouts! :! :n

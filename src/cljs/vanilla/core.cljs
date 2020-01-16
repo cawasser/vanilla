@@ -46,79 +46,18 @@
            first-widget (first widget-list)
            keys (map first first-widget)
            values (map edn/read-string (map second first-widget))
-           new-widget (zipmap keys values)]
+           new-widget (zipmap keys values)
+           conjed (conj (:widgets db) new-widget)]
 
-       (do
-         (prn ":set-layout ///"
-              " /// new-widget: " new-widget)
+       (prn ":set-layout " layout-data
+         ;" //// widget-list " widget-list
+         ;" //// keys " keys
+         ;" //// values " values
+         ;" /// new-widget " new-widget
+         " //// conjed " conjed)
 
-         (assoc db
-           :widgets (conj (:widgets db)  new-widget))))))
+       (assoc db :widgets (into [] conjed)))))
 
-
-(def test-layout
-    {:ret_types [:data-format/x-y]
-      :key "1"
-      :name :area-widget
-      :basis :chart
-      :data-source :spectrum-traces
-      :type :area-chart
-      :icon "/images/area-widget.png"
-      :label "Area"
-      :data-grid {:x 0, :y 0, :w 4, :h 15}
-      :options {:viz/style-name "widget"
-                :viz/y-title "power"
-                :viz/x-title "frequency"
-                :viz/allowDecimals false
-                :viz/banner-color {:r 0x00 :g 0x00 :b 0xff :a 1}
-                :viz/tooltip {:followPointer true}
-                :viz/title "Channels (area)"
-                :viz/banner-text-color "white"
-                :viz/animation false}})
-
-    ;{:ret_types [:data-format/x-y-n]
-    ;  :key "2"
-    ;  :name :bubble-widget
-    ;  :basis :chart
-    ;  :data-source :bubble-service
-    ;  :type :bubble-chart
-    ;  :icon "/images/bubble-widget.png"
-    ;  :label "Bubble"
-    ;  :data-grid {:x 4, :y 0, :w 5, :h 15}
-    ;  :options {:viz/title "Bubble"
-    ;            :viz/banner-color "darkgreen"
-    ;            :viz/banner-text-color "white"
-    ;            :viz/dataLabels true
-    ;            :viz/labelFormat "{point.name}"
-    ;            :viz/lineWidth 0
-    ;            :viz/animation false
-    ;            :viz/data-labels true}}])
-
-
-
-
-;;;;;;;;;;;;;;;;;;;;;
-;
-; HACK
-;
-; TODO - remove dummy "new-widget" stuff
-
-(def next-widget-idx (atom 0))
-
-(defn add-canned-widget [])
-  ;(let [rand-widget (get defs/widgets @next-widget-idx)]
-  ;
-  ;  ;(prn "add-canned-widget " rand-widget ", " @next-widget-idx, ", " (count defs/widgets))
-  ;
-  ;  (add-widget (grid/fixup-new-widget rand-widget))
-  ;  (if (< @next-widget-idx (dec (count defs/widgets)))
-  ;    (swap! next-widget-idx inc)
-  ;    (reset! next-widget-idx 0))))
-
-
-;;;;;;;;;;;;;;;;;;;;;
-;
-; END HACK
 
 
 (enable-console-print!)
@@ -158,6 +97,7 @@
 ;
 
 (defn get-layout []
+  (prn "getting layout")
   (GET "/layout" {:headers          {"Accept" "application/transit+json"}
                   :response-format  (ajax/json-response-format {:keywords? true})
                   :handler          #(rf/dispatch-sync [:set-layout %])}))
@@ -167,6 +107,8 @@
 (def width 1536)
 (def height 1024)
 (def rows 50)
+
+
 (defn- widgets-grid []
   [grid/Grid {:id          "dashboard-widget-grid"
               :cols        {:lg 12 :md 10 :sm 6 :xs 4 :xxs 2}
