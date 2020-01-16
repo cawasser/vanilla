@@ -146,7 +146,7 @@
 
   (create-layout!
     vanilla-db
-    {:key          "123"
+    {:id         "123"
      :username    "\"APaine\""
      :name        :area-widget
      :ret_types   [:data-format/x-y]
@@ -168,7 +168,7 @@
 
   (create-layout!
     vanilla-db
-    {:key          "213"
+    {:id          "213"
      :username    "\"APaine\""
      :name        :bubble-widget
      :ret_types   [:data-format/x-y-n]
