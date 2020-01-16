@@ -132,6 +132,11 @@
 ; ***Layout table rich comment***
 (comment
 
+  (hugsql/def-db-fns "sql/queries.sql")
+  (hugsql/def-sqlvec-fns "sql/queries.sql")
+
+  (create-layout-table-sqlvec vanilla-db)
+
   (create-layout-table vanilla-db)
 
   ;ret_types needs square brackets around it
@@ -141,7 +146,7 @@
 
   (create-layout!
     vanilla-db
-    {:id          "\"123\""
+    {:key          "123"
      :username    "\"APaine\""
      :name        :area-widget
      :ret_types   [:data-format/x-y]
@@ -163,15 +168,15 @@
 
   (create-layout!
     vanilla-db
-    {:id          "213"
-     :username    "APaine"
+    {:key          "213"
+     :username    "\"APaine\""
      :name        :bubble-widget
      :ret_types   [:data-format/x-y-n]
      :basis       :chart
      :data_source :bubble-service
      :type        :bubble-chart
-     :icon        "/images/bubble-widget.png"
-     :label       "Bubble"
+     :icon        "\"/images/bubble-widget.png\""
+     :label       "\"Bubble\""
      :data_grid   {:x 4 :y 0 :w 5 :h 15}
      :options     {:viz/banner-color {:r 0x00 :g 0x00 :b 0xff :a 1}
                    :viz/tooltip {:followPointer true}
@@ -185,6 +190,9 @@
 
 
   (get-layout vanilla-db)
+
+
+
   (get-in (first (get-layout vanilla-db)) [:options])
   (first (get-layout vanilla-db))
   (clojure.edn/read-string (get-in (first (get-layout vanilla-db)) [:options]))
