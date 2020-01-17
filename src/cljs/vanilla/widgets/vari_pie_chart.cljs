@@ -63,7 +63,7 @@
 (defn register-type []
   (mc/register-type
     :vari-pie-chart {:chart-options     {:chart/type              :vari-pie-chart
-                                         :chart/supported-formats [:data-format/label-y-n :data-format/label-y]
+                                         :chart/supported-formats [:data-format/label-y-n :data-format/label-y-e]
                                          :chart                   {:type  "variablepie"
                                                                    :style {:labels {:fontFamily "monospace"
                                                                                     :color      "#FFFFFF"}}}}

@@ -40,7 +40,7 @@
 (defn register-type []
   (mc/register-type
     :area-chart {:chart-options     {:chart/type              :area-chart
-                                     :chart/supported-formats [:data-format/x-y :data-format/y]
+                                     :chart/supported-formats [:data-format/x-y :data-format/x-y-n :data-format/x-y-e :data-format/y]
                                      :chart                   {:type     "area"
                                                                :zoomType "x"}
                                      :yAxis                   {:min    0

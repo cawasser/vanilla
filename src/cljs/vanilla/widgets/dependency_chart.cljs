@@ -31,7 +31,7 @@
   (mc/register-type
     :dependency-chart {:chart-options
                        {:chart/type              :dependency-chart
-                        :chart/supported-formats [:data-format/from-to-n :data-format/from-to-e :data-format/from-to]
+                        :chart/supported-formats [:data-format/from-to-n :data-format/from-to :data-format/from-to-e]
                         :chart                   {:type "dependencywheel"}
                         :plot-options {    :dataLabels {:color    "#333"
                                                         :textPath {:enabled    true

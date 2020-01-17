@@ -29,7 +29,7 @@
 (defn register-type []
   (mc/register-type
     :bubble-chart {:chart-options     {:chart/type              :bubble-chart
-                                       :chart/supported-formats [:data-format/x-y-n :data-format/x-y-e]
+                                       :chart/supported-formats [:data-format/x-y-n :data-format/x-y :data-format/x-y-e :data-format/y]
                                        :chart                   {:type "bubble"}
                                        :yAxis                   {:min    0
                                                                  :title  {:align "high"}
