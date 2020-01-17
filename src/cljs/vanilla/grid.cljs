@@ -23,6 +23,14 @@
 ;
 
 
+(rf/reg-fx
+  :save-layout
+  xtp.io
+  http.io
+  ;sample3
+  )
+
+
 (defn fixup-new-widget [widget]
   (merge widget {:data-grid {:x 0 :y 0 :w 5 :h 15}}))
 
@@ -46,7 +54,10 @@
           " //// count " (count chg)
           " //// first id " (:i fst))
 
-        (rf/dispatch [:update-layout (js->clj new :keywordize-keys true)])))
+        (rf/dispatch [:update-layout (js->clj new :keywordize-keys true)])
+
+    ;Possibly fire off an rf/dispatch-sync (need to create event-fx too still)
+        (rf/dispatch [:save-layout (js->clj new :keywordize-keys true)])))   ;make this right
 
     (on-change prev (js->clj new :keywordize-keys true))))
 

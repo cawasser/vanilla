@@ -42,8 +42,11 @@
 
   (POST "/save-layout" req
     {:status 200
-     :headers {"Content-Type" "text/json; charset=utf-8"}
-     :body (str (json/write-str {:layout (h/save-layout req)}))})
+     :parameters {:body {:request string?}}
+     :responses {200 {:body {:result string?}}}
+     :headers {"Content-Type" "text/json; charset=utf-8"}   ;maybe convert from text-json to straight edn
+     ;pull apart parameters and strip the keys off the values for the DB call
+     :body (str (json/write-str {:layout (h/save-layout parameters)}))})
 
   (resources "/"))
 
