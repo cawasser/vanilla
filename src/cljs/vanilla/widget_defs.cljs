@@ -253,7 +253,7 @@
                  :basis     :chart
                  :type      :area-chart
                  ;:data-source :spectrum-traces
-                 :ret_types [:data-format/x-y-n]
+                 :ret_types [:data-format/x-y :data-format/x-y-n :data-format/x-y-e :data-format/y]
                  :icon      "/images/area-widget.png"
                  :label     "Area"
                  :options   {:viz/title             "Channels (area)"
@@ -271,7 +271,7 @@
                  :basis     :chart
                  :type      :bar-chart
                  ;:data-source :spectrum-traces
-                 :ret_types [:data-format/x-y]
+                 :ret_types [:data-format/x-y :data-format/x-y-n :data-format/x-y-e :data-format/y]
                  :icon      "/images/bar-widget.png"
                  :label     "Bar"
                  :options   {:viz/title        "Channels (bar)"
