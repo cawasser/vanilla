@@ -13,12 +13,6 @@
     ;:schedule {:in    [0 :seconds]
     ;           :every [15 :seconds]}}
 
-   {:name     :current-time
-    :read-fn  :vanilla.fetcher/current-time}
-    ;:params   []
-    ;:schedule {:in    [0 :seconds]
-    ;           :every [5 :seconds]}}
-
    {:name :sankey-service
     :read-fn :vanilla.sankey-service/fetch-data}
    ;:schedule {:in    [0 :seconds]
@@ -53,4 +47,10 @@
     :read-fn :vanilla.usage-24-hour-service/fetch-data}
 
    {:name :scatter-service-data
-    :read-fn :vanilla.scatter-service/fetch-data}])
+    :read-fn :vanilla.scatter-service/fetch-data}
+
+   {:name     :current-time
+    :read-fn  :vanilla.current-time-service/fetch-data}])
+   ;:params   []
+   ;:schedule {:in    [0 :seconds]
+   ;           :every [5 :seconds]}}])

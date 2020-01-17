@@ -1,15 +1,11 @@
 (ns vanilla.widgets.simple-text
   (:require [reagent.core :as r :refer [atom]]
-            ;[dashboard-clj.widgets.core :as widget-common]
             [vanilla.widgets.basic-widget :as basic]))
 
 
-;(widget-common/register-widget
 (defn make-widget [name data options]
 
   ;(.log js/console ":simple-text" (str data) (str options))
-
-
 
    [:div {:style {:width "100%"
                         :text-align :center

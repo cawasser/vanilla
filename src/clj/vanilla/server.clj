@@ -9,6 +9,7 @@
               [vanilla.sankey-service]
               [vanilla.scatter-service]
               [vanilla.stoplight-service]
+              [vanilla.current-time-service]
               [vanilla.usage-24-hour-service]
 
               [vanilla.service-deps :as deps])

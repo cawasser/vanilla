@@ -102,7 +102,11 @@
 
       ["10000" "scatter-service-data" "Scatter Data"
        "data-format/x-y" "vanilla.scatter-service/fetch-data"
-       "returns height and weight for a sample of females and males"]]})
+       "returns height and weight for a sample of females and males"]
+
+      ["11000" "current-time" "Current Time"
+       "data-format/string" "vanilla.current-time-service/fetch-data"
+       "returns a simple text"]]})
 
 
   (create-services!
@@ -154,6 +158,7 @@
       :ret_types [:data-format/entity],
       :icon      "/images/stoplight-widget.png",
       :label     "Stoplight"}
+     {:keywrd :simple-text-widget, :ret_types [:data-format/string], :icon "/images/simple-text-widget.png", :label "Current Time"}
      {:keywrd :map-widget, :ret_types [:data-format/lat-lon-n], :icon "/images/map-widget.png", :label "Map"}
      {:keywrd :sankey-widget, :ret_types [:data-format/x-y :data-format/from-to], :icon "/images/sankey-widget.png", :label "Sankey"}
      {:keywrd :deps-widget, :ret_types [:data-format/x-y :data-format/from-to], :icon "/images/deps-widget.png", :label "Dependencies"}

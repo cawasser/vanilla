@@ -26,7 +26,7 @@
                :basis       :simple
                :type        :stoplight-widget
                :build-fn    vanilla.widgets.stoplight-widget/make-widget
-               :data-source :health-and-status-data
+               ;:data-source :health-and-status-data
                :ret_types   [:data-format/entity]
                :icon        "/images/stoplight-widget.png"
                :label       "Stoplight"
@@ -37,12 +37,13 @@
                :basis       :simple
                :type        :simple-text-widget
                :build-fn    vanilla.widgets.simple-text/make-widget
-               :data-source :health-and-status-data
-               :ret_types   [:data-format/entity]
+               ;:data-source :current-time
+               :ret_types   [:data-format/string]
                :icon        "/images/simple-text-widget.png"
-               :label       "simple-text"
-               :options     {:viz/title        "Message"
+               :label       "Current Time"
+               :options     {:viz/title        "Time"
                              :viz/banner-color {:r 0x00 :g 0xff :b 0xff :a 1}}}
+
 
               {:name      :bar-widget
                :basis     :chart

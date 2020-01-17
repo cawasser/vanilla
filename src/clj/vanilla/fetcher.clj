@@ -21,15 +21,6 @@
    :src/y-title "Qty."
    :series      (db/usage-data)})
 
-(defn current-time []
-  (prn "current-time service")
-
-  {:title       "Time"
-   :data-format :data-format/string
-   :text        (.format (java.time.LocalDateTime/now)
-                         (java.time.format.DateTimeFormatter/ofPattern "hh:mm:ss"))})
-
-
 
 (defn power-data []
   (prn "Power Data")
