@@ -50,7 +50,10 @@
     :read-fn :vanilla.scatter-service/fetch-data}
 
    {:name     :current-time
-    :read-fn  :vanilla.current-time-service/fetch-data}])
+    :read-fn  :vanilla.current-time-service/fetch-data}
+
+   {:name :grid-widget
+    :read-fn :vanilla.grid-service/fetch-data}])
    ;:params   []
    ;:schedule {:in    [0 :seconds]
    ;           :every [5 :seconds]}}])

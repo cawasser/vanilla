@@ -106,7 +106,11 @@
 
       ["11000" "current-time" "Current Time"
        "data-format/string" "vanilla.current-time-service/fetch-data"
-       "returns a simple text"]]})
+       "returns a simple text"]
+
+      ["12000" "grid-service" "Grid Data"
+       ":data-format/entities" "vanilla.grid-service/fetch-data"
+       "returns users' info"]]})
 
 
   (create-services!
@@ -164,7 +168,8 @@
      {:keywrd :deps-widget, :ret_types [:data-format/x-y :data-format/from-to], :icon "/images/deps-widget.png", :label "Dependencies"}
      {:keywrd :network-widget, :ret_types [:data-format/x-y :data-format/from-to], :icon "/images/network-widget.png", :label "Network"}
      {:keywrd :org-widget, :ret_types [:data-format/x-y :data-format/from-to], :icon "/images/org-widget.png", :label "Org Chart"}
-     {:keywrd :heatmap-widget, :ret_types [:data-format/x-y-n], :icon "/images/heatmap-widget.png", :label "Heatmap"}])
+     {:keywrd :heatmap-widget, :ret_types [:data-format/x-y-n], :icon "/images/heatmap-widget.png", :label "Heatmap"}
+     {:keywrd :grid-widget, :ret_types [:data-format/entities], :icon "/images/grid-widget.png", :label "Grid Data"}])
 
   (def s (get-services vanilla-db))
   (def s-1 (first s))
