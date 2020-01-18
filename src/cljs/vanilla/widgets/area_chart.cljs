@@ -19,19 +19,19 @@
 
 ;;;;;;;;      y -> x-y conversion function (y-conversion)   ;;;;;;;;;;;;;
 
-(defn y-conversion [chart-type d options]
-  (let [s (get-in d [:data :series])
-        ret (for [{:keys [name data]} s]
-              (assoc {}
-                :name name
-                :data (into []
-                            (for [x-val (range 0 (count data))]
-                              [x-val (get data x-val) 1]))))]
-
-    (prn "y-conversion " ret)
-    (into [] ret)))
-
-
+;(defn y-conversion [chart-type d options]
+;  (let [s (get-in d [:data :series])
+;        ret (for [{:keys [name data]} s]
+;              (assoc {}
+;                :name name
+;                :data (into []
+;                            (for [x-val (range 0 (count data))]
+;                              [x-val (get data x-val) 1]))))]
+;
+;    (prn "y-conversion " ret)
+;    (into [] ret)))
+;
+;
 
 ;;;;;;;;;;;;;;
 ;
@@ -49,5 +49,5 @@
 
                  :merge-plot-option {:default plot-options}
 
-                 :conversions       {:default mc/default-conversion
-                                     :data-format/y y-conversion}}))
+                 :conversions       {:default mc/default-conversion}}))
+                                     ;:data-format/y y-conversion}}))
