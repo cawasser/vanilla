@@ -4,7 +4,7 @@
 Data formats are used to describe both the data returned from a data service and the data
 formats acceptable for visualization by UI widgets.
 
-Data formats are Clojure [keywords](https://clojure.org/guides/learn/syntax) within the code, but due to incompatibilities in
+Data formats are Clojure [keywords](https://clojure.org/guides/learn/syntax#_symbols_and_idents) within the code, but due to incompatibilities in
 storing keywords in SQL databases (specifically SQLite), they are stored as simple strings
 and do _*NOT*_ include the ':' character.
 
