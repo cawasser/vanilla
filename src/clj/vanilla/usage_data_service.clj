@@ -1,7 +1,7 @@
 (ns vanilla.usage-data-service)
 
 (defn usage-data []
-  [{:keys ["name" "y" "selected" "sliced"]
+  [{:keys ["name" "y"]
     :data [["Apples" (rand 100)]
            ["Pears" (rand 100)]
            ["Oranges" (rand 100)]

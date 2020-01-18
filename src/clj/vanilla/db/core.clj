@@ -117,7 +117,7 @@
        "returns green/yellow/red status for a collection of items"]
 
       ["9000" "usage-12-hour-service" "12-hour Usage Data"
-       "data-format/label-y-n" "vanilla.usage-12-hour-service/fetch-data"
+       "data-format/rose-y-n" "vanilla.usage-12-hour-service/fetch-data"
        "returns quantity of fruit sold per hour"]
 
       ["10000" "scatter-service-data" "Scatter Data"
@@ -186,6 +186,23 @@
                               :data [100 50 25 12 6]}]}})
 
   (y-conversion :dummy data {})
+
+
+
+  (def slice-at 45)
+
+  (def data-2 `({:keys ["name" "y" "z"],
+                 :data [["Apples" 0.7879438295646968 10]
+                        ["Pears" 98.70783117307522 10]
+                        ["Oranges" 74.74830656485089 10]
+                        ["Plums" 7.7001283846018005 10]
+                        ["Bananas" 0.8177902166278117 10]
+                        ["Peaches" 19.772631719757726 10]
+                        ["Prunes" 48.40954519661507 10]
+                        ["Avocados" 26.941125770951402 10]]}))
+
+  (conj (:keys (first data-2)) "selected" "sliced")
+  (map #(conj % false (< (second %) slice-at)) (:data (first data-2)))
 
   ())
 

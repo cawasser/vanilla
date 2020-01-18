@@ -30,9 +30,6 @@
                           :pointPadding 0.2}}})
 
 
-(defn no-conversion [chart-type data options]
-  {:series (get-in data [:data :series])})
-
 
 
 ;;;;;;;;;;;;;;
@@ -42,7 +39,7 @@
 (defn register-type []
   (mc/register-type
     :rose-chart {:chart-options     {:chart/type              :rose-chart
-                                     :chart/supported-formats [:data-format/label-y-n :data-format/label-y-e]
+                                     :chart/supported-formats [:data-format/rose-y-n :data-format/rose-y-e]
                                      :chart                   {:type     "column"
                                                                :polar    "true"
                                                                :zoomType "x"}
@@ -51,5 +48,5 @@
 
                  :merge-plot-option {:default plot-options}
 
-                 :conversions       {:default no-conversion}}))
+                 :conversions       {:default mc/default-conversion}}))
 

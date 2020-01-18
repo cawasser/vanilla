@@ -20,37 +20,61 @@
                       :minPointSize 10})
 
 
-(defn- process-data [chart-type data options]
 
-  (let [series (get-in data [:data :series])
-        ret    (for [d series]
-                    (apply assoc d default-options))]
 
-    (prn "vari-pie process-data (data) "
+(defn- add-slice-data [data slice-at]
+
+  (prn "vari-pie add-slice-data STARTED!! " data)
+
+  (let [new-keys (conj (:keys data) "selected" "sliced")
+        new-data (map #(conj % false (< (second %) slice-at)) (:data data))
+        ret [{:colorByPoint true
+              :keys         new-keys
+              :data         new-data}]]
+
+    (prn "add-slice-data " data
+      " //// (slice-at) " slice-at
+      " //// (new-keys) " new-keys
+      " //// (new-data) " new-data
       " //// (ret) " ret)
 
     ret))
 
 
-;(defn convert-x-y
-;  [chart-type data options]
-;
-;  ;(.log js/console (str "vari-pie/convert-x-y " chart-type))
-;
-;  (process-data (get-in data [:data (get-in options [:src/extract])])
-;    (get-in options [:viz/slice-at])))
-;
-;
-;(defn convert-name-y
-;  [chart-type data options]
-;
-;  ;(.log js/console (str "vari-pie/convert-name-y " chart-type
-;  ;                      " //// " data " //// " options
-;  ;                      " //// " (get-in data [:data :series 0 :data])]
-;
-;  (process-data (get-in data [:data :series 0 :data] [])
-;    (get-in options [:viz/slice-at])))
-;
+(defn add-the-y-conversion [default-y chart-config data options]
+
+  (let [series (get-in data [:data :series])
+        ret (for [{data :data :as all} series]
+              (assoc all
+                :keys ["name" "y" "z"]
+                :data (into []
+                        (for [[x z] data]
+                          [x default-y z]))))]
+
+    (prn "add-the-y-conversion (from)" data
+      " //// (series) " series
+      " /// (to) " ret)
+
+    (into [] ret)))
+
+
+(defn- process-data [default-y slice-at chart-config data options]
+
+  (prn "vari-pie PROCESS started (data) " data)
+
+  (let [add-the-n (add-the-y-conversion default-y chart-config data options)
+        add-slice (add-slice-data (first add-the-n) slice-at)
+        ret    (for [d add-slice]
+                 (merge d default-options))]
+
+    (prn "vari-pie process-data (data) " data
+      " //// (add-th-n) " add-the-n
+      " //// (add-slice) " add-slice
+      " //// (ret) " ret)
+
+    ret))
+
+
 
 ;;;;;;;;;;;;;;
 ;
@@ -59,13 +83,14 @@
 (defn register-type []
   (mc/register-type
     :vari-pie-chart {:chart-options     {:chart/type              :vari-pie-chart
-                                         :chart/supported-formats [:data-format/label-y-n :data-format/label-y-e]
+                                         :chart/supported-formats [:data-format/label-y-n :data-format/label-y :data-format/label-y-e]
                                          :chart                   {:type  "variablepie"
                                                                    :style {:labels {:fontFamily "monospace"
                                                                                     :color      "#FFFFFF"}}}}
                      :merge-plot-option {:default plot-options}
 
-                     :conversions       {:default process-data}}))
+                     :conversions       {:default mc/default-conversion
+                                         :data-format/label-y (partial process-data 100 45)}}))
 
 
 
