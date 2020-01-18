@@ -38,8 +38,14 @@ This single-page application (SPA) provides a number of graphical widgets based 
 
 ## Development
 
+### Writing new code
+
 - [Adding new chart types](docs/adding-new-chart-types.md)
 - [Adding new widget types](docs/adding-new-widget-types.md)
+- [Supporting different data formats](docs/managing-data-formats.md)
+
+### Running the application
+
 - [Running the code in 'Development Mode'](docs/development-mode.md)
 - [Deploy to Docker](docs/deploy-to-docker.md)
 - [Deploy to AWS](docs/deploy-to-aws.md)
@@ -51,21 +57,32 @@ This single-page application (SPA) provides a number of graphical widgets based 
 ### Auto-Documentation
 [Marginalia](https://github.com/gdeer81/marginalia) and more specifically [lein-marginalia](https://github.com/gdeer81/lein-marginalia)has been added as a plugin to this project to keep a healthy level of documentation of our codebase and architecture. The plugin essentially scans through the project and creates an html "wiki" of how our project operates. It takes all our in line comments and can be added to easily to explain certain namespaces, functions, or design decisions.
 
- To run the plugin and generate the aforementioned wiki simply use:
+To run the plugin and generate the aforementioned wiki simply use:
 
- ```
- lein marg
- ```
+```
+lein marg
+```
 
- This will generate the file: 
+This will generate the file:
 
- ```
- ./docs/uberdoc.html
- ```
+```
+./docs/uberdoc.html
+```
 
 Here is the document it generates:
 
 [marginalia-uberdoc](./docs/uberdoc.html)
+
+
+### Generated Diagrams
+
+Diagrams are generated "automatically" by ???
+
+- [System Overview](diagrams/basicSysContx.png)
+- [Containers](diagrams/basicContainer.png)
+- [Components](diagrams/basicComponent.png)
+
+
 
 
 #### see also
