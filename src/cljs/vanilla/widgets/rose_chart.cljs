@@ -30,6 +30,10 @@
                           :pointPadding 0.2}}})
 
 
+(defn no-conversion [chart-type data options]
+  {:series (get-in data [:data :series])})
+
+
 
 ;;;;;;;;;;;;;;
 ;
@@ -47,5 +51,5 @@
 
                  :merge-plot-option {:default plot-options}
 
-                 :conversions       {:default mc/default-conversion}}))
+                 :conversions       {:default no-conversion}}))
 

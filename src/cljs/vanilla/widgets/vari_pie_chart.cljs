@@ -14,47 +14,43 @@
                                                   :format  (get options :viz/labelFormat "")}}}})
 
 
-;;;;;;;;;;;;;;
-;
-; these functions will convert the data from the current format into
-; what the chart type actually wants. This may involve adding
-; data to the :series, or rearranging the contents
+(def default-options {:colorByPoint true
+                      :zmin         0
+                      :innerSize    "20%"
+                      :minPointSize 10})
 
-(defn- process-data [data slice-at]
 
-  ;(.log js/console "vari-pie process-data" (str data))
+(defn- process-data [chart-type data options]
 
-  (let [ret [{:colorByPoint true
-              :zmin         0
-              :innerSize    "20%"
-              :minPointSize 10
-              :keys         ["name" "y" "z"]
-              :data         (map #(conj % (rand 100)) data)}]]
+  (let [series (get-in data [:data :series])
+        ret    (for [d series]
+                    (apply assoc d default-options))]
 
-    ;(.log js/console (str "VARI-PROCESSED-DATA: " ret))
+    (prn "vari-pie process-data (data) "
+      " //// (ret) " ret)
 
     ret))
 
 
-(defn convert-x-y
-  [chart-type data options]
-
-  ;(.log js/console (str "vari-pie/convert-x-y " chart-type))
-
-  (process-data (get-in data [:data (get-in options [:src/extract])])
-                (get-in options [:viz/slice-at])))
-
-
-(defn convert-name-y
-  [chart-type data options]
-
-  ;(.log js/console (str "vari-pie/convert-name-y " chart-type
-  ;                      " //// " data " //// " options
-  ;                      " //// " (get-in data [:data :series 0 :data])]
-
-  (process-data (get-in data [:data :series 0 :data] [])
-                (get-in options [:viz/slice-at])))
-
+;(defn convert-x-y
+;  [chart-type data options]
+;
+;  ;(.log js/console (str "vari-pie/convert-x-y " chart-type))
+;
+;  (process-data (get-in data [:data (get-in options [:src/extract])])
+;    (get-in options [:viz/slice-at])))
+;
+;
+;(defn convert-name-y
+;  [chart-type data options]
+;
+;  ;(.log js/console (str "vari-pie/convert-name-y " chart-type
+;  ;                      " //// " data " //// " options
+;  ;                      " //// " (get-in data [:data :series 0 :data])]
+;
+;  (process-data (get-in data [:data :series 0 :data] [])
+;    (get-in options [:viz/slice-at])))
+;
 
 ;;;;;;;;;;;;;;
 ;
@@ -69,8 +65,7 @@
                                                                                     :color      "#FFFFFF"}}}}
                      :merge-plot-option {:default plot-options}
 
-                     :conversions       {:data-format/x-y convert-x-y
-                                         :default         convert-name-y}}))
+                     :conversions       {:default process-data}}))
 
 
 
