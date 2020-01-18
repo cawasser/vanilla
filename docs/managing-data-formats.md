@@ -28,8 +28,8 @@ Specifically, data formats take the form `:data-format/<format encoding>`, so th
 
 #### Compound Formats
 
-- 'x-y' indicates that the data will be stored as a vector of 2 numbers (i.e., \[ <x> <y> \])
-- 'grid' denotes data stored in \[ <x> <y> \] format, but with specific semantics _not_ supported by the more general widgets
+- 'x-y' indicates that the data will be stored as a vector of 2 numbers (i.e., \[ \<x\> \<y\> \])
+- 'grid' denotes data stored in \[ \<x\> \<y\> \] format, but with specific semantics _not_ supported by the more general widgets
 - 'rose' is used to denote semantic meaning for data categorized by the 12 or 24 hour clock (see [Rose Widget](widget-docs/rose-widget.md))
 
 
