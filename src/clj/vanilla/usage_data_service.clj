@@ -15,7 +15,7 @@
   (prn "Usage Data")
 
   {:title       "Usage Data"
-   :data-format :data-format/name-y
+   :data-format :data-format/label-y
    :src/x-title "Fruit"
    :src/y-title "Qty."
    :series      (usage-data)})

@@ -109,15 +109,15 @@
        "returns quantity of fruit sold"]
 
       ["7000" "heatmap-data" "Heatmap Data"
-       "data-format/x-y-n" "vanilla.heatmap-service/heatmap-data"
+       "data-format/grid-n" "vanilla.heatmap-service/heatmap-data"
        "returns quantity of fruit sold per country"]
 
       ["8000" "health-and-status-data" "Health and Status"
        "data-format/entity" "vanilla.stoplight-service/fetch-data"
        "returns green/yellow/red status for a collection of items"]
 
-      ["9000" "usage-24-hour-service" "12-hour Usage Data"
-       "data-format/x-y-n" "vanilla.usage-24-hour-service/fetch-data"
+      ["9000" "usage-12-hour-service" "12-hour Usage Data"
+       "data-format/label-y-n" "vanilla.usage-12-hour-service/fetch-data"
        "returns quantity of fruit sold per hour"]
 
       ["10000" "scatter-service-data" "Scatter Data"

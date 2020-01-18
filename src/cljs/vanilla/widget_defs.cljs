@@ -83,7 +83,7 @@
                :basis     :chart
                :type      :heatmap-chart
                ;:data-source :spectrum-traces
-               :ret_types [:data-format/x-y-n :data-format/x-y-e :data-format/lat-lon-n :data-format/lat-lon-e]
+               :ret_types [:data-format/grid-n :data-format/grid-e :data-format/lat-lon-n :data-format/lat-lon-e]
                :icon      "/images/heatmap-widget.png"
                :label     "Heatmap"
                :options   {:viz/title        "Heat Map"

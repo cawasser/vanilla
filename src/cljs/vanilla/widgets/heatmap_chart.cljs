@@ -9,35 +9,35 @@
 ;
 ; line vanilla.widgets.line-chart
 ;
-(defn plot-options-x-y
-  [chart-config data options]
-
-  ;(.log js/console (str "line/plot-options-x-y " chart-config))
-
-  {:xAxis       {:title {:text          (get-in data [:data :src/x-title] "x-axis")
-                         :allowDecimals (get-in options [:viz/x-allowDecimals] false)}}
-   :yAxis       {:title {:text          (get-in data [:data :src/y-title] "y-axis")
-                         :allowDecimals (get-in options [:viz/y-allowDecimals] false)}}
-   :plotOptions {:series {:animation (:viz/animation options false)}
-                 :line   {:dataLabels {:enabled (:viz/dataLabels options false)
-                                       :format  (:viz/labelFormat options "")}
-                          :lineWidth  (:viz/lineWidth options 1)}}})
-
-
-(defn plot-options-y
-  [chart-config data options]
-
-  ;(.log js/console (str "line/plot-options-y " chart-config))
-
-  {:xAxis       {; what to do about x-categories?  :categories (:src/x-categories data [])
-                 :title {:text          (get-in data [:data :src/x-title] "x-axis")
-                         :allowDecimals (get-in options [:viz/x-allowDecimals] false)}}
-   :yAxis       {:title {:text          (get-in data [:data :src/y-title] "y-axis")
-                         :allowDecimals (get-in options [:viz/y-allowDecimals] false)}}
-   :plotOptions {:series {:animation (:viz/animation options false)}
-                 :line   {:dataLabels {:enabled (:viz/dataLabels options false)
-                                       :format  (:viz/labelFormat options "")}
-                          :lineWidth  (:viz/lineWidth options 1)}}})
+;(defn plot-options-x-y
+;  [chart-config data options]
+;
+;  ;(.log js/console (str "line/plot-options-x-y " chart-config))
+;
+;  {:xAxis       {:title {:text          (get-in data [:data :src/x-title] "x-axis")
+;                         :allowDecimals (get-in options [:viz/x-allowDecimals] false)}}
+;   :yAxis       {:title {:text          (get-in data [:data :src/y-title] "y-axis")
+;                         :allowDecimals (get-in options [:viz/y-allowDecimals] false)}}
+;   :plotOptions {:series {:animation (:viz/animation options false)}
+;                 :line   {:dataLabels {:enabled (:viz/dataLabels options false)
+;                                       :format  (:viz/labelFormat options "")}
+;                          :lineWidth  (:viz/lineWidth options 1)}}})
+;
+;
+;(defn plot-options-y
+;  [chart-config data options]
+;
+;  ;(.log js/console (str "line/plot-options-y " chart-config))
+;
+;  {:xAxis       {; what to do about x-categories?  :categories (:src/x-categories data [])
+;                 :title {:text          (get-in data [:data :src/x-title] "x-axis")
+;                         :allowDecimals (get-in options [:viz/x-allowDecimals] false)}}
+;   :yAxis       {:title {:text          (get-in data [:data :src/y-title] "y-axis")
+;                         :allowDecimals (get-in options [:viz/y-allowDecimals] false)}}
+;   :plotOptions {:series {:animation (:viz/animation options false)}
+;                 :line   {:dataLabels {:enabled (:viz/dataLabels options false)
+;                                       :format  (:viz/labelFormat options "")}
+;                          :lineWidth  (:viz/lineWidth options 1)}}})
 
 
 
@@ -49,7 +49,7 @@
   (mc/register-type
     :heatmap-chart
     {:chart-options     {:chart/type              :heatmap-chart
-                         :chart/supported-formats [:data-format/x-y-n :data-format/x-y-e :data-format/lat-lon-n :data-format/lat-lon-e]
+                         :chart/supported-formats [:data-format/grid-n :data-format/grid-e :data-format/lat-lon-n :data-format/lat-lon-e]
                          :chart                   {:type            "heatmap"
                                                    :zoomType        "x"
                                                    :marginTop       40
