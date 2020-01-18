@@ -42,8 +42,7 @@
                                      :chart                   {:type     "column"
                                                                :polar    "true"
                                                                :zoomType "x"}
-                                     :yAxis                   {:min    0
-                                                               :title  {:align "high"}
+                                     :yAxis                   {:title  {:align "high"}
                                                                :labels {:overflow "justify"}}}
 
                  :merge-plot-option {:default plot-options}

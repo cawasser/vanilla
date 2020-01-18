@@ -47,7 +47,7 @@
 
   (with-precision 1 (range 7900 (+ 7900 (* 5 0.1)) 0.1))
 
-  (make-trace 7900 250 0.1 -200 150 1)
+  (make-trace 7900 250 0.1 -20 15 1)
 
 
   (into []

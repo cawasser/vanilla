@@ -30,8 +30,7 @@
                                     :chart/supported-formats [:data-format/x-y :data-format/x-y-n :data-format/x-y-e :data-format/y]
                                     :chart                   {:type     "bar"
                                                               :zoomType "x"}
-                                    :yAxis                   {:min    0
-                                                              :title  {:align "high"}
+                                    :yAxis                   {:title  {:align "high"}
                                                               :labels {:overflow "justify"}}}
 
                 :merge-plot-option {:default plot-options}
