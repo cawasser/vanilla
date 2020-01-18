@@ -8,18 +8,18 @@ Data formats are Clojure [keywords](https://clojure.org/guides/learn/syntax) wit
 storing keywords in SQL databases (specifically SQLite), they are stored as simple strings
 and do _*NOT*_ include the ':' character.
 
-> This allows the use of the [(keyword <string>)](https://clojuredocs.org/clojure.core/keyword) function to reconstitute
+> This allows the use of the [(keyword \<string\>)](https://clojuredocs.org/clojure.core/keyword) function to reconstitute
 
 
-Specifically, data formats take the form `:data-format/<format encoding>` so they are namespaced ot `data-format`
+Specifically, data formats take the form `:data-format/<format encoding>`, so they in the "namespace" `data-format`
 
 
 ### Encoding
 
 - 'x' is used to denote numbers that are mapped to the "x axis" of a chart
 - 'y' is used to denote numbers that are mapped to the "y axis" of a chart
-- 'from' denotes the "from" element of a relation, typically expressed as a <string>
-- 'to' denotes the "to" element of a relation, typically expressed as a <string>
+- 'from' denotes the "from" element of a relation, typically expressed as a \<string\>
+- 'to' denotes the "to" element of a relation, typically expressed as a \<string\>
 - 'n' is used to denote numbers that represent the magnitude of the value at coordinate "C"
 - 'e' denotes that the magnitude data is taken form an "entity," defined as a hash-map
 

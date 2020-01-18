@@ -22,7 +22,7 @@ This single-page application (SPA) provides a number of graphical widgets based 
 
 ### Client-side
 
-- [ ] improve chart conversions between the various :data-format/<> types
+- [x] improve chart conversions between the various :data-format/\<\> types
 - [x] user picker for colors and title, using \[cljsjs/react-color "2.13.8-0"\] [link](http://casesandberg.github.io/react-color/)
 - [ ] move some of the viz stuff (labels, etc) to the service definition/data-message to make more declarative (mix-in? where?)
 - [ ] ~~figure out how to let the user pick the charts in a stacked or side-by-side~~ (DROPPED)
