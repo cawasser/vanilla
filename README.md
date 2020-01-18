@@ -23,18 +23,23 @@ This single-page application (SPA) provides a number of graphical widgets based 
 ### Client-side
 
 - [x] improve chart conversions between the various :data-format/\<\> types
-- [x] user picker for colors and title, using \[cljsjs/react-color "2.13.8-0"\] [link](http://casesandberg.github.io/react-color/)
+- [x] user picker for colors and title, using [\[cljsjs/react-color "2.13.8-0"\]](http://casesandberg.github.io/react-color/)
 - [ ] move some of the viz stuff (labels, etc) to the service definition/data-message to make more declarative (mix-in? where?)
-- [ ] ~~figure out how to let the user pick the charts in a stacked or side-by-side~~ (DROPPED)
-- [ ] allow widgets to publish/subscribe of user selection events so multiple widgets can work together
-- [ ] migrate the widget defs to the server and load them dynamically (can this be done with a push from the server? that way the client will get the updates as soon as we put them on the server-farm)
+- [ ] allow widgets to publish/subscribe user selection events so multiple widgets can work together
 - [ ] login
+- [ ] store widget layout for each user (and restore on next login)
+- [ ] `spec` the data structures (`:data-format/*`)
 - [ ] generative testing of the client
+- [ ] migrate the widget defs to the server and load them dynamically (can this be done with a push from the server? that way the client will get the updates as soon as we put them on the server-farm)
+
+- [ ] ~~figure out how to let the user pick the charts in a stacked or side-by-side~~ (DROPPED)
+
 
 ### Services-side
-- login
-- RabitMQ support using [Bunnicula](https://github.com/nomnom-insights/nomnom.bunnicula)
-- Kafka support
+- [ ] login
+- [ ] reload widgets on user login
+- [ ] RabitMQ support using [Bunnicula](https://github.com/nomnom-insights/nomnom.bunnicula)
+- [ ] Kafka support
 
 ## Development
 

@@ -21,7 +21,7 @@ Specifically, data formats take the form `:data-format/<format encoding>`, so th
 - 'from' denotes the "from" element of a relation, typically expressed as a \<string\>
 - 'to' denotes the "to" element of a relation, typically expressed as a \<string\>
 - 'n' is used to denote numbers that represent the magnitude of the value at coordinate "C"
-- 'e' denotes that the magnitude data is taken form an "entity," defined as a hash-map
+- 'e' denotes that the magnitude data is taken from an "entity," provided in a hash-map
 
 > where "C" can be 'x-y', 'grid', etc.
 
