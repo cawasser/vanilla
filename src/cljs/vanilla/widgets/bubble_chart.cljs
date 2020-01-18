@@ -39,6 +39,7 @@
 
                    :merge-plot-option {:default plot-options}
 
-                   :conversions       {:default mc/default-conversion}}))
+                   :conversions       {:default mc/default-conversion
+                                       :data-format/x-y (partial mc/add-the-n-conversion "z" 0.01)}}))
 
 

@@ -38,7 +38,7 @@
                           [])]
 
     (prn "get-conversion " chart-type "/" format-type
-;      " //// (data)" data
+      " //// (data)" data
       " //// (chart-reg-entry) " chart-reg-entry
       " //// (conversions) " conversions
       " //// (conv-fn) " conv-fn
@@ -137,16 +137,23 @@
 
     ret))
 
-(defn add-the-n-conversion [chart-type data options]
-  (let [source (get-in data [:data :series 0 :data])
-        ret (mapv (fn [[x y]] [x y 1]) source)]
 
-    (prn "add-the-n-conversion " chart-type
-      " //// (source) " source
-      " //// (ret)" ret)
 
-    [{:data ret}]))
+(defn add-the-n-conversion [n-name default-n chart-config data options]
 
+  (let [series (get-in data [:data :series])
+        ret (for [{keys :keys data :data :as all} series]
+              (assoc all
+                :keys (conj keys n-name)
+                :data (into []
+                        (for [[x y] data]
+                          [x y default-n]))))]
+
+    (prn "add-the-n-conversion (from)" data
+      " //// (series) " series
+      " /// (to) " ret)
+
+    (into [] ret)))
 
 
 

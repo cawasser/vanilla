@@ -5,11 +5,13 @@
   (prn "Bubble Service")
 
   {:title "Bubble Data"
-   :data-format :x-y-n
+   :data-format :data-format/x-y-n
 
    ; notice how we can mix formats - some data sets can be maps,
    ; while others can be vectors with the keys in a separate key,
    ; called :keys
+
+   ; TODO: PICK ONE!!!!!!!!!!
    ;
    :series  [{:name "Countries"
               :data [{:x 95 :y 95 :z 13.8 :name "BE" :country "Belgium"}

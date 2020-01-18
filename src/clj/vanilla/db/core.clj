@@ -105,7 +105,7 @@
        "returns interconnectivity data"]
 
       ["6000" "power-data" "Power Data"
-       "data-format/label-y" "vanilla.power-data-service/power-data"
+       "data-format/x-y" "vanilla.power-data-service/power-data"
        "returns quantity of fruit sold"]
 
       ["7000" "heatmap-data" "Heatmap Data"

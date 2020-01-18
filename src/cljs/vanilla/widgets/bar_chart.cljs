@@ -20,21 +20,6 @@
 
 
 
-(defn convert-pie-to-bar [chart-type data options]
-
-  ;(.log js/console (str "bar/convert-pie-to-bar " chart-type
-  ;                      " //// (data)" data
-  ;                      " //// (options)" options))
-
-  (let [dats (get-in data [:data :series 0 :data])
-        new-data (into [] (map (fn [[n v]] {:name n :data [v]}) dats))]
-
-    ;(.log js/console (str "pie->bar " data " -> " new-data))
-
-    new-data))
-
-
-
 ;;;;;;;;;;;;;;
 ;
 ; register all the data stuff so we have access to it
@@ -51,6 +36,5 @@
 
                 :merge-plot-option {:default plot-options}
 
-                :conversions       {:data-format/name-y convert-pie-to-bar
-                                    :default mc/default-conversion}}))
+                :conversions       {:default mc/default-conversion}}))
 

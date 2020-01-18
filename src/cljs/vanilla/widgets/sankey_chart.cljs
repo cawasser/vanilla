@@ -11,15 +11,15 @@
 ;  {:plotOptions {:series {:animation (:viz/animation options false)}}})
 ;
 ;
-(defn sankey-conversion
-  [chart-type data options]
-
-  ;(prn "sankey-conversion " chart-type
-  ;  " //// (data)" data
-  ;  " //// (options)" options)
-
-  [{:keys (get-in data [:data :src/keys] [])
-    :data (get-in data [:data :series 0 :data])}])
+;(defn sankey-conversion
+;  [chart-type data options]
+;
+;  ;(prn "sankey-conversion " chart-type
+;  ;  " //// (data)" data
+;  ;  " //// (options)" options)
+;
+;  [{:keys (get-in data [:data :src/keys] [])
+;    :data (get-in data [:data :series 0 :data])}])
 
 
 
@@ -38,7 +38,8 @@
                    {:default mc/default-plot-options}
 
                    :conversions
-                   {:default sankey-conversion}}))
+                   {:default mc/default-conversion
+                    :data-format/from-to (partial mc/add-the-n-conversion "weight" 1)}}))
 
 
 
