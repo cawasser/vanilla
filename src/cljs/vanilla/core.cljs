@@ -41,9 +41,10 @@
 (rf/reg-event-db
   :set-layout
   (fn-traced [db [_ layout-data]]
-     (prn ":SET-layout " layout-data)
+   (prn "Set-layout start: " layout-data)
 
      (let [de-stringed (mapv #(into {} (for [[k v] %] [k (edn/read-string v)])) (:layout layout-data))]
+       (prn ":SET-layout " de-stringed)
 
         (assoc db :widgets de-stringed))))
 

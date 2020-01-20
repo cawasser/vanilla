@@ -84,8 +84,8 @@
 
 (defn widget-wrapper [props data]
 
-  ;(prn "widget-wrapper..." props
-  ;  " //// data " data)
+  (prn "widget-wrapper..." props
+    " //// data " data)
 
   (let [content (widget/setup-widget props)
         ret     [:div
@@ -94,11 +94,11 @@
                                        :color            (get-in props [:options :viz/banner-text-color] "black")}})
                  content]]
 
-    ;(prn "widget-wrapper "
-    ;  " //// props " props)
-      ;" //// data " data
-      ;" //// content " content
-      ;" //// ret " ret)
+    (prn "widget-wrapper "
+      " //// props " props
+      " //// data " data
+      " //// content " content
+      " //// ret " ret)
 
     ret))
 
