@@ -109,7 +109,7 @@
        "returns a simple text"]
 
       ["12000" "grid-service" "Grid Data"
-       ":data-format/entities" "vanilla.grid-service/fetch-data"
+       "data-format/entities" "vanilla.grid-service/fetch-data"
        "returns users' info"]]})
 
 

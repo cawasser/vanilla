@@ -52,7 +52,7 @@
    {:name     :current-time
     :read-fn  :vanilla.current-time-service/fetch-data}
 
-   {:name :grid-widget
+   {:name :grid-service
     :read-fn :vanilla.grid-service/fetch-data}])
    ;:params   []
    ;:schedule {:in    [0 :seconds]
