@@ -4,7 +4,8 @@
     [re-frame.core :as rf]
     [vanilla.events]
     [cljsjs.react-grid-layout]
-    [vanilla.widgets.core :as widget]))
+    [vanilla.widgets.core :as widget]
+    [ajax.core :as ajax]))
 
 
 
@@ -22,13 +23,32 @@
 ;                                                          :color            "white"}})
 ;
 
-
-(rf/reg-fx
+;might not even have to pass in layout?
+(rf/reg-event-fx
   :save-layout
-  xtp.io
-  http.io
-  ;sample3
-  )
+  (fn-traced
+    [cofx [_ layout]]
+    (let [data (-> (:db cofx) :widgets)
+          path (str "/save-layout")]
+      (prn ":save-layout data: " data
+           " //// path: " path
+           " //// layout?: " layout)
+      ;TODO change the data to strip the keys out and order correctly for db
+
+      {:http-xhrio {:method          :post
+                    :params          data
+                    :uri             path
+                    :format          (ajax/json-request-format)
+                    :response-format (ajax/json-response-format {:keywords? true})
+                    :on-success      (prn "Layout saved successfully to the database")  ;maybe have a layout saved popup or status icon
+                    :on-failure      [:common/set-error]}})))   ;figure out how we want to handle errors
+
+(rf/reg-event-db
+  :common/set-error
+  (fn-traced
+    [db [_ error]]
+    (prn "Error saving the layout to the DB: " error)))
+    ;(assoc db :common/error error)))
 
 
 (defn fixup-new-widget [widget]
@@ -56,8 +76,7 @@
 
         (rf/dispatch [:update-layout (js->clj new :keywordize-keys true)])
 
-    ;Possibly fire off an rf/dispatch-sync (need to create event-fx too still)
-        (rf/dispatch [:save-layout (js->clj new :keywordize-keys true)])))   ;make this right
+        (rf/dispatch [:save-layout (js->clj new :keywordize-keys true)])))
 
     (on-change prev (js->clj new :keywordize-keys true))))
 

@@ -41,12 +41,13 @@
      :body (str (json/write-str {:layout (h/get-layout)}))})
 
   (POST "/save-layout" req
+    (prn "d.ROUTES save-layout request: " req)
     {:status 200
      :parameters {:body {:request string?}}
      :responses {200 {:body {:result string?}}}
      :headers {"Content-Type" "text/json; charset=utf-8"}   ;maybe convert from text-json to straight edn
      ;pull apart parameters and strip the keys off the values for the DB call
-     :body (str (json/write-str {:layout (h/save-layout parameters)}))})
+     :body (h/save-layout (:widgets req))})  ; this is way off, what is this body even needed for?
 
   (resources "/"))
 
