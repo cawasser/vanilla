@@ -51,7 +51,7 @@ Org         | from-to             | from-to-n    | from-to-e |
 Dependency  | from-to-n           | from-to      | from-to-e |
 Sankey      | from-to-n           | from-to      | from-to-e |
 Pie         | label-y             |              |           |
-Vari-pie    | label-y-n           |              | label-y-e |
+Vari-pie    | label-y-n           | label-y      | label-y-e |
 Rose        | rose-y-n            |              | rose-y-e  |
 
 
@@ -66,7 +66,7 @@ Data Source         | Data Format
 Spectrum Traces     | x-y
 Power Data          | x-y
 Scatter Data        | x-y
-Relationship Data   | x-y-n
+Relationship Data   | from-to-n
 Bubble Data         | x-y-n
 Heatmap Data        | grid-n
 Network Data        | from-to
