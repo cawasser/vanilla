@@ -23,31 +23,37 @@
   (GET "/version" _
     {:status 200
      :headers {"Content-Type" "text/json; charset=utf-8"}
-     :body (str (json/write-str {:version (version/get-version
-                                            "vanilla"
-                                            "vanilla"
-                                            "version number not found")}))})
+     :body (do
+             (prn "get version")
+             (str (json/write-str {:version (version/get-version
+                                              "vanilla"
+                                              "vanilla"
+                                              "version number not found")})))})
 
   (GET "/services" _
     {:status 200
      :headers {"Content-Type" "text/json; charset=utf-8"}
-     :body (str (json/write-str {:services (h/get-services)}))})
+     :body (do
+             (prn "get services")
+             (str (json/write-str {:services (h/get-services)})))})
 
 
   ;TODO test removing the write-str here and put the de-string back in url handler
   (GET "/layout" _
     {:status 200
      :headers {"Content-Type" "text/json; charset=utf-8"}
-     :body (str (json/write-str {:layout (h/get-layout)}))})
+     :body (do
+             (prn "get layout")
+             (str (json/write-str {:layout (h/get-layout)})))})
+
 
   (POST "/save-layout" req
-    (prn "d.ROUTES save-layout request: " req)
     {:status 200
-     :parameters {:body {:request string?}}
-     :responses {200 {:body {:result string?}}}
      :headers {"Content-Type" "text/json; charset=utf-8"}   ;maybe convert from text-json to straight edn
      ;pull apart parameters and strip the keys off the values for the DB call
-     :body (h/save-layout (:widgets req))})  ; this is way off, what is this body even needed for?
+     :body (do
+             (prn "save layout " req)
+             (h/save-layout (:widgets (:params req))))})  ; this is way off, what is this body even needed for?
 
   (resources "/"))
 
@@ -62,5 +68,5 @@
 
        (GET "/version" req (ring-ajax-get-or-ws-handshake req)))
       (wrap-defaults api-defaults)
-      wrap-with-logger
+      ;wrap-with-logger
       wrap-gzip))
