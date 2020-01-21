@@ -80,6 +80,31 @@
     (assoc db :widgets (u/update-layout (:widgets db) (u/reduce-layouts layout)))))
 
 
+;might not even have to pass in layout?
+(rf/reg-event-fx
+  :save-layout
+  (fn-traced
+    [cofx [_ layout]]
+    (let [data (-> (:db cofx) :widgets)
+          path (str "/save-layout")]
+      (prn ":save-layout data: " data
+           " //// path: " path)
+
+      {:http-xhrio {:method          :post
+                    :params          data
+                    :uri             path
+                    :format          (ajax/json-request-format)
+                    :response-format (ajax/json-response-format {:keywords? true})
+                    :on-success      (prn "Layout event POSTED")  ;maybe have a layout saved popup or status icon
+                    :on-failure      [:common/set-error]}})))   ;figure out how we want to handle errors
+
+(rf/reg-event-db
+  :common/set-error
+  (fn-traced
+    [db [_ error]]
+    (prn "Error saving the layout to the DB: " error)))
+;(assoc db :common/error error)))
+
 
 
 ; adding new widgets picker support

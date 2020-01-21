@@ -23,32 +23,6 @@
 ;                                                          :color            "white"}})
 ;
 
-;might not even have to pass in layout?
-(rf/reg-event-fx
-  :save-layout
-  (fn-traced
-    [cofx [_ layout]]
-    (let [data (-> (:db cofx) :widgets)
-          path (str "/save-layout")]
-      (prn ":save-layout data: " data
-           " //// path: " path
-           " //// layout?: " layout)
-      ;TODO change the data to strip the keys out and order correctly for db
-
-      {:http-xhrio {:method          :post
-                    :params          data
-                    :uri             path
-                    :format          (ajax/json-request-format)
-                    :response-format (ajax/json-response-format {:keywords? true})
-                    :on-success      (prn "Layout saved successfully to the database")  ;maybe have a layout saved popup or status icon
-                    :on-failure      [:common/set-error]}})))   ;figure out how we want to handle errors
-
-(rf/reg-event-db
-  :common/set-error
-  (fn-traced
-    [db [_ error]]
-    (prn "Error saving the layout to the DB: " error)))
-    ;(assoc db :common/error error)))
 
 
 (defn fixup-new-widget [widget]
@@ -69,8 +43,8 @@
 
 (defn widget-wrapper [props data]
 
-  (prn "widget-wrapper..." props
-    " //// data " data)
+  ;(prn "widget-wrapper..." props
+  ;  " //// data " data)
 
   (let [content (widget/setup-widget props)
         ret     [:div
@@ -79,11 +53,11 @@
                                        :color            (get-in props [:options :viz/banner-text-color] "black")}})
                  content]]
 
-    (prn "widget-wrapper "
-      " //// props " props
-      " //// data " data
-      " //// content " content
-      " //// ret " ret)
+    ;(prn "widget-wrapper "
+    ;  " //// props " props
+    ;  " //// data " data
+    ;  " //// content " content
+    ;  " //// ret " ret)
 
     ret))
 

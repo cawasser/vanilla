@@ -40,6 +40,8 @@
      :headers {"Content-Type" "text/json; charset=utf-8"}
      :body (str (json/write-str {:layout (h/get-layout)}))})
 
+  ;TODO change the data to strip the keys out and order correctly for db
+  ;TODO add current username to map
   (POST "/save-layout" req
     (prn "d.ROUTES save-layout request: " req)
     {:status 200
