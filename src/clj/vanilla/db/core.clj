@@ -219,7 +219,34 @@
 
   ())
 
+(comment
 
+
+  (hugsql/def-db-fns "sql/queries.sql")
+  (hugsql/def-sqlvec-fns "sql/queries.sql")
+
+  (def users-db
+    "SQLite database connection spec."
+    {:dbtype "sqlite" :dbname "user_db"})
+
+  (create-user-table users-db)
+
+
+
+
+
+  (sign-up-new-user!
+    users-db
+    {:username "chad"
+     :pass "123"})
+
+  (get-user users-db {:username "chad"})
+  (get-users users-db)
+
+
+  (drop-users-table users-db)
+
+  )
 
 (comment
 
