@@ -16,7 +16,7 @@
     [vanilla.widgets.area-chart]
     [vanilla.widgets.stoplight-widget]
     [vanilla.widgets.simple-text]
-    [vanilla.widgets.grid-widget]
+    [vanilla.widgets.table-widget]
     [vanilla.widgets.bar-chart]
     [vanilla.widgets.bubble-chart]
     [vanilla.widgets.column-chart]

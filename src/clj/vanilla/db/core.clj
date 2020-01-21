@@ -108,8 +108,8 @@
        "data-format/string" "vanilla.current-time-service/fetch-data"
        "returns a simple text"]
 
-      ["12000" "grid-service" "Grid Data"
-       "data-format/entities" "vanilla.grid-service/fetch-data"
+      ["12000" "table-service" "Data Table"
+       "data-format/entities" "vanilla.table-service/fetch-data"
        "returns users' info"]]})
 
 
@@ -169,7 +169,7 @@
      {:keywrd :network-widget, :ret_types [:data-format/x-y :data-format/from-to], :icon "/images/network-widget.png", :label "Network"}
      {:keywrd :org-widget, :ret_types [:data-format/x-y :data-format/from-to], :icon "/images/org-widget.png", :label "Org Chart"}
      {:keywrd :heatmap-widget, :ret_types [:data-format/x-y-n], :icon "/images/heatmap-widget.png", :label "Heatmap"}
-     {:keywrd :grid-widget, :ret_types [:data-format/entities], :icon "/images/grid-widget.png", :label "Grid Data"}])
+     {:keywrd :table-widget, :ret_types [:data-format/entities], :icon "/images/table-widget.png", :label "Data Table"}])
 
   (def s (get-services vanilla-db))
   (def s-1 (first s))

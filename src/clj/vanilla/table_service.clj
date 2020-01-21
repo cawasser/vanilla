@@ -1,4 +1,4 @@
-(ns vanilla.grid-service)
+(ns vanilla.table-service)
 
 (defn header []
   [{:key "name"
@@ -14,7 +14,7 @@
     :name "Operating Since"
     :editable true}])
 
-(defn grid-data []
+(defn table-data []
   [{:name "user one"
     :country "USA"
     :email "user_one@none.com"
@@ -29,9 +29,9 @@
     :operating-since "2002"}])
 
 (defn fetch-data []
-  (prn "grid-widget service")
+  (prn "table-widget service")
 
-  {:title "Grid Data"
+  {:title "Data Table"
    :data-format :data-format/entities
    :meta-data   (header)
-   :series  (grid-data)})
+   :series  (table-data)})

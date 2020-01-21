@@ -1,21 +1,19 @@
-(ns vanilla.widgets.grid-widget
+(ns vanilla.widgets.table-widget
   (:require [reagent.core :as r :refer [atom]]
             [vanilla.widgets.basic-widget :as basic]))
-
-(def header ["header" "Requestor" "Requests"])
 
 
 (defn make-widget [name data options]
 
-  (prn ":grid make-widget" name
-       " //// data " data
-       " //// (options) " options)
+  ;(prn ":grid make-widget" name
+  ;     " //// data " data
+  ;     " //// (options) " options)
 
   ( let [header (get (get data :data) :meta-data)
          body (get (get data :data) :series)]
 
-    (prn "header " header
-         " //// body " body)
+    ;(prn "header " header
+    ;     " //// body " body)
 
     [:div.container
       [:table-container

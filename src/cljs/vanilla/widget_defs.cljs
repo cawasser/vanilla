@@ -44,16 +44,16 @@
                :options     {:viz/title        "Time"
                              :viz/banner-color {:r 0x00 :g 0xff :b 0xff :a 1}}}
 
-              {:name        :grid-widget
-               :basis       :simple
-               :type        :grid-widget
-               :build-fn    vanilla.widgets.grid-widget/make-widget
-               ;:data-source :grid-widget
-               :ret_types   [:data-format/entities]
-               :icon        "/images/grid-widget.png"
-               :label       "Grid Data"
-               :options     {:viz/title        "Grid"
-                             :viz/banner-color {:r 0x00 :g 0xff :b 0xff :a 1}}}
+              {:name      :table-widget
+               :basis     :simple
+               :type      :table-widget
+               :build-fn  vanilla.widgets.table-widget/make-widget
+               ;:data-source :table-widget
+               :ret_types [:data-format/entities]
+               :icon      "/images/table-widget.png"
+               :label     "Data Table"
+               :options   {:viz/title        "Table"
+                           :viz/banner-color {:r 0x00 :g 0xff :b 0xff :a 1}}}
 
               {:name      :bar-widget
                :basis     :chart
