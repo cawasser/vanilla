@@ -9,8 +9,8 @@
   ;     " //// data " data
   ;     " //// (options) " options)
 
-  ( let [header (get (get data :data) :meta-data)
-         body (get (get data :data) :series)]
+  ( let [header (get-in data [:data :meta-data])
+         body (get-in data [:data :series])]
 
     ;(prn "header " header
     ;     " //// body " body)
@@ -25,17 +25,9 @@
           (for [h header]
             ^{:key (str (get h :name))} [:th (str (get h :name))])]]
 
-
         [:tbody
          (for [b body]
            [:tr
              (for [[k v] b]
                (do
                  ^{:key (str v)}[:td (str v)]))])]]]]))
-
-
-
-
-
-
-

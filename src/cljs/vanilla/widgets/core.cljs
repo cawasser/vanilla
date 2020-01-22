@@ -3,21 +3,6 @@
             [vanilla.widgets.basic-widget :as basic]
             [vanilla.widgets.make-chart :as mc]))
 
-;(def widget-store (atom {}))
-
-; TODO - is having a widget registry even worth doing?
-
-;(defn register-widget [name w]
-;  (swap! widget-store assoc name w))
-
-;(prn "register-widget " type
-;  " //// w " w))
-
-;(defn build-simple [type data options]
-;  (get widget-store type))
-;
-
-
 (defn make-widget [name id chart-config]
 
   ;(prn "make-widget " name "of type " id ", " chart-config)

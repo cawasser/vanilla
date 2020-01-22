@@ -5,7 +5,7 @@
 
 (defn- stoplight [id val]
 
-  ;(.log js/console (str "stoplight " id ", " val))
+  ; (prn "stoplight " id ", " val)
 
   (let [c (condp = val
             :up "green"
@@ -21,7 +21,7 @@
 
 (defn- stoplight-row [data]
 
-  ;(.log js/console (str "stoplight-row " data))
+  ;(prn "stoplight-row " data)
 
   ^{:key (str data)}
   [:buttons
@@ -36,9 +36,9 @@
 
 (defn make-widget [name data options]
 
-  (prn ":stoplight make-widget" name
-    " //// data " data
-    " //// (options) " options)
+  ;(prn ":stoplight make-widget" name
+  ;  " //// data " data
+  ;  " //// (options) " options)
 
   [:table-container
    [:table.is-hoverable {:style {:width          "100%"
