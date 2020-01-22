@@ -22,6 +22,10 @@
   "SQLite database connection spec."
   {:dbtype "sqlite" :dbname "vanilla_db"})
 
+(def users-db
+  "SQLite database connection spec."
+  {:dbtype "sqlite" :dbname "user_db"})
+
 
 
 (defrecord Database [db-spec                                ; configuration
@@ -232,10 +236,10 @@
   (create-user-table users-db)
 
 
+  (create-new-user!
+    users-db "Jeff" "321")      ;; This does not work, don't try to do this
 
-
-
-  (sign-up-new-user!
+  (create-new-user!
     users-db
     {:username "chad"
      :pass "123"})

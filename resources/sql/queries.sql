@@ -121,7 +121,7 @@ drop table if exists users
 
 
 
--- :name sign-up-new-user! :! :n
+-- :name create-new-user! :! :n
 -- :doc Creates a new user in the database
 INSERT INTO users (username, pass)
 VALUES (:username, :pass);

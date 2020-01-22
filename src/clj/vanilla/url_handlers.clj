@@ -27,3 +27,37 @@
       " //// renames " renamed)
     (db/save-layout! db/vanilla-db renamed)))
 
+
+(defn create-user
+  "Makes a call to the hugsql functions that create a user"
+  [credentials]
+  ;; credentials
+    (prn credentials)
+    (db/create-new-user! db/users-db credentials))
+
+
+(defn get-requested-user
+  "Makes a call to the hugsql functions that return a requested user if it exist"
+  [username]
+  (db/get-user  db/users-db {:username username}))
+
+(defn get-all-users
+  "Returns all users in the db"
+  []
+  (db/get-users db/users-db))
+
+
+
+(comment
+
+  (create-user
+    {:username "chad-uri-handler"
+     :pass "123"})
+
+  (get-requested-user "chad")
+  (get-requested-user "chad-uri-handler")
+
+  (get-all-users)
+
+
+  )
