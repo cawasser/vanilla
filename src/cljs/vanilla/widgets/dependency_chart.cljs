@@ -38,8 +38,8 @@
   (let [add-the-n (mc/add-the-n-conversion n-name default-n chart-type data options)
         ret       [(merge (first add-the-n) label-options)]]
 
-    (prn "dependency-conversion (add-the-n) " add-the-n
-      " //// (ret)" ret)
+    ;(prn "dependency-conversion (add-the-n) " add-the-n
+    ;  " //// (ret)" ret)
 
     ret))
 

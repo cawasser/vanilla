@@ -24,7 +24,7 @@
 
 (defn- add-slice-data [data slice-at]
 
-  (prn "vari-pie add-slice-data STARTED!! " data)
+  ;(prn "vari-pie add-slice-data STARTED!! " data)
 
   (let [new-keys (conj (:keys data) "selected" "sliced")
         new-data (map #(conj % false (< (second %) slice-at)) (:data data))
@@ -60,7 +60,7 @@
 
 (defn- process-data [default-y slice-at chart-config data options]
 
-  (prn "vari-pie PROCESS started (data) " data)
+  ;(prn "vari-pie PROCESS started (data) " data)
 
   (let [add-the-n (add-the-y-conversion default-y chart-config data options)
         add-slice (add-slice-data (first add-the-n) slice-at)
