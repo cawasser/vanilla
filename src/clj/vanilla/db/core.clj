@@ -122,7 +122,15 @@
 
       ["10000" "scatter-service-data" "Scatter Data"
        "data-format/x-y" "vanilla.scatter-service/fetch-data"
-       "returns height and weight for a sample of females and males"]]})
+       "returns height and weight for a sample of females and males"]
+
+      ["11000" "current-time" "Current Time"
+       "data-format/string" "vanilla.current-time-service/fetch-data"
+       "returns a simple text"]
+
+      ["12000" "table-service" "Data Table"
+       "data-format/entities" "vanilla.table-service/fetch-data"
+       "returns users' info"]]})
 
 
   (create-services!

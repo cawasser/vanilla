@@ -1,4 +1,8 @@
-(ns vanilla.widget-defs)
+(ns vanilla.widget-defs
+  (:require [vanilla.widgets.table-widget]
+            [vanilla.widgets.stoplight-widget]
+            [vanilla.widgets.simple-text]))
+
 
 
 (def black {:r 0x00 :g 0x00 :b 0x00 :a 1})
@@ -20,6 +24,39 @@
                            :viz/style-name        "widget"
                            :viz/animation         false
                            :viz/tooltip           {:followPointer true}}}
+
+              {:name        :stoplight-widget
+               :basis       :simple
+               :type        :stoplight-widget
+               :build-fn    vanilla.widgets.stoplight-widget/make-widget
+               ;:data-source :health-and-status-data
+               :ret_types   [:data-format/entity]
+               :icon        "/images/stoplight-widget.png"
+               :label       "Stoplight"
+               :options     {:viz/title        "Status"
+                             :viz/banner-color {:r 0x00 :g 0xff :b 0xff :a 1}}}
+
+              {:name        :simple-text-widget
+               :basis       :simple
+               :type        :simple-text-widget
+               :build-fn    vanilla.widgets.simple-text/make-widget
+               ;:data-source :current-time
+               :ret_types   [:data-format/string]
+               :icon        "/images/simple-text-widget.png"
+               :label       "Current Time"
+               :options     {:viz/title        "Time"
+                             :viz/banner-color {:r 0x00 :g 0xff :b 0xff :a 1}}}
+
+              {:name      :table-widget
+               :basis     :simple
+               :type      :table-widget
+               :build-fn  vanilla.widgets.table-widget/make-widget
+               ;:data-source :table-widget
+               :ret_types [:data-format/entities]
+               :icon      "/images/table-widget.png"
+               :label     "Data Table"
+               :options   {:viz/title        "Table"
+                           :viz/banner-color {:r 0x00 :g 0xff :b 0xff :a 1}}}
 
               {:name      :bar-widget
                :basis     :chart

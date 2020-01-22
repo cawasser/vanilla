@@ -12,11 +12,7 @@ This single-page application (SPA) provides a number of graphical widgets based 
 
 [look here](docs/history.md)
 
-> 0.3.0-SNAPSHOT. Basic working version with Add/Remove Widgets. Some of the widget/data-source combination don't work
-> but there are such wide-spread changes, we need to draw the line somewhere
-
-> 0.3.1-SNAPSHOT. clicking on a widget header allows for changing the header color. Similarly, clicking on the title
-> text allow the user to change the color of the text
+> 0.3.2-SNAPSHOT. the Stoplight and Time widget type is available once again. Also a new "table" widget
 
 ## Roadmap
 
