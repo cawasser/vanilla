@@ -6,8 +6,8 @@
 
   {:title "Sankey Data"
    :data-format :data-format/from-to-n
-   :src/keys ["from" "to" "weight"]
-   :series [{:data [["Brazil" "Portugal" 5]
+   :series [{:keys ["from" "to" "weight"]
+             :data [["Brazil" "Portugal" 5]
                     ["Brazil" "France" 1]
                     ["Brazil" "Spain" 1]
                     ["Brazil" "England" 1]

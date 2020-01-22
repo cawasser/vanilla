@@ -25,33 +25,29 @@
 ; what the chart type actually wants. This may involve adding
 ; data to the :series, or rearranging the contents
 
-(defn- process-data [data slice-at]
+(defn- add-slice-data [data slice-at]
 
-  ; (.log js/console "pie process-data" (str data))
+  ; (prn "pie process-data" (str data))
 
   [{:colorByPoint true
     :keys         ["name" "y" "selected" "sliced"]
     :data         (map #(conj % false (< (second %) slice-at)) data)}])
 
 
-(defn convert-x-y
-  [chart-type data options]
-
-  ; (.log js/console (str "pie/convert-x-y " chart-type))
-
-  (process-data (get-in data [:data (get-in options [:src/extract])])
-                (get-in options [:viz/slice-at])))
 
 
 (defn convert-name-y
-  [chart-type data options]
+  [slice-at chart-type data options]
 
-  ; (.log js/console (str "pie/convert-name-y " chart-type
-  ;                      " //// " data " //// " options
-  ;                      " //// " (get-in data [:data :series 0 :data])))
+  (let [ret (add-slice-data (get-in data [:data :series 0 :data] []) slice-at)]
+    (prn "pie/convert-name-y " chart-type
+      " //// (data) " data
+      " //// (:data) " (get-in data [:data :series 0 :data])
+      " //// (ret) " ret)
 
-  (process-data (get-in data [:data :series 0 :data] [])
-                (get-in options [:viz/slice-at])))
+    ret))
+
+
 
 
 ;;;;;;;;;;;;;;
@@ -61,15 +57,14 @@
 (defn register-type []
   (mc/register-type
     :pie-chart {:chart-options     {:chart/type              :pie-chart
-                                    :chart/supported-formats [:data-format/name-y :data-format/x-y]
+                                    :chart/supported-formats [:data-format/label-y]
                                     :chart                   {:type  "pie"
                                                               :style {:labels {:fontFamily "monospace"
                                                                                :color      "#FFFFFF"}}}}
 
                 :merge-plot-option {:default plot-options}
 
-                :conversions       {:data-format/x-y convert-x-y
-                                    :default         convert-name-y}}))
+                :conversions       {:default (partial convert-name-y 45)}}))
 
 
 
