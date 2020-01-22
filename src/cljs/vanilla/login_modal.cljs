@@ -7,38 +7,73 @@
 
 (defn attempt-create-user
   ""
-  [])
+  [username pass]
+  (prn username "///" pass)
+  )
 
 (defn attempt-login
   ""
-  [])
+  [username pass]
+  (prn username "///" pass)
+  )
+
+(defn input-element
+  "An input element that takes in what type of element it is, and the current value that will change with input."
+  [id name type value]
+  [:input {:id id
+           :name name
+           :class "form-control"
+           :type type
+           :required ""
+           :value @value
+           :on-change #(reset! value (-> % .-target .-value))
+           }])
+
 
 (defn login-pop-up                                          ;; Name should include modal instead of pop up
   "When the login button is clicked have this modal pop up"
   [is-active]
-  [:div.modal (if @is-active {:class "is-active"})
-   ;[:p "I was hiding"]
-   [:div.modal-background]
-   [:div.modal-card
-    [:header.modal-card-head
-     [:p.modal-card-title "Login"]
-     [:button.delete {:aria-label "close"
-                      :on-click   #(reset! is-active false)}]]
+  (let [                                                    ;credentials (r/atom {:username "" :pass ""})
+        username (r/atom nil)
+        pass (r/atom nil)]
+    (fn []
+      [:div.modal (if @is-active {:class "is-active"})
+       ;[:p "I was hiding"]
+       [:div.modal-background]
+       [:div.modal-card
+        [:header.modal-card-head
+         [:p.modal-card-title "Login"]
+         [:button.delete {:aria-label "close"
+                          :on-click   #(reset! is-active false)}]]
 
 
-    [:section.modal-card-body
-     ]
+        [:section.modal-card-body
+         [:label "Email:"
+          [:div
+           [input-element "email" "email" "email" username]]]
 
-    [:section.modal-card-body
-     ]
 
-    [:footer.modal-card-foot
-     [:button.button.is-success {:on-click #(do
-                                              ;(prn "picked widget " @chosen-widget @selected)
-                                              ;(add-widget @chosen-widget @selected)
-                                              (reset! is-active false))} "Sign-in"]
-     [:button.button {:on-click #(reset! is-active false)} "Cancel"]]]
-   ]
+         [:label "Password:"
+          [:div
+           [input-element "password" "password" "password" pass]]]
+
+         ]
+
+        [:section.modal-card-body
+         ]
+
+        [:footer.modal-card-foot
+         [:button.button.is-success {:on-click #(do
+                                                  ;(prn "login")
+                                                  (attempt-login @username @pass)
+                                                  (reset! is-active false))} "Login"]
+         [:button.button.is-success {:on-click #(do
+                                                  ;(prn "picked widget " @chosen-widget @selected)
+                                                  (attempt-create-user @username @pass )
+                                                  (reset! is-active false))} "Sign-up"]
+         [:button.button {:on-click #(reset! is-active false)} "Cancel"]]
+        ]])
+    )
   )
 
 
