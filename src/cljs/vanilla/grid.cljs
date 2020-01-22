@@ -10,11 +10,12 @@
 
 
 (defn save-layout [layout]
-  (prn "saving layout")
+  (prn "saving layout: " layout)
 
   (POST "/save-layout"
-    {:headers         {"Accept" "application/transit+json"}
-     :response-format (ajax/json-response-format {:keywords? true})
+    {;:headers         {"Accept" "application/transit+json" "Content-Type" "text/json; charset=utf-8"}
+     :format          :json
+     ;:response-format (ajax/json-response-format {:keywords? true})
      :params          {:widgets layout}
      :handler         #(prn "Layout SAVED!")
      :on-error        #(prn "ERROR saving the layout " %)}))
@@ -42,7 +43,7 @@
           " //// first id " (:i fst))
 
         (rf/dispatch [:update-layout (js->clj new :keywordize-keys true)])
-        (save-layout (js->clj new :keywordize-keys true))))
+        (save-layout (js->clj prev :keywordize-keys true))))
 
 
     (on-change prev (js->clj new :keywordize-keys true))))

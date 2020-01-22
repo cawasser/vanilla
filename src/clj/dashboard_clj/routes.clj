@@ -5,6 +5,7 @@
             [ring.middleware.defaults :refer [wrap-defaults api-defaults]]
             [ring.middleware.gzip :refer [wrap-gzip]]
             [ring.middleware.logger :refer [wrap-with-logger]]
+            [ring.middleware.json :refer [wrap-json-response wrap-json-params]]
             [clojure.data.json :as json]
 
             ; version number support
@@ -54,7 +55,7 @@
      :headers {"Content-Type" "text/json; charset=utf-8"}   ;maybe convert from text-json to straight edn
      ;pull apart parameters and strip the keys off the values for the DB call
      :body (do
-             (prn "save layout " req)
+             (prn "save layout route " (:json-params req))
              (h/save-layout (:widgets (:params req))))})  ; this is way off, what is this body even needed for?
 
   (resources "/"))
@@ -70,5 +71,7 @@
 
        (GET "/version" req (ring-ajax-get-or-ws-handshake req)))
       (wrap-defaults api-defaults)
+      (wrap-json-response)
+      (wrap-json-params)
       ;wrap-with-logger
       wrap-gzip))
