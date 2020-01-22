@@ -11,6 +11,7 @@
     [day8.re-frame.tracing :refer-macros [fn-traced]]
 
     [vanilla.add-widget-modal :as modal]
+    [vanilla.login-modal :as login]
     [clojure.edn :as edn]
 
     [vanilla.grid :as grid]
@@ -116,8 +117,11 @@
   [:div {:width "100%"}
    [:div.container
     [:div.content {:width "100%"}
-     [modal/version-number]]]
-   [widgets-grid]])
+     ;[modal/version-number]
+     ;[:p "hello"]
+     [login/login-button]]]
+   ;[widgets-grid]
+   ])
 
 
 
