@@ -37,7 +37,7 @@
 (defn register-type []
   (mc/register-type
     :scatter-chart {:chart-options     {:chart/type              :scatter-chart
-                                        :chart/supported-formats [:data-format/x-y]
+                                        :chart/supported-formats [:data-format/x-y :data-format/x-y-n :data-format/x-y-e :data-format/y]
                                         :chart                   {:type "scatter"
                                                                   :zoomType "xy"}
                                         :yAxis                   {:labels {:overflow "justify"}}

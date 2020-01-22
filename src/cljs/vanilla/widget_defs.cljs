@@ -12,8 +12,7 @@
               {:name      :area-widget
                :basis     :chart
                :type      :area-chart
-               ;:data-source :spectrum-traces
-               :ret_types [:data-format/x-y]
+               :ret_types [:data-format/x-y :data-format/x-y-n :data-format/x-y-e :data-format/y]
                :icon      "/images/area-widget.png"
                :label     "Area"
                :options   {:viz/title             "Channels (area)"
@@ -62,8 +61,7 @@
               {:name      :bar-widget
                :basis     :chart
                :type      :bar-chart
-               ;:data-source :spectrum-traces
-               :ret_types [:data-format/x-y]
+               :ret_types [:data-format/x-y :data-format/x-y-n :data-format/x-y-e :data-format/y]
                :icon      "/images/bar-widget.png"
                :label     "Bar"
                :options   {:viz/title        "Channels (bar)"
@@ -76,8 +74,7 @@
               {:name      :bubble-widget
                :basis     :chart
                :type      :bubble-chart
-               ;:data-source :bubble-service
-               :ret_types [:data-format/x-y-n]
+               :ret_types [:data-format/x-y-n :data-format/x-y :data-format/x-y-e :data-format/y]
                :icon      "/images/bubble-widget.png"
                :label     "Bubble"
                :options   {:viz/title             "Bubble"
@@ -92,8 +89,7 @@
               {:name        :column-widget
                :basis       :chart
                :type        :column-chart
-               ;:data-source :spectrum-traces
-               :ret_types   [:data-format/x-y]
+               :ret_types   [:data-format/x-y :data-format/x-y-n :data-format/x-y-e :data-format/y]
                :icon        "/images/column-widget.png"
                :label       "Column"
                :options     {:viz/title        "Channels (column)"
@@ -106,8 +102,7 @@
               {:name      :dependency-widget
                :basis     :chart
                :type      :dependency-chart
-               ;:data-source :sankey-service
-               :ret_types [:data-format/x-y :data-format/from-to :data-format/form-to-n]
+               :ret_types [:data-format/from-to-n :data-format/from-to-e :data-format/from-to]
                :icon      "/images/deps-widget.png"
                :label     "Dependencies"
                :options   {:viz/title             "Dependency Wheel"
@@ -119,8 +114,7 @@
               {:name      :heatmap-widget
                :basis     :chart
                :type      :heatmap-chart
-               ;:data-source :spectrum-traces
-               :ret_types [:data-format/x-y-n]
+               :ret_types [:data-format/grid-n :data-format/grid-e :data-format/lat-lon-n :data-format/lat-lon-e]
                :icon      "/images/heatmap-widget.png"
                :label     "Heatmap"
                :options   {:viz/title        "Heat Map"
@@ -134,8 +128,7 @@
               {:name      :line-widget
                :basis     :chart
                :type      :line-chart
-               ;:data-source :spectrum-traces
-               :ret_types [:data-format/x-y]
+               :ret_types [:data-format/x-y :data-format/x-y-n :data-format/x-y-e :data-format/y]
                :icon      "/images/line-widget.png"
                :label     "Line"
                :options   {:viz/title        "Channels (line)"
@@ -149,8 +142,7 @@
               {:name      :network-widget
                :basis     :chart
                :type      :network-chart
-               ;:data-source :network-service
-               :ret_types [:data-format/x-y :data-format/from-to :data-format/form-to-n]
+               :ret_types [:data-format/from-to :data-format/from-to-n :data-format/from-to-e]
                :icon      "/images/network-widget.png"
                :label     "Network"
                :options   {:viz/title             "Network (network)"
@@ -162,8 +154,7 @@
               {:name      :org-widget
                :basis     :chart
                :type      :org-chart
-               ;:data-source :network-service
-               :ret_types [:data-format/x-y :data-format/from-to :data-format/form-to-n]
+               :ret_types [:data-format/from-to :data-format/from-to-n :data-format/from-to-e]
                :icon      "/images/org-widget.png"
                :label     "Org Chart"
                :options   {:viz/title        "Network (org chart)"
@@ -174,8 +165,7 @@
               {:name      :pie-widget
                :basis     :chart
                :type      :pie-chart
-               ;:data-source :usage-data
-               :ret_types [:data-format/x-y :data-format/name-y]
+               :ret_types [:data-format/label-y]
                :icon      "/images/pie-widget.png"
                :label     "Pie"
                :options   {:viz/title        "Usage Data (pie)"
@@ -188,8 +178,7 @@
               {:name      :rose-widget
                :basis     :chart
                :type      :rose-chart
-               ;:data-source :usage-24-hour-service
-               :ret_types [:data-format/x-y-n]
+               :ret_types [:data-format/rose-y-n :data-format/rose-y-e]
                :icon      "/images/rose-widget.png"
                :label     "Wind Rose"
                :options   {:viz/title        "Channels (rose)"
@@ -203,8 +192,7 @@
               {:name      :sankey-widget
                :basis     :chart
                :type      :sankey-chart
-               ;:data-source :sankey-service
-               :ret_types [:data-format/x-y :data-format/from-to :data-format/form-to-n]
+               :ret_types [:data-format/from-to-n :data-format/from-to :data-format/from-to-e]
                :icon      "/images/sankey-widget.png"
                :label     "Sankey"
                :options   {:viz/title             "Sankey"
@@ -217,8 +205,7 @@
               {:name      :scatter-widget
                :basis     :chart
                :type      :scatter-chart
-               ;:data-source :scatter-service-data
-               :ret_types [:data-format/x-y]
+               :ret_types [:data-format/x-y :data-format/x-y-n :data-format/x-y-e :data-format/y]
                :icon      "/images/scatter-widget.png"
                :label     "Scatter"
                :options   {:viz/title             "Scatter"
@@ -233,8 +220,7 @@
               {:name      :vari-pie-widget
                :basis     :chart
                :type      :vari-pie-chart
-               ;:data-source :usage-data
-               :ret_types [:data-format/x-y-n]
+               :ret_types [:data-format/label-y-n :data-format/label-y :data-format/label-y-e]
                :icon      "/images/vari-pie-widget.png"
                :label     "Variable Pie"
                :options   {:viz/title             "Usage Data (vari-pie)"
@@ -290,7 +276,7 @@
                  :basis     :chart
                  :type      :area-chart
                  ;:data-source :spectrum-traces
-                 :ret_types [:data-format/x-y-n]
+                 :ret_types [:data-format/x-y :data-format/x-y-n :data-format/x-y-e :data-format/y]
                  :icon      "/images/area-widget.png"
                  :label     "Area"
                  :options   {:viz/title             "Channels (area)"
@@ -308,7 +294,7 @@
                  :basis     :chart
                  :type      :bar-chart
                  ;:data-source :spectrum-traces
-                 :ret_types [:data-format/x-y]
+                 :ret_types [:data-format/x-y :data-format/x-y-n :data-format/x-y-e :data-format/y]
                  :icon      "/images/bar-widget.png"
                  :label     "Bar"
                  :options   {:viz/title        "Channels (bar)"

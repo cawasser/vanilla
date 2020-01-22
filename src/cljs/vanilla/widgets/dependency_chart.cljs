@@ -8,23 +8,41 @@
 ;  ;(.log js/console (str "sankey-deps/plot-options " chart-config))
 ;
 ;  {:plotOptions {:series {:animation (:viz/animation options false)}}})
-;
-;
-;
-(defn dependency-conversion
+
+
+(def label-options {:dataLabels {:color    "#333"
+                                 :textPath {:enabled    true
+                                            :attributes {:dy 5}}
+                                 :distance 10}
+                    :size       "95%"})
+
+
+
+(defn dependency-default
   [chart-type data options]
 
-  ;(prn "dependency-conversion " chart-type
-  ;  " //// (data)" data
-  ;  " //// (options)" options)
+  (let [default (mc/default-conversion chart-type data options)
+        ret     [(merge (first default) label-options)]]
 
-  [{:keys       (get-in data [:data :src/keys] [])
-    :dataLabels {:color    "#333"
-                 :textPath {:enabled    true
-                            :attributes {:dy 5}}
-                 :distance 10}
-    :size       "95%"
-    :data       (get-in data [:data :series 0 :data])}])
+    ;(prn "dependency-conversion (data) " data
+    ;  " //// (default) " default
+    ;  " //// (ret)" ret)
+
+    ret))
+
+
+
+(defn dependency-add-the-n
+  [n-name default-n chart-type data options]
+
+  (let [add-the-n (mc/add-the-n-conversion n-name default-n chart-type data options)
+        ret       [(merge (first add-the-n) label-options)]]
+
+    ;(prn "dependency-conversion (add-the-n) " add-the-n
+    ;  " //// (ret)" ret)
+
+    ret))
+
 
 
 
@@ -34,14 +52,13 @@
 ;
 (defn register-type []
   (mc/register-type
-    :dependency-chart {:chart-options
-                       {:chart/type              :dependency-chart
-                        :chart/supported-formats [:data-format/from-to :data-format/from-to-n]
-                        :chart                   {:type "dependencywheel"}}
+    :dependency-chart {:chart-options     {:chart/type              :dependency-chart
+                                           :chart/supported-formats [:data-format/from-to-n :data-format/from-to :data-format/from-to-e]
+                                           :chart                   {:type "dependencywheel"}}
 
-                       :merge-plot-option
-                       {:default mc/default-plot-options}
+                       :merge-plot-option {:default mc/default-plot-options}
 
-                       :conversions
-                       {:default dependency-conversion}}))
+                       :conversions       {:default             dependency-default
+                                           :data-format/from-to (partial dependency-add-the-n "weight" 1)}}))
+
 

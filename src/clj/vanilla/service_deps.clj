@@ -4,12 +4,12 @@
 
 (def datasources
   [{:name     :spectrum-traces
-    :read-fn  :vanilla.fetcher/spectrum-traces}
+    :read-fn  :vanilla.spectrum-traces-service/fetch-data}
     ;:schedule {:in    [0 :seconds]
     ;           :every [10 :seconds]}}
 
    {:name     :usage-data
-    :read-fn  :vanilla.fetcher/usage-data}
+    :read-fn  :vanilla.usage-data-service/fetch-data}
     ;:schedule {:in    [0 :seconds]
     ;           :every [15 :seconds]}}
 
@@ -29,7 +29,7 @@
    ;           :every [5 :seconds]}}
 
    {:name     :power-data
-    :read-fn  :vanilla.fetcher/power-data}
+    :read-fn  :vanilla.power-data-service/fetch-data}
     ;:schedule {:in    [0 :seconds]
     ;           :every [30 :seconds]}}
 
@@ -43,8 +43,8 @@
     ;:schedule {:in    [0 :seconds]
     ;           :every [10 :seconds]}}
 
-   {:name :usage-24-hour-service
-    :read-fn :vanilla.usage-24-hour-service/fetch-data}
+   {:name :usage-12-hour-service
+    :read-fn :vanilla.usage-12-hour-service/fetch-data}
 
    {:name :scatter-service-data
     :read-fn :vanilla.scatter-service/fetch-data}

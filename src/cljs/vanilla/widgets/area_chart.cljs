@@ -17,8 +17,6 @@
                  :area   {:dataLabels {:enabled (get options :viz/dataLabels false)
                                        :format  (get options :viz/labelFormat "")}}}})
 
-
-
 ;;;;;;;;;;;;;;
 ;
 ; register all the data stuff so we have access to it
@@ -26,13 +24,13 @@
 (defn register-type []
   (mc/register-type
     :area-chart {:chart-options     {:chart/type              :area-chart
-                                     :chart/supported-formats [:data-format/y :data-format/x-y]
+                                     :chart/supported-formats [:data-format/x-y :data-format/x-y-n :data-format/x-y-e :data-format/y]
                                      :chart                   {:type     "area"
                                                                :zoomType "x"}
-                                     :yAxis                   {:min    0
-                                                               :title  {:align "high"}
+                                     :yAxis                   {:title  {:align "high"}
                                                                :labels {:overflow "justify"}}}
 
                  :merge-plot-option {:default plot-options}
 
                  :conversions       {:default mc/default-conversion}}))
+                                     ;:data-format/y y-conversion}}))
