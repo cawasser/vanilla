@@ -12,7 +12,7 @@ This single-page application (SPA) provides a number of graphical widgets based 
 
 [look here](docs/history.md)
 
-> 0.3.2-SNAPSHOT. the Stoplight widget type is available once again
+> 0.3.2-SNAPSHOT. the Stoplight and Time widget type is available once again. Also a new "table" widget
 
 ## Roadmap
 

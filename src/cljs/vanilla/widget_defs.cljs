@@ -1,4 +1,8 @@
-(ns vanilla.widget-defs)
+(ns vanilla.widget-defs
+  (:require [vanilla.widgets.table-widget]
+            [vanilla.widgets.stoplight-widget]
+            [vanilla.widgets.simple-text]))
+
 
 
 (def black {:r 0x00 :g 0x00 :b 0x00 :a 1})
