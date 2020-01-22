@@ -9,17 +9,6 @@
 ;  ;(.log js/console (str "sankey-deps/plot-options " chart-config))
 ;
 ;  {:plotOptions {:series {:animation (:viz/animation options false)}}})
-;
-;
-;(defn sankey-conversion
-;  [chart-type data options]
-;
-;  ;(prn "sankey-conversion " chart-type
-;  ;  " //// (data)" data
-;  ;  " //// (options)" options)
-;
-;  [{:keys (get-in data [:data :src/keys] [])
-;    :data (get-in data [:data :series 0 :data])}])
 
 
 

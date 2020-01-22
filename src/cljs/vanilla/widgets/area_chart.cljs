@@ -17,22 +17,6 @@
                  :area   {:dataLabels {:enabled (get options :viz/dataLabels false)
                                        :format  (get options :viz/labelFormat "")}}}})
 
-;;;;;;;;      y -> x-y conversion function (y-conversion)   ;;;;;;;;;;;;;
-
-;(defn y-conversion [chart-type d options]
-;  (let [s (get-in d [:data :series])
-;        ret (for [{:keys [name data]} s]
-;              (assoc {}
-;                :name name
-;                :data (into []
-;                            (for [x-val (range 0 (count data))]
-;                              [x-val (get data x-val) 1]))))]
-;
-;    (prn "y-conversion " ret)
-;    (into [] ret)))
-;
-;
-
 ;;;;;;;;;;;;;;
 ;
 ; register all the data stuff so we have access to it

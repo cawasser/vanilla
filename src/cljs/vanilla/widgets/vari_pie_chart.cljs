@@ -32,11 +32,11 @@
               :keys         new-keys
               :data         new-data}]]
 
-    (prn "add-slice-data " data
-      " //// (slice-at) " slice-at
-      " //// (new-keys) " new-keys
-      " //// (new-data) " new-data
-      " //// (ret) " ret)
+    ;(prn "add-slice-data " data
+    ;  " //// (slice-at) " slice-at
+    ;  " //// (new-keys) " new-keys
+    ;  " //// (new-data) " new-data
+    ;  " //// (ret) " ret)
 
     ret))
 
@@ -51,9 +51,9 @@
                         (for [[x z] data]
                           [x default-y z]))))]
 
-    (prn "add-the-y-conversion (from)" data
-      " //// (series) " series
-      " /// (to) " ret)
+    ;(prn "add-the-y-conversion (from)" data
+    ;  " //// (series) " series
+    ;  " /// (to) " ret)
 
     (into [] ret)))
 
@@ -67,10 +67,10 @@
         ret    (for [d add-slice]
                  (merge d default-options))]
 
-    (prn "vari-pie process-data (data) " data
-      " //// (add-th-n) " add-the-n
-      " //// (add-slice) " add-slice
-      " //// (ret) " ret)
+    ;(prn "vari-pie process-data (data) " data
+    ;  " //// (add-th-n) " add-the-n
+    ;  " //// (add-slice) " add-slice
+    ;  " //// (ret) " ret)
 
     ret))
 

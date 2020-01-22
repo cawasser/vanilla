@@ -93,10 +93,10 @@
 (defn widget-list [widgets s chosen-widget]
   (let [widget-cards (filter-widgets widgets s)]
 
-    (prn "widget-list " widgets
-    ;  " //// selected " s)
-    ;  " //// chosen-widget " @chosen-widget)
-      " //// cards " widget-cards)
+    ;(prn "widget-list " widgets
+    ;;  " //// selected " s)
+    ;;  " //// chosen-widget " @chosen-widget)
+    ;  " //// cards " widget-cards)
 
     [:table>tbody
      [:tr

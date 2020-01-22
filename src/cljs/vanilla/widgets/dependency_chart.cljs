@@ -24,9 +24,9 @@
   (let [default (mc/default-conversion chart-type data options)
         ret     [(merge (first default) label-options)]]
 
-    (prn "dependency-conversion (data) " data
-      " //// (default) " default
-      " //// (ret)" ret)
+    ;(prn "dependency-conversion (data) " data
+    ;  " //// (default) " default
+    ;  " //// (ret)" ret)
 
     ret))
 

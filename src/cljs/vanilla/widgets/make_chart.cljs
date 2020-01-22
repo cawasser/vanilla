@@ -37,12 +37,12 @@
                           (conv-fn chart-type data options)
                           [])]
 
-    (prn "get-conversion " chart-type "/" format-type
-      " //// (data)" data
-      " //// (chart-reg-entry) " chart-reg-entry
-      " //// (conversions) " conversions
-      " //// (conv-fn) " conv-fn
-      " //// (ret) " ret)
+    ;(prn "get-conversion " chart-type "/" format-type
+    ;     " //// (data)" data
+    ;     " //// (chart-reg-entry) " chart-reg-entry
+    ;     " //// (conversions) " conversions
+    ;     " //// (conv-fn) " conv-fn
+    ;     " //// (ret) " ret)
 
     ret))
 
@@ -107,11 +107,11 @@
                      (assoc chart-config :series converted)
                      chart-config)]
 
-    (prn "merge-configs " chart-type
-      " //// (chart-config) " chart-config
-      " //// (data) " data
-      " //// (converted)" converted
-      " //// (ret)" ret)
+    ;(prn "merge-configs " chart-type
+    ;  " //// (chart-config) " chart-config
+    ;  " //// (data) " data
+    ;  " //// (converted)" converted
+    ;  " //// (ret)" ret)
 
 
     ret))
@@ -149,9 +149,9 @@
                         (for [[x y] data]
                           [x y default-n]))))]
 
-    (prn "add-the-n-conversion (from)" data
-      " //// (series) " series
-      " /// (to) " ret)
+    ;(prn "add-the-n-conversion (from)" data
+    ;  " //// (series) " series
+    ;  " /// (to) " ret)
 
     (into [] ret)))
 
