@@ -191,6 +191,26 @@
 
   (get-layout vanilla-db)
 
+  (save-layout! vanilla-db {:layout test1})
+
+ (def test1
+   [[:chart {:x 0, :y 0, :w 5, :h 15} :spectrum-traces "/images/area-widget.png" "1" "Area" :area-widget
+     {:viz/style-name "widget", :viz/y-title "power", :viz/x-title "frequency", :viz/allowDecimals false, :viz/banner-color {:r 0, :g 0, :b 255, :a 1}, :viz/tooltip {:followPointer true}, :viz/title "Channels (area)", :viz/banner-text-color {:r 255, :g 255, :b 255, :a 1}, :viz/animation false}
+     [:data-format/x-y] :area-chart "testHuman"]])
+
+  (def test2
+    [{:ret_types [:data-format/x-y], :key "1", :name :area-widget, :basis :chart, :username "testHuman",
+      :data-source :spectrum-traces, :type :area-chart, :icon "/images/area-widget.png",
+      :label "Area", :data-grid {:x 0, :y 0, :w 5, :h 15}, :options {:viz/style-name "widget", :viz/y-title "power", :viz/x-title "frequency", :viz/allowDecimals false, :viz/banner-color {:r 0, :g 0, :b 255, :a 1}, :viz/tooltip {:followPointer true}, :viz/title "Channels (area)", :viz/banner-text-color {:r 255, :g 255, :b 255, :a 1}, :viz/animation false}}])
+
+  (map #(select-keys % [:key :username :icon :label]) test2)
+  (first test2)
+
+  (into {} (for [[k v] (first (map #(select-keys % [:ret_types :name :basis :data_grid :type :data_source :options]) (get-layout vanilla-db)))] [k (clojure.core/read-string v)]))
+
+  (map #(select-keys % [:ret_types :name :basis :data_grid :type :data_source :options]) (get-layout vanilla-db))
+
+
   (save-layout! vanilla-db
                 {:layout
                  [["123" "APaine" ":area-widget" "[:data-format/x-y]"

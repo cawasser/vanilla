@@ -5,18 +5,18 @@
     [vanilla.events]
     [cljsjs.react-grid-layout]
     [vanilla.widgets.core :as widget]
+    [clojure.edn :as edn]
     [ajax.core :as ajax :refer [GET POST]]))
 
 
 
 (defn save-layout [layout]
-  (prn "saving layout: " layout)
+  (prn "saving layout: " (clojure.core/pr-str layout))
 
   (POST "/save-layout"
-    {;:headers         {"Accept" "application/transit+json" "Content-Type" "text/json; charset=utf-8"}
-     :format          :json
-     ;:response-format (ajax/json-response-format {:keywords? true})
-     :params          {:widgets layout}
+    {:format          (ajax/json-request-format {:keywords? true})
+     :response-format (ajax/json-response-format {:keywords? true})
+     :params          {:widgets (clojure.core/pr-str layout)}       ;convert the whole layout struct to a string to preserve values
      :handler         #(prn "Layout SAVED!")
      :on-error        #(prn "ERROR saving the layout " %)}))
 

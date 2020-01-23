@@ -22,8 +22,12 @@
   (map #(clojure.set/rename-keys % from-sqlite) (db/get-layout db/vanilla-db)))
 
 (defn save-layout [new-layout]
-  (let [renamed (map #(clojure.set/rename-keys % to-sqlite) new-layout)]
-    (prn "SAVE-LAYOUT Handler: " new-layout
-      " //// renamed " renamed)
-    (db/save-layout! db/vanilla-db {:layout renamed})))
+  (prn "SAVE-LAYOUT HANDLER incoming: " new-layout)
+  ; TODO replace with actual user, probably sooner than here, on the cljs side
+  ; first add the current user to all the widget maps after reading the string
+  ; then order the maps by keys, then remove all keys
+  (let [usernamed (map #(assoc % :username "testHuman") (clojure.core/read-string new-layout))
+        ordered (map #(vals %) (map #(into (sorted-map) %) usernamed))]
+    (prn "SAVE-LAYOUT Handler: " ordered)
+    (db/save-layout! db/vanilla-db {:layout ordered})))
 

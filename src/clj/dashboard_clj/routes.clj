@@ -6,6 +6,7 @@
             [ring.middleware.gzip :refer [wrap-gzip]]
             [ring.middleware.logger :refer [wrap-with-logger]]
             [ring.middleware.json :refer [wrap-json-response wrap-json-params]]
+            [ring.middleware.keyword-params :refer [wrap-keyword-params]]
             [clojure.data.json :as json]
 
             ; version number support
@@ -52,11 +53,10 @@
   ;TODO add current username to map
   (POST "/save-layout" req
     {:status 200
-     :headers {"Content-Type" "text/json; charset=utf-8"}   ;maybe convert from text-json to straight edn
-     ;pull apart parameters and strip the keys off the values for the DB call
+     :headers {"Content-Type" "text/json; charset=utf-8"}
      :body (do
-             (prn "save layout route " (:json-params req))
-             (h/save-layout (:widgets (:params req))))})  ; this is way off, what is this body even needed for?
+             (prn "save layout route " req)
+             (h/save-layout (:widgets (:params req))))})
 
   (resources "/"))
 
@@ -72,6 +72,7 @@
        (GET "/version" req (ring-ajax-get-or-ws-handshake req)))
       (wrap-defaults api-defaults)
       (wrap-json-response)
+      (wrap-keyword-params)
       (wrap-json-params)
       ;wrap-with-logger
       wrap-gzip))

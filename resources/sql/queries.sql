@@ -82,10 +82,10 @@ INSERT INTO layout
 
 
 -- :name save-layout! :! :n
--- :doc creates multiple new layout record
+-- :doc creates multiple new layout record, ordered by keys
 INSERT INTO layout
-    (id, username, name, ret_types, basis, data_source, type, icon,
-        label, data_grid, options)
+    (basis, data_grid, data_source, icon, id, label, name, options,
+        ret_types, type, username)
 values :tuple*:layout;
 
 
