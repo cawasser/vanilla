@@ -133,6 +133,13 @@ SELECT * FROM users
 WHERE username = :username;
 
 
+-- :name verify-credentials :? :1
+-- :doc Take in username and password and verify they are in db
+SELECT 1 FROM users
+WHERE (username = :username AND
+              pass = :pass);
+
+
 -- :name get-users :? :*
 -- :doc retrieves a user record given the id
 SELECT * FROM users;

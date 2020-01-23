@@ -247,6 +247,9 @@
   (get-user users-db {:username "chad"})
   (get-users users-db)
 
+  (verify-credentials users-db
+                      {:username "chad" :pass "123"})
+
 
   (drop-users-table users-db)
 
