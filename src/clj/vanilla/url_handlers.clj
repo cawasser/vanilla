@@ -32,7 +32,7 @@
   "Makes a call to the hugsql functions that create a user"
   [credentials]
   ;; credentials
-    (prn credentials)
+    (prn "uri handlers - " credentials)
     (db/create-new-user! db/users-db credentials))
 
 

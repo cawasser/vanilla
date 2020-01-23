@@ -1,42 +1,80 @@
 (ns vanilla.login-modal
   (:require
     [re-frame.core :as rf]
-    [reagent.core :as r]))
+    [reagent.core :as r]
+    [ajax.core :as ajax :refer [GET POST]]))
 
 
 
 (defn attempt-create-user
   ""
-  [username pass]
-  (prn username "///" pass)
-  )
+  [credentials]
+  (prn "Attempting to create this user:" credentials)             ;; This runs
+  (POST "/create-new-user"
+        {
+         ;; These two lines blow things up
+         ;:headers         {"Accept" "application/transit+json"}
+         ;:response-format (ajax/json-response-format {:keywords? true})
+
+
+
+         :headers         {"Accept" "application/json"}     ;; This does not blow up - not sure if it does anything
+
+         ;; This works and returns the handlers response
+         :format          :json
+         :params          credentials
+         :handler         #(prn "User created!")            ;; This needs to call a function?
+         :on-error        #(prn "ERROR creating the user! " %)}))
+
+
+
 
 (defn attempt-login
   ""
-  [username pass]
-  (prn username "///" pass)
-  )
+  [credentials]
+  (prn "login "credentials)
+  (GET "/user-verify"
+       {
+        :headers         {"Accept" "application/json"}
+        :response-format (ajax/json-response-format {:keywords? true})
+        :params          credentials
+        :handler #(prn "login attempt successful")}))
+
+
+
+(defn attempt-get-all-users
+  ""
+  []
+  (GET "/return-all-users"
+       {
+        :headers         {"Accept" "application/json"}
+        :response-format (ajax/json-response-format {:keywords? true})
+        ;:handler #(fn [response] (prn :key response))
+        :handler #(prn "get all users successful")}))
+
+
 
 (defn input-element
   "An input element that takes in what type of element it is, and the current value that will change with input."
-  [id name type value]
-  [:input {:id id
-           :name name
+  [id-name-type value]
+  [:input {:id id-name-type
+           :name id-name-type
            :class "form-control"
-           :type type
+           :type id-name-type
            :required ""
            :value @value
-           :on-change #(reset! value (-> % .-target .-value))
-           }])
+           :on-change #(reset! value (-> % .-target .-value))}])
+
 
 
 (defn login-pop-up                                          ;; Name should include modal instead of pop up
   "When the login button is clicked have this modal pop up"
   [is-active]
-  (let [                                                    ;credentials (r/atom {:username "" :pass ""})
-        username (r/atom nil)
+  (let [username (r/atom nil)
         pass (r/atom nil)]
+
     (fn []
+
       [:div.modal (if @is-active {:class "is-active"})
        ;[:p "I was hiding"]
        [:div.modal-background]
@@ -50,31 +88,35 @@
         [:section.modal-card-body
          [:label "Email:"
           [:div
-           [input-element "email" "email" "email" username]]]
+           [input-element "email" username]]]
 
 
          [:label "Password:"
           [:div
-           [input-element "password" "password" "password" pass]]]
+           [input-element "password"  pass]]]]
 
-         ]
 
-        [:section.modal-card-body
-         ]
+
+        [:section.modal-card-body]
+
 
         [:footer.modal-card-foot
          [:button.button.is-success {:on-click #(do
                                                   ;(prn "login")
-                                                  (attempt-login @username @pass)
+                                                  (attempt-login {:username @username
+                                                                  :pass @pass})
                                                   (reset! is-active false))} "Login"]
          [:button.button.is-success {:on-click #(do
-                                                  ;(prn "picked widget " @chosen-widget @selected)
-                                                  (attempt-create-user @username @pass )
+
+                                                  (attempt-create-user {:username @username
+                                                                        :pass @pass})
+
                                                   (reset! is-active false))} "Sign-up"]
-         [:button.button {:on-click #(reset! is-active false)} "Cancel"]]
-        ]])
-    )
-  )
+         [:button.button {:on-click #(reset! is-active false)} "Cancel"]]]])))
+
+
+
+
 
 
 
@@ -84,9 +126,8 @@
   (let [is-active (r/atom false)]
     (fn []
       [:div
-        ;[:p "Good bye"]
+        ;[:p (str (attempt-get-all-users))] ;; This prints all users to lein run, but crashes UI
         [:div.level-right.has-text-right
           [:button.button.is-link {:on-click #(swap! is-active not)} "Login"]]
-        [login-pop-up is-active]
-       ]
-      )))
+        [login-pop-up is-active]])))
+

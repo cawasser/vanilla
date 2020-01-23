@@ -37,6 +37,7 @@
                  [ring-webjars "0.2.0"]
                  [ring/ring-core "1.8.0"]
                  [ring/ring-defaults "0.3.2"]
+                 [ring/ring-json "0.5.0"]
                  [selmer "1.12.18"]
 
                  [cljsjs/react-grid-layout "0.17.1-0"]
@@ -119,6 +120,7 @@
                                            [day8.re-frame/tracing "0.5.3"]
                                            [ring/ring-devel "1.8.0"]
                                            [ring/ring-mock "0.4.0"]
+                                           [ring/ring-json "0.5.0"]
 
                                            ;from original
                                            [figwheel "0.5.2"]

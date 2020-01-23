@@ -5,6 +5,7 @@
             [ring.middleware.defaults :refer [wrap-defaults api-defaults]]
             [ring.middleware.gzip :refer [wrap-gzip]]
             [ring.middleware.logger :refer [wrap-with-logger]]
+            [ring.middleware.json :refer [wrap-json-response wrap-json-params]]
             [clojure.data.json :as json]
 
             ; version number support
@@ -47,6 +48,32 @@
              (str (json/write-str {:layout (h/get-layout)})))})
 
 
+  (GET "/user-verify" req
+    {:status 200
+     :headers {"Content-Type" "text/json; charset=utf-8"}
+     :body  (do
+              (prn "get user " :params req)
+              (h/get-requested-user (get-in req [:params :username])))})
+
+
+  (GET "/return-all-users" _
+    {:status 200
+     :headers {"Content-Type" "text/json; charset=utf-8"}
+     :body (do
+             (prn "get all users")
+             (prn (h/get-all-users))
+             (h/get-all-users))})
+
+  (POST "/create-new-user" req
+    {:status 200
+     ;:headers {"Content-Type" "text/json; charset=utf-8"}    ;; Not sure if this is better than line below it
+     :header { "Accept" "application/json"
+              :content-type "application/json;charset=utf-8"} ;;Not sure if this does anything
+     :body (do
+             (prn "create new user " (:params req))         ;; This keeps req in clojure format (keywords values)
+             (prn "create new user " (:json-params req))    ;; This turns req into json strings
+             {:rows-updated (h/create-user (:params req))})})                            ;;Expects a struct of username password
+
   (POST "/save-layout" req
     {:status 200
      :headers {"Content-Type" "text/json; charset=utf-8"}   ;maybe convert from text-json to straight edn
@@ -54,6 +81,10 @@
      :body (do
              (prn "save layout " req)
              (h/save-layout (:widgets (:params req))))})  ; this is way off, what is this body even needed for?
+
+
+
+
 
   (resources "/"))
 
@@ -68,5 +99,9 @@
 
        (GET "/version" req (ring-ajax-get-or-ws-handshake req)))
       (wrap-defaults api-defaults)
+
+      wrap-json-response                                  ;;Adding this did nothing
+      wrap-json-params                                    ;;Adding this did nothing
+
       ;wrap-with-logger
       wrap-gzip))
