@@ -76,3 +76,11 @@
     ;(prn ":selected-new-widget-type subscription " type)
     (get db :selected-new-widget-type)))
 
+
+; Login stuff
+
+(rf/reg-sub
+  :get-current-user
+  (fn [db _]
+    (get db :current-user)))
+

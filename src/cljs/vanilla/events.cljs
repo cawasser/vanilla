@@ -134,3 +134,18 @@
     ;(prn ":set-services " services)
     (assoc db :services (:services services))))
 
+
+
+;Login based stuff
+
+(rf/reg-event-db
+  :set-current-user
+  (fn-traced [db [_ username]]
+             (prn "Set currnet user" username)
+             (assoc db :current-user username)))
+
+
+(rf/reg-event-db
+  :logout
+  (fn-traced [db _]
+             (dissoc db :current-user)))

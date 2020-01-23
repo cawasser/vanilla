@@ -29,27 +29,29 @@
 
 
 
+(defn login-successful?
+  ""
+  [bool-val username]
+  (prn username "login was" bool-val)
+  (if (= bool-val true)
+    (rf/dispatch-sync [:set-current-user username])
+    (prn "login failed"))) ; This should just bring up a new modal that says login failed, no need to call a new function
 
 
-
-
-(defn run-verify
-  "Runs the ajax GET call to verify the username and pass exist in the database"
-  [credentials]
-  (GET "/verify-user"
-     {
-      :headers         {"Accept" "application/json"}
-      :response-format (ajax/json-response-format {:keywords? true})
-      :params          credentials
-      :handler #(prn "login attempt successful" %)}))
 
 (defn attempt-login
   "Handles login, runs a verify call then dispatches an event based on the verification"
   [credentials]
   (prn "login "credentials)
-  (if ((run-verify credentials) :verified-user)
-    (rf/dispatch-sync [:login-success credentials])
-    (rf/dispatch-sync [:login-fail])))
+  (GET "/verify-user"
+       {
+        :headers         {"Accept" "application/json"}
+        :response-format (ajax/json-response-format {:keywords? true})
+        :params          credentials
+        :handler #( login-successful? (% :verified-user) (credentials :username))}))
+
+
+
 
 
 

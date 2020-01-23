@@ -53,6 +53,7 @@
      :headers {"Content-Type" "text/json; charset=utf-8"}
      :body  (do
               (prn "verify user " (:params req))
+              (prn (str (h/verify-user-password (:params req))))
               {:verified-user (h/verify-user-password (:params req))})})
 
 
