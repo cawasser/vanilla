@@ -250,6 +250,9 @@
   (verify-credentials users-db
                       {:username "chad" :pass "123"})
 
+  (verify-credentials users-db
+                      {:username "chad" :pass "321"})
+
 
   (drop-users-table users-db)
 

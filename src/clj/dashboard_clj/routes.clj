@@ -48,12 +48,12 @@
              (str (json/write-str {:layout (h/get-layout)})))})
 
 
-  (GET "/user-verify" req
+  (GET "/verify-user" req
     {:status 200
      :headers {"Content-Type" "text/json; charset=utf-8"}
      :body  (do
-              (prn "get user " :params req)
-              (h/get-requested-user (get-in req [:params :username])))})
+              (prn "verify user " (:params req))
+              {:verified-user (h/verify-user-password (:params req))})})
 
 
   (GET "/return-all-users" _

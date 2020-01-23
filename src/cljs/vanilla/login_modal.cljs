@@ -29,21 +29,32 @@
 
 
 
+
+
+
+
+(defn run-verify
+  "Runs the ajax GET call to verify the username and pass exist in the database"
+  [credentials]
+  (GET "/verify-user"
+     {
+      :headers         {"Accept" "application/json"}
+      :response-format (ajax/json-response-format {:keywords? true})
+      :params          credentials
+      :handler #(prn "login attempt successful" %)}))
+
 (defn attempt-login
-  ""
+  "Handles login, runs a verify call then dispatches an event based on the verification"
   [credentials]
   (prn "login "credentials)
-  (GET "/user-verify"
-       {
-        :headers         {"Accept" "application/json"}
-        :response-format (ajax/json-response-format {:keywords? true})
-        :params          credentials
-        :handler #(prn "login attempt successful")}))
+  (if ((run-verify credentials) :verified-user)
+    (rf/dispatch-sync [:login-success credentials])
+    (rf/dispatch-sync [:login-fail])))
 
 
 
 (defn attempt-get-all-users
-  ""
+  "Used mostly to determine database content, made for dev logs"
   []
   (GET "/return-all-users"
        {

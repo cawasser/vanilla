@@ -1,5 +1,7 @@
 (ns vanilla.url-handlers
-  (:require [vanilla.db.core :as db]))
+  (:require
+    [vanilla.db.core :as db]
+    [clojure.core]))
 
 
 ;;;;;;;;;;;;;;;;
@@ -35,6 +37,11 @@
     (prn "uri handlers - " credentials)
     (db/create-new-user! db/users-db credentials))
 
+(defn verify-user-password
+    "Take in a user and password and determine if they are in the database"
+    [credentials]
+    (prn "url handlers verify creds - " credentials)
+    (some? (db/verify-credentials db/users-db credentials)))
 
 (defn get-requested-user
   "Makes a call to the hugsql functions that return a requested user if it exist"
@@ -56,6 +63,14 @@
 
   (get-requested-user "chad")
   (get-requested-user "chad-uri-handler")
+
+  (verify-user-password
+    {:username "chad"
+     :pass "123"})
+
+  (verify-user-password
+                      {:username "chad"
+                       :pass "321"})
 
   (get-all-users)
 
