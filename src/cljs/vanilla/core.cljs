@@ -36,17 +36,34 @@
 
 (enable-console-print!)
 
-
+(def conversion {:ret_types edn/read-string
+                 :name edn/read-string
+                 :basis edn/read-string
+                 :data-grid edn/read-string
+                 :type edn/read-string
+                 :data-source edn/read-string
+                 :options edn/read-string})
 
 (rf/reg-event-db
   :set-layout
   (fn-traced [db [_ layout-data]]
    (prn "Set-layout start: " layout-data)
 
-     (let [de-stringed (mapv #(into {} (for [[k v] %] [k (edn/read-string v)])) (:layout layout-data))]
-       (prn ":SET-layout " de-stringed)
+     (let [data (:layout layout-data)
+           converted-data (mapv (fn [{:keys [ret_types name basis data-grid type data-source options] :as original}]
+                                  (assoc original
+                                    :ret_types ((:ret_types conversion) ret_types)
+                                    :name ((:name conversion) name)
+                                    :basis ((:basis conversion) basis)
+                                    :data-grid ((:data-grid conversion) data-grid)
+                                    :type ((:type conversion) type)
+                                    :data-source ((:data-source conversion) data-source)
+                                    :options ((:options conversion) options)))
+                                data)]
 
-        (assoc db :widgets de-stringed))))
+       (prn ":set-layout CONVERTED: " converted-data)
+
+        (assoc db :widgets converted-data))))
 
 
 (enable-console-print!)

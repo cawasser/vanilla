@@ -56,7 +56,7 @@
      :headers {"Content-Type" "text/json; charset=utf-8"}
      :body (do
              (prn "save layout route " req)
-             (h/save-layout (:widgets (:params req))))})
+             (h/save-layout (:widgets (:params req))))}) ;(get-in req [:params :widgets])
 
   (resources "/"))
 

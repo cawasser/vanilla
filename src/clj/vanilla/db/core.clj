@@ -146,7 +146,7 @@
 
   (create-layout!
     vanilla-db
-    {:id         "\"123\""
+    {:id          "\"123\""
      :username    "\"APaine\""
      :name        :area-widget
      :ret_types   [:data-format/x-y]
@@ -156,15 +156,15 @@
      :icon        "\"/images/area-widget.png\""
      :label       "\"Area\""
      :data_grid   {:x 0 :y 0 :w 4 :h 14}
-     :options     {:viz/style-name "widget"
-                   :viz/y-title "power"
-                   :viz/x-title "frequency"
-                   :viz/allowDecimals false
-                   :viz/banner-color {:r 0x00 :g 0x00 :b 0xff :a 1}
-                   :viz/tooltip {:followPointer true}
-                   :viz/title "Channels (area)"
+     :options     {:viz/style-name        "widget"
+                   :viz/y-title           "power"
+                   :viz/x-title           "frequency"
+                   :viz/allowDecimals     false
+                   :viz/banner-color      {:r 0x00 :g 0x00 :b 0xff :a 1}
+                   :viz/tooltip           {:followPointer true}
+                   :viz/title             "Channels (area)"
                    :viz/banner-text-color {:r 255, :g 255, :b 255, :a 1}
-                   :viz/animation false}})
+                   :viz/animation         false}})
 
   (create-layout!
     vanilla-db
@@ -178,35 +178,47 @@
      :icon        "\"/images/bubble-widget.png\""
      :label       "\"Bubble\""
      :data_grid   {:x 4 :y 0 :w 5 :h 15}
-     :options     {:viz/banner-color {:r 0x00 :g 0x00 :b 0xff :a 1}
-                   :viz/tooltip {:followPointer true}
-                   :viz/dataLabels true
-                   :viz/data-labels true
-                   :viz/labelFormat "{point.name}"
-                   :viz/lineWidth 0
-                   :viz/title "Bubble"
+     :options     {:viz/banner-color      {:r 0x00 :g 0x00 :b 0xff :a 1}
+                   :viz/tooltip           {:followPointer true}
+                   :viz/dataLabels        true
+                   :viz/data-labels       true
+                   :viz/labelFormat       "{point.name}"
+                   :viz/lineWidth         0
+                   :viz/title             "Bubble"
                    :viz/banner-text-color {:r 255, :g 255, :b 255, :a 1}
-                   :viz/animation false}})
+                   :viz/animation         false}})
 
 
   (get-layout vanilla-db)
 
   (save-layout! vanilla-db {:layout test1})
 
- (def test1
-   [[:chart {:x 0, :y 0, :w 5, :h 15} :spectrum-traces "/images/area-widget.png" "1" "Area" :area-widget
-     {:viz/style-name "widget", :viz/y-title "power", :viz/x-title "frequency", :viz/allowDecimals false, :viz/banner-color {:r 0, :g 0, :b 255, :a 1}, :viz/tooltip {:followPointer true}, :viz/title "Channels (area)", :viz/banner-text-color {:r 255, :g 255, :b 255, :a 1}, :viz/animation false}
-     [:data-format/x-y] :area-chart "testHuman"]])
+  (def test1
+    [[:chart {:x 0, :y 0, :w 5, :h 15} :spectrum-traces "/images/area-widget.png" "1" "Area" :area-widget
+      {:viz/style-name "widget", :viz/y-title "power", :viz/x-title "frequency", :viz/allowDecimals false, :viz/banner-color {:r 0, :g 0, :b 255, :a 1}, :viz/tooltip {:followPointer true}, :viz/title "Channels (area)", :viz/banner-text-color {:r 255, :g 255, :b 255, :a 1}, :viz/animation false}
+      [:data-format/x-y] :area-chart "testHuman"]])
 
   (def test2
-    [{:ret_types [:data-format/x-y], :key "1", :name :area-widget, :basis :chart, :username "testHuman",
+    [{:ret_types   [:data-format/x-y], :key "1", :name :area-widget, :basis :chart, :username "testHuman",
       :data-source :spectrum-traces, :type :area-chart, :icon "/images/area-widget.png",
-      :label "Area", :data-grid {:x 0, :y 0, :w 5, :h 15}, :options {:viz/style-name "widget", :viz/y-title "power", :viz/x-title "frequency", :viz/allowDecimals false, :viz/banner-color {:r 0, :g 0, :b 255, :a 1}, :viz/tooltip {:followPointer true}, :viz/title "Channels (area)", :viz/banner-text-color {:r 255, :g 255, :b 255, :a 1}, :viz/animation false}}])
+      :label       "Area", :data-grid {:x 0, :y 0, :w 5, :h 15}, :options {:viz/style-name "widget", :viz/y-title "power", :viz/x-title "frequency", :viz/allowDecimals false, :viz/banner-color {:r 0, :g 0, :b 255, :a 1}, :viz/tooltip {:followPointer true}, :viz/title "Channels (area)", :viz/banner-text-color {:r 255, :g 255, :b 255, :a 1}, :viz/animation false}}])
+
+
+  (clojure.core/read-string "/images/area-widget.png")
+  (clojure.string/escape "/images/area-widget.png" {\  "/"})
+
+  (mapv #(into {} (for [[k v] %] [k (clojure.core/read-string v)])) (get-layout vanilla-db))
+  (mapv #(into {} (for [[k v] %] [k (clojure.string/escape v {\  "/"})])) (get-layout vanilla-db))
+
 
   (map #(select-keys % [:key :username :icon :label]) test2)
-  (first test2)
+  (first (get-layout vanilla-db))
 
-  (into {} (for [[k v] (first (map #(select-keys % [:ret_types :name :basis :data_grid :type :data_source :options]) (get-layout vanilla-db)))] [k (clojure.core/read-string v)]))
+  (defn key-picker [db]
+    (into {} (for [[k v] (first (map #(select-keys % [:ret_types :name :basis :data_grid :type :data_source :options]) (get-layout db)))] [k (clojure.core/read-string v)]))
+    )
+  (key-picker vanilla-db)
+  (update-in (first (get-layout vanilla-db)) merge (key-picker vanilla-db))
 
   (map #(select-keys % [:ret_types :name :basis :data_grid :type :data_source :options]) (get-layout vanilla-db))
 
@@ -229,6 +241,37 @@
                   ":chart" ":bubble-service" ":bubble-chart"
                   "\"/images/bubble-widget.png\"" "\"Bubble\"" "{:x 4, :y 0, :w 5, :h 15}"
                   "#:viz{:animation false, :labelFormat \"{point.name}\", :banner-text-color {:r 255, :g 255, :b 255, :a 1}, :title \"Bubble\", :dataLabels true, :lineWidth 0, :data-labels true, :banner-color {:r 0, :g 0, :b 255, :a 1}, :tooltip {:followPointer true}}"]]})
+
+
+   (def sample
+     [{:a 10 :b 6 :c 3 :d 5} {:a 3 :b 4 :c 5 :d 6}])
+
+   (def newvals {:a "new" :b "newer"})
+
+   (mapv (fn [{:keys [a b] :as original}] (assoc original :a (:a newvals) :b (:b newvals))) sample)
+
+   (def sample2
+     [{:username "Apaine" :icon "/test/temp.png" :chart ":area"}])
+
+   (def conversion {:ret_types clojure.core/read-string
+                    :name clojure.core/read-string
+                    :basis clojure.core/read-string
+                    :data_grid clojure.core/read-string
+                    :type clojure.core/read-string
+                    :data_source clojure.core/read-string
+                    :options clojure.core/read-string})
+
+   (mapv (fn [{:keys [ret_types name basis data_grid type data_source options] :as original}]
+           (assoc original
+             :ret_types ((:ret_types conversion) ret_types)
+             :name ((:name conversion) name)
+             :basis ((:basis conversion) basis)
+             :data_grid ((:data_grid conversion) data_grid)
+             :type ((:type conversion) type)
+             :data_source ((:data_source conversion) data_source)
+             :options ((:options conversion) options)))
+         (get-layout vanilla-db))
+
 
   (delete-all-layouts! vanilla-db)
 
@@ -332,5 +375,3 @@
 
 
   ())
-
-
