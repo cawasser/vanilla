@@ -14,46 +14,66 @@
                                                   :format  (get options :viz/labelFormat "")}}}})
 
 
-;;;;;;;;;;;;;;
-;
-; these functions will convert the data from the current format into
-; what the chart type actually wants. This may involve adding
-; data to the :series, or rearranging the contents
+(def default-options {:colorByPoint true
+                      :zmin         0
+                      :innerSize    "20%"
+                      :minPointSize 10})
 
-(defn- process-data [data slice-at]
 
-  ;(.log js/console "vari-pie process-data" (str data))
 
-  (let [ret [{:colorByPoint true
-              :zmin         0
-              :innerSize    "20%"
-              :minPointSize 10
-              :keys         ["name" "y" "z"]
-              :data         (map #(conj % (rand 100)) data)}]]
 
-    ;(.log js/console (str "VARI-PROCESSED-DATA: " ret))
+(defn- add-slice-data [data slice-at]
+
+  ;(prn "vari-pie add-slice-data STARTED!! " data)
+
+  (let [new-keys (conj (:keys data) "selected" "sliced")
+        new-data (map #(conj % false (< (second %) slice-at)) (:data data))
+        ret [{:colorByPoint true
+              :keys         new-keys
+              :data         new-data}]]
+
+    ;(prn "add-slice-data " data
+    ;  " //// (slice-at) " slice-at
+    ;  " //// (new-keys) " new-keys
+    ;  " //// (new-data) " new-data
+    ;  " //// (ret) " ret)
 
     ret))
 
 
-(defn convert-x-y
-  [chart-type data options]
+(defn add-the-y-conversion [default-y chart-config data options]
 
-  ;(.log js/console (str "vari-pie/convert-x-y " chart-type))
+  (let [series (get-in data [:data :series])
+        ret (for [{data :data :as all} series]
+              (assoc all
+                :keys ["name" "y" "z"]
+                :data (into []
+                        (for [[x z] data]
+                          [x default-y z]))))]
 
-  (process-data (get-in data [:data (get-in options [:src/extract])])
-                (get-in options [:viz/slice-at])))
+    ;(prn "add-the-y-conversion (from)" data
+    ;  " //// (series) " series
+    ;  " /// (to) " ret)
+
+    (into [] ret)))
 
 
-(defn convert-name-y
-  [chart-type data options]
+(defn- process-data [default-y slice-at chart-config data options]
 
-  ;(.log js/console (str "vari-pie/convert-name-y " chart-type
-  ;                      " //// " data " //// " options
-  ;                      " //// " (get-in data [:data :series 0 :data])]
+  ;(prn "vari-pie PROCESS started (data) " data)
 
-  (process-data (get-in data [:data :series 0 :data] [])
-                (get-in options [:viz/slice-at])))
+  (let [add-the-n (add-the-y-conversion default-y chart-config data options)
+        add-slice (add-slice-data (first add-the-n) slice-at)
+        ret    (for [d add-slice]
+                 (merge d default-options))]
+
+    ;(prn "vari-pie process-data (data) " data
+    ;  " //// (add-th-n) " add-the-n
+    ;  " //// (add-slice) " add-slice
+    ;  " //// (ret) " ret)
+
+    ret))
+
 
 
 ;;;;;;;;;;;;;;
@@ -63,14 +83,14 @@
 (defn register-type []
   (mc/register-type
     :vari-pie-chart {:chart-options     {:chart/type              :vari-pie-chart
-                                         :chart/supported-formats [:data-format/name-y :data-format/x-y]
+                                         :chart/supported-formats [:data-format/label-y-n :data-format/label-y :data-format/label-y-e]
                                          :chart                   {:type  "variablepie"
                                                                    :style {:labels {:fontFamily "monospace"
                                                                                     :color      "#FFFFFF"}}}}
                      :merge-plot-option {:default plot-options}
 
-                     :conversions       {:data-format/x-y convert-x-y
-                                         :default         convert-name-y}}))
+                     :conversions       {:default mc/default-conversion
+                                         :data-format/label-y (partial process-data 100 45)}}))
 
 
 

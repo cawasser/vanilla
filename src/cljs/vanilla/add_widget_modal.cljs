@@ -31,14 +31,14 @@
 
 (defn- filter-widgets [widgets selected]
   ;(prn "filter-widgets " selected
-  ;  " //// ret_types " (keyword (:ret_types selected)))
+  ;  " //// ret_types " (keyword (:ret_type selected)))
 
-  (let [ret-val (filter #(if (some #{(keyword (:ret_types selected))}
+  (let [ret-val (filter #(if (some #{(keyword (:ret_type selected))}
                                (:ret_types %)) true false)
                   (vals widgets))]
 
     ;(prn (str "filter-widgets " selected
-    ;       " //// ret_types " (keyword (:ret_types selected))
+    ;       " //// ret_types " (keyword (:ret_type selected))
     ;       " //// ret-val " ret-val))
 
     ret-val))
@@ -93,9 +93,9 @@
 (defn widget-list [widgets s chosen-widget]
   (let [widget-cards (filter-widgets widgets s)]
 
-    ;(prn "widget-list " widgets)
-    ;  " //// selected " s)
-    ;  " //// chosen-widget " @chosen-widget)
+    ;(prn "widget-list " widgets
+    ;;  " //// selected " s)
+    ;;  " //// chosen-widget " @chosen-widget)
     ;  " //// cards " widget-cards)
 
     [:table>tbody

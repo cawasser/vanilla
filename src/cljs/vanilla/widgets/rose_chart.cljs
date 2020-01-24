@@ -31,6 +31,7 @@
 
 
 
+
 ;;;;;;;;;;;;;;
 ;
 ; register all the data stuff so we have access to it
@@ -38,12 +39,11 @@
 (defn register-type []
   (mc/register-type
     :rose-chart {:chart-options     {:chart/type              :rose-chart
-                                     :chart/supported-formats [:data-format/y :data-format/x-y]
+                                     :chart/supported-formats [:data-format/rose-y-n :data-format/rose-y-e]
                                      :chart                   {:type     "column"
                                                                :polar    "true"
                                                                :zoomType "x"}
-                                     :yAxis                   {:min    0
-                                                               :title  {:align "high"}
+                                     :yAxis                   {:title  {:align "high"}
                                                                :labels {:overflow "justify"}}}
 
                  :merge-plot-option {:default plot-options}

@@ -9,17 +9,6 @@
 ;  ;(.log js/console (str "sankey-deps/plot-options " chart-config))
 ;
 ;  {:plotOptions {:series {:animation (:viz/animation options false)}}})
-;
-;
-(defn sankey-conversion
-  [chart-type data options]
-
-  ;(prn "sankey-conversion " chart-type
-  ;  " //// (data)" data
-  ;  " //// (options)" options)
-
-  [{:keys (get-in data [:data :src/keys] [])
-    :data (get-in data [:data :series 0 :data])}])
 
 
 
@@ -31,14 +20,15 @@
   (mc/register-type
     :sankey-chart {:chart-options
                    {:chart/type              :sankey-chart
-                    :chart/supported-formats [:data-format/from-to :data-format/from-to-n]
+                    :chart/supported-formats [:data-format/from-to-n :data-format/from-to :data-format/from-to-e]
                     :chart                   {:type "sankey"}}
 
                    :merge-plot-option
                    {:default mc/default-plot-options}
 
                    :conversions
-                   {:default sankey-conversion}}))
+                   {:default mc/default-conversion
+                    :data-format/from-to (partial mc/add-the-n-conversion "weight" 1)}}))
 
 
 
