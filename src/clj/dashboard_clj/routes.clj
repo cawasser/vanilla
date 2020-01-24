@@ -49,14 +49,12 @@
              (str (json/write-str {:layout (h/get-layout)})))})
 
 
-  ;TODO change the data to strip the keys out and order correctly for db
-  ;TODO add current username to map
   (POST "/save-layout" req
     {:status 200
      :headers {"Content-Type" "text/json; charset=utf-8"}
      :body (do
-             (prn "save layout route " req)
-             (h/save-layout (:widgets (:params req))))}) ;(get-in req [:params :widgets])
+             (prn "save layout")
+             (h/save-layout (get-in req [:params :widgets])))})
 
   (resources "/"))
 

@@ -48,7 +48,7 @@
 (rf/reg-event-db
   :set-layout
   (fn-traced [db [_ layout-data]]
-   (prn "Set-layout start: " layout-data)
+   ;(prn "Set-layout start: " layout-data)
 
      (let [data (:layout layout-data)
            converted-data (mapv (fn [{:keys [ret_types key name basis data-grid type data-source options] :as original}]
@@ -64,8 +64,8 @@
                                 data)
            highestNextid (apply max (mapv #(:key %) converted-data))]
 
-       (prn ":set-layout CONVERTED: " converted-data
-            "///// nextid: " highestNextid)
+       ;(prn ":set-layout CONVERTED: " converted-data
+       ;     "///// nextid: " highestNextid)
 
         (assoc db :widgets converted-data
                   :next-id (inc highestNextid)))))

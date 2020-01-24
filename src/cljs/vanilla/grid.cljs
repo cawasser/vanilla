@@ -4,21 +4,8 @@
     [re-frame.core :as rf]
     [vanilla.events]
     [cljsjs.react-grid-layout]
-    [vanilla.widgets.core :as widget]
-    [clojure.edn :as edn]
-    [ajax.core :as ajax :refer [GET POST]]))
+    [vanilla.widgets.core :as widget]))
 
-
-
-;(defn save-layout [layout]
-;  (prn "saving layout: " (clojure.core/pr-str layout))
-;
-;  (POST "/save-layout"
-;    {:format          (ajax/json-request-format {:keywords? true})
-;     :response-format (ajax/json-response-format {:keywords? true})
-;     :params          {:widgets (clojure.core/pr-str layout)}       ;convert the whole layout struct to a string to preserve values
-;     :handler         #(prn "Layout SAVED!")
-;     :on-error        #(prn "ERROR saving the layout " %)}))
 
 (defn fixup-new-widget [widget]
   (merge widget {:data-grid {:x 0 :y 0 :w 5 :h 15}}))
@@ -35,16 +22,14 @@
           (<= 1 (count chg))
           (not= (:i fst) "null"))
       (do
-        (prn "onLayoutChange " on-change
-          " //// prev " prev
-          " //// new " new
-          " //// empty? " (empty? chg)
-          " //// count " (count chg)
-          " //// first id " (:i fst))
+        ;(prn "onLayoutChange " on-change
+        ;  " //// prev " prev
+        ;  " //// new " new
+        ;  " //// empty? " (empty? chg)
+        ;  " //// count " (count chg)
+        ;  " //// first id " (:i fst))
 
-        (rf/dispatch [:update-layout (js->clj new :keywordize-keys true)])
-        ;(save-layout (js->clj prev :keywordize-keys true))
-        ))
+        (rf/dispatch [:update-layout (js->clj new :keywordize-keys true)])))
 
 
     (on-change prev (js->clj new :keywordize-keys true))))

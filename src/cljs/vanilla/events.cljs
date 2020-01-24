@@ -55,9 +55,9 @@
                          :data-grid {:x 0 :y 0 :w 5 :h 15})]
 
       (do
-        (prn ":add-widget " new-widget-type
-          " //// widget-type " widget-type
-          " //// named-widget " named-widget)
+        ;(prn ":add-widget " new-widget-type
+        ;  " //// widget-type " widget-type
+        ;  " //// named-widget " named-widget)
         (assoc db
           :widgets (conj (:widgets db) named-widget)
           :next-id (inc next-id))))))

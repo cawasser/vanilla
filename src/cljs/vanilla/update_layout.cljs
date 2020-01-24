@@ -4,7 +4,7 @@
 
 
 (defn save-layout [layout]
-  (prn "saving layout: " (clojure.core/pr-str layout))
+  ;(prn "saving layout: " (clojure.core/pr-str layout))
 
   (POST "/save-layout"
         {:format          (ajax/json-request-format {:keywords? true})
@@ -12,6 +12,7 @@
          :params          {:widgets (clojure.core/pr-str layout)}       ;convert the whole layout struct to a string to preserve values
          :handler         #(prn "Layout SAVED!")
          :on-error        #(prn "ERROR saving the layout " %)}))
+
 
 (defn- apply-updates [new-layout widget]
   ;(prn "apply layout " new-layout)
@@ -22,8 +23,6 @@
     (assoc-in [:data-grid :h] (:h new-layout))))
 
 
-
-
 (defn reduce-layouts [layout]
   (map (fn [n]
          {:y   (:y n)
@@ -32,8 +31,6 @@
           :h   (:h n)
           :key (:i n)})
     layout))
-
-
 
 
 (defn update-layout [widgets layout]
