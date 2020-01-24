@@ -203,6 +203,8 @@
       :data-source :spectrum-traces, :type :area-chart, :icon "/images/area-widget.png",
       :label       "Area", :data-grid {:x 0, :y 0, :w 5, :h 15}, :options {:viz/style-name "widget", :viz/y-title "power", :viz/x-title "frequency", :viz/allowDecimals false, :viz/banner-color {:r 0, :g 0, :b 255, :a 1}, :viz/tooltip {:followPointer true}, :viz/title "Channels (area)", :viz/banner-text-color {:r 255, :g 255, :b 255, :a 1}, :viz/animation false}}])
 
+  (map #(:id %) (get-layout vanilla-db))
+  (apply max [1 4 8 2 54 2 7 83])
 
   (clojure.core/read-string "/images/area-widget.png")
   (clojure.string/escape "/images/area-widget.png" {\  "/"})

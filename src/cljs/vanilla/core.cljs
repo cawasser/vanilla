@@ -37,6 +37,7 @@
 (enable-console-print!)
 
 (def conversion {:ret_types edn/read-string
+                 :key edn/read-string
                  :name edn/read-string
                  :basis edn/read-string
                  :data-grid edn/read-string
@@ -50,20 +51,24 @@
    (prn "Set-layout start: " layout-data)
 
      (let [data (:layout layout-data)
-           converted-data (mapv (fn [{:keys [ret_types name basis data-grid type data-source options] :as original}]
+           converted-data (mapv (fn [{:keys [ret_types key name basis data-grid type data-source options] :as original}]
                                   (assoc original
                                     :ret_types ((:ret_types conversion) ret_types)
+                                    :key ((:key conversion) key)
                                     :name ((:name conversion) name)
                                     :basis ((:basis conversion) basis)
                                     :data-grid ((:data-grid conversion) data-grid)
                                     :type ((:type conversion) type)
                                     :data-source ((:data-source conversion) data-source)
                                     :options ((:options conversion) options)))
-                                data)]
+                                data)
+           highestNextid (apply max (mapv #(:key %) converted-data))]
 
-       (prn ":set-layout CONVERTED: " converted-data)
+       (prn ":set-layout CONVERTED: " converted-data
+            "///// nextid: " highestNextid)
 
-        (assoc db :widgets converted-data))))
+        (assoc db :widgets converted-data
+                  :next-id (inc highestNextid)))))
 
 
 (enable-console-print!)
