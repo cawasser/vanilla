@@ -48,27 +48,30 @@
 (rf/reg-event-db
   :set-layout
   (fn-traced [db [_ layout-data]]
-   ;(prn "Set-layout start: " layout-data)
+   ;(prn "Set-layout start: " (:layout layout-data))
+     (if (not (empty? (:layout layout-data)))             ; if its not initial page load with empty layout-table
+       (let [data (:layout layout-data)
+             converted-data (mapv (fn [{:keys [ret_types key name basis data-grid type data-source options] :as original}]
+                                    (assoc original
+                                      :ret_types ((:ret_types conversion) ret_types)
+                                      :key ((:key conversion) key)
+                                      :name ((:name conversion) name)
+                                      :basis ((:basis conversion) basis)
+                                      :data-grid ((:data-grid conversion) data-grid)
+                                      :type ((:type conversion) type)
+                                      :data-source ((:data-source conversion) data-source)
+                                      :options ((:options conversion) options)))
+                                  data)
+             highestNextid (apply max (mapv #(:key %) converted-data))]     ; Will need to address how we actually want to handle widget id's
 
-     (let [data (:layout layout-data)
-           converted-data (mapv (fn [{:keys [ret_types key name basis data-grid type data-source options] :as original}]
-                                  (assoc original
-                                    :ret_types ((:ret_types conversion) ret_types)
-                                    :key ((:key conversion) key)
-                                    :name ((:name conversion) name)
-                                    :basis ((:basis conversion) basis)
-                                    :data-grid ((:data-grid conversion) data-grid)
-                                    :type ((:type conversion) type)
-                                    :data-source ((:data-source conversion) data-source)
-                                    :options ((:options conversion) options)))
-                                data)
-           highestNextid (apply max (mapv #(:key %) converted-data))]     ; Will need to address how we actually want to handle widget id's
-                                                                          ; Likely move to some kind of randomized generation
        ;(prn ":set-layout CONVERTED: " converted-data
        ;     "///// nextid: " highestNextid)
 
         (assoc db :widgets converted-data
-                  :next-id (inc highestNextid)))))
+                :next-id (inc highestNextid)))
+        ; else it is initial page load with empty layout-table
+        (assoc db :widgets []
+                 :next-id 1))))
 
 
 (enable-console-print!)
