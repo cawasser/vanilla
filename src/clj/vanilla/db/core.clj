@@ -40,8 +40,89 @@
 
 (defn setup-database [] (map->Database {:db-spec vanilla-db}))
 
+(defn populate-services []
+  (create-services!
+    vanilla-db
+    {:services
+     [["1000" "spectrum-traces" "Spectrum Traces"
+       "data-format/x-y" "vanilla.spectrum-traces-service/spectrum-traces"
+       "returns power over frequency"]
+
+      ["2000" "usage-data" "Usage Data"
+       "data-format/label-y" "vanilla.usage-data-service/usage-data"
+       "returns usage data over time"]
+
+      ["3000" "sankey-service" "Relationship Data"
+       "data-format/from-to-n" "vanilla.sankey-service/fetch-data"
+       "returns interdependencies between countries"]
+
+      ["4000" "bubble-service" "Bubble Data"
+       "data-format/x-y-n" "vanilla.bubble-service/fetch-data"
+       "returns x-y-n data for Fruits, Countries and MLB teams"]
+
+      ["5000" "network-service" "Network Data"
+       "data-format/from-to" "vanilla.network-service/fetch-data"
+       "returns interconnectivity data"]
+
+      ["6000" "power-data" "Power Data"
+       "data-format/x-y" "vanilla.power-data-service/power-data"
+       "returns quantity of fruit sold"]
+
+      ["7000" "heatmap-data" "Heatmap Data"
+       "data-format/grid-n" "vanilla.heatmap-service/heatmap-data"
+       "returns quantity of fruit sold per country"]
+
+      ["8000" "health-and-status-data" "Health and Status"
+       "data-format/entity" "vanilla.stoplight-service/fetch-data"
+       "returns green/yellow/red status for a collection of items"]
+
+      ["9000" "usage-12-hour-service" "12-hour Usage Data"
+       "data-format/rose-y-n" "vanilla.usage-12-hour-service/fetch-data"
+       "returns quantity of fruit sold per hour"]
+
+      ["10000" "scatter-service-data" "Scatter Data"
+       "data-format/x-y" "vanilla.scatter-service/fetch-data"
+       "returns height and weight for a sample of females and males"]
+
+      ["11000" "current-time" "Current Time"
+       "data-format/string" "vanilla.current-time-service/fetch-data"
+       "returns a simple text"]
+
+      ["12000" "table-service" "Data Table"
+       "data-format/entities" "vanilla.table-service/fetch-data"
+       "returns users' info"]]}))
 
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; INITIAL DB SETUP FUNCTION
+;;
+;; not called anywhere in the app
+;; run in the repl to create fresh db tables populated accordingly
+;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+(defn initialize-database []
+  (do
+    ;; Remove any current tables to start fresh
+    (drop-services-table vanilla-db)
+    (drop-layout-table vanilla-db)
+
+    ;; Create new empty versions of the table
+    (create-services-table vanilla-db)
+    (create-layout-table vanilla-db)
+
+    ;; Bootstrap any data needed in the DB at start
+    (populate-services)))
+
+;;; REPL ME vvvvv ;;;
+(initialize-database)
+
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;; COMMENTS ;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;; Services table rich comment
 (comment
   (do
     (hugsql/def-db-fns "sql/queries.sql")
@@ -164,8 +245,8 @@
 
   ())
 
-
-; ***Layout table rich comment***
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Layout table rich comment
 (comment
 
   (hugsql/def-db-fns "sql/queries.sql")
@@ -232,17 +313,6 @@
 
   (save-layout! vanilla-db {:layout test1})
 
-  (def test1
-    [[:chart {:x 0, :y 0, :w 5, :h 15} :spectrum-traces "/images/area-widget.png" "1" "Area" :area-widget
-      {:viz/style-name "widget", :viz/y-title "power", :viz/x-title "frequency", :viz/allowDecimals false, :viz/banner-color {:r 0, :g 0, :b 255, :a 1}, :viz/tooltip {:followPointer true}, :viz/title "Channels (area)", :viz/banner-text-color {:r 255, :g 255, :b 255, :a 1}, :viz/animation false}
-      [:data-format/x-y] :area-chart "testHuman"]])
-
-  (def test2
-    [{:ret_types   [:data-format/x-y], :key "1", :name :area-widget, :basis :chart, :username "testHuman",
-      :data-source :spectrum-traces, :type :area-chart, :icon "/images/area-widget.png",
-      :label       "Area", :data-grid {:x 0, :y 0, :w 5, :h 15}, :options {:viz/style-name "widget", :viz/y-title "power", :viz/x-title "frequency", :viz/allowDecimals false, :viz/banner-color {:r 0, :g 0, :b 255, :a 1}, :viz/tooltip {:followPointer true}, :viz/title "Channels (area)", :viz/banner-text-color {:r 255, :g 255, :b 255, :a 1}, :viz/animation false}}])
-
-
   (save-layout! vanilla-db
                 {:layout
                  [["123" "APaine" ":area-widget" "[:data-format/x-y]"
@@ -264,7 +334,7 @@
   ())
 
 
-
+;; Data setup playground
 (comment
 
 
