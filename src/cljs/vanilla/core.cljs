@@ -62,8 +62,8 @@
                                     :data-source ((:data-source conversion) data-source)
                                     :options ((:options conversion) options)))
                                 data)
-           highestNextid (apply max (mapv #(:key %) converted-data))]
-
+           highestNextid (apply max (mapv #(:key %) converted-data))]     ; Will need to address how we actually want to handle widget id's
+                                                                          ; Likely move to some kind of randomized generation
        ;(prn ":set-layout CONVERTED: " converted-data
        ;     "///// nextid: " highestNextid)
 

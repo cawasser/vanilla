@@ -173,6 +173,9 @@
 
   (create-layout-table-sqlvec vanilla-db)
 
+  ;;;;;;;;;;;;;;;
+  ; THIS FUNCTION MUST BE RUN TO CREATE INITIAL DB TABLE
+  ;;;;;;;;;;;;;;;
   (create-layout-table vanilla-db)
 
   ;ret_types needs square brackets around it

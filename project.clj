@@ -1,4 +1,4 @@
-(defproject vanilla "0.3.2-SNAPSHOT"
+(defproject vanilla "0.3.3-SNAPSHOT"
   :description "Vanilla Dashboard - a simple dashboard built on dashboard-clj"
   :url ""
 
@@ -120,7 +120,6 @@
                                            [day8.re-frame/tracing "0.5.3"]
                                            [ring/ring-devel "1.8.0"]
                                            [ring/ring-mock "0.4.0"]
-                                           [ring/ring-json "0.5.0"]
 
                                            ;from original
                                            [figwheel "0.5.2"]

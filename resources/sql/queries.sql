@@ -53,17 +53,17 @@ DELETE FROM services;
 -- :result :raw
 -- :doc Create widget layout table
 create table layout (
-  id                   VARCHAR(20) PRIMARY KEY,
-  username              VARCHAR(30),
-  name                  VARCHAR(30),
-  ret_types             BLOB(30),
-  basis                 VARCHAR(30),
-  data_source           VARCHAR(30),
-  type                  VARCHAR(30),
-  icon                  VARCHAR(30),
-  label                 VARCHAR(30),
-  data_grid             BLOB(30),
-  options               BLOB(300));
+  id                   TEXT PRIMARY KEY,
+  username              TEXT,
+  name                  TEXT,
+  ret_types             BLOB,
+  basis                 TEXT,
+  data_source           TEXT,
+  type                  TEXT,
+  icon                  TEXT,
+  label                 TEXT,
+  data_grid             BLOB,
+  options               BLOB);
 
 
 

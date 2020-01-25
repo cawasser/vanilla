@@ -5,9 +5,9 @@
 
 
 (defn add-widget [new-widget selected-source]
-  (prn "add-widget " new-widget
-    " //// selected-source " selected-source
-    " //// keyword " (keyword (:keyword selected-source)))
+  ;(prn "add-widget " new-widget
+  ;  " //// selected-source " selected-source
+  ;  " //// keyword " (keyword (:keyword selected-source)))
 
   (rf/dispatch [:add-widget new-widget (keyword (:keyword selected-source))]))
 
