@@ -3,12 +3,12 @@
 -- :result :raw
 -- :doc Create services table
 create table services (
-  id              VARCHAR(20) PRIMARY KEY,
-  keyword         VARCHAR(30),
-  name            VARCHAR(30),
-  ret_type        VARCHAR(30),
-  read_fn         VARCHAR(128),
-  doc_string      VARCHAR(300));
+  id              TEXT PRIMARY KEY,
+  keyword         TEXT,
+  name            TEXT,
+  ret_type        TEXT,
+  read_fn         TEXT,
+  doc_string      TEXT);
 
 
 
