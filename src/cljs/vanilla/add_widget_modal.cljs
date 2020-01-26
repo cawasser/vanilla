@@ -1,7 +1,40 @@
 (ns vanilla.add-widget-modal
   (:require [reagent.core :as r]
-            [re-frame.core :as rf]))
+            [re-frame.core :as rf]
+            [day8.re-frame.tracing :refer-macros [fn-traced]]))
 
+
+;;;; EVENTS
+(rf/reg-event-db
+  :add-widget
+  (fn-traced [db [_ new-widget-type data-source]]
+             (let [next-id (:next-id db)
+                   widget-type (get-in db [:widget-types new-widget-type])
+                   named-widget (assoc widget-type
+                                  :key (str next-id)
+                                  :data-source data-source
+                                  :data-grid {:x 0 :y 0 :w 5 :h 15})]
+
+               (do
+                 ;(prn ":add-widget " new-widget-type
+                 ;  " //// widget-type " widget-type
+                 ;  " //// named-widget " named-widget)
+                 (assoc db
+                   :widgets (conj (:widgets db) named-widget)
+                   :next-id (inc next-id))))))
+
+(rf/reg-event-db
+  :init-selected-service
+  (fn-traced [db _]
+             ;(prn (str ":init-selected-service " (first (:services db))))
+             (assoc db :selected-service (first (:services db)))))
+
+
+(rf/reg-event-db
+  :selected-service
+  (fn-traced [db [_ s]]
+             ;(prn (str ":selected-service " s))
+             (assoc db :selected-service s)))
 
 
 (defn add-widget [new-widget selected-source]

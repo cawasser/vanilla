@@ -1,12 +1,18 @@
 (ns vanilla.widgets.make-chart
   (:require [reagent.core :as reagent]
             [re-frame.core :as rf]
+            [day8.re-frame.tracing :refer-macros [fn-traced]]
             [vanilla.widgets.util :as util]))
 
 
-
-
 (declare default-conversion)
+
+
+(rf/reg-event-db
+  :register-hc-type
+  (fn-traced [db [_ type type-fn]]
+             ;(prn "registering highcharts type " type)
+             (assoc-in db [:hc-type type] type-fn)))
 
 ;;;;;;;;;;;;;;;;;
 ;

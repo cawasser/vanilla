@@ -3,8 +3,15 @@
   (:require [cljs.core.async :as async :refer (<! >! put! chan)]
             [taoensso.sente  :as sente :refer (cb-success?)]
             [re-frame.core :as rf]
+            [day8.re-frame.tracing :refer-macros [fn-traced]]
             [vanilla.events]
             [vanilla.subscriptions]))
+
+(rf/reg-event-db
+  :update-data-source
+  (fn-traced
+    [app-state [_ data-source new-val]]
+    (assoc-in  app-state [:data-sources data-source] new-val)))
 
 
 (defn connect-to-data-sources []

@@ -4,11 +4,21 @@
     [re-frame.core :as rf]
     [vanilla.events]
     [cljsjs.react-grid-layout]
-    [vanilla.widgets.core :as widget]))
+    [vanilla.widgets.core :as widget]
+    [day8.re-frame.tracing :refer-macros [fn-traced]]
+    [vanilla.update-layout :as u]))
 
 
 (defn fixup-new-widget [widget]
   (merge widget {:data-grid {:x 0 :y 0 :w 5 :h 15}}))
+
+(rf/reg-event-db
+  :update-layout
+  (fn-traced [db [_ layout]]
+             ;(prn (str ":update-layout " layout))
+             (let [new-layout (u/update-layout (:widgets db) (u/reduce-layouts layout))]
+               (u/save-layout new-layout)
+               (assoc db :widgets new-layout))))
 
 
 

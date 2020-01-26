@@ -24,6 +24,12 @@
     (assoc db :widgets (map #(partial (update-color widget-id option color %)) (:widgets db)))))
 
 
+(rf/reg-event-db
+  :remove-widget
+  (fn-traced [db [_ widget-id]]
+             (assoc db :widgets (remove #(= (:key %) widget-id) (:widgets db)))))
+
+
 ;
 ;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

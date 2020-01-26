@@ -36,6 +36,28 @@
 
 (enable-console-print!)
 
+(rf/reg-event-db
+  :initialize
+  (fn-traced
+    [db _]
+    (prn (str ":initialize handler "))
+    (merge db {:data-sources {}
+               :hc-type {}
+               :chosen-bg-color {:r 150 :g 150 :b 150 :a 1.0}
+               :chosen-txt-color "white"})))
+
+(rf/reg-event-db
+  :widget-type
+  (fn-traced [db [_ widget]]
+             ;(prn (str ":widget-type " widget))
+             (assoc-in db [:widget-types (:name widget)] widget)))
+
+(rf/reg-event-db
+  :next-id
+  (fn-traced [db [_ id]]
+             (assoc db :next-id id)))
+
+;; Helper function to set-layout to define function called for each value
 (def conversion {:ret_types edn/read-string
                  :key edn/read-string
                  :name edn/read-string
@@ -73,8 +95,18 @@
         (assoc db :widgets []
                  :next-id 1))))
 
+(rf/reg-event-db
+  :set-version
+  (fn-traced [db [_ version]]
+             ;(prn ":set-version " version)
+             (assoc db :version (:version version))))
 
-(enable-console-print!)
+
+(rf/reg-event-db
+  :set-services
+  (fn-traced [db [_ services]]
+             ;(prn ":set-services " services)
+             (assoc db :services (:services services))))
 
 
 
