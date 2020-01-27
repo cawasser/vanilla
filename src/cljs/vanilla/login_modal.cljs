@@ -179,8 +179,8 @@
   (let [is-active (r/atom false)]
     (fn []
       [:div
-       [:div.level-right.has-text-right
-        [:button.button.is-link {:on-click #(swap! is-active not)} "Logout"]]
+      ; [:div.level-right.has-text-right
+        [:button.button.is-link {:on-click #(swap! is-active not)} "Logout"]
        [logout-pop-up is-active]])))
 
 

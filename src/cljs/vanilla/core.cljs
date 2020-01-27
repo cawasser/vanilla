@@ -118,10 +118,14 @@
    [:div.container
     [:div.content {:width "100%"}
      [:div.container.level.is-fluid {:width "100%"}
-      [modal/version-number]
-      [login/determine-login-or-logout]]]
-   ;[widgets-grid]
-   ]])
+      [:div.level-left.has-text-left
+       [modal/version-number]]
+      [:div.level-right.has-text-right
+       [modal/add-widget-button]
+       []         ;; Something needs to go here to separate buttons
+       [login/determine-login-or-logout]]]
+     ;[widgets-grid]]]
+   ]]])
 
 
 
