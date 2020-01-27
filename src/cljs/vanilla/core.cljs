@@ -117,11 +117,11 @@
   [:div {:width "100%"}
    [:div.container
     [:div.content {:width "100%"}
-     ;[modal/version-number]
-     ;[:p "hello"]
-     [login/login-button]]]
+     [:div.container.level.is-fluid {:width "100%"}
+      [modal/version-number]
+      [login/determine-login-or-logout]]]
    ;[widgets-grid]
-   ])
+   ]])
 
 
 

@@ -148,4 +148,5 @@
 (rf/reg-event-db
   :logout
   (fn-traced [db _]
+             (prn "Logging out")
              (dissoc db :current-user)))
