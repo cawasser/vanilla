@@ -54,7 +54,14 @@
      :headers {"Content-Type" "text/json; charset=utf-8"}
      :body (do
              (prn "save layout")
-             (h/save-layout (get-in req [:params :widgets])))})
+             {:widget-save (h/save-layout (get-in req [:params :widgets]))})})
+
+  (POST "/delete-widget" req
+    {:status 200
+     :headers {"Content-Type" "text/json; charset=utf-8"}
+     :body (do
+             (prn "remove widget" (get-in req [:params :id]))
+             {:delete-widget (h/delete-widget (get-in req [:params :id]))})})
 
   (resources "/"))
 

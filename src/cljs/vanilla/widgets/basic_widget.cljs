@@ -2,8 +2,19 @@
   (:require [reagent.core :as r]
             [re-frame.core :as rf]
             [day8.re-frame.tracing :refer-macros [fn-traced]]
+            [ajax.core :as ajax :refer [GET POST]]
             [cljsjs.react-color]))
 
+
+(defn delete-widget [widget-id]
+  ;(prn "removing widget: " widget-id)
+
+  (POST "/delete-widget"
+        {:format          (ajax/json-request-format {:keywords? true})
+         :response-format (ajax/json-response-format {:keywords? true})
+         :params          {:id widget-id}
+         :handler         #(prn "widget removed")
+         :on-error        #(prn "ERROR deleting the widget " %)}))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -27,6 +38,7 @@
 (rf/reg-event-db
   :remove-widget
   (fn-traced [db [_ widget-id]]
+             (delete-widget widget-id)
              (assoc db :widgets (remove #(= (:key %) widget-id) (:widgets db)))))
 
 

@@ -87,7 +87,9 @@ INSERT INTO layout
     (basis, data_grid, data_source, icon, id, label, name, options,
         ret_types, type, username)
 VALUES :tuple*:layout
-ON CONFLICT (id) DO UPDATE SET data_grid=excluded.data_grid;
+ON CONFLICT (id) DO
+UPDATE SET data_grid=excluded.data_grid,
+            options=excluded.options;
 
 
 -- :name get-layout :? :*
