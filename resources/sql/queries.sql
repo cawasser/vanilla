@@ -78,8 +78,10 @@ INSERT INTO layout
     (id, username, name, ret_types, basis, data_source, type, icon,
         label, data_grid, options)
     VALUES (:id, :username, :name, :ret_types, :basis, :data_source, :type, :icon,
-            :label, :data_grid, :options);
-
+            :label, :data_grid, :options)
+    ON CONFLICT (id) DO
+    UPDATE SET options=excluded.options
+               data_grid=excluded.data_grid;
 
 -- :name save-layout! :! :n
 -- :doc creates multiple new layout record, ordered by keys

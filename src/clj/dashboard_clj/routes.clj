@@ -36,7 +36,7 @@
     {:status 200
      :headers {"Content-Type" "text/json; charset=utf-8"}
      :body (do
-             (prn "get services")
+             ;(prn "get services")
              (str (json/write-str {:services (h/get-services)})))})
 
 
@@ -45,7 +45,7 @@
     {:status 200
      :headers {"Content-Type" "text/json; charset=utf-8"}
      :body (do
-             (prn "get layout")
+             ;(prn "get layout")
              (str (json/write-str {:layout (h/get-layout)})))})
 
 
@@ -53,14 +53,21 @@
     {:status 200
      :headers {"Content-Type" "text/json; charset=utf-8"}
      :body (do
-             (prn "save layout")
+             ;(prn "save layout")
              {:widget-save (h/save-layout (get-in req [:params :widgets]))})})
+
+  (POST "/update-widget" req
+    {:status 200
+     :headers {"Content-Type" "text/json; charset=utf-8"}
+     :body (do
+             ;(prn "updating one widget" (get-in req [:params :widget]))
+             {:widget-update (h/update-widget (get-in req [:params :widget]))})})
 
   (POST "/delete-widget" req
     {:status 200
      :headers {"Content-Type" "text/json; charset=utf-8"}
      :body (do
-             (prn "remove widget" (get-in req [:params :id]))
+             ;(prn "remove widget" (get-in req [:params :id]))
              {:delete-widget (h/delete-widget (get-in req [:params :id]))})})
 
   (resources "/"))

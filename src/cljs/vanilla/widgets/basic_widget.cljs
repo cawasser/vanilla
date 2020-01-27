@@ -16,6 +16,16 @@
          :handler         #(prn "widget removed")
          :on-error        #(prn "ERROR deleting the widget " %)}))
 
+(defn update-widget [widget]
+  ;(prn "updating widget: " widget)
+
+  (POST "/update-widget"
+        {:format          (ajax/json-request-format {:keywords? true})
+         :response-format (ajax/json-response-format {:keywords? true})
+         :params          {:widget (clojure.core/pr-str widget)}
+         :handler         #(prn "widget updated")
+         :on-error        #(prn "ERROR updating the widget " %)}))
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;
@@ -25,7 +35,9 @@
 
 (defn update-color [id option color widget]
   (if (= id (:key widget))
-    (assoc-in widget [:options option] color)
+    (do       ;; SIDE-EFFECT: the next line sends the updated widget to the db
+      (update-widget (assoc-in widget [:options option] color))
+      (assoc-in widget [:options option] color))
     widget))
 
 

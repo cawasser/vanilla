@@ -12,8 +12,7 @@
 
 
 (def from-sqlite {:id :key :data_source :data-source :data_grid :data-grid})
-;dont need this call because we insert as a keyless tuple but may be useful in the future
-;(def to-sqlite {:key :id :data-source :data_source :data-grid :data_grid})
+(def to-sqlite {:key :id :data-source :data_source :data-grid :data_grid})
 
 
 ; fixup the key changes caused by SQLite with rename-keys
@@ -34,6 +33,8 @@
     ;(prn "SAVE-LAYOUT Handler: " ordered)
     (db/save-layout! db/vanilla-db {:layout ordered})))
 
+(defn update-widget [widget]
+  (db/create-layout! db/vanilla-db (assoc (clojure.set/rename-keys (clojure.core/read-string widget) to-sqlite) :username "testHuman")))
 
 (defn delete-widget [id]
   (db/delete-layout! db/vanilla-db {:id id}))
