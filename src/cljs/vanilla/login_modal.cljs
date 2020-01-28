@@ -141,7 +141,7 @@
   []
   (let [is-active (r/atom false)]
     (fn []
-      [:div
+      [:div.has-text-left
         ;[:p (str (attempt-get-all-users))] ;; This prints all users to lein run, but crashes UI
         [:div.level-right.has-text-right
           [:button.button.is-link {:on-click #(swap! is-active not)} "Login"]]
@@ -178,7 +178,7 @@
   []
   (let [is-active (r/atom false)]
     (fn []
-      [:div
+      [:div.level-left.has-text-left
       ; [:div.level-right.has-text-right
         [:button.button.is-link {:on-click #(swap! is-active not)} "Logout"]
        [logout-pop-up is-active]])))

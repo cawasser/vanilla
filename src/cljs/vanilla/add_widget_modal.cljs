@@ -143,7 +143,7 @@
   []
   (let [is-active (r/atom false)]
     (fn []
-      [:div
+      [:div.has-text-left
       ;[:div.level-right.has-text-right
        [:button.button.is-link {:on-click #(swap! is-active not)} "Add"]
       ;[:button.button.is-link {:on-click #(add-canned-widget)} "widget"]]

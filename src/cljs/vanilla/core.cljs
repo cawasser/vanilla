@@ -122,7 +122,7 @@
        [modal/version-number]]
       [:div.level-right.has-text-right
        [modal/add-widget-button]
-       []         ;; Something needs to go here to separate buttons
+       ;; Something needs to go here to separate buttons
        [login/determine-login-or-logout]]]
      ;[widgets-grid]]]
    ]]])
