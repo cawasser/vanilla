@@ -2,8 +2,38 @@
   (:require [reagent.core :as r]
             [re-frame.core :as rf]
             [day8.re-frame.tracing :refer-macros [fn-traced]]
+            [ajax.core :as ajax :refer [GET POST]]
             [cljsjs.react-color]))
 
+
+(defn notification [is-active]
+  (fn []
+    [:div.message (if @is-active {:class "is-active"})
+     [:div.message-header
+      [:h3 {:class "title"
+            :style {:color "green"}}
+       "Layout Saved Successfully"]]]))
+
+
+(defn delete-widget [widget-id]
+  ;(prn "removing widget: " widget-id)
+
+  (POST "/delete-widget"
+        {:format          (ajax/json-request-format {:keywords? true})
+         :response-format (ajax/json-response-format {:keywords? true})
+         :params          {:id widget-id}
+         :handler         #(prn "widget removed")
+         :on-error        #(prn "ERROR deleting the widget " %)}))
+
+(defn update-widget [widget]
+  ;(prn "updating widget: " widget)
+
+  (POST "/update-widget"
+        {:format          (ajax/json-request-format {:keywords? true})
+         :response-format (ajax/json-response-format {:keywords? true})
+         :params          {:widget (clojure.core/pr-str widget)}
+         :handler         (notification true)
+         :on-error        #(prn "ERROR updating the widget " %)}))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -14,7 +44,9 @@
 
 (defn update-color [id option color widget]
   (if (= id (:key widget))
-    (assoc-in widget [:options option] color)
+    (do       ;; SIDE-EFFECT: the next line sends the updated widget to the db
+      (update-widget (assoc-in widget [:options option] color))
+      (assoc-in widget [:options option] color))
     widget))
 
 
@@ -22,6 +54,13 @@
   :update-color
   (fn-traced [db [_ widget-id option color]]
     (assoc db :widgets (map #(partial (update-color widget-id option color %)) (:widgets db)))))
+
+
+(rf/reg-event-db
+  :remove-widget
+  (fn-traced [db [_ widget-id]]
+             (delete-widget widget-id)
+             (assoc db :widgets (remove #(= (:key %) widget-id) (:widgets db)))))
 
 
 ;
@@ -61,9 +100,9 @@
 
 (defn basic-widget [name data options custom-content]
 
-  (prn "basic-widget " name
-    " //// options " options
-    " //// custom-content " custom-content)
+  ;(prn "basic-widget " name
+  ;  " //// options " options
+  ;  " //// custom-content " custom-content)
 
   (let [show-title-picker (r/atom false)
         show-header-picker (r/atom false)

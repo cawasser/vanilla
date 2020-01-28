@@ -16,6 +16,7 @@
 (def from-sqlite {:id :key :data_source :data-source :data_grid :data-grid})
 (def to-sqlite {:key :id :data-source :data_source :data-grid :data_grid})
 
+
 ; fixup the key changes caused by SQLite with rename-keys
 ; :id -> :key
 ; :data_source -> :data-source
@@ -23,11 +24,22 @@
 (defn get-layout []
   (map #(clojure.set/rename-keys % from-sqlite) (db/get-layout db/vanilla-db)))
 
+
 (defn save-layout [new-layout]
-  (let [renamed (map #(clojure.set/rename-keys % to-sqlite) new-layout)]
-    (prn "SAVE-LAYOUT route: " new-layout
-      " //// renames " renamed)
-    (db/save-layout! db/vanilla-db renamed)))
+  ;(prn "SAVE-LAYOUT HANDLER incoming: " new-layout)
+  ; TODO replace with actual user, probably sooner than here, on the cljs side
+  ; first add the current user to all the widget maps after reading the string
+  ; then order the maps by keys, then remove all keys
+  (let [usernamed (map #(assoc % :username "testHuman") (clojure.core/read-string new-layout))
+        ordered (map #(vals %) (map #(into (sorted-map) %) usernamed))]
+    ;(prn "SAVE-LAYOUT Handler: " ordered)
+    (db/save-layout! db/vanilla-db {:layout ordered})))
+
+(defn update-widget [widget]
+  (db/create-layout! db/vanilla-db (assoc (clojure.set/rename-keys (clojure.core/read-string widget) to-sqlite) :username "testHuman")))
+
+(defn delete-widget [id]
+  (db/delete-layout! db/vanilla-db {:id id}))
 
 
 (defn create-user

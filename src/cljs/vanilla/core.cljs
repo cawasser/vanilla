@@ -37,20 +37,77 @@
 
 (enable-console-print!)
 
+(rf/reg-event-db
+  :initialize
+  (fn-traced
+    [db _]
+    (prn (str ":initialize handler "))
+    (merge db {:data-sources {}
+               :hc-type {}
+               :chosen-bg-color {:r 150 :g 150 :b 150 :a 1.0}
+               :chosen-txt-color "white"})))
 
+(rf/reg-event-db
+  :widget-type
+  (fn-traced [db [_ widget]]
+             ;(prn (str ":widget-type " widget))
+             (assoc-in db [:widget-types (:name widget)] widget)))
+
+(rf/reg-event-db
+  :next-id
+  (fn-traced [db [_ id]]
+             (assoc db :next-id id)))
+
+;; Helper function to set-layout to define function called for each value
+(def conversion {:ret_types edn/read-string
+                 :key edn/read-string
+                 :name edn/read-string
+                 :basis edn/read-string
+                 :data-grid edn/read-string
+                 :type edn/read-string
+                 :data-source edn/read-string
+                 :options edn/read-string})
 
 (rf/reg-event-db
   :set-layout
   (fn-traced [db [_ layout-data]]
-   (prn "Set-layout start: " layout-data)
+   ;(prn "Set-layout start: " (:layout layout-data))
+     (if (not (empty? (:layout layout-data)))             ; if its not initial page load with empty layout-table
+       (let [data (:layout layout-data)
+             converted-data (mapv (fn [{:keys [ret_types key name basis data-grid type data-source options] :as original}]
+                                    (assoc original
+                                      :ret_types ((:ret_types conversion) ret_types)
+                                      :key ((:key conversion) key)
+                                      :name ((:name conversion) name)
+                                      :basis ((:basis conversion) basis)
+                                      :data-grid ((:data-grid conversion) data-grid)
+                                      :type ((:type conversion) type)
+                                      :data-source ((:data-source conversion) data-source)
+                                      :options ((:options conversion) options)))
+                                  data)
+             highestNextid (apply max (mapv #(:key %) converted-data))]     ; Will need to address how we actually want to handle widget id's
 
-     (let [de-stringed (mapv #(into {} (for [[k v] %] [k (edn/read-string v)])) (:layout layout-data))]
-       (prn ":SET-layout " de-stringed)
+       ;(prn ":set-layout CONVERTED: " converted-data
+       ;     "///// nextid: " highestNextid)
 
-        (assoc db :widgets de-stringed))))
+        (assoc db :widgets converted-data
+                :next-id (inc highestNextid)))
+        ; else it is initial page load with empty layout-table
+        (assoc db :widgets []
+                 :next-id 1))))
+
+(rf/reg-event-db
+  :set-version
+  (fn-traced [db [_ version]]
+             ;(prn ":set-version " version)
+             (assoc db :version (:version version))))
 
 
-(enable-console-print!)
+(rf/reg-event-db
+  :set-services
+  (fn-traced [db [_ services]]
+             ;(prn ":set-services " services)
+             (assoc db :services (:services services))))
 
 
 

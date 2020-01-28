@@ -6,6 +6,7 @@
             [ring.middleware.gzip :refer [wrap-gzip]]
             [ring.middleware.logger :refer [wrap-with-logger]]
             [ring.middleware.json :refer [wrap-json-response wrap-json-params]]
+            [ring.middleware.keyword-params :refer [wrap-keyword-params]]
             [clojure.data.json :as json]
 
             ; version number support
@@ -35,7 +36,7 @@
     {:status 200
      :headers {"Content-Type" "text/json; charset=utf-8"}
      :body (do
-             (prn "get services")
+             ;(prn "get services")
              (str (json/write-str {:services (h/get-services)})))})
 
 
@@ -44,7 +45,7 @@
     {:status 200
      :headers {"Content-Type" "text/json; charset=utf-8"}
      :body (do
-             (prn "get layout")
+             ;(prn "get layout")
              (str (json/write-str {:layout (h/get-layout)})))})
 
 
@@ -77,11 +78,24 @@
 
   (POST "/save-layout" req
     {:status 200
-     :headers {"Content-Type" "text/json; charset=utf-8"}   ;maybe convert from text-json to straight edn
-     ;pull apart parameters and strip the keys off the values for the DB call
+     :headers {"Content-Type" "text/json; charset=utf-8"}
      :body (do
-             (prn "save layout " req)
-             (h/save-layout (:widgets (:params req))))})  ; this is way off, what is this body even needed for?
+             ;(prn "save layout")
+             {:widget-save (h/save-layout (get-in req [:params :widgets]))})})
+
+  (POST "/update-widget" req
+    {:status 200
+     :headers {"Content-Type" "text/json; charset=utf-8"}
+     :body (do
+             ;(prn "updating one widget" (get-in req [:params :widget]))
+             {:widget-update (h/update-widget (get-in req [:params :widget]))})})
+
+  (POST "/delete-widget" req
+    {:status 200
+     :headers {"Content-Type" "text/json; charset=utf-8"}
+     :body (do
+             ;(prn "remove widget" (get-in req [:params :id]))
+             {:delete-widget (h/delete-widget (get-in req [:params :id]))})})
 
 
 
@@ -100,9 +114,8 @@
 
        (GET "/version" req (ring-ajax-get-or-ws-handshake req)))
       (wrap-defaults api-defaults)
-
-      wrap-json-response                                  ;;Adding this did nothing
-      wrap-json-params                                    ;;Adding this did nothing
-
+      (wrap-json-response)
+      (wrap-keyword-params)
+      (wrap-json-params)
       ;wrap-with-logger
       wrap-gzip))

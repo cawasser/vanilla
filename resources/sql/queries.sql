@@ -3,12 +3,12 @@
 -- :result :raw
 -- :doc Create services table
 create table services (
-  id              VARCHAR(20) PRIMARY KEY,
-  keyword         VARCHAR(30),
-  name            VARCHAR(30),
-  ret_type        VARCHAR(30),
-  read_fn         VARCHAR(128),
-  doc_string      VARCHAR(300));
+  id              TEXT PRIMARY KEY,
+  keyword         TEXT,
+  name            TEXT,
+  ret_type        TEXT,
+  read_fn         TEXT,
+  doc_string      TEXT);
 
 
 
@@ -53,17 +53,17 @@ DELETE FROM services;
 -- :result :raw
 -- :doc Create widget layout table
 create table layout (
-  id                   VARCHAR(20) PRIMARY KEY,
-  username              VARCHAR(30),
-  name                  VARCHAR(30),
-  ret_types             BLOB(30),
-  basis                 VARCHAR(30),
-  data_source           VARCHAR(30),
-  type                  VARCHAR(30),
-  icon                  VARCHAR(30),
-  label                 VARCHAR(30),
-  data_grid             BLOB(30),
-  options               BLOB(300));
+  id                   TEXT PRIMARY KEY,
+  username              TEXT,
+  name                  TEXT,
+  ret_types             BLOB,
+  basis                 TEXT,
+  data_source           TEXT,
+  type                  TEXT,
+  icon                  TEXT,
+  label                 TEXT,
+  data_grid             BLOB,
+  options               BLOB);
 
 
 
@@ -78,15 +78,20 @@ INSERT INTO layout
     (id, username, name, ret_types, basis, data_source, type, icon,
         label, data_grid, options)
     VALUES (:id, :username, :name, :ret_types, :basis, :data_source, :type, :icon,
-            :label, :data_grid, :options);
-
+            :label, :data_grid, :options)
+    ON CONFLICT (id) DO
+    UPDATE SET options=excluded.options,
+               data_grid=excluded.data_grid;
 
 -- :name save-layout! :! :n
--- :doc creates multiple new layout record
+-- :doc creates multiple new layout record, ordered by keys
 INSERT INTO layout
-    (id, username, name, ret_types, basis, data_source, type, icon,
-        label, data_grid, options)
-values :tuple*:layout;
+    (basis, data_grid, data_source, icon, id, label, name, options,
+        ret_types, type, username)
+VALUES :tuple*:layout
+ON CONFLICT (id) DO
+UPDATE SET data_grid=excluded.data_grid,
+            options=excluded.options;
 
 
 -- :name get-layout :? :*
