@@ -6,6 +6,15 @@
             [cljsjs.react-color]))
 
 
+(defn notification [is-active]
+  (fn []
+    [:div.message (if @is-active {:class "is-active"})
+     [:div.message-header
+      [:h3 {:class "title"
+            :style {:color "green"}}
+       "Layout Saved Successfully"]]]))
+
+
 (defn delete-widget [widget-id]
   ;(prn "removing widget: " widget-id)
 
@@ -23,7 +32,7 @@
         {:format          (ajax/json-request-format {:keywords? true})
          :response-format (ajax/json-response-format {:keywords? true})
          :params          {:widget (clojure.core/pr-str widget)}
-         :handler         #(prn "widget updated")
+         :handler         (notification true)
          :on-error        #(prn "ERROR updating the widget " %)}))
 
 
