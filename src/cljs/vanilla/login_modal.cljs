@@ -55,8 +55,8 @@
   (if (= bool-val true)
     (rf/dispatch-sync [:set-current-user username])
     (do
-      (prn "login failed pop up")))) ; This should just bring up a new modal that says login failed, no need to call a new function
-      ;[login-failed-pop-up])))
+      (prn "login failed pop up") ; This should just bring up a new modal that says login failed, no need to call a new function
+      [login-failed-pop-up])))
 
 
 
