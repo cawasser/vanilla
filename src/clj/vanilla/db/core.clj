@@ -22,6 +22,10 @@
   "SQLite database connection spec."
   {:dbtype "sqlite" :dbname "vanilla_db"})
 
+(def users-db
+  "SQLite database connection spec."
+  {:dbtype "sqlite" :dbname "user_db"})
+
 
 
 (defrecord Database [db-spec                                ; configuration
@@ -150,12 +154,6 @@
 
   (get-services vanilla-db)
 
-
-
-
-
-
-
   (delete-all-services! vanilla-db)
 
   (delete-service! vanilla-db {:id "1000"})
@@ -171,6 +169,130 @@
   ())
 
 
+; ***Layout table rich comment***
+(comment
+
+  (hugsql/def-db-fns "sql/queries.sql")
+  (hugsql/def-sqlvec-fns "sql/queries.sql")
+
+  (create-layout-table-sqlvec vanilla-db)
+
+  (create-layout-table vanilla-db)
+
+  ;ret_types needs square brackets around it
+  ;data-grid needs curly braces around it
+  ;viz_tooltip(redundant) = {:followPointer true}
+  ;viz_animation(redundant) = false, defaults to false though
+
+  (create-layout!
+    vanilla-db
+    {:id         "123"
+     :username    "\"APaine\""
+     :name        :area-widget
+     :ret_types   [:data-format/x-y]
+     :basis       :chart
+     :data_source :spectrum-traces
+     :type        :area-chart
+     :icon        "\"/images/area-widget.png\""
+     :label       "\"Area\""
+     :data_grid   {:x 0 :y 0 :w 4 :h 14}
+     :options     {:viz/style-name "widget"
+                   :viz/y-title "power"
+                   :viz/x-title "frequency"
+                   :viz/allowDecimals false
+                   :viz/banner-color {:r 0x00 :g 0x00 :b 0xff :a 1}
+                   :viz/tooltip {:followPointer true}
+                   :viz/title "Channels (area)"
+                   :viz/banner-text-color {:r 255, :g 255, :b 255, :a 1}
+                   :viz/animation false}})
+
+  (create-layout!
+    vanilla-db
+    {:id          "213"
+     :username    "\"APaine\""
+     :name        :bubble-widget
+     :ret_types   [:data-format/x-y-n]
+     :basis       :chart
+     :data_source :bubble-service
+     :type        :bubble-chart
+     :icon        "\"/images/bubble-widget.png\""
+     :label       "\"Bubble\""
+     :data_grid   {:x 4 :y 0 :w 5 :h 15}
+     :options     {:viz/banner-color {:r 0x00 :g 0x00 :b 0xff :a 1}
+                   :viz/tooltip {:followPointer true}
+                   :viz/dataLabels true
+                   :viz/data-labels true
+                   :viz/labelFormat "{point.name}"
+                   :viz/lineWidth 0
+                   :viz/title "Bubble"
+                   :viz/banner-text-color {:r 255, :g 255, :b 255, :a 1}
+                   :viz/animation false}})
+
+
+  (get-layout vanilla-db)
+
+  (save-layout! vanilla-db
+                {:layout
+                 [["123" "APaine" ":area-widget" "[:data-format/x-y]"
+                   ":chart" ":spectrum-traces" ":area-chart"
+                   "\"/images/area-widget.png\"" "\"Area\"" "{:x 0, :y 0, :w 4, :h 14}"
+                   "#:viz{:style-name \"widget\", :animation false, :x-title \"frequency\", :banner-text-color {:r 255, :g 255, :b 255, :a 1}, :title \"Channels (area)\", :allowDecimals false, :banner-color {:r 0, :g 0, :b 255, :a 1}, :y-title \"power\", :tooltip {:followPointer true}}"]]})
+
+
+  (save-layout! vanilla-db
+                {:layout
+                 [["123" "APaine" ":area-widget" "[:data-format/x-y]"
+                   ":chart" ":spectrum-traces" ":area-chart"
+                   "\"/images/area-widget.png\"" "\"Area\"" "{:x 0, :y 0, :w 4, :h 14}"
+                   "#:viz{:style-name \"widget\", :animation false, :x-title \"frequency\", :banner-text-color {:r 255, :g 255, :b 255, :a 1}, :title \"Channels (area)\", :allowDecimals false, :banner-color {:r 0, :g 0, :b 255, :a 1}, :y-title \"power\", :tooltip {:followPointer true}}"]
+                 ["213" "APaine" ":bubble-widget" "[:data-format/x-y-n]"
+                  ":chart" ":bubble-service" ":bubble-chart"
+                  "\"/images/bubble-widget.png\"" "\"Bubble\"" "{:x 4, :y 0, :w 5, :h 15}"
+                  "#:viz{:animation false, :labelFormat \"{point.name}\", :banner-text-color {:r 255, :g 255, :b 255, :a 1}, :title \"Bubble\", :dataLabels true, :lineWidth 0, :data-labels true, :banner-color {:r 0, :g 0, :b 255, :a 1}, :tooltip {:followPointer true}}"]]})
+
+  (delete-all-layouts! vanilla-db)
+
+  (delete-layout! vanilla-db {:id "123"})
+  (delete-layout! vanilla-db {:id "213"})
+
+  (drop-layout-table vanilla-db)
+
+  ())
+
+(comment
+
+
+  (hugsql/def-db-fns "sql/queries.sql")
+  (hugsql/def-sqlvec-fns "sql/queries.sql")
+
+  (def users-db
+    "SQLite database connection spec."
+    {:dbtype "sqlite" :dbname "user_db"})
+
+  (create-user-table users-db)
+
+
+  (create-new-user!
+    users-db "Jeff" "321")      ;; This does not work, don't try to do this
+
+  (create-new-user!
+    users-db
+    {:username "chad"
+     :pass "123"})
+
+  (get-user users-db {:username "chad"})
+  (get-users users-db)
+
+  (verify-credentials users-db
+                      {:username "chad" :pass "123"})
+
+  (verify-credentials users-db
+                      {:username "chad" :pass "321"})
+
+
+  (drop-users-table users-db)
+
+  )
 
 (comment
 

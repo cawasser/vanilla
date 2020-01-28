@@ -4,24 +4,20 @@
     [re-frame.core :as rf]
     [vanilla.events]
     [cljsjs.react-grid-layout]
-    [vanilla.widgets.core :as widget]))
+    [vanilla.widgets.core :as widget]
+    [ajax.core :as ajax :refer [GET POST]]))
 
 
 
-(def colors [["purple" "white"] ["yellow" "black"] ["blue" "white"]])
-(def x-y-range 5)
-(def w-h-range 4)
+(defn save-layout [layout]
+  (prn "saving layout")
 
-;(def widgets [{:key 1 :data-grid {:x 0 :y 0 :w 3 :h 3} :style {:background-color "green"
-;                                                               :color            "white"}}
-;              {:key 2 :data-grid {:x 0 :y 3 :w 3 :h 3} :style {:background-color "gray"
-;                                                               :color            "white"}}
-;              {:key 3 :data-grid {:x 2 :y 0 :w 3 :h 3} :style {:background-color "lightsalmon"}}])
-
-(def new-layout {:data-grid {:x 0 :y 0 :w 4 :h 4} :style {:background-color "purple"
-                                                          :color            "white"}})
-
-
+  (POST "/save-layout"
+    {:headers         {"Accept" "application/transit+json"}
+     :response-format (ajax/json-response-format {:keywords? true})
+     :params          {:widgets layout}
+     :handler         #(prn "Layout SAVED!")
+     :on-error        #(prn "ERROR saving the layout " %)}))
 
 (defn fixup-new-widget [widget]
   (merge widget {:data-grid {:x 0 :y 0 :w 5 :h 15}}))
@@ -31,32 +27,50 @@
 (defn onLayoutChange [on-change prev new]
   ;; note the need to convert the callbacks from js objects
 
-  ;(prn "onLayoutChange " on-change
-  ;  " //// prev " prev
-  ;  " //// new " (js->clj new :keywordize-keys true))
 
-  (rf/dispatch [:update-layout (js->clj new :keywordize-keys true)])
+  (let [chg (js->clj new :keywordize-keys true)
+        fst (first chg)]
+    (if (and
+          (not (empty? chg))
+          (<= 1 (count chg))
+          (not= (:i fst) "null"))
+      (do
+        (prn "onLayoutChange " on-change
+          " //// prev " prev
+          " //// new " chg
+          " //// empty? " (empty? chg)
+          " //// count " (count chg)
+          " //// first id " (:i fst))
 
-  (on-change prev (js->clj new :keywordize-keys true)))
+        (rf/dispatch [:update-layout (js->clj new :keywordize-keys true)])
+        (save-layout (js->clj new :keywordize-keys true))))
+
+
+    (on-change prev (js->clj new :keywordize-keys true))))
 
 
 
 (defn widget-wrapper [props data]
 
-  ;(prn "widget-wrapper..." props
-  ;  " //// data " data)
+  (prn "widget-wrapper..." props
+    " //// data " data)
 
-  (let [content (widget/setup-widget props)]
+  (let [content (widget/setup-widget props)
+        ret     [:div
+                 (merge props {:class "widget grid-toolbar"
+                               :style {:background-color (get-in props [:options :viz/banner-color] "yellow")
+                                       :color            (get-in props [:options :viz/banner-text-color] "black")}})
+                 content]]
 
-    ;(prn (str "widget-wrapper " props
-    ;       " //// data " data
-    ;       " //// content " content))
+    (prn "widget-wrapper "
+      " //// props " props
+      " //// data " data
+      " //// content " content
+      " //// ret " ret)
 
-    [:div
-     (merge props {:class "widget grid-toolbar"
-                   :style {:background-color (get-in props [:options :viz/banner-color] "yellow")
-                           :color            (get-in props [:options :viz/banner-text-color] "black")}})
-     content]))
+    ret))
+
+
 
 
 

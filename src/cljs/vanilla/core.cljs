@@ -8,7 +8,11 @@
     [vanilla.widget-defs :as defs]
     [ajax.core :refer [GET POST] :as ajax]
 
+    [day8.re-frame.tracing :refer-macros [fn-traced]]
+
     [vanilla.add-widget-modal :as modal]
+    [vanilla.login-modal :as login]
+    [clojure.edn :as edn]
 
     [vanilla.grid :as grid]
 
@@ -35,29 +39,15 @@
 
 
 
+(rf/reg-event-db
+  :set-layout
+  (fn-traced [db [_ layout-data]]
+   (prn "Set-layout start: " layout-data)
 
-;;;;;;;;;;;;;;;;;;;;;
-;
-; HACK
-;
-; TODO - remove dummy "new-widget" stuff
+     (let [de-stringed (mapv #(into {} (for [[k v] %] [k (edn/read-string v)])) (:layout layout-data))]
+       (prn ":SET-layout " de-stringed)
 
-(def next-widget-idx (atom 0))
-
-(defn add-canned-widget [])
-  ;(let [rand-widget (get defs/widgets @next-widget-idx)]
-  ;
-  ;  ;(prn "add-canned-widget " rand-widget ", " @next-widget-idx, ", " (count defs/widgets))
-  ;
-  ;  (add-widget (grid/fixup-new-widget rand-widget))
-  ;  (if (< @next-widget-idx (dec (count defs/widgets)))
-  ;    (swap! next-widget-idx inc)
-  ;    (reset! next-widget-idx 0))))
-
-
-;;;;;;;;;;;;;;;;;;;;;
-;
-; END HACK
+        (assoc db :widgets de-stringed))))
 
 
 (enable-console-print!)
@@ -90,11 +80,27 @@
                    :response-format (ajax/json-response-format {:keywords? true})
                    :handler         #(rf/dispatch-sync [:set-version %])}))
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;
+; LAYOUT SAVING
+;
+;
+
+(defn get-layout []
+  (prn "getting layout")
+  (GET "/layout" {:headers          {"Accept" "application/transit+json"}
+                  :response-format  (ajax/json-response-format {:keywords? true})
+                  :handler          #(rf/dispatch-sync [:set-layout %])}))
+
+
+
 
 
 (def width 1536)
 (def height 1024)
 (def rows 50)
+
+
 (defn- widgets-grid []
   [grid/Grid {:id          "dashboard-widget-grid"
               :cols        {:lg 12 :md 10 :sm 6 :xs 4 :xxs 2}
@@ -111,7 +117,13 @@
   [:div {:width "100%"}
    [:div.container
     [:div.content {:width "100%"}
-     [modal/version-number]]]
+     [:div.container.level.is-fluid {:width "100%"}
+      [:div.level-left.has-text-left
+       [modal/version-number]]
+      [:div.level-right.has-text-right
+       [modal/add-widget-button]
+       [:br {:width "5px"}] ;; Something needs to go here to separate buttons
+       [login/determine-login-or-logout]]]]]
    [widgets-grid]])
 
 
@@ -126,6 +138,7 @@
 
   (get-version)
   (get-services)
+  (get-layout)
 
   ; TODO eliminate register-global-app-state-subscription (attach subscription in add-widget)
   (subs/register-global-app-state-subscription)
@@ -150,6 +163,7 @@
     (rf/dispatch-sync [:widget-type w]))
 
   (d/connect-to-data-sources)
+
   (r/render home-page (.getElementById js/document "app")))
 
 

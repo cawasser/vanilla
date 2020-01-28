@@ -5,9 +5,9 @@
 
 
 (defn add-widget [new-widget selected-source]
-  ;(prn "add-widget " new-widget
-  ;  " //// selected-source " selected-source
-  ;  " //// keyword " (keyword (:keyword selected-source)))
+  (prn "add-widget " new-widget
+    " //// selected-source " selected-source
+    " //// keyword " (keyword (:keyword selected-source)))
 
   (rf/dispatch [:add-widget new-widget (keyword (:keyword selected-source))]))
 
@@ -138,16 +138,34 @@
          [:button.button {:on-click #(reset! is-active false)} "Cancel"]]]])))
 
 
+(defn add-widget-button
+  ""
+  []
+  (let [is-active (r/atom false)]
+    (fn []
+      [:div.has-text-left
+      ;[:div.level-right.has-text-right
+       [:button.button.is-link {:on-click #(swap! is-active not)} "Add"]
+      ;[:button.button.is-link {:on-click #(add-canned-widget)} "widget"]]
+      [add-widget-modal is-active]])))
+
+
 
 
 (defn version-number []
-  (let [version   (rf/subscribe [:version])
-        is-active (r/atom false)]
+  (let [version   (rf/subscribe [:version])]
     (fn []
-      [:div.container.level.is-fluid {:width "100%"}
-       [:div.level-left.has-text-left
-        [:h6.subtitle.is-6 @version]]
-       [:div.level-right.has-text-right
-        [:button.button.is-link {:on-click #(swap! is-active not)} "Add"]]
-       ;[:button.button.is-link {:on-click #(add-canned-widget)} "widget"]]
-       [add-widget-modal is-active]])))
+       ;[:div.level-left.has-text-left
+        [:h6.subtitle.is-6 @version])))
+
+;(defn version-number []
+;  (let [version   (rf/subscribe [:version])
+;        is-active (r/atom false)]
+;    (fn []
+;      [:div.container.level.is-fluid {:width "100%"}
+;       [:div.level-left.has-text-left
+;        [:h6.subtitle.is-6 @version]]
+;       [:div.level-right.has-text-right
+;        [:button.button.is-link {:on-click #(swap! is-active not)} "Add"]]
+;       ;[:button.button.is-link {:on-click #(add-canned-widget)} "widget"]]
+;       [add-widget-modal is-active]])))

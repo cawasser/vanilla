@@ -174,17 +174,20 @@
 
 
 
+
 (defn make-chart
   "creates the correct reagent 'hiccup' and react/class to implement a
   Highcharts.js UI component that can be embedded inside any valid hiccup"
 
   [chart-config data options]
 
+  ;(prn " entering make-chart " chart-config)
+
   (let [dom-node        (reagent/atom nil)
         chart-type      (-> chart-config :chart-options :chart/type)
         chart-reg-entry @(rf/subscribe [:hc-type chart-type])]
 
-    ;(prn "MAKE-chart " chart-type
+    ;(prn "make-chart " chart-type
     ;  " //// (chart-config)" chart-config
     ;  " ////// (chart-reg-entry)" chart-reg-entry)
 
