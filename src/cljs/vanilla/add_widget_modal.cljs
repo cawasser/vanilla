@@ -10,9 +10,11 @@
   (fn-traced [db [_ new-widget-type data-source]]
              (let [next-id (:next-id db)
                    widget-type (get-in db [:widget-types new-widget-type])
+                   current-user @(rf/subscribe [:get-current-user])      ;;get current user
                    named-widget (assoc widget-type
                                   :key (str next-id)
                                   :data-source data-source
+                                  :username current-user                ;;add username key value to widget map
                                   :data-grid {:x 0 :y 0 :w 5 :h 15})]
 
                (do

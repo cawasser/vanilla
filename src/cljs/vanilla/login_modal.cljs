@@ -2,9 +2,27 @@
   (:require
     [re-frame.core :as rf]
     [reagent.core :as r]
+    [day8.re-frame.tracing :refer-macros [fn-traced]]
     [ajax.core :as ajax :refer [GET POST]]))
 
 
+;;;;;;;;;;;;;;;;;
+;;EVENTS
+;;;;;;;;;;;;;;;;;
+(rf/reg-event-db
+  :set-current-user
+  (fn-traced [db [_ username]]
+             (prn "Set currnet user" username)
+             (assoc db :current-user username)))
+
+
+(rf/reg-event-db
+  :logout
+  (fn-traced [db _]
+             (prn "Logging out")
+             (dissoc db :current-user)))
+
+;;;;;;;;;;;;;;;;;;;;;
 
 (defn attempt-create-user
   "This is called when the user tries to sign up a new username and password"

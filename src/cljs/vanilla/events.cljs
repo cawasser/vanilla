@@ -138,15 +138,4 @@
 
 ;Login based stuff
 
-(rf/reg-event-db
-  :set-current-user
-  (fn-traced [db [_ username]]
-             (prn "Set currnet user" username)
-             (assoc db :current-user username)))
 
-
-(rf/reg-event-db
-  :logout
-  (fn-traced [db _]
-             (prn "Logging out")
-             (dissoc db :current-user)))
