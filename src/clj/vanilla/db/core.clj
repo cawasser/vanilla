@@ -120,8 +120,11 @@
     (populate-services)))
 
 ;;; REPL ME vvvvv ;;;
-(initialize-database)
+(comment
 
+  (initialize-database)
+
+  ())
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
