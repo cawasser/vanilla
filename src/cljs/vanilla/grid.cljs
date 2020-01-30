@@ -2,7 +2,6 @@
   (:require
     [reagent.core :as r]
     [re-frame.core :as rf]
-    [vanilla.events]
     [cljsjs.react-grid-layout]
     [vanilla.widgets.core :as widget]
     [day8.re-frame.tracing :refer-macros [fn-traced]]

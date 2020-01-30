@@ -3,7 +3,6 @@
     [reagent.core :as r]
     [re-frame.core :as rf]
     [dashboard-clj.core :as d]
-    [vanilla.events]
     [vanilla.subscriptions :as subs]
     [vanilla.widget-defs :as defs]
     [ajax.core :refer [GET POST] :as ajax]

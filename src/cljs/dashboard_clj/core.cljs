@@ -4,7 +4,6 @@
             [taoensso.sente  :as sente :refer (cb-success?)]
             [re-frame.core :as rf]
             [day8.re-frame.tracing :refer-macros [fn-traced]]
-            [vanilla.events]
             [vanilla.subscriptions]))
 
 (rf/reg-event-db
