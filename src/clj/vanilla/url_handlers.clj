@@ -21,8 +21,8 @@
 ; :id -> :key
 ; :data_source -> :data-source
 ; :data_grid -> :data-grid
-(defn get-layout []
-  (map #(clojure.set/rename-keys % from-sqlite) (db/get-layout db/vanilla-db)))
+(defn get-layout [user]
+  (map #(clojure.set/rename-keys % from-sqlite) (db/get-user-layout db/vanilla-db {:username user})))
 
 
 (defn save-layout [new-layout]

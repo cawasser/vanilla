@@ -321,6 +321,8 @@
 
   (get-layout vanilla-db)
 
+  (get-user-layout vanilla-db {:username "chad"})
+
   (save-layout! vanilla-db {:layout test1})
 
   (save-layout! vanilla-db

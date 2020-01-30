@@ -98,6 +98,10 @@ UPDATE SET data_grid=excluded.data_grid,
 -- :doc retrieves all widgets given a username
 SELECT * FROM layout;
 
+-- :name get-user-layout :? :*
+-- :doc gets all widgets associated with a user
+SELECT * FROM layout WHERE username = :username;
+
 
 -- :name delete-layout! :! :n
 -- :doc deletes a layout record given the id

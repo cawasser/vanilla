@@ -143,11 +143,14 @@
 ;
 ;
 
-(defn get-layout []
+(defn get-layout [user]
   (prn "getting layout")
-  (GET "/layout" {:headers          {"Accept" "application/transit+json"}
-                  :response-format  (ajax/json-response-format {:keywords? true})
-                  :handler          #(rf/dispatch-sync [:set-layout %])}))
+  (if (some? user)
+    (GET "/layout" {:headers          {"Accept" "application/transit+json"}
+                    :response-format  (ajax/json-response-format {:keywords? true})
+                    :params           {:username user}
+                    :handler          #(rf/dispatch-sync [:set-layout %])})
+    (prn "no user logged in to fetch layout")))
 
 
 
@@ -176,6 +179,7 @@
   - A login button
   - An add widget button alongside a logout button"
   []
+  (get-layout @(rf/subscribe [:get-current-user]))
   (if (some? @(rf/subscribe [:get-current-user]))
     [:div.level-right.has-text-right
      [modal/add-widget-button]
@@ -209,7 +213,6 @@
 
   (get-version)
   (get-services)
-  (get-layout)
 
   ; TODO eliminate register-global-app-state-subscription (attach subscription in add-widget)
   (subs/register-global-app-state-subscription)

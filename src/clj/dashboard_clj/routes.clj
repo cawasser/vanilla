@@ -42,12 +42,12 @@
 ;;;;; Layout Saving Routes
 
   ;TODO test removing the write-str here and put the de-string back in url handler
-  (GET "/layout" _
+  (GET "/layout" req
     {:status 200
      :headers {"Content-Type" "text/json; charset=utf-8"}
      :body (do
              ;(prn "get layout")
-             (str (json/write-str {:layout (h/get-layout)})))})
+             (str (json/write-str {:layout (h/get-layout (get-in req [:params :username]))})))})
 
   (POST "/save-layout" req
     {:status 200
@@ -73,31 +73,31 @@
 ;;;;;; User Login Routes
 
   (GET "/verify-user" req
-    {:status 200}
+    {:status 200
     :headers {"Content-Type" "text/json; charset=utf-8"}
     :body  (do
              ;(prn "verify user " (:params req))
              ;(prn (str (h/verify-user-password (:params req))))
-             {:verified-user (h/verify-user-password (:params req))}))
+             {:verified-user (h/verify-user-password (:params req))})})
 
 
   (GET "/return-all-users" _
-    {:status 200}
+    {:status 200
     :headers {"Content-Type" "text/json; charset=utf-8"}
     :body (do
             ;(prn "get all users")
             ;(prn (h/get-all-users))
-            (h/get-all-users)))
+            (h/get-all-users))})
 
   (POST "/create-new-user" req
-    {:status 200}
+    {:status 200
     ;:headers {"Content-Type" "text/json; charset=utf-8"}    ;; Not sure if this is better than line below it
     :header { "Accept" "application/json"
              :content-type "application/json;charset=utf-8"} ;;Not sure if this does anything
     :body (do
             ;(prn "create new user " (:params req))         ;; This keeps req in clojure format (keywords values)
             ;(prn "create new user " (:json-params req))    ;; This turns req into json strings
-            {:rows-updated (h/create-user (:params req))}))                            ;;Expects a struct of username password
+            {:rows-updated (h/create-user (:params req))})})                            ;;Expects a struct of username password
 
 
 
