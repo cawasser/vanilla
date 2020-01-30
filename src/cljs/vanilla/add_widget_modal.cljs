@@ -174,7 +174,7 @@
 
 
 (defn add-widget-button
-  ""
+  "Creates a button that triggers a modal that allows the user to add a widget"
   []
   (let [is-active (r/atom false)]
     (fn []
@@ -187,7 +187,9 @@
 
 
 
-(defn version-number []
+(defn version-number
+  "Returns the version number wrapped in a h6 element."
+  []
   (let [version   (rf/subscribe [:version])]
     (fn []
        ;[:div.level-left.has-text-left
