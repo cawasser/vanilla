@@ -1,7 +1,8 @@
 (ns vanilla.add-widget-modal
   (:require [reagent.core :as r]
             [re-frame.core :as rf]
-            [day8.re-frame.tracing :refer-macros [fn-traced]]))
+            [day8.re-frame.tracing :refer-macros [fn-traced]]
+            [cljs-uuid-utils.core :as uuid]))
 
 
 ;;;; EVENTS
@@ -23,7 +24,7 @@
                  ;  " //// named-widget " named-widget)
                  (assoc db
                    :widgets (conj (:widgets db) named-widget)
-                   :next-id (inc next-id))))))
+                   :next-id (uuid/uuid-string (uuid/make-random-uuid)))))))
 
 (rf/reg-event-db
   :init-selected-service

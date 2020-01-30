@@ -32,6 +32,7 @@
                  [org.webjars.npm/material-icons "0.3.1"]
                  [org.webjars/webjars-locator "0.38"]
                  [org.xerial/sqlite-jdbc "3.28.0"]
+                 [com.lucasbradstreet/cljs-uuid-utils "1.0.2"]
                  [re-frame "0.10.9"]
                  [reagent "0.9.0-rc3"]
                  [ring-webjars "0.2.0"]

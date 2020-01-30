@@ -7,6 +7,7 @@
     [vanilla.subscriptions :as subs]
     [vanilla.widget-defs :as defs]
     [ajax.core :refer [GET POST] :as ajax]
+    [cljs-uuid-utils.core :as uuid]
 
     [day8.re-frame.tracing :refer-macros [fn-traced]]
 
@@ -53,14 +54,13 @@
              ;(prn (str ":widget-type " widget))
              (assoc-in db [:widget-types (:name widget)] widget)))
 
-(rf/reg-event-db
-  :next-id
-  (fn-traced [db [_ id]]
-             (assoc db :next-id id)))
+;(rf/reg-event-db
+;  :next-id
+;  (fn-traced [db [_ id]]
+;             (assoc db :next-id id)))
 
 ;; Helper function to set-layout to define function called for each value
 (def conversion {:ret_types edn/read-string
-                 :key edn/read-string
                  :name edn/read-string
                  :basis edn/read-string
                  :data-grid edn/read-string
@@ -77,24 +77,22 @@
              converted-data (mapv (fn [{:keys [ret_types key name basis data-grid type data-source options] :as original}]
                                     (assoc original
                                       :ret_types ((:ret_types conversion) ret_types)
-                                      :key ((:key conversion) key)
                                       :name ((:name conversion) name)
                                       :basis ((:basis conversion) basis)
                                       :data-grid ((:data-grid conversion) data-grid)
                                       :type ((:type conversion) type)
                                       :data-source ((:data-source conversion) data-source)
                                       :options ((:options conversion) options)))
-                                  data)
-             highestNextid (apply max (mapv #(:key %) converted-data))]     ; Will need to address how we actually want to handle widget id's
+                                  data)]     ; Will need to address how we actually want to handle widget id's
 
        ;(prn ":set-layout CONVERTED: " converted-data
        ;     "///// nextid: " highestNextid)
 
         (assoc db :widgets converted-data
-                :next-id (inc highestNextid)))
+                :next-id (uuid/uuid-string (uuid/make-random-uuid))))
         ; else it is initial page load with empty layout-table
         (assoc db :widgets []
-                 :next-id 1))))
+                 :next-id (uuid/uuid-string (uuid/make-random-uuid))))))
 
 (rf/reg-event-db
   :set-version
@@ -145,7 +143,7 @@
 
 (defn get-layout [user]
   (prn "getting layout")
-  (if (some? user)
+  (if (some? user)    ;if a user is logged in, go get their widgets, otherwise clear screen
     (GET "/layout" {:headers          {"Accept" "application/transit+json"}
                     :response-format  (ajax/json-response-format {:keywords? true})
                     :params           {:username user}
@@ -206,7 +204,7 @@
   []
 
   ;(prn  "calling :next-id ")
-  (rf/dispatch-sync [:next-id 1])
+  ;(rf/dispatch-sync [:next-id (uuid/uuid-string (uuid/make-random-uuid))])
 
   ;(prn "calling :initialize")
   (rf/dispatch-sync [:initialize])

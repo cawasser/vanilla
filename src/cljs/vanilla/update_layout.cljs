@@ -36,7 +36,7 @@
 (defn update-layout [widgets layout]
   (->> (for [w widgets
              l layout]
-         (if (= (str (:key w)) (:key l))
+         (if (= (str (:key w)) (str (:key l)))
            (apply-updates l w)))
     (remove nil?)
     (into [])))
