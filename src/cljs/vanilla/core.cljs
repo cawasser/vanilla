@@ -137,7 +137,6 @@
 ;
 
 (defn get-layout [user]
-  (prn "getting layout")
   (if (some? user)    ;if a user is logged in, go get their widgets, otherwise clear screen
     (GET "/layout" {:headers          {"Accept" "application/transit+json"}
                     :response-format  (ajax/json-response-format {:keywords? true})
@@ -172,7 +171,7 @@
   - A login button
   - An add widget button alongside a logout button"
   []
-  (get-layout @(rf/subscribe [:get-current-user]))
+  (get-layout @(rf/subscribe [:get-current-user]))    ;; Probably need to put this somewhere better
   (if (some? @(rf/subscribe [:get-current-user]))
     [:div.level-right.has-text-right
      [modal/add-widget-button]
