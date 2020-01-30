@@ -150,7 +150,7 @@
                     :response-format  (ajax/json-response-format {:keywords? true})
                     :params           {:username user}
                     :handler          #(rf/dispatch-sync [:set-layout %])})
-    (prn "no user logged in to fetch layout")))
+    (rf/dispatch-sync [:set-layout []])))
 
 
 
