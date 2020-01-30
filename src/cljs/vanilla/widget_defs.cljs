@@ -71,6 +71,19 @@
                            :viz/style-name   "widget"
                            :viz/tooltip      {:followPointer true}}}
 
+              {:name      :highmaps-widget
+               :basis     :chart
+               :type      :highmaps
+               :ret_types [:data-format/x-y :data-format/x-y-n :data-format/x-y-e :data-format/y]
+               :icon      "/images/bar-widget.png"
+               :label     "Map"
+               :options   {:viz/title        "Channels (map)"
+                           :viz/banner-color {:r 0xd2 :g 0xbf :b 0xd8 :a 1}
+                           :viz/line-width   0.5
+                           :viz/animation    false
+                           :viz/style-name   "widget"
+                           :viz/tooltip      {:followPointer true}}}
+
               {:name      :bubble-widget
                :basis     :chart
                :type      :bubble-chart
