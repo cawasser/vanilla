@@ -72,7 +72,7 @@
                            :viz/tooltip      {:followPointer true}}}
 
               {:name      :highmaps-widget
-               :basis     :chart
+               :basis     :map
                :type      :highmaps
                :ret_types [:data-format/x-y :data-format/x-y-n :data-format/x-y-e :data-format/y]
                :icon      "/images/bar-widget.png"
