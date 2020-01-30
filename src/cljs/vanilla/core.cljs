@@ -170,22 +170,36 @@
 
 
 
-(defn home-page []
+
+(defn top-right-buttons
+  "Determine whether buttons in the top right of the dashboard show either:
+  - A login button
+  - An add widget button alongside a logout button"
+  []
+  (if (some? @(rf/subscribe [:get-current-user]))
+    [:div.level-right.has-text-right
+     [modal/add-widget-button]
+     [login/logout-button]]
+    [:div.level-right.has-text-right
+     [login/login-button]]))
+
+(defn home-page
+  "This is the start of the UI for our SPA"
+  []
   [:div {:width "100%"}
    [:div.container
     [:div.content {:width "100%"}
      [:div.container.level.is-fluid {:width "100%"}
       [:div.level-left.has-text-left
        [modal/version-number]]
-      [:div.level-right.has-text-right
-       [modal/add-widget-button]
-       [:br {:width "5px"}] ;; Something needs to go here to separate buttons
-       [login/determine-login-or-logout]]]]]
+      [top-right-buttons]]]]
    [widgets-grid]])
 
 
 
-(defn start-dashboard []
+(defn start-dashboard
+  "Initialize all the data needed for the start of our SPA, ends by calling the UI to generate"
+  []
 
   ;(prn  "calling :next-id ")
   (rf/dispatch-sync [:next-id 1])
