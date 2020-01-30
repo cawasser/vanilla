@@ -32,15 +32,27 @@
 (defn rgba [{:keys [r g b a]}]
   (str "rgba(" r "," g "," b "," a ")"))
 
+(defn input-field [tag type data]
+  (prn "input-field " tag "," type "," @data)
+  [:div.field
+   [tag
+    {:type        type
+     :value       @data
+     :on-change   #(reset! data (-> % .-target .-value))}]])
 
 
-(defn change-color [is-active id item chosen-color]
+
+(def title-data (atom "widget-title"))
+
+(defn change-color [is-active id item chosen-color widget-title]
   (fn []
     [:div.modal (if @is-active {:class "is-active"})
      [:div.modal-background]
      [:div.modal-content {:on-click #(do
                                        (reset! is-active false)
                                        (.stopPropagation %))}
+      [input-field :input.input :text title-data]
+
       [:> js/ReactColor.CompactPicker
        {:style {:top "5px" :left "10px"}
         :color @chosen-color
@@ -68,7 +80,8 @@
   (let [show-title-picker (r/atom false)
         show-header-picker (r/atom false)
         header-color (r/atom (get options :viz/banner-color {:r 150 :g 150 :b 150 :a 1}))
-        title-color (r/atom (get options :viz/banner-text-color {:r 0 :g 0 :b 0 :a 1}))]
+        title-color (r/atom (get options :viz/banner-text-color {:r 0 :g 0 :b 0 :a 1}))
+        widget-title (atom (get options :viz/title))]
 
     (fn []
 
@@ -82,7 +95,7 @@
                                         (.stopPropagation %))}
 
          [change-color show-header-picker name :viz/banner-color header-color]
-         [change-color show-title-picker name :viz/banner-text-color title-color]
+         [change-color show-title-picker name :viz/banner-text-color title-color title-data]
 
          [:div.level-left.has-text-left
           [:h3 {:class "title"
