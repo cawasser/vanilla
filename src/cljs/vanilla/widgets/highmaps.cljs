@@ -25,7 +25,7 @@
 ;
 (defn register-type []
   (mc/register-type
-    :bar-chart {:chart-options     {:chart/type              :highmaps
+    :highmaps {:chart-options     {:chart/type              :highmaps
                                     :chart/supported-formats [:data-format/x-y :data-format/x-y-n :data-format/x-y-e :data-format/y]
                                     :chart                   {:type     "bar"
                                                               :zoomType "x"}
