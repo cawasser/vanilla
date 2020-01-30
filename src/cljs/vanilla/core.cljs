@@ -54,10 +54,6 @@
              ;(prn (str ":widget-type " widget))
              (assoc-in db [:widget-types (:name widget)] widget)))
 
-;(rf/reg-event-db
-;  :next-id
-;  (fn-traced [db [_ id]]
-;             (assoc db :next-id id)))
 
 ;; Helper function to set-layout to define function called for each value
 (def conversion {:ret_types edn/read-string
@@ -202,9 +198,6 @@
 (defn start-dashboard
   "Initialize all the data needed for the start of our SPA, ends by calling the UI to generate"
   []
-
-  ;(prn  "calling :next-id ")
-  ;(rf/dispatch-sync [:next-id (uuid/uuid-string (uuid/make-random-uuid))])
 
   ;(prn "calling :initialize")
   (rf/dispatch-sync [:initialize])
