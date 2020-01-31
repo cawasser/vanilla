@@ -120,8 +120,8 @@ DELETE FROM layout;
 -- :result :raw
 -- :doc Create users table
 create table users (
-    username        VARCHAR(30) PRIMARY KEY,
-    pass            VARCHAR(30));
+    username        TEXT PRIMARY KEY,
+    pass            TEXT);
 
 
 -- :name drop-users-table :!

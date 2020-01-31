@@ -43,23 +43,23 @@
   [credentials]
   ;; credentials
   ;  (prn "uri handlers - " credentials)
-  (db/create-new-user! db/users-db credentials))
+  (db/create-new-user! db/vanilla-db credentials))
 
 (defn verify-user-password
     "Take in a user and password and determine if they are in the database"
     [credentials]
     ;(prn "url handlers verify creds - " credentials)
-    (some? (db/verify-credentials db/users-db credentials)))
+    (some? (db/verify-credentials db/vanilla-db credentials)))
 
 (defn get-requested-user
   "Makes a call to the hugsql functions that return a requested user if it exist"
   [username]
-  (db/get-user  db/users-db {:username username}))
+  (db/get-user  db/vanilla-db {:username username}))
 
 (defn get-all-users
   "Returns all users in the db"
   []
-  (db/get-users db/users-db))
+  (db/get-users db/vanilla-db))
 
 
 

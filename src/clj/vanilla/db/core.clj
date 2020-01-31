@@ -22,11 +22,6 @@
   "SQLite database connection spec."
   {:dbtype "sqlite" :dbname "vanilla_db"})
 
-(def users-db
-  "SQLite database connection spec."
-  {:dbtype "sqlite" :dbname "user_db"})
-
-
 
 (defrecord Database [db-spec                                ; configuration
                      datasource]                            ; state
@@ -109,12 +104,12 @@
     ;; Remove any current tables to start fresh
     (drop-services-table vanilla-db)
     (drop-layout-table vanilla-db)
-    (drop-users-table users-db)
+    (drop-users-table vanilla-db)
 
     ;; Create new empty versions of the tables
     (create-services-table vanilla-db)
     (create-layout-table vanilla-db)
-    (create-user-table users-db)
+    (create-user-table vanilla-db)
 
     ;; Bootstrap any data needed in the DB at start
     (populate-services)))
@@ -353,32 +348,28 @@
   (hugsql/def-db-fns "sql/queries.sql")
   (hugsql/def-sqlvec-fns "sql/queries.sql")
 
-  (def users-db
-    "SQLite database connection spec."
-    {:dbtype "sqlite" :dbname "user_db"})
-
-  (create-user-table users-db)
+  (create-user-table vanilla-db)
 
 
   (create-new-user!
-    users-db "Jeff" "321")      ;; This does not work, don't try to do this
+    vanilla-db "Jeff" "321")      ;; This does not work, don't try to do this
 
   (create-new-user!
-    users-db
+    vanilla-db
     {:username "chad"
      :pass "123"})
 
-  (get-user users-db {:username "chad"})
-  (get-users users-db)
+  (get-user vanilla-db {:username "chad"})
+  (get-users vanilla-db)
 
-  (verify-credentials users-db
+  (verify-credentials vanilla-db
                       {:username "chad" :pass "123"})
 
-  (verify-credentials users-db
+  (verify-credentials vanilla-db
                       {:username "chad" :pass "321"})
 
 
-  (drop-users-table users-db)
+  (drop-users-table vanilla-db)
 
   )
 

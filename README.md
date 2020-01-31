@@ -22,7 +22,7 @@ This single-page application (SPA) provides a number of graphical widgets based 
 - [x] user picker for colors and title, using [\[cljsjs/react-color "2.13.8-0"\]](http://casesandberg.github.io/react-color/)
 - [ ] move some of the viz stuff (labels, etc) to the service definition/data-message to make more declarative (mix-in? where?)
 - [ ] allow widgets to publish/subscribe user selection events so multiple widgets can work together
-- [ ] login
+- [x] login
 - [x] store widget layout for each user (and restore on next login)
 - [ ] `spec` the data structures (`:data-format/*`)
 - [ ] generative testing of the client
@@ -32,8 +32,8 @@ This single-page application (SPA) provides a number of graphical widgets based 
 
 
 ### Services-side
-- [ ] login
-- [ ] reload widgets on user login
+- [x] login
+- [x] reload widgets on user login
 - [ ] RabitMQ support using [Bunnicula](https://github.com/nomnom-insights/nomnom.bunnicula)
 - [ ] Kafka support
 
