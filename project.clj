@@ -40,6 +40,7 @@
                  [ring/ring-defaults "0.3.2"]
                  [ring/ring-json "0.5.0"]
                  [selmer "1.12.18"]
+                 [cljsjs/toastr "2.1.2-1"]
 
                  [cljsjs/react-grid-layout "0.17.1-0"]
 
