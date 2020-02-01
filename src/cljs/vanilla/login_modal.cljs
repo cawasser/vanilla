@@ -2,6 +2,7 @@
   (:require
     [re-frame.core :as rf]
     [reagent.core :as r]
+    [cljsjs.toastr]
     [day8.re-frame.tracing :refer-macros [fn-traced]]
     [ajax.core :as ajax :refer [GET POST]]))
 
@@ -22,24 +23,26 @@
              (prn "Logging out")
              (dissoc db :current-user)))
 
+(rf/reg-event-db
+  :login-message
+  (fn-traced [db [_ response message]]
+             (if (= (:status response) 200)
+               (js/toastr.success message)
+               (js/toastr.error message))
+             db))
+
 ;;;;;;;;;;;;;;;;;;;;;
 
 (defn attempt-create-user
   "This is called when the user tries to sign up a new username and password"
   [credentials]
-  ;(prn "Attempting to create this user:" credentials)             ;; This runs
+  ;(prn "Attempting to create this user:" credentials)
   (POST "/create-new-user"
-        {
-         ;; These two lines blow things up
-         ;:headers         {"Accept" "application/transit+json"}
-         ;:response-format (ajax/json-response-format {:keywords? true})
-
-         :headers         {"Accept" "application/json"}     ;; This does not blow up - not sure if it does anything
-         ;; This works and returns the handlers response
-         :format          :json
+        {:format          (ajax/json-request-format {:keywords? true})
+         :response-format (ajax/json-request-format {:keywords? true})
          :params          credentials
-         :handler         #(prn "User created!")
-         :on-error        #(prn "ERROR creating the user! " %)}))
+         :handler         #(rf/dispatch [:login-message % "Account created!"])
+         :on-error        #(rf/dispatch [:login-message % "Failed to create account, please try again."])}))
 
 ; TODO  When a user fails to login, nothing happens. Trigger a pop up or modal.
 (defn login-failed-pop-up
@@ -68,9 +71,11 @@
   [bool-val username]
   (prn username "login was" bool-val)
   (if (= bool-val true)
-    (rf/dispatch-sync [:set-current-user username])
     (do
-      (prn "login failed pop up") ; This should just bring up a new modal that says login failed, no need to call a new function
+      (rf/dispatch [:login-message {:status 200} "Welcome to Vanilla!"])
+      (rf/dispatch-sync [:set-current-user username]))
+    (do
+      (rf/dispatch [:login-message {:status 500} "Login failed, try again"])
       [login-failed-pop-up])))
 
 

@@ -91,9 +91,7 @@
 
   (POST "/create-new-user" req
     {:status 200
-    ;:headers {"Content-Type" "text/json; charset=utf-8"}    ;; Not sure if this is better than line below it
-    :header { "Accept" "application/json"
-             :content-type "application/json;charset=utf-8"} ;;Not sure if this does anything
+    :header { "Accept" "application/json"}
     :body (do
             ;(prn "create new user " (:params req))         ;; This keeps req in clojure format (keywords values)
             ;(prn "create new user " (:json-params req))    ;; This turns req into json strings

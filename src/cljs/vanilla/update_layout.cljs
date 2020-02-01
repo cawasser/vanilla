@@ -8,8 +8,8 @@
 
 (rf/reg-event-db
   :layout-message
-  (fn-traced [db [_ success?]]
-             (if success?
+  (fn-traced [db [_ response]]
+             (if (= (:status response) 200)
                (js/toastr.success "Layout Saved!")
                (js/toastr.error "Layout Save Failed"))
              db))
@@ -20,10 +20,10 @@
 
   (POST "/save-layout"
         {:format          (ajax/json-request-format {:keywords? true})
-         :response-format (ajax/json-response-format {:keywords? true})
+         :response-format (ajax/json-request-format {:keywords? true})
          :params          {:widgets (clojure.core/pr-str layout)}       ;convert the whole layout struct to a string to preserve values
-         :on-success      (rf/dispatch [:layout-message true])
-         :on-error        (rf/dispatch [:layout-message false])}))
+         :handler         #(rf/dispatch [:layout-message %])
+         :error-handler   #(rf/dispatch [:layout-message %])}))
 
 
 (defn- apply-updates [new-layout widget]
