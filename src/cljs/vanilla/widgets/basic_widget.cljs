@@ -17,11 +17,20 @@
     (assoc-in widget [:options option] color)
     widget))
 
+(defn update-title [id option title widget]
+  (if (= id (:key widget))
+    (assoc-in widget [:options option] title)
+    widget))
 
 (rf/reg-event-db
   :update-color
   (fn-traced [db [_ widget-id option color]]
     (assoc db :widgets (map #(partial (update-color widget-id option color %)) (:widgets db)))))
+
+(rf/reg-event-db
+  :update-title
+  (fn-traced [db [_ widget-id option title]]
+             (assoc db :widgets (map #(partial (update-title widget-id option title %)) (:widgets db)))))
 
 
 ;
@@ -37,7 +46,10 @@
    [tag
     {:type      type
      :value     @data
-     :on-change #(reset! data (-> % .-target .-value))}]])
+     :on-click #(.stopPropagation %)
+     :on-change #(do
+                   (prn "new title " %)
+                   (reset! data %))}]])
 
 
 
@@ -45,38 +57,66 @@
 
 (defn change-header [is-active id color-item chosen-color]
   (fn []
-    [:div.modal (if @is-active {:class "is-active"})
+    [:div.modal (if (= "header" @is-active) {:class "is-active"})
      [:div.modal-background]
-     [:div.modal-content {:on-click #(do
-                                       (reset! is-active false)
-                                       (.stopPropagation %))}
+     [:div.modal-card
+      [:header.modal-card-head
+       [:p.modal-card-title "Change Banner Color"]]
+
 
       [:> js/ReactColor.CompactPicker
        {:style            {:top "5px" :left "10px"}
         :color            @chosen-color
         :onChangeComplete (fn [color _]
-                            (reset! chosen-color (:rgb (js->clj color :keywordize-keys true)))
-                            (rf/dispatch-sync [:update-color id color-item @chosen-color])
-                            (reset! is-active false))}]]]))
+                            (reset! chosen-color (:rgb (js->clj color :keywordize-keys true))))}]
+
+      [:footer.modal-card-foot
+       [:button.button.is-success {:on-click #(do
+                                                ;(prn "picked widget " @chosen-widget @selected)
+                                                (rf/dispatch-sync [:update-color id color-item @chosen-color])
+                                                (reset! is-active "")
+                                                (.stopPropagation %))} "OK"]
+       [:button.button {:on-click #(do
+                                     (prn "inactive header")
+                                     (reset! is-active "")
+                                     (.stopPropagation %))} "Cancel"]]]]))
 
 
 (defn change-title [is-active id color-item chosen-color title-item widget-title]
   (fn []
-    [:div.modal (if @is-active {:class "is-active"})
+    [:div.modal (if (= "title" @is-active) {:class "is-active"})
      [:div.modal-background]
-     [:div.modal-content {:on-click #(do
-                                       (reset! is-active false)
-                                       (.stopPropagation %))}
 
-      [input-field :input.input :text widget-title]
+     [:div.modal-card
+
+      [:header.modal-card-head
+       [:p.modal-card-title "Change Tile and Text Color"]]
+
+      [:div.field
+       [:input.input
+        {:type      :text
+         :value     @widget-title
+         :on-change #(do
+                       (prn "new title " (-> % .-target .-value))
+                       (reset! widget-title (-> % .-target .-value)))}]]
 
       [:> js/ReactColor.CompactPicker
        {:style            {:top "5px" :left "10px"}
         :color            @chosen-color
         :onChangeComplete (fn [color _]
-                            (reset! chosen-color (:rgb (js->clj color :keywordize-keys true)))
-                            (rf/dispatch-sync [:update-color id color-item @chosen-color])
-                            (reset! is-active false))}]]]))
+                            (reset! chosen-color (:rgb (js->clj color :keywordize-keys true))))}]
+
+      [:footer.modal-card-foot
+       [:button.button.is-success {:on-click #(do
+                                                ;(prn "picked widget " @chosen-widget @selected)
+                                                (rf/dispatch-sync [:update-color id color-item @chosen-color])
+                                                (rf/dispatch-sync [:update-title id title-item @widget-title])
+                                                (reset! is-active "")
+                                                (.stopPropagation %))} "OK"]
+       [:button.button {:on-click #(do
+                                     (prn "inactive title")
+                                     (reset! is-active "")
+                                     (.stopPropagation %))} "Cancel"]]]]))
 
 
 
@@ -93,11 +133,10 @@
     " //// options " options
     " //// custom-content " custom-content)
 
-  (let [show-title-picker  (r/atom false)
-        show-header-picker (r/atom false)
+  (let [show-picker  (r/atom "")
         header-color       (r/atom (get options :viz/banner-color {:r 150 :g 150 :b 150 :a 1}))
         title-color        (r/atom (get options :viz/banner-text-color {:r 0 :g 0 :b 0 :a 1}))
-        title              (atom (get options :viz/title "dummy title"))]
+        title              (r/atom (get options :viz/title "dummy title"))]
 
     (fn []
 
@@ -107,17 +146,23 @@
        [:div {:class "title-wrapper"}
         [:container.level {:style    {:background-color (rgba @header-color)}
                            :on-click #(do
-                                        (swap! show-header-picker not)
-                                        (.stopPropagation %))}
+                                        (if (= "" @show-picker)
+                                          (do
+                                            (prn "showing header")
+                                            (reset! show-picker "header")))
+                                        )}
 
-         [change-header show-header-picker name :viz/banner-color header-color]
-         [change-title show-title-picker name :viz/banner-text-color title-color :viz/title title]
+         [change-header show-picker name :viz/banner-color header-color]
+         [change-title show-picker name :viz/banner-text-color title-color :viz/title title]
 
          [:div.level-left.has-text-left
           [:h3 {:class    "title"
                 :style    {:color (rgba @title-color)}
                 :on-click #(do
-                             (swap! show-title-picker not)
+                             (if (= "" @show-picker)
+                               (do
+                                 (prn "showing title")
+                                 (reset! show-picker "title")))
                              (.stopPropagation %))}
            (get options :viz/title)]]
 

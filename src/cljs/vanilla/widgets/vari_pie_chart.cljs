@@ -8,7 +8,12 @@
 
   ;(.log js/console (str "pie/plot-options " chart-config))
 
-  {:plotOptions {:series      {:animation (:viz/animation options false)}
+  {
+   ;:legend      {:align         "right"
+   ;              :verticalAlign "top"
+   ;              :layout        "vertical"}
+
+   :plotOptions {:series      {:animation (:viz/animation options false)}
                  :variablepie {:allowPointSelect true
                                :dataLabels       {:enabled (get options :viz/dataLabels false)
                                                   :format  (get options :viz/labelFormat "")}}}})
