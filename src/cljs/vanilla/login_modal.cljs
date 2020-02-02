@@ -42,7 +42,7 @@
          :response-format (ajax/json-request-format {:keywords? true})
          :params          credentials
          :handler         #(rf/dispatch [:login-message % "Account created!"])
-         :on-error        #(rf/dispatch [:login-message % "Failed to create account, please try again."])}))
+         :error-handler   #(rf/dispatch [:login-message % "Failed to create account, please try again."])}))
 
 ; TODO  When a user fails to login, nothing happens. Trigger a pop up or modal.
 (defn login-failed-pop-up
