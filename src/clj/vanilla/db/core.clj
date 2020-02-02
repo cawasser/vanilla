@@ -371,7 +371,7 @@
 
   (drop-users-table vanilla-db)
 
-  )
+  ())
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Data setup playground

@@ -26,6 +26,7 @@
 
 
 (defn save-layout [new-layout]
+  ;(prn "SAVE-LAYOUT Handler: " new-layout)
   ;read in the stringed json, order the maps by keys, then remove all keys
   (let [ordered (map #(vals %) (map #(into (sorted-map) %) (clojure.core/read-string new-layout)))]
     ;(prn "SAVE-LAYOUT Handler: " ordered)

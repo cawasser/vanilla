@@ -22,7 +22,7 @@
   (POST "/update-widget"
         {:format          (ajax/json-request-format {:keywords? true})
          :response-format (ajax/json-response-format {:keywords? true})
-         :params          {:widget (clojure.core/pr-str widget)}
+         :params          {:widget (clojure.core/pr-str (dissoc widget :build-fn))}
          :handler         #(prn "widget updated")
          :on-error        #(prn "ERROR updating the widget " %)}))
 

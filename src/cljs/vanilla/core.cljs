@@ -15,6 +15,7 @@
     [clojure.edn :as edn]
 
     [vanilla.grid :as grid]
+    [vanilla.widget-defs :as widget-defs]
 
     ; needed to register all the highcharts types
     [vanilla.widgets.area-chart]
@@ -54,11 +55,18 @@
              (assoc-in db [:widget-types (:name widget)] widget)))
 
 
+
+(defn get-build-fn [name]
+  (:build-fn (->> widget-defs/widgets
+                   (filter #(= (:name %) name) )
+                   first)))
+
 ;; Helper function to set-layout to define function called for each value
 (def conversion {:ret_types edn/read-string
                  :name edn/read-string
                  :basis edn/read-string
                  :data-grid edn/read-string
+                 :build-fn get-build-fn    ;;give me the widget_def build function from the :name
                  :type edn/read-string
                  :data-source edn/read-string
                  :options edn/read-string})
@@ -68,17 +76,19 @@
   (fn-traced [db [_ layout-data]]
    ;(prn "Set-layout start: " (:layout layout-data))
      (if (not (empty? (:layout layout-data)))             ; if its not initial page load with empty layout-table
-       (let [data (:layout layout-data)
-             converted-data (mapv (fn [{:keys [ret_types key name basis data-grid type data-source options] :as original}]
+       (let [read (:layout layout-data)
+             data (map #(assoc % :build-fn "temp") read)    ;re-add build-fn key and fake value to all widget maps
+             converted-data (mapv (fn [{:keys [ret_types name basis data-grid type data-source options] :as original}]
                                     (assoc original
                                       :ret_types ((:ret_types conversion) ret_types)
                                       :name ((:name conversion) name)
                                       :basis ((:basis conversion) basis)
+                                      :build-fn ((:build-fn conversion) name)     ; pass it the name, just a temp str in :build-fn right now
                                       :data-grid ((:data-grid conversion) data-grid)
                                       :type ((:type conversion) type)
                                       :data-source ((:data-source conversion) data-source)
                                       :options ((:options conversion) options)))
-                                  data)]     ; Will need to address how we actually want to handle widget id's
+                                  data)]
 
        ;(prn ":set-layout CONVERTED: " converted-data
        ;     "///// nextid: " highestNextid)
