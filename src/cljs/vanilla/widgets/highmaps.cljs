@@ -1,5 +1,5 @@
 (ns vanilla.widgets.highmaps
-  (:require [vanilla.widgets.make-chart :as mc]))
+  (:require [vanilla.widgets.make-map :as mm]))
 
 
 (defn plot-options
@@ -24,7 +24,7 @@
 ; register all the data stuff so we have access to it
 ;
 (defn register-type []
-  (mc/register-type
+  (mm/register-type
     :highmaps {:chart-options     {:chart/type              :highmaps
                                     :chart/supported-formats [:data-format/x-y :data-format/x-y-n :data-format/x-y-e :data-format/y]
                                     :chart                   {:type     "bar"
@@ -34,5 +34,5 @@
 
                 :merge-plot-option {:default plot-options}
 
-                :conversions       {:default mc/default-conversion}}))
+                :conversions       {:default mm/default-conversion}}))
 

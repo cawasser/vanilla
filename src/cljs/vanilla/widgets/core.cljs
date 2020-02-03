@@ -1,7 +1,8 @@
 (ns vanilla.widgets.core
   (:require [re-frame.core :as rf]
             [vanilla.widgets.basic-widget :as basic]
-            [vanilla.widgets.make-chart :as mc]))
+            [vanilla.widgets.make-chart :as mc]
+            [vanilla.widgets.make-map :as mm]))
 
 (defn make-widget [name id chart-config]
 
@@ -31,7 +32,7 @@
 
     [basic/basic-widget name data options
      [:div {:style {:width "95%" :height "100%"}}
-      [mc/make-chart chart-config data options]]]))
+      [mm/make-chart chart-config data options]]]))
 
 
 
