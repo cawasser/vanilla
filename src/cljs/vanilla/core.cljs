@@ -12,10 +12,8 @@
 
     [vanilla.add-widget-modal :as modal]
     [vanilla.login-modal :as login]
-    [clojure.edn :as edn]
 
     [vanilla.grid :as grid]
-    [vanilla.widget-defs :as widget-defs]
 
     ; needed to register all the highcharts types
     [vanilla.widgets.area-chart]
@@ -54,50 +52,6 @@
              ;(prn (str ":widget-type " widget))
              (assoc-in db [:widget-types (:name widget)] widget)))
 
-
-
-(defn get-build-fn [name]
-  (:build-fn (->> widget-defs/widgets
-                   (filter #(= (:name %) name) )
-                   first)))
-
-;; Helper function to set-layout to define function called for each value
-(def conversion {:ret_types edn/read-string
-                 :name edn/read-string
-                 :basis edn/read-string
-                 :data-grid edn/read-string
-                 :build-fn get-build-fn    ;;give me the widget_def build function from the :name
-                 :type edn/read-string
-                 :data-source edn/read-string
-                 :options edn/read-string})
-
-(rf/reg-event-db
-  :set-layout
-  (fn-traced [db [_ layout-data]]
-   ;(prn "Set-layout start: " (:layout layout-data))
-     (if (not (empty? (:layout layout-data)))             ; if its not initial page load with empty layout-table
-       (let [read (:layout layout-data)
-             data (map #(assoc % :build-fn "temp") read)    ;re-add build-fn key and fake value to all widget maps
-             converted-data (mapv (fn [{:keys [ret_types name basis data-grid type data-source options] :as original}]
-                                    (assoc original
-                                      :ret_types ((:ret_types conversion) ret_types)
-                                      :name ((:name conversion) name)
-                                      :basis ((:basis conversion) basis)
-                                      :build-fn ((:build-fn conversion) name)     ; pass it the name, just a temp str in :build-fn right now
-                                      :data-grid ((:data-grid conversion) data-grid)
-                                      :type ((:type conversion) type)
-                                      :data-source ((:data-source conversion) data-source)
-                                      :options ((:options conversion) options)))
-                                  data)]
-
-       ;(prn ":set-layout CONVERTED: " converted-data
-       ;     "///// nextid: " highestNextid)
-
-        (assoc db :widgets converted-data
-                :next-id (uuid/uuid-string (uuid/make-random-uuid))))
-        ; else it is initial page load with empty layout-table
-        (assoc db :widgets []
-                 :next-id (uuid/uuid-string (uuid/make-random-uuid))))))
 
 (rf/reg-event-db
   :set-version
@@ -140,23 +94,6 @@
                    :response-format (ajax/json-response-format {:keywords? true})
                    :handler         #(rf/dispatch-sync [:set-version %])}))
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;
-; LAYOUT SAVING
-;
-;
-
-(defn get-layout [user]
-  (if (some? user)    ;if a user is logged in, go get their widgets, otherwise clear screen
-    (GET "/layout" {:headers          {"Accept" "application/transit+json"}
-                    :response-format  (ajax/json-response-format {:keywords? true})
-                    :params           {:username user}
-                    :handler          #(rf/dispatch-sync [:set-layout %])})
-    (rf/dispatch-sync [:set-layout []])))
-
-
-
-
 
 (def width 1536)
 (def height 1024)
@@ -181,7 +118,6 @@
   - A login button
   - An add widget button alongside a logout button"
   []
-  (get-layout @(rf/subscribe [:get-current-user]))    ;; Probably need to put this somewhere better
   (if (some? @(rf/subscribe [:get-current-user]))
     [:div.level-right.has-text-right
      [modal/add-widget-button]

@@ -14,7 +14,6 @@
 (rf/reg-event-db
   :update-layout
   (fn-traced [db [_ layout]]
-             ;(prn (str ":update-layout " layout))
              (let [new-layout (u/update-layout (:widgets db) (u/reduce-layouts layout))]
                (u/save-layout new-layout)
                (assoc db :widgets new-layout))))

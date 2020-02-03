@@ -1,5 +1,6 @@
 (ns vanilla.login-modal
   (:require
+    [vanilla.update-layout :as layout]
     [re-frame.core :as rf]
     [reagent.core :as r]
     [cljsjs.toastr]
@@ -14,13 +15,16 @@
   :set-current-user
   (fn-traced [db [_ username]]
              (prn "Set currnet user" username)
-             (assoc db :current-user username)))
+             (layout/get-layout username)
+             (assoc db :current-user username
+                       :new-login true)))
 
 
 (rf/reg-event-db
   :logout
   (fn-traced [db _]
              (prn "Logging out")
+             (layout/get-layout nil)    ;;clear page of widgets
              (dissoc db :current-user)))
 
 (rf/reg-event-db
