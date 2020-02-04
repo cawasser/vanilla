@@ -164,8 +164,8 @@
 
   [id registry-data]
 
-  ;(prn "register-type " id
-  ; " //// (registry-data)" registry-data)
+  (prn "register-type " id
+   " //// (registry-data)" registry-data)
 
   (rf/dispatch [:register-hc-type id registry-data]))
 
@@ -204,56 +204,13 @@
          (let [new-args (rest (reagent/argv this))
                new-data (js->clj (second new-args))
                base-config (make-config chart-config new-data options)
-               all-configs (merge-configs base-config new-data options)
-               config {:chart {:map "custom/world-continents"}
+               all-configs (merge-configs base-config new-data options)]
 
-
-
-                       :title {:text ""}
-
-
-
-                       :subtitle {:text ""}
-
-
-
-                       :mapNavigation {:enabled true
-
-                                       :buttonOptions {:verticalAlign "bottom"}}
-
-
-
-                       :colorAxis {:min 0}
-
-
-
-
-
-                       :series [{:data [["eu" 0]
-
-                                        ["oc" 10]
-
-                                        ["af" 200]
-
-                                        ["as" 33]
-
-                                        ["na" 44]
-
-                                        ["sa" 55]]
-
-                                 :name "Tons produced"
-
-                                 :states {:hover {:color "#BADA55"}}
-
-                                 :dataLabels {:enabled true
-
-                                              :format "{point.name}"}}]}]
-
-           ;(prn "component-did-update " chart-type
-           ;  " //// chart-config " chart-config
-           ;  " //// chart-reg-entry " chart-reg-entry
-           ;  " //// base-config " base-config
-           ;  " //// (all-config)" all-configs)
+           (prn "component-did-update " chart-type
+             " //// chart-config " chart-config
+             " //// chart-reg-entry " chart-reg-entry
+             " //// base-config " base-config
+             " //// (all-config)" all-configs)
 
            (js/Highcharts.mapChart. (reagent/dom-node this)
-                                 (clj->js config))))})))
+                                 (clj->js all-configs))))})))

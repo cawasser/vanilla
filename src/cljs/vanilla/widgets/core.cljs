@@ -26,7 +26,7 @@
   (fn [data options]
 
     ;(prn "in widget " id " / " name
-    ;  ;" //// data " data
+    ;  " //// data " data
     ;  " //// options " options
     ;  " //// chart-config " chart-config)
 

@@ -15,7 +15,38 @@
    :plotOptions {:series {:animation (:viz/animation options false)}
                  :bar    {:dataLabels   {:enabled (get options :viz/dataLabels false)
                                          :format  (get options :viz/labelFormat "")}
-                          :pointPadding 0.2}}})
+                          :pointPadding 0.2}}
+   :mapNavigation {:enabled true
+
+                   :buttonOptions {:verticalAlign "bottom"}}
+
+
+
+   :colorAxis {:min 0}
+
+
+
+
+
+   :series [{:data [["eu" 0]
+
+                    ["oc" 10]
+
+                    ["af" 200]
+
+                    ["as" 33]
+
+                    ["na" 44]
+
+                    ["sa" 55]]
+
+             :name "Tons produced"
+
+             :states {:hover {:color "#BADA55"}}
+
+             :dataLabels {:enabled true
+
+                          :format "{point.name}"}}]})
 
 
 
@@ -27,7 +58,7 @@
   (mm/register-type
     :highmaps {:chart-options     {:chart/type              :highmaps
                                     :chart/supported-formats [:data-format/x-y :data-format/x-y-n :data-format/x-y-e :data-format/y]
-                                    :chart                   {:type     "bar"
+                                    :chart                   {:map "custom/world-continents"
                                                               :zoomType "x"}
                                     :yAxis                   {:title  {:align "high"}
                                                               :labels {:overflow "justify"}}}

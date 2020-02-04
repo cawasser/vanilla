@@ -26,7 +26,8 @@
     [vanilla.widgets.rose-chart]
     [vanilla.widgets.sankey-chart]
     [vanilla.widgets.scatter-chart]
-    [vanilla.widgets.vari-pie-chart]))
+    [vanilla.widgets.vari-pie-chart]
+    [vanilla.widgets.highmaps]))
 
 
 
@@ -145,6 +146,7 @@
   (vanilla.widgets.sankey-chart/register-type)
   (vanilla.widgets.scatter-chart/register-type)
   (vanilla.widgets.vari-pie-chart/register-type)
+  (vanilla.widgets.highmaps/register-type)
 
   (doseq [w defs/widgets]
     (rf/dispatch-sync [:widget-type w]))

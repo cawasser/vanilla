@@ -61,9 +61,9 @@
 
 (defn basic-widget [name data options custom-content]
 
-  (prn "basic-widget " name
-    " //// options " options
-    " //// custom-content " custom-content)
+  ;(prn "basic-widget " name
+  ;  " //// options " options
+  ;  " //// custom-content " custom-content)
 
   (let [show-title-picker (r/atom false)
         show-header-picker (r/atom false)
