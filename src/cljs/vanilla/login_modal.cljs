@@ -43,7 +43,7 @@
   ;(prn "Attempting to create this user:" credentials)
   (POST "/create-new-user"
         {:format          (ajax/json-request-format {:keywords? true})
-         :response-format (ajax/json-request-format {:keywords? true})
+         :response-format (ajax/json-response-format {:keywords? true})
          :params          credentials
          :handler         #(rf/dispatch [:login-message % "Account created!"])
          :error-handler   #(rf/dispatch [:login-message % "Failed to create account, please try again."])}))

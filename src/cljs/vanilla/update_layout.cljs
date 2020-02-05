@@ -24,7 +24,7 @@
 
   (POST "/save-layout"
         {:format          (ajax/json-request-format {:keywords? true})
-         :response-format (ajax/json-request-format {:keywords? true})
+         :response-format (ajax/json-response-format {:keywords? true})
          :params          {:widgets (clojure.core/pr-str (map #(dissoc % :build-fn) layout))}       ;convert the whole layout struct to a string to preserve values
          :handler         #(rf/dispatch [:layout-message %])
          :error-handler   #(rf/dispatch [:layout-message %])}))

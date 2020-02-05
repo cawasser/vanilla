@@ -54,7 +54,7 @@
      :headers {"Content-Type" "text/json; charset=utf-8"}
      :body (do
              ;(prn "save layout")
-             {:widget-save (h/save-layout (get-in req [:params :widgets]))})})
+             {:widget-save (h/save-layout (get-in req [:params :widgets])) :status 200})})
 
   (POST "/update-widget" req
     {:status 200
@@ -93,9 +93,7 @@
     {:status 200
      :header {"Content-Type" "text/json; charset=utf-8"}
      :body (do
-            ;(prn "create new user " (:params req))         ;; This keeps req in clojure format (keywords values)
-            ;(prn "create new user " (:json-params req))    ;; This turns req into json strings
-            {:rows-updated (h/create-user (:params req))})})                            ;;Expects a struct of username password
+            {:rows-updated (h/create-user (:params req)) :status 200})})                            ;;Expects a struct of username password
 
 
 
