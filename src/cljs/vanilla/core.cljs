@@ -9,6 +9,7 @@
     [ajax.core :refer [GET POST] :as ajax]
 
     [vanilla.add-widget-modal :as modal]
+    [vanilla.widgets.configure-widget :as wc]
 
     [vanilla.grid :as grid]
 
@@ -111,6 +112,7 @@
   [:div {:width "100%"}
    [:div.container
     [:div.content {:width "100%"}
+     [wc/change-header (rf/subscribe [:configure-widget])]
      [modal/version-number]]]
    [widgets-grid]])
 
