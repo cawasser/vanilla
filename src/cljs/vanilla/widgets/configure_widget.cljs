@@ -12,9 +12,6 @@
 
 (def def-color {:r 150 :g 150 :b 150 :a 1})
 
-(defn- rgba [{:keys [r g b a]}]
-  (str "rgba(" r "," g "," b "," a ")"))
-
 (defn- f [n w]
   (->> w
      (filter #(= (:key %) n))
