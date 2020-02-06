@@ -2,7 +2,8 @@
   (:require [reagent.core :as r]
             [re-frame.core :as rf]
             [day8.re-frame.tracing :refer-macros [fn-traced]]
-            [cljsjs.react-color]))
+            [cljsjs.react-color]
+            [vanilla.update-layout :as u]))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -81,11 +82,14 @@
   :update-widget-config
   (fn-traced
     [db [_ widget-id]]
-    (assoc db :widgets (into [] (conj (notf widget-id (:widgets db))
-                                      (modify-the-widget (f widget-id (:widgets db))
-                                                         (:chosen-banner-color db)
-                                                         (:chosen-title-color db)
-                                                         (:chosen-title db)))))))
+    (let [orig-widget (f widget-id (:widgets db))
+          mod-widget (modify-the-widget orig-widget
+                       (:chosen-banner-color db)
+                       (:chosen-title-color db)
+                       (:chosen-title db))
+          new-widgets (into [] (conj (notf widget-id (:widgets db)) mod-widget))]
+      (u/save-layout new-widgets)
+      (assoc db :widgets new-widgets))))
 
 (rf/reg-sub
   :chosen-widget
