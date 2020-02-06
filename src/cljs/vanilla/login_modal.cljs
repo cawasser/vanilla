@@ -114,13 +114,13 @@
 (defn input-element
   "An input element that takes in what type of element it is, and the current value that will change with input."
   [id-name-type value]
-  [:input {:id id-name-type
-           :name id-name-type
-           :class "form-control"
-           :type id-name-type
-           :required ""
-           :value @value
-           :on-change #(reset! value (-> % .-target .-value))}])
+  [:input.input {:id id-name-type
+                 :name id-name-type
+                 :class "form-control"
+                 :type id-name-type
+                 :required ""
+                 :value @value
+                 :on-change #(reset! value (-> % .-target .-value))}])
 
 
 
@@ -151,10 +151,10 @@
                                                                   :pass @pass})
                                                   (reset! is-active false))} "Login"]
 
-         [:button.button.is-success {:on-click #(do
-                                                  (attempt-create-user {:username @username
-                                                                        :pass @pass})
-                                                  (reset! is-active false))} "Sign-up"]
+         [:button.button.is-info {:on-click #(do
+                                               (attempt-create-user {:username @username
+                                                                     :pass @pass})
+                                               (reset! is-active false))} "Sign-up"]
 
          [:button.button {:on-click #(reset! is-active false)} "Cancel"]]]])))
 
