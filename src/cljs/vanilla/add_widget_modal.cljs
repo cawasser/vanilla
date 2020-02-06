@@ -1,7 +1,43 @@
 (ns vanilla.add-widget-modal
   (:require [reagent.core :as r]
-            [re-frame.core :as rf]))
+            [re-frame.core :as rf]
+            [day8.re-frame.tracing :refer-macros [fn-traced]]
+            [cljs-uuid-utils.core :as uuid]))
 
+
+;;;; EVENTS
+(rf/reg-event-db
+  :add-widget
+  (fn-traced [db [_ new-widget-type data-source]]
+             (let [next-id (:next-id db)
+                   widget-type (get-in db [:widget-types new-widget-type])
+                   current-user @(rf/subscribe [:get-current-user])      ;;get current user
+                   named-widget (assoc widget-type
+                                  :key (str next-id)
+                                  :data-source data-source
+                                  :username current-user                ;;add username key value to widget map
+                                  :data-grid {:x 0 :y 0 :w 5 :h 15})]
+
+               (do
+                 ;(prn ":add-widget " new-widget-type
+                 ;  " //// widget-type " widget-type
+                 ;  " //// named-widget " named-widget)
+                 (assoc db
+                   :widgets (conj (:widgets db) named-widget)
+                   :next-id (uuid/uuid-string (uuid/make-random-uuid)))))))
+
+(rf/reg-event-db
+  :init-selected-service
+  (fn-traced [db _]
+             ;(prn (str ":init-selected-service " (first (:services db))))
+             (assoc db :selected-service (first (:services db)))))
+
+
+(rf/reg-event-db
+  :selected-service
+  (fn-traced [db [_ s]]
+             ;(prn (str ":selected-service " s))
+             (assoc db :selected-service s)))
 
 
 (defn add-widget [new-widget selected-source]
@@ -138,16 +174,36 @@
          [:button.button {:on-click #(reset! is-active false)} "Cancel"]]]])))
 
 
-
-
-(defn version-number []
-  (let [version   (rf/subscribe [:version])
-        is-active (r/atom false)]
+(defn add-widget-button
+  "Creates a button that triggers a modal that allows the user to add a widget"
+  []
+  (let [is-active (r/atom false)]
     (fn []
-      [:div.container.level.is-fluid {:width "100%"}
-       [:div.level-left.has-text-left
-        [:h6.subtitle.is-6 @version]]
-       [:div.level-right.has-text-right
-        [:button.button.is-link {:on-click #(swap! is-active not)} "Add"]]
-       ;[:button.button.is-link {:on-click #(add-canned-widget)} "widget"]]
-       [add-widget-modal is-active]])))
+      [:div.has-text-left
+      ;[:div.level-right.has-text-right
+       [:button.button.is-link {:on-click #(swap! is-active not)} "Add"]
+      ;[:button.button.is-link {:on-click #(add-canned-widget)} "widget"]]
+      [add-widget-modal is-active]])))
+
+
+
+
+(defn version-number
+  "Returns the version number wrapped in a h6 element."
+  []
+  (let [version   (rf/subscribe [:version])]
+    (fn []
+       ;[:div.level-left.has-text-left
+        [:h6.subtitle.is-6 @version])))
+
+;(defn version-number []
+;  (let [version   (rf/subscribe [:version])
+;        is-active (r/atom false)]
+;    (fn []
+;      [:div.container.level.is-fluid {:width "100%"}
+;       [:div.level-left.has-text-left
+;        [:h6.subtitle.is-6 @version]]
+;       [:div.level-right.has-text-right
+;        [:button.button.is-link {:on-click #(swap! is-active not)} "Add"]]
+;       ;[:button.button.is-link {:on-click #(add-canned-widget)} "widget"]]
+;       [add-widget-modal is-active]])))

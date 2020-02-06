@@ -1,12 +1,18 @@
 (ns vanilla.widgets.make-chart
   (:require [reagent.core :as reagent]
             [re-frame.core :as rf]
+            [day8.re-frame.tracing :refer-macros [fn-traced]]
             [vanilla.widgets.util :as util]))
 
 
-
-
 (declare default-conversion)
+
+
+(rf/reg-event-db
+  :register-hc-type
+  (fn-traced [db [_ type type-fn]]
+             ;(prn "registering highcharts type " type)
+             (assoc-in db [:hc-type type] type-fn)))
 
 ;;;;;;;;;;;;;;;;;
 ;
@@ -174,17 +180,20 @@
 
 
 
+
 (defn make-chart
   "creates the correct reagent 'hiccup' and react/class to implement a
   Highcharts.js UI component that can be embedded inside any valid hiccup"
 
   [chart-config data options]
 
+  ;(prn " entering make-chart " chart-config)
+
   (let [dom-node        (reagent/atom nil)
         chart-type      (-> chart-config :chart-options :chart/type)
         chart-reg-entry @(rf/subscribe [:hc-type chart-type])]
 
-    ;(prn "MAKE-chart " chart-type
+    ;(prn "make-chart " chart-type
     ;  " //// (chart-config)" chart-config
     ;  " ////// (chart-reg-entry)" chart-reg-entry)
 

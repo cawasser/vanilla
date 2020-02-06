@@ -64,3 +64,5 @@ new widgets, just revised default layout
 
 > 0.3.1-SNAPSHOT. clicking on a widget header allows for changing the header color. Similarly, clicking on the title
 > text allow the user to change the color of the text
+
+> 0.3.2-SNAPSHOT. the Stoplight and Time widget type is available once again. Also a new "table" widget

@@ -53,6 +53,9 @@ Sankey      | from-to-n           | from-to      | from-to-e |
 Pie         | label-y             |              |           |
 Vari-pie    | label-y-n           | label-y      | label-y-e |
 Rose        | rose-y-n            |              | rose-y-e  |
+Stoplight   | entity              |              |           |
+simple-text | string              |              |           |
+data-table  | entities            |              |           |
 
 
 
@@ -74,6 +77,6 @@ Usage Data          | label-y
 12-hour Usage Data  | rose-y-n
 Health and Status   | entities (see branch [new-widgets](https://github.com/cawasser/vanilla/tree/new-widgets))
 Time                | string (see branch [new-widgets](https://github.com/cawasser/vanilla/tree/new-widgets))
-Grid                | entities (see branch [new-widgets](https://github.com/cawasser/vanilla/tree/new-widgets))
+Table               | entities (see branch [new-widgets](https://github.com/cawasser/vanilla/tree/new-widgets))
 
 
