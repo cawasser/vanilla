@@ -4,6 +4,11 @@
 
 
 
+(defn rgba [{:keys [r g b a]}]
+  (str "rgba(" r "," g "," b "," a ")"))
+
+
+
 
 
 (defn line->bar [data options]

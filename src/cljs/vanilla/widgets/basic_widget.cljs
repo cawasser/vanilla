@@ -2,7 +2,8 @@
   (:require [reagent.core :as r]
             [re-frame.core :as rf]
             [day8.re-frame.tracing :refer-macros [fn-traced]]
-            [cljsjs.react-color]))
+            [cljsjs.react-color]
+            [vanilla.widgets.util :as utils]))
 
 
 
@@ -14,7 +15,6 @@
 
 (defn- rgba [{:keys [r g b a]}]
   (str "rgba(" r "," g "," b "," a ")"))
-
 
 
 (defn basic-widget [name data options custom-content]
@@ -29,14 +29,14 @@
            :style {:height (get options :viz/height "100%")
                    :width  "100%"}}
      [:div {:class "title-wrapper"}
-      [:container.level {:style    {:background-color (rgba (get options :viz/banner-color {:r 150 :g 150 :b 150 :a 1}))}
+      [:container.level {:style    {:background-color (util/rgba (get options :viz/banner-color {:r 150 :g 150 :b 150 :a 1}))}
                          :on-click #(do
-                                      (prn "showing header for " name)
+                                      ;(prn "showing header for " name)
                                       (rf/dispatch-sync [:configure-widget name]))}
 
        [:div.level-left.has-text-left
         [:h3 {:class    "title"
-              :style    {:color (rgba (get options :viz/banner-text-color {:r 0 :g 0 :b 0 :a 1}))}}
+              :style    {:color (util/rgba (get options :viz/banner-text-color {:r 0 :g 0 :b 0 :a 1}))}}
          (get options :viz/title)]]
 
        [:div.level-right.has-text-centered
