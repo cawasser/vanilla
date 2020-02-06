@@ -12,6 +12,9 @@
     :dotted
     :none))
 
+(defn- rgba [{:keys [r g b a]}]
+  (str "rgba(" r "," g "," b "," a ")"))
+
 
 
 (defn basic-widget [name data options custom-content]
