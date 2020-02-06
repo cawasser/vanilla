@@ -130,7 +130,11 @@
 
       ["12000" "table-service" "Data Table"
        "data-format/entities" "vanilla.table-service/fetch-data"
-       "returns users' info"]]})
+       "returns users' info"]
+
+      ["13000" "continent-map-service" "Continent Data"
+       "data-format/x-y" "vanilla.continent-map-service/fetch-data"
+       "returns tons of fruit produced per continent"]]})
 
 
   (create-services!

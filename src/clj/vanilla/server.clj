@@ -14,7 +14,7 @@
               [vanilla.power-data-service]
               [vanilla.current-time-service]
               [vanilla.table-service]
-
+              [vanilla.continent-map-service]
               [vanilla.service-deps :as deps])
 
     (:gen-class))
