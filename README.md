@@ -93,6 +93,22 @@ Diagrams are generated "automatically" by ???
 
 ## User Guide
 
+###Database Management
+To run a local version of this project you will need to start a 
+repl and initialize the vanilla_db.
+This can be done in 
+````$xslt
+src/clj/vanilla/db/core.clj
+````
+In the first comment block.
+
+When this project is deployed, it packages up vanilla_default (The database 
+included this repo) and changes the name to vanilla_db so the project can use 
+the database.
+
+This is how the project allows the developers to have their own development db
+and the deployed versions of this application to have a clean initialized working
+database.
 
 ## FAQ
 
