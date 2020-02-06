@@ -133,16 +133,16 @@
        "returns users' info"]
 
       ["13000" "continent-map-service" "Continent Data"
-       "data-format/x-y" "vanilla.continent-map-service/fetch-data"
+       "data-format/cont-n" "vanilla.continent-map-service/fetch-data"
        "returns tons of fruit produced per continent"]]})
 
 
   (create-services!
     vanilla-db
     {:services
-     [["9999" "bubble-service" "Bubble Data"
-       "data-format/x-y-n" "vanilla.bubble-service/fetch-data"
-       "returns x-y-n data for Fruits, Countries and MLB teams"]]})
+     [["13000" "continent-map-service" "Continent Data"
+       "data-format/cont-n" "vanilla.continent-map-service/fetch-data"
+       "returns tons of fruit produced per continent"]]})
   (create-services!-sqlvec
     vanilla-db
     {:services
@@ -150,7 +150,7 @@
        "data-format/x-y-n" "vanilla.bubble-service/fetch-data"
        "returns x-y-n data for Fruits, Countries and MLB teams"]]})
 
-  (delete-service! vanilla-db {:id "9999"})
+  (delete-service! vanilla-db {:id "13000"})
 
   (get-services vanilla-db)
 

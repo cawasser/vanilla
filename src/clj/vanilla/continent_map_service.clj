@@ -4,19 +4,19 @@
   (prn "Continent Map Service")
 
   {:title "Continent Data"
-   :data-format :data-format/x-y
+   :data-format :data-format/cont-n
 
-   :series  [{:data [["eu" 0]
+   :series  [{:data [["eu" (rand-int 101)]
 
-                     ["oc" 10]
+                     ["oc" (rand-int 101)]
 
-                     ["af" 200]
+                     ["af" (rand-int 101)]
 
-                     ["as" 33]
+                     ["as" (rand-int 101)]
 
-                     ["na" 44]
+                     ["na" (rand-int 101)]
 
-                     ["sa" 55]]
+                     ["sa" (rand-int 101)]]
 
               :name "Tons produced"
 

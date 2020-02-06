@@ -71,12 +71,12 @@
                            :viz/style-name   "widget"
                            :viz/tooltip      {:followPointer true}}}
 
-              {:name      :highmaps-widget
+              {:name      :continent-map-widget
                :basis     :map
-               :type      :highmaps
-               :ret_types [:data-format/x-y :data-format/x-y-n :data-format/x-y-e :data-format/y]
+               :type      :continent-map
+               :ret_types [:data-format/cont-n]
                :icon      "/images/map-widget.png"
-               :label     "Map"
+               :label     "Continent Map"
                :options   {:viz/title        "Continents (map)"
                            :viz/banner-color {:r 0xd2 :g 0xbf :b 0xd8 :a 1}
                            :viz/line-width   0.5
