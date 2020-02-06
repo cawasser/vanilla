@@ -3,8 +3,20 @@
             [re-frame.core :as rf]
             [day8.re-frame.tracing :refer-macros [fn-traced]]
             [cljsjs.react-color]
-            [vanilla.widgets.util :as util]))
+            [vanilla.widgets.util :as util]
+            [ajax.core :as ajax :refer [GET POST]]))
 
+
+
+(defn delete-widget [widget-id]
+  ;(prn "removing widget: " widget-id)
+
+  (POST "/delete-widget"
+    {:format          (ajax/json-request-format {:keywords? true})
+     :response-format (ajax/json-response-format {:keywords? true})
+     :params          {:id widget-id}
+     :handler         #(rf/dispatch [:layout-message %])
+     :error-handler   #(rf/dispatch [:layout-message %])}))
 
 
 

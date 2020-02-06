@@ -50,7 +50,6 @@
         :chosen-widget (if (= widget-id "") nil widget)
         :chosen-title (get-part widget-id widget [:options :viz/title] "")
         :chosen-banner-color (get-part widget-id widget [:options :viz/banner-color] def-color)
-        :chosen-title-color (get-part widget-id widget [:options :viz/banner-text-color] def-color)
         :chosen-title-color (get-part widget-id widget [:options :viz/banner-text-color] def-color)))))
 
 
