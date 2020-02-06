@@ -17,10 +17,16 @@
 (hugsql/def-db-fns "sql/queries.sql")
 
 
-
+;; This database is stored locally. It is considered our "working" or dev db
+;; This should not be pushed to the repo or AWS, it will be added to git ignore
 (def vanilla-db
   "SQLite database connection spec."
   {:dbtype "sqlite" :dbname "vanilla_db"})
+
+;; The following is the deployed database that is pushed to the repo and to AWS
+(def vanilla-default
+  "SQLite database connection spec."
+  {:dbtype "sqlite" :dbname "vanilla_default"})
 
 
 (defrecord Database [db-spec                                ; configuration
@@ -39,9 +45,10 @@
 
 (defn setup-database [] (map->Database {:db-spec vanilla-db}))
 
-(defn populate-services []
+(defn populate-services
+  [database]
   (create-services!
-    vanilla-db
+    database
     {:services
      [["1000" "spectrum-traces" "Spectrum Traces"
        "data-format/x-y" "vanilla.spectrum-traces-service/spectrum-traces"
@@ -99,25 +106,27 @@
 ;; run in the repl to create fresh db tables populated accordingly
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;
-(defn initialize-database []
+(defn initialize-database
+  [database]
   (do
     ;; Remove any current tables to start fresh
-    (drop-services-table vanilla-db)
-    (drop-layout-table vanilla-db)
-    (drop-users-table vanilla-db)
+    (drop-services-table database)
+    (drop-layout-table database)
+    (drop-users-table database)
 
     ;; Create new empty versions of the tables
-    (create-services-table vanilla-db)
-    (create-layout-table vanilla-db)
-    (create-user-table vanilla-db)
+    (create-services-table database)
+    (create-layout-table database)
+    (create-user-table database)
 
     ;; Bootstrap any data needed in the DB at start
-    (populate-services)))
+    (populate-services database)))
 
 ;;; REPL ME vvvvv ;;;
 (comment
 
-  (initialize-database)
+  (initialize-database vanilla-default)
+  (initialize-database vanilla-db)
 
   ())
 
