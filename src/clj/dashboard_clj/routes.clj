@@ -27,28 +27,27 @@
      :headers {"Content-Type" "text/json; charset=utf-8"}
      :body (do
              (prn "get version")
-             (str (json/write-str {:version (version/get-version
-                                              "vanilla"
-                                              "vanilla"
-                                              "version number not found")
-                                   :status 200})))})
+             {:version (version/get-version
+                         "vanilla"
+                         "vanilla"
+                         "version number not found")
+              :status 200})})
 
   (GET "/services" _
     {:status 200
      :headers {"Content-Type" "text/json; charset=utf-8"}
      :body (do
              ;(prn "get services")
-             (str (json/write-str {:services (h/get-services) :status 200})))})
+             {:services (h/get-services) :status 200})})
 
 ;;;;; Layout Saving Routes
 
-  ;TODO test removing the write-str here and put the de-string back in url handler
   (GET "/layout" req
     {:status 200
      :headers {"Content-Type" "text/json; charset=utf-8"}
      :body (do
              ;(prn "get layout")
-             (str (json/write-str {:layout (h/get-layout (get-in req [:params :username])) :status 200})))})
+             {:layout (h/get-layout (get-in req [:params :username])) :status 200})})
 
   (POST "/save-layout" req
     {:status 200
