@@ -16,17 +16,19 @@
 
 (hugsql/def-db-fns "sql/queries.sql")
 
+(def dbtype "sqlite")
+
 
 ;; This database is stored locally. It is considered our "working" or dev db
 ;; This should not be pushed to the repo or AWS, it will be added to git ignore
 (def vanilla-db
   "SQLite database connection spec."
-  {:dbtype "sqlite" :dbname "vanilla_db"})
+  {:dbtype dbtype :dbname "vanilla_db"})
 
 ;; The following is the deployed database that is pushed to the repo and to AWS
 (def vanilla-default
   "SQLite database connection spec."
-  {:dbtype "sqlite" :dbname "vanilla_default"})
+  {:dbtype dbtype :dbname "vanilla_default"})
 
 
 (defrecord Database [db-spec                                ; configuration
