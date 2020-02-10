@@ -127,8 +127,9 @@
 ;;; REPL ME vvvvv ;;;
 (comment
 
-  (initialize-database vanilla-default)
-  (initialize-database vanilla-db)
+  (initialize-database vanilla-default) ;; Initialize this on database structure changes, push changes to repo
+
+  (initialize-database vanilla-db) ;; Run this to create a local database for your app
 
   ())
 
