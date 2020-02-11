@@ -26,10 +26,7 @@
   "SQLite database connection spec."
   {:dbtype db-type :dbname "vanilla_db"})
 
-;; The following is the deployed database that is pushed to the repo and to AWS
-(def vanilla-default
-  "SQLite database connection spec."
-  {:dbtype db-type :dbname "vanilla_default"})
+
 
 
 
@@ -91,7 +88,6 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; INITIAL DB SETUP FUNCTION
 ;;
-;; not called anywhere in the app
 ;; run in the repl to create fresh db tables populated accordingly
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -128,7 +124,7 @@
 (defn database-exist?
   "Runs a simple check to see if the vanilla_db file exists."
   [database]
-  (prn "Database-exist? /////" (database :dbname))
+  ;(prn "Database-exist? /////" (database :dbname))
   ;(prn (str (.exists (jio/file "vanilla_db"))))
   (.exists (jio/file (database :dbname))))
 
@@ -139,10 +135,9 @@
    connection to the database. Only creates a database when in dev mode
    and when the vanilla_db has not been created."
   [dev-mode?]
-  (prn "setup-db")
-  ;(prn (database-exist? vanilla-db))
+  ;(prn "setup-db")
   (when (and (not (database-exist? vanilla-db)) dev-mode?)
-    (prn "Creating new db")
+    ;(prn "Creating new db")
     ;; If it does not exist, create it
     (initialize-database vanilla-db))
   ;; Create a Database component -- see component library
@@ -150,8 +145,14 @@
 
 
 
-;;; REPL ME vvvvv ;;;
+;;; REPL ME WHEN DATABASE STRUCTURE CHANGES ;;;
 (comment
+
+  ;; The following is the deployed database that is pushed to the repo and to AWS
+  ;; It is not called by any of our production code, so it is in this comment block
+  (def vanilla-default
+    "SQLite database connection spec."
+    {:dbtype db-type :dbname "vanilla_default"})
 
   (initialize-database vanilla-default)                     ;; Initialize this on database structure changes, push changes to repo
 
