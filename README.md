@@ -13,6 +13,7 @@ This single-page application (SPA) provides a number of graphical widgets based 
 [look here](docs/history.md)
 
 > 0.3.3-SNAPSHOT. Addition of widget layout saving and loading from the database
+> 0.3.4-SNAPSHOT. New modal so user can "customize" a widget: banner color, title text, and title text color.
 
 ## Roadmap
 
