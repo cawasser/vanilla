@@ -3,7 +3,8 @@
     [hugsql.core :as hugsql]
     [next.jdbc :as jdbc]
     [next.jdbc.sql :as sql]
-    [com.stuartsierra.component :as component]))
+    [com.stuartsierra.component :as component]
+    [clojure.java.io :as jio]))
 
 
 
@@ -16,36 +17,22 @@
 
 (hugsql/def-db-fns "sql/queries.sql")
 
-(def dbtype "sqlite")
+(def db-type "sqlite")
 
 
 ;; This database is stored locally. It is considered our "working" or dev db
 ;; This should not be pushed to the repo or AWS, it will be added to git ignore
 (def vanilla-db
   "SQLite database connection spec."
-  {:dbtype dbtype :dbname "vanilla_db"})
+  {:dbtype db-type :dbname "vanilla_db"})
 
 ;; The following is the deployed database that is pushed to the repo and to AWS
 (def vanilla-default
   "SQLite database connection spec."
-  {:dbtype dbtype :dbname "vanilla_default"})
-
-
-(defrecord Database [db-spec                                ; configuration
-                     datasource]                            ; state
-
-  component/Lifecycle
-  (start [this]
-    (if datasource
-      this                                                  ; already initialized
-      (assoc this :datasource (jdbc/get-datasource db-spec))))
-
-  (stop [this]
-    (assoc this :datasource nil)))
+  {:dbtype db-type :dbname "vanilla_default"})
 
 
 
-(defn setup-database [] (map->Database {:db-spec vanilla-db}))
 
 (defn populate-services
   [database]
@@ -124,12 +111,51 @@
     ;; Bootstrap any data needed in the DB at start
     (populate-services database)))
 
+
+(defrecord Database [db-spec                                ; configuration
+                     datasource]                            ; state
+
+  component/Lifecycle
+  (start [this]
+    (if datasource
+      this                                                  ; already initialized
+      (assoc this :datasource (jdbc/get-datasource db-spec))))
+
+  (stop [this]
+    (assoc this :datasource nil)))
+
+
+(defn database-exist?
+  "Runs a simple check to see if the vanilla_db file exists."
+  [database]
+  (prn "Database-exist? /////" (database :dbname))
+  ;(prn (str (.exists (jio/file "vanilla_db"))))
+  (.exists (jio/file (database :dbname))))
+
+
+
+(defn setup-database
+  "This is called by dashboard-clj.system to start the applications
+   connection to the database. Only creates a database when in dev mode
+   and when the vanilla_db has not been created."
+  [dev-mode?]
+  (prn "setup-db")
+  ;(prn (database-exist? vanilla-db))
+  (when (and (not (database-exist? vanilla-db)) dev-mode?)
+    (prn "Creating new db")
+    ;; If it does not exist, create it
+    (initialize-database vanilla-db))
+  ;; Create a Database component -- see component library
+  (map->Database {:db-spec vanilla-db}))
+
+
+
 ;;; REPL ME vvvvv ;;;
 (comment
 
-  (initialize-database vanilla-default) ;; Initialize this on database structure changes, push changes to repo
+  (initialize-database vanilla-default)                     ;; Initialize this on database structure changes, push changes to repo
 
-  (initialize-database vanilla-db) ;; Run this to create a local database for your app
+  (initialize-database vanilla-db)                          ;; Run this to create a local database for your app
 
   ())
 
@@ -156,7 +182,7 @@
     {:id         "1000"
      :keyword    "spectrum-traces"
      :name       "Spectrum"
-     :ret_type  "data-format/x-y"
+     :ret_type   "data-format/x-y"
      :read_fn    "vanilla.spectrum-traces-service/spectrum-traces"
      :doc_string "returns power over frequency"})
 
@@ -170,7 +196,7 @@
     {:id         "1000"
      :keyword    "spectrum-traces"
      :name       "Spectrum"
-     :ret_type  "data-format/x-y"
+     :ret_type   "data-format/x-y"
      :read_fn    "vanilla.spectrum-traces-service/spectrum-traces"
      :doc_string "returns power over frequency"})
 
@@ -338,10 +364,10 @@
                    ":chart" ":spectrum-traces" ":area-chart"
                    "\"/images/area-widget.png\"" "\"Area\"" "{:x 0, :y 0, :w 4, :h 14}"
                    "#:viz{:style-name \"widget\", :animation false, :x-title \"frequency\", :banner-text-color {:r 255, :g 255, :b 255, :a 1}, :title \"Channels (area)\", :allowDecimals false, :banner-color {:r 0, :g 0, :b 255, :a 1}, :y-title \"power\", :tooltip {:followPointer true}}"]
-                 ["213" "APaine" ":bubble-widget" "[:data-format/x-y-n]"
-                  ":chart" ":bubble-service" ":bubble-chart"
-                  "\"/images/bubble-widget.png\"" "\"Bubble\"" "{:x 4, :y 0, :w 5, :h 15}"
-                  "#:viz{:animation false, :labelFormat \"{point.name}\", :banner-text-color {:r 255, :g 255, :b 255, :a 1}, :title \"Bubble\", :dataLabels true, :lineWidth 0, :data-labels true, :banner-color {:r 0, :g 0, :b 255, :a 1}, :tooltip {:followPointer true}}"]]})
+                  ["213" "APaine" ":bubble-widget" "[:data-format/x-y-n]"
+                   ":chart" ":bubble-service" ":bubble-chart"
+                   "\"/images/bubble-widget.png\"" "\"Bubble\"" "{:x 4, :y 0, :w 5, :h 15}"
+                   "#:viz{:animation false, :labelFormat \"{point.name}\", :banner-text-color {:r 255, :g 255, :b 255, :a 1}, :title \"Bubble\", :dataLabels true, :lineWidth 0, :data-labels true, :banner-color {:r 0, :g 0, :b 255, :a 1}, :tooltip {:followPointer true}}"]]})
 
   (delete-all-layouts! vanilla-db)
 
@@ -364,12 +390,12 @@
 
 
   (create-new-user!
-    vanilla-db "Jeff" "321")      ;; This does not work, don't try to do this
+    vanilla-db "Jeff" "321")                                ;; This does not work, don't try to do this
 
   (create-new-user!
     vanilla-db
     {:username "chad"
-     :pass "123"})
+     :pass     "123"})
 
   (get-user vanilla-db {:username "chad"})
   (get-users vanilla-db)
