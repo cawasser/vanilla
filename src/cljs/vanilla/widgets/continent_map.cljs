@@ -5,18 +5,18 @@
 (defn plot-options
   [chart-config data options]
 
-  ;(.log js/console (str "column/plot-options " chart-config))
+  ;(prn "column/plot-options " chart-config)
 
-  {:plotOptions {:series {:animation (:viz/animation options false)}
-                 :bar    {:dataLabels   {:enabled (get options :viz/dataLabels false)
-                                         :format  (get options :viz/labelFormat "")}
-                          :pointPadding 0.2}}
-   :mapNavigation {:enabled true
+  {:plotOptions   {:series {:animation (:viz/animation options false)}
+                   :bar    {:dataLabels   {:enabled (get options :viz/dataLabels false)
+                                           :format  (get options :viz/labelFormat "")}
+                            :pointPadding 0.2}}
+   :mapNavigation {:enabled       true
                    :buttonOptions {:verticalAlign "bottom"}}
 
-   :colorAxis {:min 0}
+   :colorAxis     {:min 0}
 
-   :series []})
+   :series        []})
 
 
 
@@ -26,14 +26,14 @@
 ;
 (defn register-type []
   (mm/register-type
-    :continent-map {:chart-options {:chart/type              :continent-map
-                                    :chart/supported-formats [:data-format/cont-n]
-                                    :chart                   {:map "custom/world-continents"
-                                                              :zoomType "x"}
-                                    :yAxis                   {:title  {:align "high"}
-                                                              :labels {:overflow "justify"}}}
+    :continent-map {:chart-options     {:chart/type              :continent-map
+                                        :chart/supported-formats [:data-format/cont-n]
+                                        :chart                   {:map      "custom/world-continents"
+                                                                  :zoomType "x"}
+                                        :yAxis                   {:title  {:align "high"}
+                                                                  :labels {:overflow "justify"}}}
 
-                :merge-plot-option {:default plot-options}
+                    :merge-plot-option {:default plot-options}
 
-                :conversions       {:default mm/default-conversion}}))
+                    :conversions       {:default mm/default-conversion}}))
 

@@ -4,16 +4,16 @@
 (defn plot-options
   [chart-config data options]
 
-  ;(.log js/console (str "column/plot-options " chart-config))
+  ;(.prn "column/plot-options " chart-config)
 
-  {:plotOptions {:series {:animation (:viz/animation options false)}
-                 :bar    {:dataLabels   {:enabled (get options :viz/dataLabels false)
-                                         :format  (get options :viz/labelFormat "")}
-                          :pointPadding 0.2}}
-   :mapNavigation {:enabled true
+  {:plotOptions   {:series {:animation (:viz/animation options false)}
+                   :bar    {:dataLabels   {:enabled (get options :viz/dataLabels false)
+                                           :format  (get options :viz/labelFormat "")}
+                            :pointPadding 0.2}}
+   :mapNavigation {:enabled       true
                    :buttonOptions {:verticalAlign "bottom"}}
 
-   :series []})
+   :series        []})
 
 
 
@@ -23,12 +23,12 @@
 ;
 (defn register-type []
   (mm/register-type
-    :australia-map {:chart-options {:chart/type              :australia-map
-                                    :chart/supported-formats [:data-format/lat-lon-label]
-                                    :chart                   {:map "countries/au/au-all"
-                                                              :zoomType "x"}
-                                    :yAxis                   {:title  {:align "high"}
-                                                              :labels {:overflow "justify"}}}
+    :australia-map {:chart-options     {:chart/type              :australia-map
+                                        :chart/supported-formats [:data-format/lat-lon-label]
+                                        :chart                   {:map      "countries/au/au-all"
+                                                                  :zoomType "x"}
+                                        :yAxis                   {:title  {:align "high"}
+                                                                  :labels {:overflow "justify"}}}
 
                     :merge-plot-option {:default plot-options}
 
