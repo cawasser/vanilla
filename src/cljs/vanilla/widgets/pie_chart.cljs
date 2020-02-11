@@ -11,10 +11,16 @@
 
   ;(.log js/console (str "pie/plot-options " chart-config))
 
-  {:plotOptions {:series {:animation (:viz/animation options false)}
+  {
+   :legend      {:align         "right"
+                 :verticalAlign "top"
+                 :layout        "vertical"}
+
+   :plotOptions {:series {:animation (:viz/animation options false)}
                  :pie    {:allowPointSelect true
                           :dataLabels       {:enabled (get options :viz/dataLabels false)
-                                             :format  (get options :viz/labelFormat "")}}}})
+                                             :format  (get options :viz/labelFormat "")}
+                          :showInLegend true}}})
 
 
 
@@ -60,7 +66,9 @@
                                     :chart/supported-formats [:data-format/label-y]
                                     :chart                   {:type  "pie"
                                                               :style {:labels {:fontFamily "monospace"
-                                                                               :color      "#FFFFFF"}}}}
+                                                                               :color      "#FFFFFF"}}}
+                                    :yAxis                   {:title  {:align "high"}
+                                                              :labels {:overflow "justify"}}}
 
                 :merge-plot-option {:default plot-options}
 

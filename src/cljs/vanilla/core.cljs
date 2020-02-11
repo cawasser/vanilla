@@ -3,12 +3,16 @@
     [reagent.core :as r]
     [re-frame.core :as rf]
     [dashboard-clj.core :as d]
-    [vanilla.events]
     [vanilla.subscriptions :as subs]
     [vanilla.widget-defs :as defs]
     [ajax.core :refer [GET POST] :as ajax]
+    [cljs-uuid-utils.core :as uuid]
+
+    [day8.re-frame.tracing :refer-macros [fn-traced]]
 
     [vanilla.add-widget-modal :as modal]
+    [vanilla.widgets.configure-widget :as wc]
+    [vanilla.login-modal :as login]
 
     [vanilla.grid :as grid]
 
@@ -35,34 +39,36 @@
 
 (enable-console-print!)
 
+(rf/reg-event-db
+  :initialize
+  (fn-traced
+    [db _]
+    (prn (str ":initialize handler "))
+    (merge db {:data-sources {}
+               :hc-type {}
+               ;:chosen-bg-color {:r 150 :g 150 :b 150 :a 1.0}
+               ;:chosen-txt-color "white"
+               :configure-widget ""})))
+
+(rf/reg-event-db
+  :widget-type
+  (fn-traced [db [_ widget]]
+             ;(prn (str ":widget-type " widget))
+             (assoc-in db [:widget-types (:name widget)] widget)))
 
 
-
-;;;;;;;;;;;;;;;;;;;;;
-;
-; HACK
-;
-; TODO - remove dummy "new-widget" stuff
-
-(def next-widget-idx (atom 0))
-
-(defn add-canned-widget [])
-  ;(let [rand-widget (get defs/widgets @next-widget-idx)]
-  ;
-  ;  ;(prn "add-canned-widget " rand-widget ", " @next-widget-idx, ", " (count defs/widgets))
-  ;
-  ;  (add-widget (grid/fixup-new-widget rand-widget))
-  ;  (if (< @next-widget-idx (dec (count defs/widgets)))
-  ;    (swap! next-widget-idx inc)
-  ;    (reset! next-widget-idx 0))))
+(rf/reg-event-db
+  :set-version
+  (fn-traced [db [_ version]]
+             ;(prn ":set-version " version)
+             (assoc db :version (:version version))))
 
 
-;;;;;;;;;;;;;;;;;;;;;
-;
-; END HACK
-
-
-(enable-console-print!)
+(rf/reg-event-db
+  :set-services
+  (fn-traced [db [_ services]]
+             ;(prn ":set-services " services)
+             (assoc db :services (:services services))))
 
 
 
@@ -93,10 +99,11 @@
                    :handler         #(rf/dispatch-sync [:set-version %])}))
 
 
-
 (def width 1536)
 (def height 1024)
 (def rows 50)
+
+
 (defn- widgets-grid []
   [grid/Grid {:id          "dashboard-widget-grid"
               :cols        {:lg 12 :md 10 :sm 6 :xs 4 :xxs 2}
@@ -109,19 +116,37 @@
 
 
 
-(defn home-page []
+
+(defn top-right-buttons
+  "Determine whether buttons in the top right of the dashboard show either:
+  - A login button
+  - An add widget button alongside a logout button"
+  []
+  (if (some? @(rf/subscribe [:get-current-user]))
+    [:div.level-right.has-text-right
+     [modal/add-widget-button]
+     [login/logout-button]]
+    [:div.level-right.has-text-right
+     [login/login-button]]))
+
+(defn home-page
+  "This is the start of the UI for our SPA"
+  []
   [:div {:width "100%"}
    [:div.container
     [:div.content {:width "100%"}
-     [modal/version-number]]]
+     [:div.container.level.is-fluid {:width "100%"}
+      [:div.level-left.has-text-left
+       [wc/change-header (rf/subscribe [:configure-widget])]
+       [modal/version-number]]
+      [top-right-buttons]]]]
    [widgets-grid]])
 
 
 
-(defn start-dashboard []
-
-  ;(prn  "calling :next-id ")
-  (rf/dispatch-sync [:next-id 1])
+(defn start-dashboard
+  "Initialize all the data needed for the start of our SPA, ends by calling the UI to generate"
+  []
 
   ;(prn "calling :initialize")
   (rf/dispatch-sync [:initialize])
@@ -154,6 +179,7 @@
     (rf/dispatch-sync [:widget-type w]))
 
   (d/connect-to-data-sources)
+
   (r/render home-page (.getElementById js/document "app")))
 
 

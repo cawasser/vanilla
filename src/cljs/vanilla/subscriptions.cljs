@@ -50,6 +50,7 @@
   (rf/reg-sub
     :app-db
     (fn [db [sid & db-path]]
+      ;(prn ":app-db " db-path)
       (get-in db (flatten [:data-sources db-path])))))
 
 
@@ -65,13 +66,21 @@
 
 (rf/reg-sub
   :selected-service
-  (fn [db [_ type]]
-    ;(prn ":selected-service subscription " type)
+  (fn [db [_]]
+    ;(prn ":selected-service subscription ")
     (get db :selected-service)))
 
 (rf/reg-sub
-  :selected-new-widget-type
-  (fn [db [_ type]]
-    ;(prn ":selected-new-widget-type subscription " type)
-    (get db :selected-new-widget-type)))
+  :selected-widget
+  (fn [db [_]]
+    (prn ":selected-widget subscription ")
+    (get db :selected-widget)))
+
+
+; Login stuff
+
+(rf/reg-sub
+  :get-current-user
+  (fn [db _]
+    (get db :current-user)))
 
