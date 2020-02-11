@@ -1,18 +1,9 @@
-(ns vanilla.widgets.make-chart
+(ns vanilla.widgets.make-map
   (:require [reagent.core :as reagent]
             [re-frame.core :as rf]
-            [day8.re-frame.tracing :refer-macros [fn-traced]]
             [vanilla.widgets.util :as util]))
 
-
 (declare default-conversion)
-
-
-(rf/reg-event-db
-  :register-hc-type
-  (fn-traced [db [_ type type-fn]]
-             ;(prn "registering highcharts type " type)
-             (assoc-in db [:hc-type type] type-fn)))
 
 ;;;;;;;;;;;;;;;;;
 ;
@@ -152,8 +143,8 @@
               (assoc all
                 :keys (conj keys n-name)
                 :data (into []
-                        (for [[x y] data]
-                          [x y default-n]))))]
+                            (for [[x y] data]
+                              [x y default-n]))))]
 
     ;(prn "add-the-n-conversion (from)" data
     ;  " //// (series) " series
@@ -180,20 +171,17 @@
 
 
 
-
 (defn make-chart
   "creates the correct reagent 'hiccup' and react/class to implement a
   Highcharts.js UI component that can be embedded inside any valid hiccup"
 
   [chart-config data options]
 
-  ;(prn " entering make-chart " chart-config)
-
   (let [dom-node        (reagent/atom nil)
         chart-type      (-> chart-config :chart-options :chart/type)
         chart-reg-entry @(rf/subscribe [:hc-type chart-type])]
 
-    ;(prn "make-chart " chart-type
+    ;(prn "MAKE-chart " chart-type
     ;  " //// (chart-config)" chart-config
     ;  " ////// (chart-reg-entry)" chart-reg-entry)
 
@@ -224,27 +212,5 @@
              " //// base-config " base-config
              " //// (all-config)" all-configs)
 
-           (js/Highcharts.Chart. (reagent/dom-node this)
-             (clj->js all-configs))))})))
-
-;;;;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;;;;
-
-(comment
-
-  {:chart-options {:chart/type :dependency-chart,
-                   :chart/supported-formats [:data-format/from-to-n :data-format/from-to-e :data-format/from-to],
-                   :chart {:type "dependencywheel"},
-                   :plot-options {:dataLabels {:color "#333",
-                                               :textPath {:enabled true, :attributes {:dy 5}},
-                                               :distance 10},
-                                  :size "95%"}},
-   :merge-plot-option {:default ""},
-   :conversions {:default "",
-                 :data-format/from-to ""}}
-
-  ())
+           (js/Highcharts.mapChart. (reagent/dom-node this)
+                                 (clj->js all-configs))))})))

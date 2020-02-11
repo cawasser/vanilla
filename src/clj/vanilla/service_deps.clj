@@ -53,7 +53,12 @@
     :read-fn  :vanilla.current-time-service/fetch-data}
 
    {:name :table-service
-    :read-fn :vanilla.table-service/fetch-data}])
+    :read-fn :vanilla.table-service/fetch-data}
+
+   {:name :continent-map-service
+    :read-fn :vanilla.continent-map-service/fetch-data}
+   {:name :australia-map-service
+    :read-fn :vanilla.australia-map-service/fetch-data}])
    ;:params   []
    ;:schedule {:in    [0 :seconds]
    ;           :every [5 :seconds]}}])

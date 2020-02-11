@@ -71,6 +71,32 @@
                            :viz/style-name   "widget"
                            :viz/tooltip      {:followPointer true}}}
 
+              {:name      :continent-map-widget
+               :basis     :map
+               :type      :continent-map
+               :ret_types [:data-format/cont-n]
+               :icon      "/images/map-widget.png"
+               :label     "Continent Map"
+               :options   {:viz/title        "Continents (map)"
+                           :viz/banner-color {:r 0xd2 :g 0xbf :b 0xd8 :a 1}
+                           :viz/line-width   0.5
+                           :viz/animation    false
+                           :viz/style-name   "widget"
+                           :viz/tooltip      {:followPointer true}}}
+
+              {:name      :australia-map-widget
+               :basis     :map
+               :type      :australia-map
+               :ret_types [:data-format/lat-lon-label]
+               :icon      "/images/map-widget.png"
+               :label     "Australia Map"
+               :options   {:viz/title        "Australia (map)"
+                           :viz/banner-color {:r 0xd2 :g 0xbf :b 0xd8 :a 1}
+                           :viz/line-width   0.5
+                           :viz/animation    false
+                           :viz/style-name   "widget"
+                           :viz/tooltip      {:followPointer true}}}
+
               {:name      :bubble-widget
                :basis     :chart
                :type      :bubble-chart

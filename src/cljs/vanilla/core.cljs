@@ -30,7 +30,9 @@
     [vanilla.widgets.rose-chart]
     [vanilla.widgets.sankey-chart]
     [vanilla.widgets.scatter-chart]
-    [vanilla.widgets.vari-pie-chart]))
+    [vanilla.widgets.vari-pie-chart]
+    [vanilla.widgets.continent-map]
+    [vanilla.widgets.australia-map]))
 
 
 
@@ -170,6 +172,8 @@
   (vanilla.widgets.sankey-chart/register-type)
   (vanilla.widgets.scatter-chart/register-type)
   (vanilla.widgets.vari-pie-chart/register-type)
+  (vanilla.widgets.continent-map/register-type)
+  (vanilla.widgets.australia-map/register-type)
 
   (doseq [w defs/widgets]
     (rf/dispatch-sync [:widget-type w]))

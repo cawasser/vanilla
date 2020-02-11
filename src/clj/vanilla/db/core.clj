@@ -89,7 +89,15 @@
 
       ["12000" "table-service" "Data Table"
        "data-format/entities" "vanilla.table-service/fetch-data"
-       "returns users' info"]]}))
+       "returns users' info"]
+
+      ["13000" "continent-map-service" "Continent Data"
+       "data-format/cont-n" "vanilla.continent-map-service/fetch-data"
+       "returns tons of fruit produced per continent"]
+
+      ["14000" "australia-map-service" "Australia Data"
+       "data-format/lat-lon-label" "vanilla.australia-map-service/fetch-data"
+       "returns location of various cities in Australia"]]}))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -216,15 +224,19 @@
 
       ["12000" "table-service" "Data Table"
        "data-format/entities" "vanilla.table-service/fetch-data"
-       "returns users' info"]]})
+       "returns users' info"]
+
+      ["14000" "australia-map-service" "Australia Data"
+       "data-format/lat-lon-label" "vanilla.australia-map-service/fetch-data"
+       "returns location of various cities in Australia"]]})
 
 
   (create-services!
     vanilla-db
     {:services
-     [["9999" "bubble-service" "Bubble Data"
-       "data-format/x-y-n" "vanilla.bubble-service/fetch-data"
-       "returns x-y-n data for Fruits, Countries and MLB teams"]]})
+     [["14000" "australia-map-service" "Australia Data"
+       "data-format/lat-lon-label" "vanilla.australia-map-service/fetch-data"
+       "returns location of various cities in Australia"]]})
   (create-services!-sqlvec
     vanilla-db
     {:services
@@ -232,7 +244,7 @@
        "data-format/x-y-n" "vanilla.bubble-service/fetch-data"
        "returns x-y-n data for Fruits, Countries and MLB teams"]]})
 
-  (delete-service! vanilla-db {:id "9999"})
+  (delete-service! vanilla-db {:id "13000"})
 
   (get-services vanilla-db)
 
