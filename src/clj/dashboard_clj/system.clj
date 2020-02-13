@@ -6,13 +6,14 @@
             [taoensso.sente.server-adapters.http-kit      :refer [sente-web-server-adapter]]
             [com.stuartsierra.component :as component]
             [clojure.tools.nrepl.server :as nrepl]
-            [vanilla.db.core :as db]))
+            [vanilla.db.core :as db]
+            [clojure.tools.logging :as log]))
 
 
 (defn ->system [http-port nrepl nrepl-port data-sources]
   (if nrepl
     (do
-      (prn "starting with nrepl")
+      (log/info "starting with nrepl")
       (component/system-map
        :websocket (websocket/new-websocket-server data-sources sente-web-server-adapter {})
        :server (component/using (webserver/new-webserver routes/->http-handler http-port) [:websocket])

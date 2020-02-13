@@ -16,14 +16,15 @@
               [vanilla.table-service]
               [vanilla.continent-map-service]
               [vanilla.australia-map-service]
-              [vanilla.service-deps :as deps])
+              [vanilla.service-deps :as deps]
+              [clojure.tools.logging :as log])
 
     (:gen-class))
 
 
 
 (defn start-dashboard[]
-  (prn "server starting")
+  (log/info "server starting")
   (dash/start deps/datasources))
 
 (defn -main [& [port]]

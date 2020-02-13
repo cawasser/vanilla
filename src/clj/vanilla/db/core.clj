@@ -152,7 +152,7 @@
     {:id         "1000"
      :keyword    "spectrum-traces"
      :name       "Spectrum"
-     :ret_type  "data-format/x-y"
+     :ret_type   "data-format/x-y"
      :read_fn    "vanilla.spectrum-traces-service/spectrum-traces"
      :doc_string "returns power over frequency"})
 
@@ -166,7 +166,7 @@
     {:id         "1000"
      :keyword    "spectrum-traces"
      :name       "Spectrum"
-     :ret_type  "data-format/x-y"
+     :ret_type   "data-format/x-y"
      :read_fn    "vanilla.spectrum-traces-service/spectrum-traces"
      :doc_string "returns power over frequency"})
 
@@ -333,15 +333,15 @@
   (save-layout! vanilla-db {:layout test1})
 
   (save-layout! vanilla-db
-                {:layout
-                 [["123" "APaine" ":area-widget" "[:data-format/x-y]"
-                   ":chart" ":spectrum-traces" ":area-chart"
-                   "\"/images/area-widget.png\"" "\"Area\"" "{:x 0, :y 0, :w 4, :h 14}"
-                   "#:viz{:style-name \"widget\", :animation false, :x-title \"frequency\", :banner-text-color {:r 255, :g 255, :b 255, :a 1}, :title \"Channels (area)\", :allowDecimals false, :banner-color {:r 0, :g 0, :b 255, :a 1}, :y-title \"power\", :tooltip {:followPointer true}}"]
-                 ["213" "APaine" ":bubble-widget" "[:data-format/x-y-n]"
-                  ":chart" ":bubble-service" ":bubble-chart"
-                  "\"/images/bubble-widget.png\"" "\"Bubble\"" "{:x 4, :y 0, :w 5, :h 15}"
-                  "#:viz{:animation false, :labelFormat \"{point.name}\", :banner-text-color {:r 255, :g 255, :b 255, :a 1}, :title \"Bubble\", :dataLabels true, :lineWidth 0, :data-labels true, :banner-color {:r 0, :g 0, :b 255, :a 1}, :tooltip {:followPointer true}}"]]})
+    {:layout
+     [["123" "APaine" ":area-widget" "[:data-format/x-y]"
+       ":chart" ":spectrum-traces" ":area-chart"
+       "\"/images/area-widget.png\"" "\"Area\"" "{:x 0, :y 0, :w 4, :h 14}"
+       "#:viz{:style-name \"widget\", :animation false, :x-title \"frequency\", :banner-text-color {:r 255, :g 255, :b 255, :a 1}, :title \"Channels (area)\", :allowDecimals false, :banner-color {:r 0, :g 0, :b 255, :a 1}, :y-title \"power\", :tooltip {:followPointer true}}"]
+      ["213" "APaine" ":bubble-widget" "[:data-format/x-y-n]"
+       ":chart" ":bubble-service" ":bubble-chart"
+       "\"/images/bubble-widget.png\"" "\"Bubble\"" "{:x 4, :y 0, :w 5, :h 15}"
+       "#:viz{:animation false, :labelFormat \"{point.name}\", :banner-text-color {:r 255, :g 255, :b 255, :a 1}, :title \"Bubble\", :dataLabels true, :lineWidth 0, :data-labels true, :banner-color {:r 0, :g 0, :b 255, :a 1}, :tooltip {:followPointer true}}"]]})
 
   (delete-all-layouts! vanilla-db)
 
@@ -364,21 +364,21 @@
 
 
   (create-new-user!
-    vanilla-db "Jeff" "321")      ;; This does not work, don't try to do this
+    vanilla-db "Jeff" "321")                                ;; This does not work, don't try to do this
 
   (create-new-user!
     vanilla-db
     {:username "chad"
-     :pass "123"})
+     :pass     "123"})
 
   (get-user vanilla-db {:username "chad"})
   (get-users vanilla-db)
 
   (verify-credentials vanilla-db
-                      {:username "chad" :pass "123"})
+    {:username "chad" :pass "123"})
 
   (verify-credentials vanilla-db
-                      {:username "chad" :pass "321"})
+    {:username "chad" :pass "321"})
 
 
   (drop-users-table vanilla-db)
@@ -391,13 +391,13 @@
 
 
   (defn y-conversion [chart-type d options]
-    (let [s (get-in d [:data :series])
+    (let [s   (get-in d [:data :series])
           ret (for [{:keys [name data]} s]
                 (assoc {}
                   :name name
                   :data (into []
-                              (for [x-val (range 0 (count data))]
-                                [x-val (get data x-val)]))))]
+                          (for [x-val (range 0 (count data))]
+                            [x-val (get data x-val)]))))]
 
       (prn "y-conversion " ret)
       (into [] ret)))
