@@ -43,8 +43,8 @@
                ;:data-source :current-time
                :ret_types   [:data-format/string]
                :icon        "/images/simple-text-widget.png"
-               :label       "Current Time"
-               :options     {:viz/title        "Time"
+               :label       "Text"
+               :options     {:viz/title        "Text"
                              :viz/banner-color {:r 0x00 :g 0xff :b 0xff :a 1}}}
 
               {:name      :table-widget
