@@ -2964,8 +2964,9 @@ net.brehaut.ClojureTools = (function (SH) {
   (let [data-sources (map #(ds/new-data-source %) ds-maps)
         port (Integer. (or (environment :port) 5000))
         nrepl (not (environment :prod))
-        nrepl-port (Integer. (or (environment :nrepl-port) 7000))]
-    (system/start port nrepl nrepl-port data-sources)))</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#dashboard-clj.data-source" name="dashboard-clj.data-source"><h1 class="project-name">dashboard-clj.data-source</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs">
+        nrepl-port (Integer. (or (environment :nrepl-port) 7000))
+        dev-mode? (environment :dev)]
+    (system/start port nrepl nrepl-port data-sources dev-mode?)))</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#dashboard-clj.data-source" name="dashboard-clj.data-source"><h1 class="project-name">dashboard-clj.data-source</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(ns dashboard-clj.data-source
   (:require [clojure.core.async :as async]))</pre></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(declare resolve-fn)
@@ -3101,7 +3102,7 @@ net.brehaut.ClojureTools = (function (SH) {
             [com.stuartsierra.component :as component]
             [clojure.tools.nrepl.server :as nrepl]
             [vanilla.db.core :as db]))</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defn -&gt;system [http-port nrepl nrepl-port data-sources]
+</td><td class="codes"><pre class="brush: clojure">(defn -&gt;system [http-port nrepl nrepl-port data-sources dev-mode?]
   (if nrepl
     (do
       (prn &quot;starting with nrepl&quot;)
@@ -3110,15 +3111,15 @@ net.brehaut.ClojureTools = (function (SH) {
        :server (component/using (webserver/new-webserver routes/-&gt;http-handler http-port) [:websocket])
        :scheduler (scheduler/new-scheduler data-sources)
        :nrepl (nrepl/start-server :port nrepl-port)
-       :database (db/setup-database)))
+       :database (db/setup-database dev-mode?)))
     ; don't start an nrepl
     (component/system-map
       :websocket (websocket/new-websocket-server data-sources sente-web-server-adapter {})
       :server (component/using (webserver/new-webserver routes/-&gt;http-handler http-port) [:websocket])
       :scheduler (scheduler/new-scheduler data-sources)
-      :database (db/setup-database))))</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defn start [http-port nrepl nrepl-port data-sources]
-  (component/start (-&gt;system http-port nrepl nrepl-port data-sources)))</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#dashboard-clj.widget" name="dashboard-clj.widget"><h1 class="project-name">dashboard-clj.widget</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs">
+      :database (db/setup-database dev-mode?))))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn start [http-port nrepl nrepl-port data-sources dev-mode?]
+  (component/start (-&gt;system http-port nrepl nrepl-port data-sources dev-mode?)))</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#dashboard-clj.widget" name="dashboard-clj.widget"><h1 class="project-name">dashboard-clj.widget</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(ns dashboard-clj.widget)</pre></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(defmacro widget [name widget]
   '(regsiter-widget name widget))</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#vanilla.australia-map-service" name="vanilla.australia-map-service"><h1 class="project-name">vanilla.australia-map-service</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs">
@@ -3252,23 +3253,20 @@ net.brehaut.ClojureTools = (function (SH) {
     [hugsql.core :as hugsql]
     [next.jdbc :as jdbc]
     [next.jdbc.sql :as sql]
-    [com.stuartsierra.component :as component]))</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(hugsql/def-db-fns &quot;sql/queries.sql&quot;)</pre></td></tr><tr><td class="docs"><p>SQLite database connection spec.</p>
+    [com.stuartsierra.component :as component]
+    [clojure.java.io :as jio]
+    [clojure.tools.logging :as log]))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(hugsql/def-db-fns &quot;sql/queries.sql&quot;)</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(def db-type &quot;sqlite&quot;)</pre></td></tr><tr><td class="docs"><p>SQLite database connection spec.</p>
+
+<p>This database is stored locally. It is considered our "working" or dev db
+This should not be pushed to the repo or AWS, it will be added to git ignore</p>
 </td><td class="codes"><pre class="brush: clojure">(def vanilla-db
-  {:dbtype &quot;sqlite&quot; :dbname &quot;vanilla_db&quot;})</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defrecord Database [db-spec                                ; configuration
-                     datasource]                            ; state
-  component/Lifecycle
-  (start [this]
-    (if datasource
-      this                                                  ; already initialized
-      (assoc this :datasource (jdbc/get-datasource db-spec))))
-  (stop [this]
-    (assoc this :datasource nil)))</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defn setup-database [] (map-&gt;Database {:db-spec vanilla-db}))</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defn populate-services []
+  {:dbtype db-type :dbname &quot;vanilla_db&quot;})</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn populate-services
+  [database]
   (create-services!
-    vanilla-db
+    database
     {:services
      [[&quot;1000&quot; &quot;spectrum-traces&quot; &quot;Spectrum Traces&quot;
        &quot;data-format/x-y&quot; &quot;vanilla.spectrum-traces-service/spectrum-traces&quot;
@@ -3313,24 +3311,53 @@ net.brehaut.ClojureTools = (function (SH) {
        &quot;data-format/lat-lon-label&quot; &quot;vanilla.australia-map-service/fetch-data&quot;
        &quot;returns location of various cities in Australia&quot;]]}))</pre></td></tr><tr><td class="docs"><p>INITIAL DB SETUP FUNCTION</p>
 
-<p>not called anywhere in the app
-run in the repl to create fresh db tables populated accordingly</p>
-</td><td class="codes"><pre class="brush: clojure">(defn initialize-database []
+<p>run in the repl to create fresh db tables populated accordingly</p>
+</td><td class="codes"><pre class="brush: clojure">(defn initialize-database
+  [database]
   (do
     ;; Remove any current tables to start fresh
-    (drop-services-table vanilla-db)
-    (drop-layout-table vanilla-db)
-    (drop-users-table vanilla-db)
+    (drop-services-table database)
+    (drop-layout-table database)
+    (drop-users-table database)
     ;; Create new empty versions of the tables
-    (create-services-table vanilla-db)
-    (create-layout-table vanilla-db)
-    (create-user-table vanilla-db)
+    (create-services-table database)
+    (create-layout-table database)
+    (create-user-table database)
     ;; Bootstrap any data needed in the DB at start
-    (populate-services)))</pre></td></tr><tr><td class="docs"><p>REPL ME vvvvv ;;;</p>
+    (populate-services database)))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defrecord Database [db-spec                                ; configuration
+                     datasource]                            ; state
+  component/Lifecycle
+  (start [this]
+    (if datasource
+      this                                                  ; already initialized
+      (assoc this :datasource (jdbc/get-datasource db-spec))))
+  (stop [this]
+    (assoc this :datasource nil)))</pre></td></tr><tr><td class="docs"><p>Runs a simple check to see if the vanilla_db file exists.</p>
+</td><td class="codes"><pre class="brush: clojure">(defn database-exist?
+  [database]
+  ;(prn &quot;Database-exist? /////&quot; (database :dbname))
+  ;(prn (str (.exists (jio/file &quot;vanilla_db&quot;))))
+  (.exists (jio/file (database :dbname))))</pre></td></tr><tr><td class="docs"><p>This is called by dashboard-clj.system to start the applications
+   connection to the database. Only creates a database when in dev mode
+   and when the vanilla_db has not been created.</p>
+</td><td class="codes"><pre class="brush: clojure">(defn setup-database
+  [dev-mode?]
+  (when (and (not (database-exist? vanilla-db)) dev-mode?)
+    ;; If it does not exist, create it
+    (initialize-database vanilla-db)
+    (log/info &quot;creating startup database: VANILLA_DB&quot;))
+  ;; Create a Database component -- see component library
+  (map-&gt;Database {:db-spec vanilla-db}))</pre></td></tr><tr><td class="docs"><p>SQLite database connection spec.</p>
+
+<p>REPL ME WHEN DATABASE STRUCTURE CHANGES ;;;</p>
 </td><td class="codes"><pre class="brush: clojure">(comment
-
-  (initialize-database)
-
+  ;; The following is the deployed database that is pushed to the repo and to AWS
+  ;; It is not called by any of our production code, so it is in this comment block
+  (def vanilla-default
+    {:dbtype db-type :dbname &quot;vanilla_default&quot;})
+  (initialize-database vanilla-default)                     ;; Initialize this on database structure changes, push changes to repo
+  (initialize-database vanilla-db)                          ;; Run this to create a local database for your app
   ())</pre></td></tr><tr><td class="docs"><p>COMMENTS ;;;;</p>
 </td><td class="codes"></td></tr><tr><td class="docs"><p>Services table rich comment</p>
 </td><td class="codes"><pre class="brush: clojure">(comment
@@ -3349,7 +3376,7 @@ run in the repl to create fresh db tables populated accordingly</p>
     {:id         &quot;1000&quot;
      :keyword    &quot;spectrum-traces&quot;
      :name       &quot;Spectrum&quot;
-     :ret_type  &quot;data-format/x-y&quot;
+     :ret_type   &quot;data-format/x-y&quot;
      :read_fn    &quot;vanilla.spectrum-traces-service/spectrum-traces&quot;
      :doc_string &quot;returns power over frequency&quot;})
 
@@ -3363,7 +3390,7 @@ run in the repl to create fresh db tables populated accordingly</p>
     {:id         &quot;1000&quot;
      :keyword    &quot;spectrum-traces&quot;
      :name       &quot;Spectrum&quot;
-     :ret_type  &quot;data-format/x-y&quot;
+     :ret_type   &quot;data-format/x-y&quot;
      :read_fn    &quot;vanilla.spectrum-traces-service/spectrum-traces&quot;
      :doc_string &quot;returns power over frequency&quot;})
 
@@ -3532,10 +3559,10 @@ run in the repl to create fresh db tables populated accordingly</p>
                    &quot;:chart&quot; &quot;:spectrum-traces&quot; &quot;:area-chart&quot;
                    &quot;\&quot;/images/area-widget.png\&quot;&quot; &quot;\&quot;Area\&quot;&quot; &quot;{:x 0, :y 0, :w 4, :h 14}&quot;
                    &quot;#:viz{:style-name \&quot;widget\&quot;, :animation false, :x-title \&quot;frequency\&quot;, :banner-text-color {:r 255, :g 255, :b 255, :a 1}, :title \&quot;Channels (area)\&quot;, :allowDecimals false, :banner-color {:r 0, :g 0, :b 255, :a 1}, :y-title \&quot;power\&quot;, :tooltip {:followPointer true}}&quot;]
-                 [&quot;213&quot; &quot;APaine&quot; &quot;:bubble-widget&quot; &quot;[:data-format/x-y-n]&quot;
-                  &quot;:chart&quot; &quot;:bubble-service&quot; &quot;:bubble-chart&quot;
-                  &quot;\&quot;/images/bubble-widget.png\&quot;&quot; &quot;\&quot;Bubble\&quot;&quot; &quot;{:x 4, :y 0, :w 5, :h 15}&quot;
-                  &quot;#:viz{:animation false, :labelFormat \&quot;{point.name}\&quot;, :banner-text-color {:r 255, :g 255, :b 255, :a 1}, :title \&quot;Bubble\&quot;, :dataLabels true, :lineWidth 0, :data-labels true, :banner-color {:r 0, :g 0, :b 255, :a 1}, :tooltip {:followPointer true}}&quot;]]})
+                  [&quot;213&quot; &quot;APaine&quot; &quot;:bubble-widget&quot; &quot;[:data-format/x-y-n]&quot;
+                   &quot;:chart&quot; &quot;:bubble-service&quot; &quot;:bubble-chart&quot;
+                   &quot;\&quot;/images/bubble-widget.png\&quot;&quot; &quot;\&quot;Bubble\&quot;&quot; &quot;{:x 4, :y 0, :w 5, :h 15}&quot;
+                   &quot;#:viz{:animation false, :labelFormat \&quot;{point.name}\&quot;, :banner-text-color {:r 255, :g 255, :b 255, :a 1}, :title \&quot;Bubble\&quot;, :dataLabels true, :lineWidth 0, :data-labels true, :banner-color {:r 0, :g 0, :b 255, :a 1}, :tooltip {:followPointer true}}&quot;]]})
 
   (delete-all-layouts! vanilla-db)
 
@@ -3555,12 +3582,12 @@ run in the repl to create fresh db tables populated accordingly</p>
 
 
   (create-new-user!
-    vanilla-db &quot;Jeff&quot; &quot;321&quot;)      ;; This does not work, don't try to do this
+    vanilla-db &quot;Jeff&quot; &quot;321&quot;)                                ;; This does not work, don't try to do this
 
   (create-new-user!
     vanilla-db
     {:username &quot;chad&quot;
-     :pass &quot;123&quot;})
+     :pass     &quot;123&quot;})
 
   (get-user vanilla-db {:username &quot;chad&quot;})
   (get-users vanilla-db)
@@ -4302,10 +4329,10 @@ run in the repl to create fresh db tables populated accordingly</p>
     [:p.subtitle.is-7.has-text-centered label]]])</pre></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(defn widget-list [widgets s chosen-widget]
   (let [widget-cards (filter-widgets widgets s)]
-    (prn &quot;widget-list &quot; widgets
-      &quot; //// selected &quot; s
-      &quot; //// chosen-widget &quot; chosen-widget
-      &quot; //// cards &quot; widget-cards)
+    ;(prn &quot;widget-list &quot; widgets
+    ;;  &quot; //// selected &quot; s)
+    ;;  &quot; //// chosen-widget &quot; chosen-widget)
+    ;  &quot; //// cards &quot; widget-cards)
     [:table&gt;tbody
      [:tr
       (for [{:keys [name icon label]} widget-cards]
@@ -4410,7 +4437,7 @@ run in the repl to create fresh db tables populated accordingly</p>
 </td><td class="codes"><pre class="brush: clojure">(rf/reg-event-db
   :widget-type
   (fn-traced [db [_ widget]]
-             (prn (str &quot;:widget-type &quot; widget))
+             ;(prn (str &quot;:widget-type &quot; widget))
              (assoc-in db [:widget-types (:name widget)] widget)))</pre></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(rf/reg-event-db
   :set-version
@@ -4490,7 +4517,6 @@ run in the repl to create fresh db tables populated accordingly</p>
   (vanilla.widgets.vari-pie-chart/register-type)
   (vanilla.widgets.continent-map/register-type)
   (vanilla.widgets.australia-map/register-type)
-  (prn &quot;widget-def &quot; defs/widgets)
   (doseq [w defs/widgets]
     (rf/dispatch-sync [:widget-type w]))
   (d/connect-to-data-sources)
