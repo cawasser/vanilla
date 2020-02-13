@@ -29,9 +29,6 @@
 
 
 
-
-
-
 (defn populate-services
   [database]
   (create-services!
@@ -91,7 +88,11 @@
 
       ["14000" "australia-map-service" "Australia Data"
        "data-format/lat-lon-label" "vanilla.australia-map-service/fetch-data"
-       "returns location of various cities in Australia"]]}))
+       "returns location of various cities in Australia"]
+
+      ["15000" "edn-queue-service" "EDN Queue"
+       "data-format/string" "vanilla.edn-queue-source/start-listener"
+       "returns and messages published to the EDN Queue"]]}))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;

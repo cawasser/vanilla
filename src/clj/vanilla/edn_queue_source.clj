@@ -11,8 +11,7 @@
 (defn send-message [data]
   (log/info "sending edn-queue-source data UPDATE " data)
 
-  ; TODO: how do we hook into the websocket?
-  (ws/send-to-all! (ds/data->event :edn-queue-data data)))
+  (ws/send-to-all! (ds/data->event :edn-queue-service data)))
 
 
 

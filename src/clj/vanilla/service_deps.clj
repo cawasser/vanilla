@@ -8,7 +8,7 @@
    ;:schedule {:in    [0 :seconds]
    ;           :every [10 :seconds]}}
 
-   {:name    :edn-queue-data
+   {:name    :edn-queue-service
     :read-fn :vanilla.edn-queue-source/start-listener
     :params  ["my-exchange" "some.queue"]}
 
