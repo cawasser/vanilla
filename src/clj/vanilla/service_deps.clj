@@ -55,6 +55,8 @@
 
    {:name    :current-time
     :read-fn :vanilla.current-time-service/fetch-data}
+    ;:schedule {:in    [0 :seconds]
+    ;           :every [5 :seconds]}}
 
    {:name    :table-service
     :read-fn :vanilla.table-service/fetch-data}

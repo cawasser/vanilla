@@ -15,6 +15,7 @@
       (async/go
         (async/>! output-chan (data->event name new-data))))))
 
+
 (defn new-data-source [{:keys [name read-fn params schedule]}]
   (map->DataSource {
                     :name        name

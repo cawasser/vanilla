@@ -1,8 +1,10 @@
 (ns dashboard-clj.components.websocket
   (:require [com.stuartsierra.component :as component]
-    [taoensso.sente :as sente]
-    [clojure.core.async :as async]
-    [dashboard-clj.data-source :as ds]))
+            [taoensso.sente :as sente]
+            [clojure.core.async :as async]
+            [dashboard-clj.data-source :as ds]
+            [dashboard-clj.components.system :as system]
+            [clojure.tools.logging :as log]))
 
 (defmulti -client-ev-handler (fn [_ y] (:id y)))
 
@@ -27,7 +29,7 @@
   (start [component]
 
     (let [{:keys [ch-recv send-fn ajax-post-fn
-                  ajax-get-or-ws-handshake-fn connected-uids]} (sente/make-channel-socket-server! webserver-adapter options)
+                  ajax-get-or-ws-handshake-fn connected-uids] :as socket} (sente/make-channel-socket-server! webserver-adapter options)
           ch-out (async/chan (async/sliding-buffer 1000))
           mix-out (async/mix ch-out)]
 
@@ -37,7 +39,7 @@
       (async/go-loop []
         (let [event (async/<! ch-out)]
           (doseq [cid (:any @connected-uids)]
-            ;(prn "sending " event " to " cid)
+            (log/info "sending " event " to " cid)
             (send-fn cid event))
           (recur)))
 
@@ -46,6 +48,7 @@
         :ring-ajax-get-or-ws-handshake ajax-get-or-ws-handshake-fn
         :ch-recv ch-recv
         :chsk-send! send-fn
+        :socket socket
         :connected-uids connected-uids
         :router (sente/start-chsk-router! ch-recv
                   (partial handler {:data-sources data-sources
@@ -67,3 +70,17 @@
                          :handler           client-ev-handler
                          :webserver-adapter webserver-adapter
                          :options           options}))
+
+
+(defn send! [uid message]
+  (log/info "send! " message " to " uid)
+  ((get-in @system/system [:websocket :chsk-send!]) uid message))
+
+
+(defn send-to-all! [message]
+  (log/info "send-to-all! " message ", " @(get-in @system/system [:websocket :connected-uids]))
+
+  (doseq [cid (:any @(get-in @system/system [:websocket :connected-uids]))]
+    (log/info "====>> sending " message " to " cid)
+    (send! cid message)))
+
