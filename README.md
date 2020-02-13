@@ -18,6 +18,8 @@ This single-page application (SPA) provides a number of graphical widgets based 
 
 > 0.3.5-SNAPSHOT. Added World Map and Continental Australia map widgets.
 
+> 0.3.6-SNAPSHOT. Added "queue service" to show messages received from "my-exchange/some.queue" via RabbitMQ.
+>
 ## Roadmap
 
 ### Client-side
@@ -38,7 +40,7 @@ This single-page application (SPA) provides a number of graphical widgets based 
 ### Services-side
 - [x] login
 - [x] reload widgets on user login
-- [ ] RabitMQ support using [Bunnicula](https://github.com/nomnom-insights/nomnom.bunnicula)
+- [X] RabitMQ support using [Bunnicula](https://github.com/nomnom-insights/nomnom.bunnicula)
 - [ ] Kafka support
 
 ## Development
