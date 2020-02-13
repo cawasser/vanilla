@@ -4,7 +4,8 @@
     [next.jdbc :as jdbc]
     [next.jdbc.sql :as sql]
     [com.stuartsierra.component :as component]
-    [clojure.java.io :as jio]))
+    [clojure.java.io :as jio]
+    [clojure.tools.logging :as log]))
 
 
 
@@ -135,11 +136,11 @@
    connection to the database. Only creates a database when in dev mode
    and when the vanilla_db has not been created."
   [dev-mode?]
-  ;(prn "setup-db")
   (when (and (not (database-exist? vanilla-db)) dev-mode?)
-    ;(prn "Creating new db")
     ;; If it does not exist, create it
-    (initialize-database vanilla-db))
+    (initialize-database vanilla-db)
+    (log/info "creating startup database: VANILLA_DB"))
+
   ;; Create a Database component -- see component library
   (map->Database {:db-spec vanilla-db}))
 
