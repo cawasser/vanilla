@@ -1,7 +1,8 @@
 (ns vanilla.widgets.core
   (:require [re-frame.core :as rf]
             [vanilla.widgets.basic-widget :as basic]
-            [vanilla.widgets.make-chart :as mc]))
+            [vanilla.widgets.make-chart :as mc]
+            [vanilla.widgets.make-map :as mm]))
 
 (defn make-widget [name id chart-config]
 
@@ -18,6 +19,20 @@
      [:div {:style {:width "95%" :height "100%"}}
       [mc/make-chart chart-config data options]]]))
 
+(defn make-map-widget [name id chart-config]
+
+  ;(prn "make-widget " name "of type " id ", " chart-config)
+
+  (fn [data options]
+
+    ;(prn "in widget " id " / " name
+    ;  " //// data " data
+    ;  " //// options " options
+    ;  " //// chart-config " chart-config)
+
+    [basic/basic-widget name data options
+     [:div {:style {:width "95%" :height "100%"}}
+      [mm/make-chart chart-config data options]]]))
 
 
 
@@ -51,7 +66,9 @@
     (condp = basis
       :chart (make-widget key type chart-config)
 
-      :simple (make-simple-widget key type))))
+      :simple (make-simple-widget key type)
+
+      :map (make-map-widget key type chart-config))))
 
 
 (defn setup-widget [{:keys [key data-source type options] :as props}]

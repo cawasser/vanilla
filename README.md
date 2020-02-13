@@ -14,6 +14,10 @@ This single-page application (SPA) provides a number of graphical widgets based 
 
 > 0.3.3-SNAPSHOT. Addition of widget layout saving and loading from the database
 
+> 0.3.4-SNAPSHOT. New modal so user can "customize" a widget: banner color, title text, and title text color.
+
+> 0.3.5-SNAPSHOT. Added World Map and Continental Australia map widgets.
+
 ## Roadmap
 
 ### Client-side

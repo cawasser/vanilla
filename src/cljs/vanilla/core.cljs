@@ -11,6 +11,7 @@
     [day8.re-frame.tracing :refer-macros [fn-traced]]
 
     [vanilla.add-widget-modal :as modal]
+    [vanilla.widgets.configure-widget :as wc]
     [vanilla.login-modal :as login]
 
     [vanilla.grid :as grid]
@@ -29,7 +30,9 @@
     [vanilla.widgets.rose-chart]
     [vanilla.widgets.sankey-chart]
     [vanilla.widgets.scatter-chart]
-    [vanilla.widgets.vari-pie-chart]))
+    [vanilla.widgets.vari-pie-chart]
+    [vanilla.widgets.continent-map]
+    [vanilla.widgets.australia-map]))
 
 
 
@@ -43,8 +46,9 @@
     (prn (str ":initialize handler "))
     (merge db {:data-sources {}
                :hc-type {}
-               :chosen-bg-color {:r 150 :g 150 :b 150 :a 1.0}
-               :chosen-txt-color "white"})))
+               ;:chosen-bg-color {:r 150 :g 150 :b 150 :a 1.0}
+               ;:chosen-txt-color "white"
+               :configure-widget ""})))
 
 (rf/reg-event-db
   :widget-type
@@ -133,6 +137,7 @@
     [:div.content {:width "100%"}
      [:div.container.level.is-fluid {:width "100%"}
       [:div.level-left.has-text-left
+       [wc/change-header (rf/subscribe [:configure-widget])]
        [modal/version-number]]
       [top-right-buttons]]]]
    [widgets-grid]])
@@ -167,6 +172,8 @@
   (vanilla.widgets.sankey-chart/register-type)
   (vanilla.widgets.scatter-chart/register-type)
   (vanilla.widgets.vari-pie-chart/register-type)
+  (vanilla.widgets.continent-map/register-type)
+  (vanilla.widgets.australia-map/register-type)
 
   (doseq [w defs/widgets]
     (rf/dispatch-sync [:widget-type w]))

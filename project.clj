@@ -1,4 +1,4 @@
-(defproject vanilla "0.3.3-SNAPSHOT"
+(defproject vanilla "0.3.5-SNAPSHOT"
   :description "Vanilla Dashboard - a simple dashboard built on dashboard-clj"
   :url ""
 

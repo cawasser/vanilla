@@ -27,27 +27,27 @@
      :headers {"Content-Type" "text/json; charset=utf-8"}
      :body (do
              (prn "get version")
-             (str (json/write-str {:version (version/get-version
-                                              "vanilla"
-                                              "vanilla"
-                                              "version number not found")})))})
+             {:version (version/get-version
+                         "vanilla"
+                         "vanilla"
+                         "version number not found")
+              :status 200})})
 
   (GET "/services" _
     {:status 200
      :headers {"Content-Type" "text/json; charset=utf-8"}
      :body (do
              ;(prn "get services")
-             (str (json/write-str {:services (h/get-services)})))})
+             {:services (h/get-services) :status 200})})
 
 ;;;;; Layout Saving Routes
 
-  ;TODO test removing the write-str here and put the de-string back in url handler
   (GET "/layout" req
     {:status 200
      :headers {"Content-Type" "text/json; charset=utf-8"}
      :body (do
              ;(prn "get layout")
-             (str (json/write-str {:layout (h/get-layout (get-in req [:params :username]))})))})
+             {:layout (h/get-layout (get-in req [:params :username])) :status 200})})
 
   (POST "/save-layout" req
     {:status 200
@@ -61,14 +61,14 @@
      :headers {"Content-Type" "text/json; charset=utf-8"}
      :body (do
              ;(prn "updating one widget" (get-in req [:params :widget]))
-             {:widget-update (h/update-widget (get-in req [:params :widget]))})})
+             {:widget-update (h/update-widget (get-in req [:params :widget])) :status 200})})
 
   (POST "/delete-widget" req
     {:status 200
      :headers {"Content-Type" "text/json; charset=utf-8"}
      :body (do
              ;(prn "remove widget" (get-in req [:params :id]))
-             {:delete-widget (h/delete-widget (get-in req [:params :id]))})})
+             {:delete-widget (h/delete-widget (get-in req [:params :id])) :status 200})})
 
 ;;;;;; User Login Routes
 
@@ -78,7 +78,7 @@
      :body  (do
              ;(prn "verify user " (:params req))
              ;(prn (str (h/verify-user-password (:params req))))
-             {:verified-user (h/verify-user-password (:params req))})})
+             {:verified-user (h/verify-user-password (:params req)) :status 200})})
 
 
   (GET "/return-all-users" _
