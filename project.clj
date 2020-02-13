@@ -33,6 +33,7 @@
                  [org.webjars/webjars-locator "0.38"]
                  [org.xerial/sqlite-jdbc "3.28.0"]
                  [com.lucasbradstreet/cljs-uuid-utils "1.0.2"]
+                 [nomnom/bunnicula "2.1.0"]
                  [re-frame "0.10.9"]
                  [reagent "0.9.0-rc3"]
                  [ring-webjars "0.2.0"]
@@ -41,12 +42,8 @@
                  [ring/ring-json "0.5.0"]
                  [selmer "1.12.18"]
                  [cljsjs/toastr "2.1.2-1"]
-
                  [cljsjs/react-grid-layout "0.17.1-0"]
-
                  [trptcolin/versioneer "0.2.0"]
-
-                 ; for vanilla (matching versions)
                  [environ "1.1.0"]
                  [ring "1.8.0"]
                  [bk/ring-gzip "0.3.0"]
@@ -61,7 +58,6 @@
                  [org.xerial/sqlite-jdbc "3.30.1"]
                  [seancorfield/next.jdbc "1.0.12"]
                  [org.clojure/tools.nrepl "0.2.13"]
-
                  [cljsjs/react-color "2.13.8-0"]]
 
   :min-lein-version "2.6.1"

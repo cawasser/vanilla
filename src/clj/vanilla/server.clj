@@ -16,6 +16,9 @@
               [vanilla.table-service]
               [vanilla.continent-map-service]
               [vanilla.australia-map-service]
+
+              [vanilla.edn-queue-source]
+
               [vanilla.service-deps :as deps])
 
     (:gen-class))
