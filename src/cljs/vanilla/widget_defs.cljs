@@ -25,6 +25,26 @@
                            :viz/animation         false
                            :viz/tooltip           {:followPointer true}}}
 
+              {:name      :arearange-widget
+               :basis     :chart
+               :type      :arearange-chart
+               :ret_types [:data-format/x-yl-yh]
+               :icon      "/images/arearange-widget.png"
+               :label     "AreaRange"
+               :options   {:viz/title             "Area Range"
+                           :viz/allowDecimals     false
+                           :viz/x-title           "Date"
+                           :viz/y-title           "Temperature"
+                           :viz/banner-color      {:r 0x00 :g 0x00 :b 0xff :a 1}
+                           :viz/banner-text-color white
+                           :viz/style-name        "widget"
+                           :viz/animation         false
+                           :viz/tooltip           {:followPointer true
+                                                   :crosshairs true
+                                                   :shared true
+                                                   :valueSuffix "'C"
+                                                   :xDateFormat "%A %b %e"}}}
+
               {:name        :stoplight-widget
                :basis       :simple
                :type        :stoplight-widget
