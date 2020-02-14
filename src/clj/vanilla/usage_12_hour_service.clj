@@ -1,4 +1,5 @@
-(ns vanilla.usage-12-hour-service)
+(ns vanilla.usage-12-hour-service
+  (:require [clojure.tools.logging :as log]))
 
 
 (defn- make-map [name xs max-qty]
@@ -12,7 +13,7 @@
             "0700h" "0800h" "0900h" "1000h" "1100h"])
 
 (defn fetch-data []
-  (prn "12-hour Usage Service")
+  (log/info "12-hour Usage Service")
 
   {:title       "12-hour Usage Data"
    :data-format :data-format/rose-y-n

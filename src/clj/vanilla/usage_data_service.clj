@@ -1,4 +1,5 @@
-(ns vanilla.usage-data-service)
+(ns vanilla.usage-data-service
+  (:require [clojure.tools.logging :as log]))
 
 (defn usage-data []
   [{:keys ["name" "y"]
@@ -12,7 +13,7 @@
            ["Avocados" (rand 100)]]}])
 
 (defn fetch-data []
-  (prn "Usage Data")
+  (log/info "Usage Data")
 
   {:title       "Usage Data"
    :data-format :data-format/label-y

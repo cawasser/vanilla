@@ -1,4 +1,5 @@
-(ns vanilla.spectrum-traces-service)
+(ns vanilla.spectrum-traces-service
+  (:require [clojure.tools.logging :as log]))
 
 
 (defn zipvec [keys vals]
@@ -41,7 +42,7 @@
 
 
 (defn fetch-data []
-  (prn "Spectrum Traces")
+  (log/info "Spectrum Traces")
 
   {:title           "Spectrum Traces"
    :data-format     :data-format/x-y

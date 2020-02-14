@@ -415,10 +415,10 @@
   (get-users vanilla-db)
 
   (verify-credentials vanilla-db
-                      {:username "chad" :pass "123"})
+    {:username "chad" :pass "123"})
 
   (verify-credentials vanilla-db
-                      {:username "chad" :pass "321"})
+    {:username "chad" :pass "321"})
 
 
   (drop-users-table vanilla-db)
@@ -431,13 +431,13 @@
 
 
   (defn y-conversion [chart-type d options]
-    (let [s (get-in d [:data :series])
+    (let [s   (get-in d [:data :series])
           ret (for [{:keys [name data]} s]
                 (assoc {}
                   :name name
                   :data (into []
-                              (for [x-val (range 0 (count data))]
-                                [x-val (get data x-val)]))))]
+                          (for [x-val (range 0 (count data))]
+                            [x-val (get data x-val)]))))]
 
       (prn "y-conversion " ret)
       (into [] ret)))

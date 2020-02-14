@@ -1,7 +1,8 @@
-(ns vanilla.continent-map-service)
+(ns vanilla.continent-map-service
+  (:require [clojure.tools.logging :as log]))
 
 (defn fetch-data []
-  (prn "Continent Map Service")
+  (log/info "Continent Map Service")
 
   {:title "Continent Data"
    :data-format :data-format/cont-n

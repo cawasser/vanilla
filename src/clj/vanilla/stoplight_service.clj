@@ -1,4 +1,5 @@
-(ns vanilla.stoplight-service)
+(ns vanilla.stoplight-service
+  (:require [clojure.tools.logging :as log]))
 
 
 (def idents ["item-00" "item-01" "item-02" "item-03" "item-04"
@@ -17,7 +18,7 @@
 
 
 (defn fetch-data []
-  (prn "Stoplight Service")
+  (log/info "Stoplight Service")
 
   {:title "Health and Status Data"
    :data-format :data-format/entity
