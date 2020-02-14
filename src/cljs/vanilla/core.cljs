@@ -18,7 +18,7 @@
 
     ; needed to register all the highcharts types
     [vanilla.widgets.area-chart]
-    [vanilla.widgets.arearange-chart-chart]
+    [vanilla.widgets.arearange-chart]
     [vanilla.widgets.bar-chart]
     [vanilla.widgets.bubble-chart]
     [vanilla.widgets.column-chart]
