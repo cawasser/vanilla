@@ -1,4 +1,4 @@
-(defproject vanilla "0.3.6-SNAPSHOT"
+(defproject vanilla "lein-git-inject/version"
   :description "Vanilla Dashboard - a simple dashboard built on dashboard-clj"
   :url ""
 
@@ -70,7 +70,12 @@
   :main ^:skip-aot vanilla.server
 
   :plugins [[lein-cljsbuild "1.1.7"]
-            [lein-marginalia "0.9.1"]]
+            [lein-marginalia "0.9.1"]
+            [day8/lein-git-inject "0.0.11"]
+            [lein-pprint "1.3.2"]]
+
+  :middleware [leiningen.git-inject/middleware]
+
   :clean-targets ^{:protect false} [:target-path :compile-path "resources/public/js"]
 
   :figwheel {:http-server-root "public"
