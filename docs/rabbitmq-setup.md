@@ -49,7 +49,7 @@ _fig. 4 The "some.queue" Dashboard_
 To publish a message onto the current queue, click on the `> Publish message` item and the tool will unfold. Specify the content of the message to publosh
 and click the `Publish Message` button:
 
-![rmq-console-publish-messages](screenshots/rmq-console-publish-messages.png)
+![rmq-console-publish-messages](screenshots/rmq-console-publish-message.png)
 _fig. 5 Publishing messages using the "Queues" Dashboard_
 
 > Note: Message content must be in valid JSON format. For example:
