@@ -9,6 +9,7 @@
   (let [data-sources (map #(ds/new-data-source %) ds-maps)
         port (Integer. (or (environment :port) 5000))
         nrepl (not (environment :prod))
-        nrepl-port (Integer. (or (environment :nrepl-port) 7000))]
+        nrepl-port (Integer. (or (environment :nrepl-port) 7000))
+        dev-mode? (environment :dev)]
 
-    (system/start port nrepl nrepl-port data-sources)))
+    (system/start port nrepl nrepl-port data-sources dev-mode?)))
