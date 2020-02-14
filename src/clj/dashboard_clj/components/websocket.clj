@@ -29,7 +29,7 @@
   (start [component]
 
     (let [{:keys [ch-recv send-fn ajax-post-fn
-                  ajax-get-or-ws-handshake-fn connected-uids] :as socket} (sente/make-channel-socket-server! webserver-adapter options)
+                  ajax-get-or-ws-handshake-fn connected-uids]} (sente/make-channel-socket-server! webserver-adapter options)
           ch-out (async/chan (async/sliding-buffer 1000))
           mix-out (async/mix ch-out)]
 
@@ -48,7 +48,6 @@
         :ring-ajax-get-or-ws-handshake ajax-get-or-ws-handshake-fn
         :ch-recv ch-recv
         :chsk-send! send-fn
-        :socket socket
         :connected-uids connected-uids
         :router (sente/start-chsk-router! ch-recv
                   (partial handler {:data-sources data-sources
@@ -73,14 +72,13 @@
 
 
 (defn send! [uid message]
-  (log/info "send! " message " to " uid)
+  ;(log/info "send! " message " to " uid)
   ((get-in @system/system [:websocket :chsk-send!]) uid message))
 
 
 (defn send-to-all! [message]
-  (log/info "send-to-all! " message ", " @(get-in @system/system [:websocket :connected-uids]))
-
+  ;(log/info "send-to-all! " message ", " @(get-in @system/system [:websocket :connected-uids]))
   (doseq [cid (:any @(get-in @system/system [:websocket :connected-uids]))]
-    (log/info "====>> sending " message " to " cid)
+    ;(log/info "====>> sending " message " to " cid)
     (send! cid message)))
 
