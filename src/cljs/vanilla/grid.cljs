@@ -51,7 +51,7 @@
 
   (let [content (widget/setup-widget props)
         ret     [:div
-                 (merge props {:class "widget grid-toolbar"
+                 (merge props {:class "widget"
                                :style {:background-color (get-in props [:options :viz/banner-color] "yellow")
                                        :color            (get-in props [:options :viz/banner-text-color] "black")}})
                  content]]

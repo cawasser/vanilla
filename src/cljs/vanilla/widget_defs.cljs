@@ -34,7 +34,8 @@
                :icon        "/images/stoplight-widget.png"
                :label       "Stoplight"
                :options     {:viz/title        "Status"
-                             :viz/banner-color {:r 0x00 :g 0xff :b 0xff :a 1}}}
+                             :viz/banner-color {:r 0x00 :g 0xff :b 0xff :a 1}
+                             :viz/banner-text-color black}}
 
               {:name        :simple-text-widget
                :basis       :simple
@@ -45,7 +46,8 @@
                :icon        "/images/simple-text-widget.png"
                :label       "Current Time"
                :options     {:viz/title        "Time"
-                             :viz/banner-color {:r 0x00 :g 0xff :b 0xff :a 1}}}
+                             :viz/banner-color {:r 0x00 :g 0xff :b 0xff :a 1}
+                             :viz/banner-text-color black}}
 
               {:name      :table-widget
                :basis     :simple
@@ -56,7 +58,8 @@
                :icon      "/images/table-widget.png"
                :label     "Data Table"
                :options   {:viz/title        "Table"
-                           :viz/banner-color {:r 0x00 :g 0xff :b 0xff :a 1}}}
+                           :viz/banner-color {:r 0x00 :g 0xff :b 0xff :a 1}
+                           :viz/banner-text-color black}}
 
               {:name      :bar-widget
                :basis     :chart
@@ -66,6 +69,7 @@
                :label     "Bar"
                :options   {:viz/title        "Channels (bar)"
                            :viz/banner-color {:r 0xd2 :g 0xbf :b 0xd8 :a 1}
+                           :viz/banner-text-color black
                            :viz/line-width   0.5
                            :viz/animation    false
                            :viz/style-name   "widget"
@@ -79,6 +83,7 @@
                :label     "Continent Map"
                :options   {:viz/title        "Continents (map)"
                            :viz/banner-color {:r 0xd2 :g 0xbf :b 0xd8 :a 1}
+                           :viz/banner-text-color black
                            :viz/line-width   0.5
                            :viz/animation    false
                            :viz/style-name   "widget"
@@ -92,6 +97,7 @@
                :label     "Australia Map"
                :options   {:viz/title        "Australia (map)"
                            :viz/banner-color {:r 0xd2 :g 0xbf :b 0xd8 :a 1}
+                           :viz/banner-text-color black
                            :viz/line-width   0.5
                            :viz/animation    false
                            :viz/style-name   "widget"
@@ -120,6 +126,7 @@
                :label       "Column"
                :options     {:viz/title        "Channels (column)"
                              :viz/banner-color {:r 0xff :g 0xff :b 0x00 :a 1}
+                             :viz/banner-text-color black
                              :viz/line-width   0.5
                              :viz/animation    false
                              :viz/style-name   "widget"
@@ -145,6 +152,7 @@
                :label     "Heatmap"
                :options   {:viz/title        "Heat Map"
                            :viz/banner-color {:r 0x90 :g 0xee :b 0x90 :a 1}
+                           :viz/banner-text-color black
                            :viz/line-width   0.5
                            :viz/animation    false
                            :viz/style-name   "widget"
@@ -159,6 +167,7 @@
                :label     "Line"
                :options   {:viz/title        "Channels (line)"
                            :viz/banner-color {:r 0xff :g 0x69 :b 0xb4 :a 1}
+                           :viz/banner-text-color black
                            :viz/line-width   0.5
                            :viz/animation    false
                            :viz/style-name   "widget"
@@ -185,6 +194,7 @@
                :label     "Org Chart"
                :options   {:viz/title        "Network (org chart)"
                            :viz/banner-color {:r 0xa9 :g 0xa9 :b 0xa9 :a 1}
+                           :viz/banner-text-color black
                            :viz/animation    false
                            :viz/data-labels  true}}
 
@@ -196,6 +206,7 @@
                :label     "Pie"
                :options   {:viz/title        "Usage Data (pie)"
                            :viz/banner-color {:r 0xda :g 0xa5 :b 0x20 :a 1}
+                           :viz/banner-text-color black
                            :viz/animation    false
                            :viz/dataLabels   true
                            :viz/labelFormat  "{point.name}"
@@ -209,6 +220,7 @@
                :label     "Wind Rose"
                :options   {:viz/title        "Channels (rose)"
                            :viz/banner-color {:r 0xff :g 0xc0 :b 0xcb :a 1}
+                           :viz/banner-text-color black
                            :viz/line-width   0.5
                            :viz/animation    false
                            :viz/style-name   "widget"
@@ -256,42 +268,6 @@
                            :viz/dataLabels        true
                            :viz/labelFormat       "{point.name}"
                            :viz/slice-at          20}}])
-
-
-; TODO - init :time-widget correctly
-;{:name        :time-widget
-; :basis       :simple
-; :type        :simple-text
-; :data-source :current-time
-; :options     {:viz/title        "Current Time"
-;               :viz/banner-color "lightblue"
-;               :viz/style        {}
-;               :viz/height       "100px"}}
-
-
-; TODO - init :map-container correctly
-;{:name    :map-widget
-; :type    :map-container
-; ;:data-source :current-time
-;:ret_types [:data-format/lat-lon-n]
-;:icon "/images/map-widget.png"
-;:label "Map"
-; :options {:viz/title        "Map Widget"
-;           :viz/banner-color "lightblue"
-;           :viz/style        {}
-;           :viz/height       "500px"}}
-
-
-; TODO - init :simple correctly
-;{:type        :stoplight-widget
-; :basis       :simple
-; :name        :health-and-status-widget
-; :data-source :health-and-status-data
-; :ret_types [:data-format/entity]
-; :icon      "/images/stoplight-widget.png"
-; :label     "Stoplight"
-; :options     {:viz/title        "Status"
-;               :viz/banner-color "aqua"}}
 
 
 

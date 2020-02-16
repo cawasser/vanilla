@@ -113,14 +113,25 @@
 
 (defn input-element
   "An input element that takes in what type of element it is, and the current value that will change with input."
-  [id-name-type value]
-  [:input.input {:id id-name-type
-                 :name id-name-type
-                 :class "form-control"
-                 :type id-name-type
-                 :required ""
-                 :value @value
-                 :on-change #(reset! value (-> % .-target .-value))}])
+  ([id-name-type value autofocus]
+   (prn "autofocus " id-name-type ", " autofocus)
+   [:input.input {:id id-name-type
+                  :name id-name-type
+                  :class "form-control"
+                  :type id-name-type
+                  :required ""
+                  :auto-focus autofocus
+                  :value @value
+                  :on-change #(reset! value (-> % .-target .-value))}])
+  ([id-name-type value]
+   (prn "autofocus " id-name-type)
+   [:input.input {:id id-name-type
+                  :name id-name-type
+                  :class "form-control"
+                  :type id-name-type
+                  :required ""
+                  :value @value
+                  :on-change #(reset! value (-> % .-target .-value))}]))
 
 
 
@@ -141,15 +152,15 @@
         [:section.modal-card-body
          [:label "Username:"
           [:div
-           [input-element "username" username]]]
+           [input-element "username" username "autofocus"]]]
          [:label "Password:"
           [:div
            [input-element "password"  pass]]]]
         [:footer.modal-card-foot
-         [:button.button.is-success {:on-click #(do
-                                                  (attempt-login {:username @username
-                                                                  :pass @pass})
-                                                  (reset! is-active false))} "Login"]
+         [:button.button.is-primary.is-light {:on-click #(do
+                                                           (attempt-login {:username @username
+                                                                           :pass @pass})
+                                                           (reset! is-active false))} "Login"]
 
          [:button.button.is-info {:on-click #(do
                                                (attempt-create-user {:username @username

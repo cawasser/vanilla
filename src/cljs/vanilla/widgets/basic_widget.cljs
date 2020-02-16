@@ -23,8 +23,8 @@
 (rf/reg-event-db
   :remove-widget
   (fn-traced [db [_ widget-id]]
-             (delete-widget widget-id)
-             (assoc db :widgets (remove #(= (:key %) widget-id) (:widgets db)))))
+    (delete-widget widget-id)
+    (assoc db :widgets (remove #(= (:key %) widget-id) (:widgets db)))))
 
 
 
@@ -39,28 +39,32 @@
 
 (defn basic-widget [name data options custom-content]
 
-  ;(prn "basic-widget " name
-  ;  " //// options " options
+  (prn "basic-widget " name
+    " //// options " options)
   ;  " //// custom-content " custom-content)
 
   (fn []
 
-    [:div {:class "vanilla.widgets.line-chart container"
+    [:div {;:class "vanilla.widgets.line-chart container"
            :style {:height (get options :viz/height "100%")
                    :width  "100%"}}
-     [:div {:class "title-wrapper"}
-      [:container.level {:style    {:background-color (util/rgba (get options :viz/banner-color {:r 150 :g 150 :b 150 :a 1}))}
-                         :on-click #(do
-                                      ;(prn "showing header for " name)
-                                      (rf/dispatch-sync [:configure-widget name]))}
+     [:div.title-wrapper.grid-toolbar
+      [:container.level {:style {:background-color (util/rgba (get options :viz/banner-color {:r 150 :g 150 :b 150 :a 1}))}}
+
 
        [:div.level-left.has-text-left
-        [:h3 {:class    "title"
-              :style    {:color (util/rgba (get options :viz/banner-text-color {:r 0 :g 0 :b 0 :a 1}))}}
+        [:h3.title.grid-content
+         {:style         {:color (util/rgba (get options :viz/banner-text-color {:r 0 :g 0 :b 0 :a 1}))}
+          :on-mouse-down #(.stopPropagation %)
+          :isDraggable   false
+          :on-click      #(do
+                            ;(prn "showing header for " name)
+                            (rf/dispatch-sync [:configure-widget name]))}
          (get options :viz/title)]]
 
        [:div.level-right.has-text-centered
         [:button.delete.is-large {:style    {:margin-right "10px"}
+                                  :on-mouse-down #(.stopPropagation %)
                                   :on-click #(do
                                                (rf/dispatch [:remove-widget name])
                                                (.stopPropagation %))}]]]]
