@@ -57,8 +57,14 @@
 
    {:name :continent-map-service
     :read-fn :vanilla.continent-map-service/fetch-data}
+
    {:name :australia-map-service
-    :read-fn :vanilla.australia-map-service/fetch-data}])
+    :read-fn :vanilla.australia-map-service/fetch-data}
+
+   {:name :arearange-service
+    :read-fn :vanilla.arearange-service/fetch-data}])
+
+
    ;:params   []
    ;:schedule {:in    [0 :seconds]
    ;           :every [5 :seconds]}}])

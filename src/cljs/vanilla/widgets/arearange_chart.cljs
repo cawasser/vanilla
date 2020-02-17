@@ -18,18 +18,18 @@
 
 (defn register-type []
   (mc/register-type
-    :area-chart {:chart-options     {:chart/type              :arearange-chart
-                                     :chart/supported-formats [:data-format/x-yl-yh]
-                                     :chart                   {:type     "arearange"
-                                                               :zoomType "x"
-                                                               :scrollablePlotArea {:minWidth 600
-                                                                                    :scrollPositionX 1}}
-                                     :xAxis                   {:type "datetime"
-                                                               :accessibility {:rangeDescription "Range: Jan 1st 2017 to Dec 31 2017"}}
+    :arearange-chart {:chart-options     {:chart/type              :arearange-chart
+                                          :chart/supported-formats [:data-format/x-yl-yh]
+                                          :chart                   {:type     "arearange"
+                                                                    :zoomType "x"
+                                                                    :scrollablePlotArea {:minWidth 600
+                                                                                         :scrollPositionX 1}}
+                                          :xAxis                   {:type "datetime"
+                                                                    :accessibility {:rangeDescription "Range: Jan 1st 2017 to Dec 31 2017"}}
 
-                                     :yAxis                   {:title  {:align "high"}
-                                                               :labels {:overflow "justify"}}}
+                                          :yAxis                   {:title  {:align "high"}
+                                                                    :labels {:overflow "justify"}}}
 
-                 :merge-plot-option {:default plot-options}
+                      :merge-plot-option {:default plot-options}
 
-                 :conversions       {:default mc/default-conversion}}))
+                      :conversions       {:default mc/default-conversion}}))
