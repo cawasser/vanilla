@@ -1,8 +1,9 @@
-(ns vanilla.bubble-service)
+(ns vanilla.bubble-service
+  (:require [clojure.tools.logging :as log]))
 
 
 (defn fetch-data []
-  (prn "Bubble Service")
+  (log/info "Bubble Service")
 
   {:title "Bubble Data"
    :data-format :data-format/x-y-n

@@ -1,7 +1,8 @@
-(ns vanilla.scatter-service)
+(ns vanilla.scatter-service
+  (:require [clojure.tools.logging :as log]))
 
 (defn fetch-data []
-  (prn "Scatter Service Data")
+  (log/info "Scatter Service Data")
 
   {:title       "Scatter Service Data"
    :data-format :data-format/x-y

@@ -8,11 +8,9 @@
             [ring.middleware.json :refer [wrap-json-response wrap-json-params]]
             [ring.middleware.keyword-params :refer [wrap-keyword-params]]
             [clojure.data.json :as json]
-
-            ; version number support
             [trptcolin.versioneer.core :as version]
-
-            [vanilla.url-handlers :as h])
+            [vanilla.url-handlers :as h]
+            [clojure.tools.logging :as log])
   (:gen-class))
 
 
@@ -23,15 +21,15 @@
         :body (io/input-stream (io/resource "public/index.html"))})
 
   (GET "/version" _
-    {:status 200
+    {:status  200
      :headers {"Content-Type" "text/json; charset=utf-8"}
-     :body (do
-             (prn "get version")
-             {:version (version/get-version
-                         "vanilla"
-                         "vanilla"
-                         "version number not found")
-              :status 200})})
+     :body    (do
+                (log/info "get version")
+                {:version (version/get-version
+                            "vanilla"
+                            "vanilla"
+                            "version number not found")
+                 :status  200})})
 
   (GET "/services" _
     {:status 200

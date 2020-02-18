@@ -1,4 +1,5 @@
-(ns vanilla.power-data-service)
+(ns vanilla.power-data-service
+  (:require [clojure.tools.logging :as log]))
 
 
 (defn zipvec [keys vals]
@@ -30,7 +31,7 @@
 
 
 (defn fetch-data []
-  (prn "Power Data")
+  (log/info "Power Data")
 
   {:title       "Power Data"
    :data-format :data-format/x-y

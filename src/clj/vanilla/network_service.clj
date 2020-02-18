@@ -1,8 +1,9 @@
-(ns vanilla.network-service)
+(ns vanilla.network-service
+  (:require [clojure.tools.logging :as log]))
 
 
 (defn fetch-data []
-  (prn "Network Service")
+  (log/info "Network Service")
 
   {:title "Network Data"
    :data-format :data-format/from-to

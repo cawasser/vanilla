@@ -17,14 +17,20 @@
               [vanilla.continent-map-service]
               [vanilla.australia-map-service]
               [vanilla.arearange-service]
-              [vanilla.service-deps :as deps])
+              [vanilla.service-deps :as deps]
+              [vanilla.service-deps :as deps]
+              [clojure.tools.logging :as log]
+              [trptcolin.versioneer.core :as version])
 
     (:gen-class))
 
 
 
 (defn start-dashboard[]
-  (prn "server starting")
+  (log/info "server starting version: " (version/get-version
+                                          "vanilla"
+                                          "vanilla"
+                                          "version number not found"))
   (dash/start deps/datasources))
 
 (defn -main [& [port]]

@@ -1,4 +1,5 @@
-(ns vanilla.table-service)
+(ns vanilla.table-service
+  (:require [clojure.tools.logging :as log]))
 
 (defn header []
   [{:key "name"
@@ -29,7 +30,7 @@
     :operating-since "2002"}])
 
 (defn fetch-data []
-  (prn "table-widget service")
+  (log/info "table-widget service")
 
   {:title "Data Table"
    :data-format :data-format/entities

@@ -1,7 +1,8 @@
-(ns vanilla.australia-map-service)
+(ns vanilla.australia-map-service
+  (:require [clojure.tools.logging :as log]))
 
 (defn fetch-data []
-  (prn "Australia Map Service")
+  (log/info "Australia Map Service")
 
   {:title "Australia Data"
    :data-format :data-format/lat-lon-label
