@@ -278,40 +278,6 @@
                            :viz/slice-at          20}}])
 
 
-; TODO - init :time-widget correctly
-;{:name        :time-widget
-; :basis       :simple
-; :type        :simple-text
-; :data-source :current-time
-; :options     {:viz/title        "Current Time"
-;               :viz/banner-color "lightblue"
-;               :viz/style        {}
-;               :viz/height       "100px"}}
-
-
-; TODO - init :map-container correctly
-;{:name    :map-widget
-; :type    :map-container
-; ;:data-source :current-time
-;:ret_types [:data-format/lat-lon-n]
-;:icon "/images/map-widget.png"
-;:label "Map"
-; :options {:viz/title        "Map Widget"
-;           :viz/banner-color "lightblue"
-;           :viz/style        {}
-;           :viz/height       "500px"}}
-
-
-; TODO - init :simple correctly
-;{:type        :stoplight-widget
-; :basis       :simple
-; :name        :health-and-status-widget
-; :data-source :health-and-status-data
-; :ret_types [:data-format/entity]
-; :icon      "/images/stoplight-widget.png"
-; :label     "Stoplight"
-; :options     {:viz/title        "Status"
-;               :viz/banner-color "aqua"}}
 
 
 

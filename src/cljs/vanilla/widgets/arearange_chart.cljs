@@ -5,7 +5,7 @@
 (defn plot-options
   [chart-config data options]
 
-  ;(.log js/console (str "area/plot-options " chart-config))
+  ;(prn "area/plot-options " chart-config)
 
   {:xAxis       {; what to do about x-categories?  :categories (:src/x-categories data [])
                  :title {:text          (get-in data [:data :src/x-title] "x-axis")
@@ -24,6 +24,8 @@
                                                                     :zoomType "x"
                                                                     :scrollablePlotArea {:minWidth 600
                                                                                          :scrollPositionX 1}}
+
+                                          ; TODO: need to reconsider how to describe the x-axis...
                                           :xAxis                   {:type "datetime"
                                                                     :accessibility {:rangeDescription "Range: Jan 1st 2017 to Dec 31 2017"}}
 

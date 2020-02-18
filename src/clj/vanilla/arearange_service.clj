@@ -1,7 +1,8 @@
-(ns vanilla.arearange-service)
+(ns vanilla.arearange-service
+  (:require [clojure.tools.logging :as log]))
 
 (defn fetch-data []
-  (prn "Arearange Service Data")
+  (log/info "Arearange Service Data")
 
   {:title       "Area Range Data"
    :data-format :data-format/x-yl-yh
@@ -9,7 +10,6 @@
    :src/y-title "Temperature ('C)"
 
    :series      [{:name "Temperatures"
-                  :keys [ "x" "yl" "yh"]
                   :data [[1483232400000 1.4 4.7] [1483318800000 -1.3 1.9] [1483405200000 -0.7 4.3]
                          [1483491600000 -5.5 3.2] [1483578000000 -9.9 -6.6] [1483664400000 -9.6 0.1]
                          [1483750800000 -0.9 4.0] [1483837200000 -2.2 2.9] [1483923600000 1.3 2.3]

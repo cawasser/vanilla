@@ -94,7 +94,7 @@
        "returns location of various cities in Australia"]
 
       ["15000" "arearange-service" "AreaRange Data"
-       "data-format/x-yh-yl" "vanilla.arearange-service/fetch-data"
+       "data-format/x-yl-yh" "vanilla.arearange-service/fetch-data"
        "returns low and high temperature of a day over time"]]}))
 
 
@@ -167,9 +167,11 @@
     "SQLite database connection spec."
     {:dbtype db-type :dbname "vanilla_default"})
 
-  (initialize-database vanilla-default)                     ;; Initialize this on database structure changes, push changes to repo
+  ;; Initialize this on database structure changes, push changes to repo
+  (initialize-database vanilla-default)
 
-  (initialize-database vanilla-db)                          ;; Run this to create a local database for your app
+  ;; Run this to create a local database for your app
+  (initialize-database vanilla-db)
 
   ())
 
