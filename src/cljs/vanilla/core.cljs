@@ -11,6 +11,7 @@
     [day8.re-frame.tracing :refer-macros [fn-traced]]
 
     [vanilla.add-widget-modal :as modal]
+    [vanilla.modal :as modal-modal]
     [vanilla.widgets.configure-widget :as wc]
     [vanilla.login-modal :as login]
 
@@ -132,6 +133,7 @@
 (defn home-page
   "This is the start of the UI for our SPA"
   []
+  ;[modal-modal/initialize-modal]
   [:div {:width "100%"}
    [:div.container
     [:div.content {:width "100%"}
@@ -180,6 +182,7 @@
 
   (d/connect-to-data-sources)
 
+  ;modal-modal/initialize-modal-components
   (r/render home-page (.getElementById js/document "app")))
 
 
