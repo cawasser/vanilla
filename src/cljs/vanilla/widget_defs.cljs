@@ -42,7 +42,7 @@
                            :viz/tooltip           {:followPointer true
                                                    :crosshairs true
                                                    :shared true
-                                                   :valueSuffix "'C"
+                                                   :valueSuffix "°C"
                                                    :xDateFormat "%A %b %e"}}}
 
               {:name        :stoplight-widget

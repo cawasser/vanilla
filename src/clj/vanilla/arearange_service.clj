@@ -7,7 +7,7 @@
   {:title       "Area Range Data"
    :data-format :data-format/x-yl-yh
    :src/x-title "Date"
-   :src/y-title "Temperature ('C)"
+   :src/y-title "Temperature (°C)"
 
    :series      [{:name "Temperatures"
                   :data [[1483232400000 1.4 4.7] [1483318800000 -1.3 1.9] [1483405200000 -0.7 4.3]
