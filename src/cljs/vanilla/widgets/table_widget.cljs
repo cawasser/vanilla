@@ -9,8 +9,8 @@
   ;     " //// data " data
   ;     " //// (options) " options)
 
-  ( let [header (get-in data [:data :meta-data])
-         body (get-in data [:data :series])]
+  ( let [header (get-in @data [:data :meta-data])
+         body (get-in @data [:data :series])]
 
     ;(prn "header " header
     ;     " //// body " body)

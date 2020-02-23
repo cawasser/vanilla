@@ -12,10 +12,11 @@
             :warning "yellow"
             :fault "red")]
     ^{:key id}
-    [:button.button {:style    {:background-color c
-                                :width            "20%"
-                                :border-spacing   "5px"}
-                     :on-click #(.log js/console (str "clicked " id))}
+    [:button.button
+     {:style    {:background-color c
+                 :width            "20%"
+                 :border-spacing   "5px"}
+      :on-click #(.log js/console (str "clicked " id))}
      id]))
 
 
@@ -28,7 +29,7 @@
    (for [[k v] data]
      (doall
 
-       ;(.log js/console (str "stoplight-row> " k "-" v))
+       ;(prn "stoplight-row> " k "-" v)
 
        (stoplight k v)))])
 
@@ -46,5 +47,5 @@
                                  :table-layout   :fixed}}
     [:tbody
      (doall
-       (for [d (partition-all 5 (get-in data [:data :series]))]
+       (for [d (partition-all 5 (get-in @data [:data :series]))]
          (stoplight-row d)))]]])

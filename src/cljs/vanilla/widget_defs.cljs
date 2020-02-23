@@ -65,6 +65,7 @@
               {:name      :bar-widget
                :basis     :chart
                :type      :bar-chart
+               :build-fn  vanilla.widgets.make-chart/make-chart
                :ret_types [:data-format/x-y :data-format/x-y-n :data-format/x-y-e :data-format/y]
                :icon      "/images/bar-widget.png"
                :label     "Bar"
@@ -107,6 +108,7 @@
               {:name      :bubble-widget
                :basis     :chart
                :type      :bubble-chart
+               :build-fn  vanilla.widgets.make-chart/make-chart
                :ret_types [:data-format/x-y-n :data-format/x-y :data-format/x-y-e :data-format/y]
                :icon      "/images/bubble-widget.png"
                :label     "Bubble"
@@ -122,6 +124,7 @@
               {:name      :column-widget
                :basis     :chart
                :type      :column-chart
+               :build-fn  vanilla.widgets.make-chart/make-chart
                :ret_types [:data-format/x-y :data-format/x-y-n :data-format/x-y-e :data-format/y]
                :icon      "/images/column-widget.png"
                :label     "Column"
@@ -136,6 +139,7 @@
               {:name      :dependency-widget
                :basis     :chart
                :type      :dependency-chart
+               :build-fn  vanilla.widgets.make-chart/make-chart
                :ret_types [:data-format/from-to-n :data-format/from-to-e :data-format/from-to]
                :icon      "/images/deps-widget.png"
                :label     "Dependencies"
@@ -148,6 +152,7 @@
               {:name      :heatmap-widget
                :basis     :chart
                :type      :heatmap-chart
+               :build-fn  vanilla.widgets.make-chart/make-chart
                :ret_types [:data-format/grid-n :data-format/grid-e :data-format/lat-lon-n :data-format/lat-lon-e]
                :icon      "/images/heatmap-widget.png"
                :label     "Heatmap"
@@ -163,6 +168,7 @@
               {:name      :line-widget
                :basis     :chart
                :type      :line-chart
+               :build-fn  vanilla.widgets.make-chart/make-chart
                :ret_types [:data-format/x-y :data-format/x-y-n :data-format/x-y-e :data-format/y]
                :icon      "/images/line-widget.png"
                :label     "Line"
@@ -178,6 +184,7 @@
               {:name      :network-widget
                :basis     :chart
                :type      :network-chart
+               :build-fn  vanilla.widgets.make-chart/make-chart
                :ret_types [:data-format/from-to :data-format/from-to-n :data-format/from-to-e]
                :icon      "/images/network-widget.png"
                :label     "Network"
@@ -190,6 +197,7 @@
               {:name      :org-widget
                :basis     :chart
                :type      :org-chart
+               :build-fn  vanilla.widgets.make-chart/make-chart
                :ret_types [:data-format/from-to :data-format/from-to-n :data-format/from-to-e]
                :icon      "/images/org-widget.png"
                :label     "Org Chart"
@@ -202,6 +210,7 @@
               {:name      :pie-widget
                :basis     :chart
                :type      :pie-chart
+               :build-fn  vanilla.widgets.make-chart/make-chart
                :ret_types [:data-format/label-y]
                :icon      "/images/pie-widget.png"
                :label     "Pie"
@@ -216,6 +225,7 @@
               {:name      :rose-widget
                :basis     :chart
                :type      :rose-chart
+               :build-fn  vanilla.widgets.make-chart/make-chart
                :ret_types [:data-format/rose-y-n :data-format/rose-y-e]
                :icon      "/images/rose-widget.png"
                :label     "Wind Rose"
@@ -231,6 +241,7 @@
               {:name      :sankey-widget
                :basis     :chart
                :type      :sankey-chart
+               :build-fn  vanilla.widgets.make-chart/make-chart
                :ret_types [:data-format/from-to-n :data-format/from-to :data-format/from-to-e]
                :icon      "/images/sankey-widget.png"
                :label     "Sankey"
@@ -244,6 +255,7 @@
               {:name      :scatter-widget
                :basis     :chart
                :type      :scatter-chart
+               :build-fn  vanilla.widgets.make-chart/make-chart
                :ret_types [:data-format/x-y :data-format/x-y-n :data-format/x-y-e :data-format/y]
                :icon      "/images/scatter-widget.png"
                :label     "Scatter"
@@ -259,6 +271,7 @@
               {:name      :vari-pie-widget
                :basis     :chart
                :type      :vari-pie-chart
+               :build-fn  vanilla.widgets.make-chart/make-chart
                :ret_types [:data-format/label-y-n :data-format/label-y :data-format/label-y-e]
                :icon      "/images/vari-pie-widget.png"
                :label     "Variable Pie"
@@ -278,7 +291,7 @@
                 {:name      :area-widget
                  :basis     :chart
                  :type      :area-chart
-                 ;:data-source :spectrum-traces
+                 :build-fn  vanilla.widgets.make-chart/make-chart
                  :ret_types [:data-format/x-y :data-format/x-y-n :data-format/x-y-e :data-format/y]
                  :icon      "/images/area-widget.png"
                  :label     "Area"
@@ -296,7 +309,7 @@
                 {:name      :bar-widget
                  :basis     :chart
                  :type      :bar-chart
-                 ;:data-source :spectrum-traces
+                 :build-fn  vanilla.widgets.make-chart/make-chart
                  :ret_types [:data-format/x-y :data-format/x-y-n :data-format/x-y-e :data-format/y]
                  :icon      "/images/bar-widget.png"
                  :label     "Bar"
