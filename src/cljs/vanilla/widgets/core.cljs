@@ -96,10 +96,10 @@
   (let [widget @(rf/subscribe [:widget-type name])
         build-fn (:build-fn widget)]
 
-    ;(prn "chart-content " name "of type " type
-    ;  " //// widget " widget
-    ;  ;" //// data " @data
-    ;  " //// build-fn " build-fn)
+    (prn "chart-content " name "of type " type
+      " //// widget " widget
+      ;" //// data " @data
+      " //// build-fn " build-fn)
 
     (build-fn widget data options)))
 

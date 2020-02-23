@@ -80,6 +80,7 @@
               {:name      :continent-map-widget
                :basis     :map
                :type      :continent-map
+               :build-fn  vanilla.widgets.make-map/make-map
                :ret_types [:data-format/cont-n]
                :icon      "/images/map-widget.png"
                :label     "Continent Map"
@@ -94,6 +95,7 @@
               {:name      :australia-map-widget
                :basis     :map
                :type      :australia-map
+               :build-fn  vanilla.widgets.make-map/make-map
                :ret_types [:data-format/lat-lon-label]
                :icon      "/images/map-widget.png"
                :label     "Australia Map"
