@@ -101,7 +101,7 @@
     ;  ;" //// data " @data
     ;  " //// build-fn " build-fn)
 
-    (build-fn widget @data options)))
+    (build-fn widget data options)))
 
 
 (defn widget

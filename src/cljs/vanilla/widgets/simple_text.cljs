@@ -15,4 +15,4 @@
                        :font-weight "bold"
                        :color       "blue"}}
 
-     (get-in data [:data :text])]])
+     (get-in @data [:data :text])]])

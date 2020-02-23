@@ -92,10 +92,10 @@
                        base-config plot-config (-> chart-config :chart-options))]
 
     ;(prn "make-config after " chart-type
-    ;  " //// (chart-config)" chart-config
+    ;  ;" //// (chart-config)" chart-config
     ;  " //// (data)" data-config
-    ;  " //// (base-config)" base-config
-    ;  " //// (plot-config)" plot-config
+    ;  ;" //// (base-config)" base-config
+    ;  ;" //// (plot-config)" plot-config
     ;  " //// (final-config)" final-config)
 
     final-config))
@@ -114,10 +114,10 @@
                      (assoc chart-config :series converted)
                      chart-config)]
 
-    ;(prn "merge-configs " chart-type
-    ;  " //// (chart-config) " chart-config
+    ;(prn "merge-config after " chart-type
+    ;  ;" //// (chart-config) " chart-config
     ;  " //// (data) " data
-    ;  " //// (converted)" converted
+    ;  ;" //// (converted)" converted)
     ;  " //// (ret)" ret)
 
 
@@ -191,19 +191,18 @@
   ;(prn " entering make-chart " chart-config)
 
   (let [chart-config @(rf/subscribe [:hc-type (:type widget)])
-        chart-type   (-> chart-config :chart-options :chart/type)
-        base-config (make-config chart-config data options)
-        all-configs (merge-configs base-config data options)
-        ret [hc/chart {:chart-data all-configs}]]
+        base-config (make-config chart-config @data options)
+        all-configs (merge-configs base-config @data options)
+        ret [hc/chart {:chart-meta {:id (:key widget) :redo true}
+                       :chart-data (merge-configs base-config @data options)}]]
 
 
-    (prn "make-chart " widget
-      " //// chart-type " chart-type
-      " //// base-config " base-config
-      " //// all-configs " all-configs
+    ;(prn "make-chart " widget
+    ;  " //// base-config " base-config
+    ;  " //// all-configs " all-configs)
       ;" //// options " options
-      " //// ret" ret
-      " //// data " data)
+      ;" //// ret" ret
+      ;" //// data " data)
 
     ret))
 
