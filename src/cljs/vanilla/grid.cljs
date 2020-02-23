@@ -44,30 +44,6 @@
 
 
 
-;(defn widget-wrapper [props id]
-;  (let [content (widget/setup-widget props)
-;        ret     [:div
-;                 (merge props {:class "widget"
-;                               :style {:background-color (get-in props [:options :viz/banner-color] "yellow")
-;                                       :color            (get-in props [:options :viz/banner-text-color] "black")}})
-;                 content]]
-;
-;    (prn "widget-wrapper "
-;      " //// props " props
-;      " //// id " id
-;      " //// content " content
-;      " //// ret " ret)
-;
-;    ret))
-
-
-
-
-
-
-
-
-
 (defn Grid
   [args]
 
@@ -84,10 +60,10 @@
      :reagent-render
      (fn [{:keys [id data width row-height cols breakpoints item-props on-change empty-text] :as props}]
 
-       (prn (str "grid render args " args
-              " //// props " props
-              " //// item-props" item-props
-              " //// data " data))
+       ;(prn (str "grid render args " args
+       ;       " //// props " props
+       ;       " //// item-props" item-props
+       ;       " //// data " data))
 
        [:div.grid-container
         (into [:> js/ReactGridLayout.Responsive {:id              id

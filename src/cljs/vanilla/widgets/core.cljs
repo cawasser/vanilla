@@ -110,7 +110,7 @@
 
   [{:keys [name key basis build-fn options] :as w} id s]
 
-  (let [ret (basic/basic-widget name w
+  (let [ret (basic/basic-widget key options
               [:div
                (chart-content w s options)])]
     ;(prn "widget " w
