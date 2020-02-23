@@ -14,9 +14,9 @@
 (rf/reg-event-db
   :update-layout
   (fn-traced [db [_ layout]]
-             (let [new-layout (u/update-layout (:widgets db) (u/reduce-layouts layout))]
-               (u/save-layout new-layout)
-               (assoc db :widgets new-layout))))
+    (let [new-layout (u/update-layout (:widgets db) (u/reduce-layouts layout))]
+      (u/save-layout new-layout)
+      (assoc db :widgets new-layout))))
 
 
 
@@ -44,25 +44,24 @@
 
 
 
-(defn widget-wrapper [props data]
+;(defn widget-wrapper [props id]
+;  (let [content (widget/setup-widget props)
+;        ret     [:div
+;                 (merge props {:class "widget"
+;                               :style {:background-color (get-in props [:options :viz/banner-color] "yellow")
+;                                       :color            (get-in props [:options :viz/banner-text-color] "black")}})
+;                 content]]
+;
+;    (prn "widget-wrapper "
+;      " //// props " props
+;      " //// id " id
+;      " //// content " content
+;      " //// ret " ret)
+;
+;    ret))
 
-  ;(prn "widget-wrapper..." props
-  ;  " //// data " data)
 
-  (let [content (widget/setup-widget props)
-        ret     [:div
-                 (merge props {:class "widget"
-                               :style {:background-color (get-in props [:options :viz/banner-color] "yellow")
-                                       :color            (get-in props [:options :viz/banner-text-color] "black")}})
-                 content]]
 
-    ;(prn "widget-wrapper "
-    ;  " //// props " props
-    ;  " //// data " data
-    ;  " //// content " content
-    ;  " //// ret " ret)
-
-    ret))
 
 
 
@@ -85,10 +84,10 @@
      :reagent-render
      (fn [{:keys [id data width row-height cols breakpoints item-props on-change empty-text] :as props}]
 
-       ;(prn (str "grid render args " args
-       ;       " //// props " props
-       ;       " //// item-props" item-props
-       ;       " //// data " data))
+       (prn (str "grid render args " args
+              " //// props " props
+              " //// item-props" item-props
+              " //// data " data))
 
        [:div.grid-container
         (into [:> js/ReactGridLayout.Responsive {:id              id
@@ -102,4 +101,4 @@
                                                  :draggableCancel ".grid-content"
                                                  :breakpoints     breakpoints
                                                  :onLayoutChange  (partial onLayoutChange on-change data)}]
-          (mapv #(widget-wrapper % (:key %)) data))])}))
+          (mapv #(widget/widget-wrapper % (:key %)) data))])}))

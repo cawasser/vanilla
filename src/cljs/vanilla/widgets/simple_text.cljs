@@ -3,9 +3,10 @@
             [vanilla.widgets.basic-widget :as basic]))
 
 
-(defn make-widget [name data options]
+(defn make-widget [widget data options]
 
-  ;(.log js/console ":simple-text" (str data) (str options))
+  ;(prn ":simple-text " data
+  ;    " //// options " options)
 
    [:div {:style {:width "100%"
                         :text-align :center
