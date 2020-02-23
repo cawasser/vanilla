@@ -178,7 +178,7 @@
 
   [widget data options]
 
-  (prn " entering make-map " widget)
+  ;(prn " entering make-map " widget)
 
   (let [chart-config @(rf/subscribe [:hc-type (:type widget)])
         base-config (make-config chart-config @data options)
@@ -188,11 +188,11 @@
                          :chart-data (merge-configs base-config @data options)}]]]
 
 
-    (prn "make-map " widget
+    ;(prn "make-map " widget
       ;" //// base-config " base-config
       ;" //// all-configs " all-configs
       ;" //// options " options
-      " //// ret" ret)
+      ;" //// ret" ret
       ;" //// data " data)
 
     ret))

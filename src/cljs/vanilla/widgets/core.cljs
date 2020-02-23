@@ -4,102 +4,16 @@
             [vanilla.widgets.make-chart :as mc]
             [vanilla.widgets.make-map :as mm]))
 
-;(defn make-widget [name id chart-config data options]
-;
-;  ;(prn "make-widget " name "of type " id ", " chart-config)
-;
-;  ;(fn [data options]
-;
-;    ;(prn "in widget " id " / " name
-;    ;  ;" //// data " data
-;    ;  " //// options " options
-;    ;  " //// chart-config " chart-config)
-;
-;    [basic/basic-widget name options
-;     [:div {:style {:width "95%" :height "100%"}}
-;      [mc/make-chart chart-config @data options]]])
-;
-;(defn make-map-widget [name id chart-config data options]
-;
-;  ;(prn "make-widget " name "of type " id ", " chart-config)
-;
-;  ;(fn [data options]
-;
-;    ;(prn "in widget " id " / " name
-;    ;  " //// data " data
-;    ;  " //// options " options
-;    ;  " //// chart-config " chart-config)
-;
-;    [basic/basic-widget name options
-;     [:div {:style {:width "95%" :height "100%"}}
-;      [mm/make-chart chart-config @data options]]])
-;
-;
-;
-;(defn make-simple-widget [name type data options]
-;
-;  (let [widget @(rf/subscribe [:widget-type type])
-;        build-fn (:build-fn widget)]
-;
-;    (prn "make-simple-widget " name "of type " type
-;      " //// widget " widget
-;      " //// data " @data
-;      " //// build-fn " build-fn
-;
-;    ;(fn [data options]
-;
-;      [basic/basic-widget name options
-;       [:div.container
-;        (build-fn name @data options)]])))
-;
-;
-;
-;(defn build-widget [{:keys [key basis type chart-types] :as widget} data options]
-;
-;  (let [chart-config @(rf/subscribe [:hc-type type])]
-;
-;    (prn "build-widget " key " of " type
-;      " //// " basis "/" chart-types
-;      " //// chart-config " chart-config
-;      " //// data " data
-;      " //// widget " widget)
-;
-;    (condp = basis
-;      :chart (make-widget key type chart-config data options)
-;
-;      :simple (make-simple-widget key type data options)
-;
-;      :map (make-map-widget key type chart-config data options))))
-;
-;
-;(defn setup-widget [{:keys [key data-source type options] :as props}]
-;
-;  (prn "setup-widget " key "/" type
-;                     " //// data-source " data-source
-;                     " //// options " options
-;                     " //// props " props)
-;
-;  (if data-source
-;    (let [data (rf/subscribe [:app-db data-source])]
-;
-;      (prn "attaching data " data-source
-;        " //// data "@data)
-;
-;      (build-widget props data options))
-;
-;    (build-widget props {} options)))
-
-
 (defn chart-content
   [{:keys [name type]} data options]
 
   (let [widget @(rf/subscribe [:widget-type name])
         build-fn (:build-fn widget)]
 
-    (prn "chart-content " name "of type " type
-      " //// widget " widget
+    ;(prn "chart-content " name "of type " type
+    ;  " //// widget " widget
       ;" //// data " @data
-      " //// build-fn " build-fn)
+      ;" //// build-fn " build-fn
 
     (build-fn widget data options)))
 
