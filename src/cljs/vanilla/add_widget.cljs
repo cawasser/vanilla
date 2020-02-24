@@ -1,4 +1,4 @@
-(ns vanilla.add-widget-modal
+(ns vanilla.add-widget
   (:require [reagent.core :as r]
             [re-frame.core :as rf]
             [day8.re-frame.tracing :refer-macros [fn-traced]]
