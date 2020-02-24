@@ -133,7 +133,6 @@
 (defn home-page
   "This is the start of the UI for our SPA"
   []
-  ;[modal-modal/initialize-modal]
   [:div {:width "100%"}
    [:div.container
     [:div.content {:width "100%"}

@@ -3,7 +3,8 @@
             [re-frame.core :as rf]
             [day8.re-frame.tracing :refer-macros [fn-traced]]
             [cljsjs.react-color]
-            [vanilla.update-layout :as u]))
+            [vanilla.update-layout :as u]
+            [vanilla.modal :as modal]))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -90,6 +91,12 @@
       (u/save-layout new-widgets)
       (assoc db :widgets new-widgets))))
 
+(rf/reg-event-db
+  :widget-modal-active
+  (fn-traced
+    [db [_ val]]
+    (assoc db :widget-modal-active :true)))
+
 (rf/reg-sub
   :chosen-widget
   (fn-traced
@@ -123,6 +130,11 @@
   (fn [db _]
     (:configure-widget db)))
 
+(rf/reg-sub
+  :widget-modal-active
+  (fn [db _]
+    (:widget-modal-active db)))
+
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -130,34 +142,53 @@
 ; PUBLIC component
 ;
 
-(defn change-header [is-active]
-  [:div.modal (if (and (not= @is-active "") (not (nil? @is-active)))
-                {:class "is-active"})
-   [:div.modal-background]
-   [:div.modal-card
+(defn body-1 []
+  [:p "Title: "]
+  [:input.input
+   {:type      :text
+    :value     @(rf/subscribe [:chosen-title])
+    :on-change #(do
+                  (rf/dispatch-sync [:chosen-title (-> % .-target .-value)]))}])
+
+
+(defn change-header
+  "This calls a modal to pop up to allow the user to change the title, text color and background color
+  for the widget."
+  ;; TODO - Right now this code uses "is-active" as a string value to determine active widget for
+  ;;        saving/editing purposes but modal code expects a boolean value. Need to determine if it's
+  ;;        worth changing the architecture of either of these systems to make one accommodate the other.
+  [is-active]
+
+  [modal/modal-start (if (and (not= @is-active "") (not (nil? @is-active)))
+                       {:class "is-active"})
+   [modal/modal-background]
+   [modal/modal-card
     [:header.modal-card-head
      [:p.modal-card-title "Change Tile and Text Color"]]
-    [:section.modal-card-body
-     [:p "Title: "]
-     [:input.input
-      {:type      :text
-       :value     @(rf/subscribe [:chosen-title])
-       :on-change #(do
-                     (rf/dispatch-sync [:chosen-title (-> % .-target .-value)]))}]]
-    [:section.modal-card-body
-     [:p "Text Color: "]
-     [:> js/ReactColor.CompactPicker
-      {:style            {:top "5px" :left "10px"}
-       :color            @(rf/subscribe [:chosen-title-color])
-       :onChangeComplete (fn [color _]
-                           (rf/dispatch-sync [:chosen-title-color (:rgb (js->clj color :keywordize-keys true))]))}]]
-    [:section.modal-card-body
-     [:p "Banner Color: "]
-     [:> js/ReactColor.CompactPicker
-      {:style            {:top "5px" :left "10px"}
-       :color            @(rf/subscribe [:chosen-banner-color])
-       :onChangeComplete (fn [color _]
-                           (rf/dispatch-sync [:chosen-banner-color (:rgb (js->clj color :keywordize-keys true))]))}]]
+    [modal/modal-body-section
+     [:h5 "Title: "
+      [:div.container
+       [:input.input
+        {:type      :text
+         :value     @(rf/subscribe [:chosen-title])
+         :on-change #(do
+                       (rf/dispatch-sync [:chosen-title (-> % .-target .-value)]))}]]]]
+    [modal/modal-body-section
+     [:h5 "Text Color: "
+      [:div.container
+       [:> js/ReactColor.CompactPicker
+        {:style            {:top "5px" :left "10px"}
+         :color            @(rf/subscribe [:chosen-title-color])
+         :onChangeComplete (fn [color _]
+                             (rf/dispatch-sync [:chosen-title-color (:rgb (js->clj color :keywordize-keys true))]))}]]]]
+    [modal/modal-body-section
+     [:h5 "Banner Color: "
+      [:div.container
+       [:> js/ReactColor.CompactPicker
+         {:style            {:top "5px" :left "10px"}
+          :color            @(rf/subscribe [:chosen-banner-color])
+          :onChangeComplete (fn [color _]
+                              (rf/dispatch-sync [:chosen-banner-color (:rgb (js->clj color :keywordize-keys true))]))}]]]]
 
     [:footer.modal-card-foot
      [:button.button.is-success {:on-click #(do
