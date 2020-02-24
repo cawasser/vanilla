@@ -26,7 +26,7 @@
     :australia-map {:chart-options     {:chart/type              :australia-map
                                         :chart/supported-formats [:data-format/lat-lon-label]
                                         :chart                   {:map      "countries/au/au-all"
-                                                                  :zoomType "x"}
+                                                                  :zoomType "xy"}
                                         :yAxis                   {:title  {:align "high"}
                                                                   :labels {:overflow "justify"}}}
 
