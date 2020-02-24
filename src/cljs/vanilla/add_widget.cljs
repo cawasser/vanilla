@@ -185,8 +185,8 @@
     (fn []
 
       (modal/create-modal is-active
-                          "Add Data Sour"
-                          (list [service-list @services @selected]
+                          "Add Data Source"
+                          (vector [service-list @services @selected]
                                 [widget-list @widget-cards @selected @chosen-widget])
                           @compatible-selection
                           #(add-widget (:name @chosen-widget) @selected)

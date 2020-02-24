@@ -62,16 +62,29 @@
 
 (defn create-modal
   "This function creates a modal
-  More specifically this function takes in all the data used by a the modal components and
-  creates the components and strings them together to return one fully built modal in return."
-  [is-active                 ;; The modal is not visible(or inactive) by default. This var denotes it's visibility
-   title                     ;; The title of the modal
-   modal-body-list           ;; This should be the body section of the modal. This is very specific for each use
-                             ;; so this can take in a list of hiccup.
-   footer-button-enabled     ;; Should the modal-footer-button show?
-   footer-button-fn          ;; What does the modal-footer-button do?
-   footer-button-text]       ;; What does the modal-button say? (ie "submit")
 
+  More specifically this function takes in all the data used by a the modal components and
+  creates the components and strings them together to return one fully built modal in return.
+
+  *is-active*                 The modal is not visible(or inactive) by default. This var denotes it's visibility
+
+  *title*                     The title of the modal
+
+  *modal-body-list*           This should be the body section of the modal. This is very specific for each use
+                             so this can take in a list of hiccup.
+
+  *footer-button-enabled*     Should the modal-footer-button show?
+
+  *footer-button-fn*          What does the modal-footer-button do on-click?
+
+  *footer-button-text*        What does the modal-button say? (ie \"submit\")"
+
+  [is-active
+   title
+   modal-body-list
+   footer-button-enabled
+   footer-button-fn
+   footer-button-text]
   [modal-start (if @is-active {:class "is-active"})
    [modal-background]
    [modal-card
