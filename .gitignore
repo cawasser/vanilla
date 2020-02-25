@@ -1,0 +1,5 @@
+vanilla_db
+log/
+target/
+.idea/
+.nrepl-port

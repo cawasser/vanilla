@@ -57,6 +57,9 @@ This single-page application (SPA) provides a number of graphical widgets based 
 - [Deploy to AWS](docs/deploy-to-aws.md)
 - [Working with AMQP (RabbitMQ/Bunnicula)]()
 - [Working with Kafka]()
+- [Database Management](docs/database_management.md)
+
+
 
 ## Architecture
 
@@ -77,7 +80,7 @@ This will generate the file:
 
 Here is the document it generates:
 
-[marginalia-uberdoc](./docs/uberdoc.html)
+[marginalia-uberdoc](/docs/uberdoc.html)
 
 
 ### Generated Diagrams
@@ -97,6 +100,7 @@ Diagrams are generated "automatically" by ???
 
 
 ## User Guide
+
 
 
 ## FAQ
