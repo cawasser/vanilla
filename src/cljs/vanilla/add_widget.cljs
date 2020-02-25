@@ -184,13 +184,13 @@
         compatible-selection (rf/subscribe [:compatible-selections])]
     (fn []
 
-      (modal/create-modal is-active
-                          "Add Data Source"
-                          (vector [service-list @services @selected]
-                                [widget-list @widget-cards @selected @chosen-widget])
-                          @compatible-selection
-                          #(add-widget (:name @chosen-widget) @selected)
-                          "Add"))))
+      (modal/create-modal {:is-active             is-active
+                           :title                 "Add Data Source"
+                           :modal-body-list       (vector [service-list @services @selected]
+                                                        [widget-list @widget-cards @selected @chosen-widget])
+                           :footer-button-enabled @compatible-selection
+                           :footer-button-fn      #(add-widget (:name @chosen-widget) @selected)
+                           :footer-button-text    "Add"}))))
 
 
       ;[modal/modal-start (if @is-active {:class "is-active"})

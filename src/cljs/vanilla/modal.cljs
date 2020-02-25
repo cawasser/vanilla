@@ -79,12 +79,12 @@
 
   *footer-button-text*        What does the modal-button say? (ie \"submit\")"
 
-  [is-active
-   title
-   modal-body-list
-   footer-button-enabled
-   footer-button-fn
-   footer-button-text]
+  [{:keys [is-active
+           title
+           modal-body-list
+           footer-button-enabled
+           footer-button-fn
+           footer-button-text] :as input}]
   [modal-start (if @is-active {:class "is-active"})
    [modal-background]
    [modal-card
