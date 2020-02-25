@@ -180,7 +180,7 @@
 
   (d/connect-to-data-sources)
 
-  ;modal-modal/initialize-modal-components
+
   (r/render home-page (.getElementById js/document "app")))
 
 
