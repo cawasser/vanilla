@@ -5,7 +5,7 @@
   (log/info "Arearange Service Data")
 
   {:title       "Area Range Data"
-   :data-format :data-format/x-yl-yh
+   :data-format :data-format/date-yl-yh
    :src/x-title "Date"
    :src/y-title "Temperature (°C)"
 

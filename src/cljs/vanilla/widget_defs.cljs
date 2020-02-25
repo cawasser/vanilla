@@ -28,7 +28,7 @@
               {:name      :arearange-widget
                :basis     :chart
                :type      :arearange-chart
-               :ret_types [:data-format/x-yl-yh]
+               :ret_types [:data-format/date-yl-yh]
                :icon      "/images/arearange-widget.png"
                :label     "AreaRange"
                :options   {:viz/title             "Area Range"

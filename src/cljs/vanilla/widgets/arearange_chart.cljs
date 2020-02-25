@@ -19,7 +19,7 @@
 (defn register-type []
   (mc/register-type
     :arearange-chart {:chart-options     {:chart/type              :arearange-chart
-                                          :chart/supported-formats [:data-format/x-yl-yh]
+                                          :chart/supported-formats [:data-format/date-yl-yh]
                                           :chart                   {:type     "arearange"
                                                                     :zoomType "x"
                                                                     :scrollablePlotArea {:minWidth 600

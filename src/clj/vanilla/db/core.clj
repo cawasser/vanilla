@@ -94,7 +94,7 @@
        "returns location of various cities in Australia"]
 
       ["15000" "arearange-service" "AreaRange Data"
-       "data-format/x-yl-yh" "vanilla.arearange-service/fetch-data"
+       "data-format/date-yl-yh" "vanilla.arearange-service/fetch-data"
        "returns low and high temperature of a day over time"]]}))
 
 
@@ -277,7 +277,7 @@
        "returns location of various cities in Australia"]
 
       ["15000" "arearange-service" "Area Range Data"
-       "data-format/x-yl-yh" "vanilla.arearange-service/fetch-data"
+       "data-format/date-yl-yh" "vanilla.arearange-service/fetch-data"
        "returns temperature variation by day"]]})
 
 
