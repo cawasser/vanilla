@@ -13,8 +13,14 @@
     [vanilla.add-widget-modal :as modal]
     [vanilla.widgets.configure-widget :as wc]
     [vanilla.login-modal :as login]
+    [vanilla.version :as ver]
 
     [vanilla.grid :as grid]
+
+    [reitit.core :as re]
+    [goog.events :as events]
+    [goog.history.EventType :as HistoryEventType]
+
 
     ; needed to register all the highcharts types
     [vanilla.widgets.area-chart]
@@ -57,11 +63,11 @@
              (assoc-in db [:widget-types (:name widget)] widget)))
 
 
-(rf/reg-event-db
-  :set-version
-  (fn-traced [db [_ version]]
-             ;(prn ":set-version " version)
-             (assoc db :version (:version version))))
+;(rf/reg-event-db
+;  :set-version
+;  (fn-traced [db [_ version]]
+;             ;(prn ":set-version " version)
+;             (assoc db :version (:version version))))
 
 
 (rf/reg-event-db
@@ -72,6 +78,23 @@
 
 
 
+
+;;;;;;;
+;
+; Routing & Page Navigation
+
+(rf/reg-event-db
+  :navigate
+  (fn-traced
+    [db [_ route]]
+    (assoc db :route route)))
+
+
+(rf/reg-sub
+  :page
+  :<- [:route]
+  (fn [route _]
+    (-> route :data :name)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;
@@ -92,11 +115,11 @@
 ; VERSION NUMBER
 ;
 ;
-
-(defn get-version []
-  (GET "/version" {:headers         {"Accept" "application/transit+json"}
-                   :response-format (ajax/json-response-format {:keywords? true})
-                   :handler         #(rf/dispatch-sync [:set-version %])}))
+;
+;(defn get-version []
+;  (GET "/version" {:headers         {"Accept" "application/transit+json"}
+;                   :response-format (ajax/json-response-format {:keywords? true})
+;                   :handler         #(rf/dispatch-sync [:set-version %])}))
 
 
 (def width 1536)
@@ -138,10 +161,99 @@
      [:div.container.level.is-fluid {:width "100%"}
       [:div.level-left.has-text-left
        [wc/change-header (rf/subscribe [:configure-widget])]
-       [modal/version-number]]
+       [ver/version-number]]
       [top-right-buttons]]]]
    [widgets-grid]])
 
+
+;;;;;;;;;;
+;
+;   About Page
+
+(defn about-page []
+  [:section.section
+   [:p "about about about"]])
+
+
+
+
+
+;;;;;;;;;;
+;
+;    Navbar stuff
+
+
+(defn nav-link
+  ""
+  [uri title page]
+  [:a.navbar-item
+   {:href   uri
+    :active (when (= page @(rf/subscribe [:page])) "active")}
+   title])
+
+(defn navbar
+  ""
+  []
+  (r/with-let [expanded? (r/atom false)]
+              [:nav.navbar.is-info>div.container
+               [:div.navbar-brand
+                [:a.navbar-item {:href "/" :style {:font-weight :bold}} "sample-3"]
+                [:span.navbar-burger.burger
+                 {:data-target :nav-menu
+                  :on-click #(swap! expanded? not)
+                  :class (when @expanded? :is-active)}
+                 [:span][:span][:span]]]
+               [:div#nav-menu.navbar-menu
+                {:class (when @expanded? :is-active)}
+                [:div.navbar-end
+                 [nav-link "#/" "Home" :home]
+                 [nav-link "#/about" "About" :about]]]]))
+
+
+
+;;;;;;;;;;;
+;
+;    Routing and Page management
+
+(def pages
+  {:home #'home-page
+   :about #'about-page})
+
+(def router
+  (re/router
+    [["/" :home]
+     ["/about" :about]]))
+
+(defn page
+  []
+  [:div
+   [navbar]
+   [(pages @(rf/subscribe [:page]))]])
+
+
+;; -------------------------
+;; History
+;; must be called after routes have been defined
+(defn hook-browser-navigation! []
+  (doto (History.)
+    (events/listen
+      HistoryEventType/NAVIGATE
+      (fn [event]
+        (let [uri (or (not-empty (string/replace (.-token event) #"^.*#" "")) "/")]
+          (rf/dispatch
+            [:navigate (reitit/match-by-path router uri)]))))
+    (.setEnabled true)))
+
+
+;;;;;;;;;;;
+;
+;   Initialize the application
+
+(defn mount-components
+  "Right now we may not need to clear sub cache - find this out"
+  []
+  ;(rf/clear-subscription-cache!)
+  (r/render [#'page] (.getElementById js/document "app")))
 
 
 (defn start-dashboard
@@ -151,7 +263,11 @@
   ;(prn "calling :initialize")
   (rf/dispatch-sync [:initialize])
 
-  (get-version)
+  ;; Set up page navigation and routing
+  (rf/dispatch-sync [:navigate (reitit/match-by-name router :home)])
+
+
+  (ver/get-version)
   (get-services)
 
   ; TODO eliminate register-global-app-state-subscription (attach subscription in add-widget)
@@ -180,7 +296,11 @@
 
   (d/connect-to-data-sources)
 
-  (r/render home-page (.getElementById js/document "app")))
+
+  (hook-browser-navigation!)
+
+  (mount-components))
+  ;(r/render home-page (.getElementById js/document "app")))
 
 
 ;(start-dashboard)
