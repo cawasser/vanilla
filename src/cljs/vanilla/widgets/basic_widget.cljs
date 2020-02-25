@@ -48,19 +48,25 @@
     [:div {:class "vanilla.widgets.line-chart container"
            :style {:height (get options :viz/height "100%")
                    :width  "100%"}}
-     [:div {:class "title-wrapper"}
-      [:container.level {:style    {:background-color (util/rgba (get options :viz/banner-color {:r 150 :g 150 :b 150 :a 1}))}
-                         :on-click #(do
-                                      ;(prn "showing header for " name)
-                                      (rf/dispatch-sync [:configure-widget name]))}
+     [:div {:class "title-wrapper grid-toolbar move-cursor"
+            :cursor "move"}
+      [:container.level
+       {:style    {:background-color (util/rgba (get options :viz/banner-color {:r 150 :g 150 :b 150 :a 1}))}}
+
 
        [:div.level-left.has-text-left
-        [:h3 {:class    "title"
+        [:h3 {:class    "title grid-content menu-cursor"
+              :cursor "context-menu"
+              :on-mouse-down #(.stopPropagation %)
+              :on-click #(do
+                           ;(prn "showing header for " name)
+                           (rf/dispatch-sync [:configure-widget name]))
               :style    {:color (util/rgba (get options :viz/banner-text-color {:r 0 :g 0 :b 0 :a 1}))}}
          (get options :viz/title)]]
 
        [:div.level-right.has-text-centered
         [:button.delete.is-large {:style    {:margin-right "10px"}
+                                  :on-mouse-down #(.stopPropagation %)
                                   :on-click #(do
                                                (rf/dispatch [:remove-widget name])
                                                (.stopPropagation %))}]]]]
