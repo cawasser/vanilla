@@ -40,7 +40,7 @@
    return - 'stuart sierra component' for later use"
   [consumer]
   (component/system-map
-    :rmq-connection conn/connection
+    :rmq-connection (conn/connection)
     :monitoring monitoring/BaseMonitoring
     :consumer (component/using
                 consumer
@@ -102,10 +102,11 @@
                service        (create-consumer-service new-p)
                started-server (component/start-system service)]
            (register-consumer exchange queue started-server)
+           (prn "registered the consumer correctly for:" exchange "///" queue)
            started-server)
          p)
        (catch Exception e (do
-                            (log/debug "Can't connect consumer: " (.getMessage e))
+                            (prn "Can't connect consumer: " (.getMessage e))
                             ())))))
 
   ([exchange queue handler-fn] (create-consumer-for exchange queue handler-fn "edn")))
@@ -144,7 +145,9 @@
   (def queue "some.queue")
   (def typ "edn")
   (def msg-type "edn")
-  (def handler-fn edn-handler)
+  (def handler-fn proc/edn-handler)
+
+  (require '[vanilla.processing :as proc])
 
   (find-consumer-for exchange queue)
 
@@ -162,10 +165,12 @@
   @consumers
 
 
-  (create-consumer-for "my-exchange" "some.queue" edn-handler)
+  (create-consumer-for "my-exchange" "some.queue" proc/edn-handler)
 
 
-  @edn-messages-received
+
+
+  @proc/edn-messages-received
   (reset! edn-messages-received [])
 
   (stop-and-remove-consumer-for exchange queue)

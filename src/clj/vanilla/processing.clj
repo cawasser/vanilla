@@ -5,7 +5,8 @@
             ;[chocolate.protobuf.person]
             ;[chocolate.protobuf.message]))
 
-
+(defonce edn-messages-received
+         (atom []))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;
@@ -15,6 +16,7 @@
 (defn edn-handler
   [processing-fn]
   (fn [body parsed envelope components]
+    (swap! edn-messages-received conj parsed)
     (processing-fn body parsed envelope components)))
 
 
