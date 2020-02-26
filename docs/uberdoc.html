@@ -4368,8 +4368,8 @@ This should not be pushed to the repo or AWS, it will be added to git ignore</p>
     (fn []
       (modal/create-modal {:is-active             is-active
                            :title                 &quot;Add Data Source&quot;
-                           :modal-body-list       (vector [service-list @services @selected]
-                                                        [widget-list @widget-cards @selected @chosen-widget])
+                           :modal-body-list       [[service-list @services @selected]
+                                                   [widget-list @widget-cards @selected @chosen-widget]]
                            :footer-button-enabled @compatible-selection
                            :footer-button-fn      #(add-widget (:name @chosen-widget) @selected)
                            :footer-button-text    &quot;Add&quot;}))))</pre></td></tr><tr><td class="docs"><p>[modal/modal-start (if @is-active {:class "is-active"})
@@ -4551,7 +4551,7 @@ This should not be pushed to the repo or AWS, it will be added to git ignore</p>
        [add-wid/version-number]]
       [top-right-buttons]]]]
    [widgets-grid]])</pre></td></tr><tr><td class="docs"><p>Initialize all the data needed for the start of our SPA, ends by calling the UI to generate</p>
-</td><td class="codes"><pre class="brush: clojure">(defn start-dashbolard
+</td><td class="codes"><pre class="brush: clojure">(defn start-dashboard
   []
   ;(prn &quot;calling :initialize&quot;)
   (rf/dispatch-sync [:initialize])
@@ -4843,10 +4843,9 @@ This should not be pushed to the repo or AWS, it will be added to git ignore</p>
   [:header.modal-card-head
    [:p.modal-card-title title]
    [:button.delete {:aria-label &quot;close&quot;
-                    :on-click   #(reset! is-active false)}]])</pre></td></tr><tr><td class="docs">
+                    :on-click   #(reset! is-active false)}]])</pre></td></tr><tr><td class="docs"><p>This is mostly a helper def</p>
 </td><td class="codes"><pre class="brush: clojure">(def modal-body-section
-  :section.modal-card-body)  ;; This is mostly a helper def</pre></td></tr><tr><td class="docs"><p>This is mostly a helper def</p>
-</td><td class="codes"></td></tr><tr><td class="docs">
+  :section.modal-card-body)</pre></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(defn modal-footer
   [enabled-button button-fn button-text is-active]
   [:footer.modal-card-foot
@@ -4862,18 +4861,22 @@ This should not be pushed to the repo or AWS, it will be added to git ignore</p>
 <p>  More specifically this function takes in all the data used by a the modal components and
   creates the components and strings them together to return one fully built modal in return.</p>
 
-<p>  <em>is-active</em>                 The modal is not visible(or inactive) by default. This var denotes it's visibility</p>
+<p>  <em>:is-active</em>(boolean r/atom)
+                               The modal is not visible(or inactive) based on the r/atom boolean value.</p>
 
-<p>  <em>title</em>                     The title of the modal</p>
+<p>  <em>:title</em>(string)             The title of the modal</p>
 
-<p>  <em>modal-body-list</em>           This should be the body section of the modal. This is very specific for each use
-                             so this can take in a list of hiccup.</p>
+<p>  <em>:modal-body-list</em>(vector of hiccup)
+                               This should be the body section of the modal. This is very specific for each use
+                               so this can take in a list of hiccup.</p>
 
-<p>  <em>footer-button-enabled</em>     Should the modal-footer-button show?</p>
+<p>  <em>:footer-button-enabled</em>(boolean)
+                               Should the modal-footer-button show (True or false)?</p>
 
-<p>  <em>footer-button-fn</em>          What does the modal-footer-button do on-click?</p>
+<p>  <em>:footer-button-fn</em>(fn)      What does the modal-footer-button do on-click?</p>
 
-<p>  <em>footer-button-text</em>        What does the modal-button say? (ie "submit")</p>
+<p>  <em>:footer-button-text</em>(string)
+                               What does the modal-button say? (ie "submit")</p>
 </td><td class="codes"><pre class="brush: clojure">(defn create-modal
   [{:keys [is-active
            title
@@ -4887,7 +4890,17 @@ This should not be pushed to the repo or AWS, it will be added to git ignore</p>
     (modal-header title is-active)
     (for [item modal-body-list]
        [modal-body-section item])
-    (modal-footer footer-button-enabled footer-button-fn footer-button-text is-active)]])</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#vanilla.subscriptions" name="vanilla.subscriptions"><h1 class="project-name">vanilla.subscriptions</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs">
+    (modal-footer footer-button-enabled footer-button-fn footer-button-text is-active)]])</pre></td></tr><tr><td class="docs"><p>This is an example</p>
+</td><td class="codes"><pre class="brush: clojure">(defn lets-call-a-modal
+  [is-active]
+  [:div
+   (create-modal {:is-active is-active
+                  :title &quot;Example example&quot;
+                  :modal-body-list [[:p &quot;section one&quot;]
+                                    [:p &quot;section two&quot;]]
+                  :footer-button-enabled :true
+                  :footer-button-fn #(prn &quot;You did it!&quot;)
+                  :footer-button-text &quot;Click here&quot;})])</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#vanilla.subscriptions" name="vanilla.subscriptions"><h1 class="project-name">vanilla.subscriptions</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(ns vanilla.subscriptions
   (:require [re-frame.core :as rf]))</pre></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(rf/reg-sub
@@ -5311,14 +5324,7 @@ This should not be pushed to the repo or AWS, it will be added to git ignore</p>
   :widget-modal-active
   (fn [db _]
     (:widget-modal-active db)))</pre></td></tr><tr><td class="docs"><p>PUBLIC component</p>
-</td><td class="codes"></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defn body-1 []
-  [:p &quot;Title: &quot;]
-  [:input.input
-   {:type      :text
-    :value     @(rf/subscribe [:chosen-title])
-    :on-change #(do
-                  (rf/dispatch-sync [:chosen-title (-&gt; % .-target .-value)]))}])</pre></td></tr><tr><td class="docs"><p>This calls a modal to pop up to allow the user to change the title, text color and background color
+</td><td class="codes"></td></tr><tr><td class="docs"><p>This calls a modal to pop up to allow the user to change the title, text color and background color
   for the widget.</p>
 </td><td class="codes"><pre class="brush: clojure">(defn change-header
   ;; TODO - Right now this code uses &quot;is-active&quot; as a string value to determine active widget for

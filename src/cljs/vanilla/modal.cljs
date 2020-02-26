@@ -41,8 +41,9 @@
    [:button.delete {:aria-label "close"
                     :on-click   #(reset! is-active false)}]])
 
+;; This is mostly a helper def
 (def modal-body-section
-  :section.modal-card-body)  ;; This is mostly a helper def
+  :section.modal-card-body)
 
 (defn modal-footer
   ""
@@ -66,18 +67,22 @@
   More specifically this function takes in all the data used by a the modal components and
   creates the components and strings them together to return one fully built modal in return.
 
-  *is-active*                 The modal is not visible(or inactive) by default. This var denotes it's visibility
+  *:is-active*(boolean r/atom)
+                               The modal is not visible(or inactive) based on the r/atom boolean value.
 
-  *title*                     The title of the modal
+  *:title*(string)             The title of the modal
 
-  *modal-body-list*           This should be the body section of the modal. This is very specific for each use
-                             so this can take in a list of hiccup.
+  *:modal-body-list*(vector of hiccup)
+                               This should be the body section of the modal. This is very specific for each use
+                               so this can take in a list of hiccup.
 
-  *footer-button-enabled*     Should the modal-footer-button show?
+  *:footer-button-enabled*(boolean)
+                               Should the modal-footer-button show (True or false)?
 
-  *footer-button-fn*          What does the modal-footer-button do on-click?
+  *:footer-button-fn*(fn)      What does the modal-footer-button do on-click?
 
-  *footer-button-text*        What does the modal-button say? (ie \"submit\")"
+  *:footer-button-text*(string)
+                               What does the modal-button say? (ie \"submit\")"
 
   [{:keys [is-active
            title
@@ -94,4 +99,15 @@
     (modal-footer footer-button-enabled footer-button-fn footer-button-text is-active)]])
 
 
+(defn lets-call-a-modal
+ "This is an example"
+  [is-active]
+  [:div
+   (create-modal {:is-active is-active
+                  :title "Example example"
+                  :modal-body-list [[:p "section one"]
+                                    [:p "section two"]]
+                  :footer-button-enabled :true
+                  :footer-button-fn #(prn "You did it!")
+                  :footer-button-text "Click here"})])
 

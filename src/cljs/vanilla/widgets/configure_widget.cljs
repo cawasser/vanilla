@@ -142,15 +142,6 @@
 ; PUBLIC component
 ;
 
-(defn body-1 []
-  [:p "Title: "]
-  [:input.input
-   {:type      :text
-    :value     @(rf/subscribe [:chosen-title])
-    :on-change #(do
-                  (rf/dispatch-sync [:chosen-title (-> % .-target .-value)]))}])
-
-
 (defn change-header
   "This calls a modal to pop up to allow the user to change the title, text color and background color
   for the widget."

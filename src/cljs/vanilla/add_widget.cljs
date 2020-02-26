@@ -186,8 +186,8 @@
 
       (modal/create-modal {:is-active             is-active
                            :title                 "Add Data Source"
-                           :modal-body-list       (vector [service-list @services @selected]
-                                                        [widget-list @widget-cards @selected @chosen-widget])
+                           :modal-body-list       [[service-list @services @selected]
+                                                   [widget-list @widget-cards @selected @chosen-widget]]
                            :footer-button-enabled @compatible-selection
                            :footer-button-fn      #(add-widget (:name @chosen-widget) @selected)
                            :footer-button-text    "Add"}))))
