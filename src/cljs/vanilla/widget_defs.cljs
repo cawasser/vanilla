@@ -154,7 +154,7 @@
               {:name      :line-widget
                :basis     :chart
                :type      :line-chart
-               :ret_types [:data-format/x-y :data-format/x-y-n :data-format/x-y-e :data-format/y]
+               :ret_types [:data-format/x-y :data-format/date-y :data-format/x-y-n :data-format/x-y-e :data-format/y]
                :icon      "/images/line-widget.png"
                :label     "Line"
                :options   {:viz/title        "Channels (line)"
