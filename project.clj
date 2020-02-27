@@ -62,7 +62,9 @@
                  [seancorfield/next.jdbc "1.0.12"]
                  [org.clojure/tools.nrepl "0.2.13"]
 
-                 [cljsjs/react-color "2.13.8-0"]]
+                 [cljsjs/react-color "2.13.8-0"]
+
+                 [re-frame-highcharts "0.1.3"]]
 
   :min-lein-version "2.6.1"
 

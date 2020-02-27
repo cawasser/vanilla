@@ -14,9 +14,9 @@
 (rf/reg-event-db
   :update-layout
   (fn-traced [db [_ layout]]
-             (let [new-layout (u/update-layout (:widgets db) (u/reduce-layouts layout))]
-               (u/save-layout new-layout)
-               (assoc db :widgets new-layout))))
+    (let [new-layout (u/update-layout (:widgets db) (u/reduce-layouts layout))]
+      (u/save-layout new-layout)
+      (assoc db :widgets new-layout))))
 
 
 
@@ -41,31 +41,6 @@
 
 
     (on-change prev (js->clj new :keywordize-keys true))))
-
-
-
-(defn widget-wrapper [props data]
-
-  ;(prn "widget-wrapper..." props
-  ;  " //// data " data)
-
-  (let [content (widget/setup-widget props)
-        ret     [:div
-                 (merge props {:class "widget"
-                               :style {:background-color (get-in props [:options :viz/banner-color] "yellow")
-                                       :color            (get-in props [:options :viz/banner-text-color] "black")}})
-                 content]]
-
-    ;(prn "widget-wrapper "
-    ;  " //// props " props
-    ;  " //// data " data
-    ;  " //// content " content
-    ;  " //// ret " ret)
-
-    ret))
-
-
-
 
 
 
@@ -102,4 +77,4 @@
                                                  :draggableCancel ".grid-content"
                                                  :breakpoints     breakpoints
                                                  :onLayoutChange  (partial onLayoutChange on-change data)}]
-          (mapv #(widget-wrapper % (:key %)) data))])}))
+          (mapv #(widget/widget-wrapper % (:key %)) data))])}))

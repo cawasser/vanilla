@@ -1,12 +1,14 @@
 (ns vanilla.widgets.simple-text
   (:require [reagent.core :as r :refer [atom]]
+            [re-frame.core :as rf]
             [vanilla.widgets.basic-widget :as basic]))
 
 
-(defn make-widget [name data options]
+(defn make-widget [widget source options]
 
-  ;(.log js/console ":simple-text" (str data) (str options))
-
+  ;(prn ":simple-text " data
+  ;    " //// options " options)
+  (let [data (rf/subscribe [:app-db source])]
    [:div {:style {:width "100%"
                         :text-align :center
                         :border-style  (basic/debug-style options)}}
@@ -14,4 +16,4 @@
                        :font-weight "bold"
                        :color       "blue"}}
 
-     (get-in data [:data :text])]])
+     (get-in @data [:data :text])]]))

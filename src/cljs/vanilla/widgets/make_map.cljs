@@ -1,7 +1,8 @@
 (ns vanilla.widgets.make-map
   (:require [reagent.core :as reagent]
             [re-frame.core :as rf]
-            [vanilla.widgets.util :as util]))
+            [vanilla.widgets.util :as util]
+            [vanilla.maps.utils :as hm]))
 
 (declare default-conversion)
 
@@ -164,53 +165,35 @@
 
   [id registry-data]
 
-  (prn "register-type " id
-   " //// (registry-data)" registry-data)
+  ;(prn "register-type " id
+  ; " //// (registry-data)" registry-data)
 
   (rf/dispatch [:register-hc-type id registry-data]))
 
 
 
-(defn make-chart
+(defn make-map
   "creates the correct reagent 'hiccup' and react/class to implement a
-  Highcharts.js UI component that can be embedded inside any valid hiccup"
+  Highcharts.js UI MAP component that can be embedded inside any valid hiccup"
 
-  [chart-config data options]
+  [widget source options]
 
-  (let [dom-node        (reagent/atom nil)
-        chart-type      (-> chart-config :chart-options :chart/type)
-        chart-reg-entry @(rf/subscribe [:hc-type chart-type])]
+  ;(prn " entering make-map " widget)
 
-    ;(prn "MAKE-chart " chart-type
-    ;  " //// (chart-config)" chart-config
-    ;  " ////// (chart-reg-entry)" chart-reg-entry)
+  (let [chart-config @(rf/subscribe [:hc-type (:type widget)])
+        base-config (make-config chart-config data options)
+        all-configs (merge-configs base-config data options)
+        data (rf/subscribe [:app-db source])
+        ret [:div {:style {:width (get options :viz/width "100%") :height "100%"}}
+             [hm/hc-map {:chart-meta {:id (:key widget) :redo true}
+                         :chart-data (merge-configs base-config data options)}]]]
 
-    (reagent/create-class
-      {:reagent-render
-       (fn [args]
-         @dom-node                                          ; be sure to render if node changes
-         [:div {:style {:width (get options :viz/width "100%") :height "100%"}}])
 
-       :component-did-mount
-       (fn [this]
-         (let [node (reagent/dom-node this)]
+    ;(prn "make-map " widget
+      ;" //// base-config " base-config
+      ;" //// all-configs " all-configs
+      ;" //// options " options
+      ;" //// ret" ret
+      ;" //// data " data)
 
-           ;(prn "component-did-mount " chart-type)
-
-           (reset! dom-node node)))
-
-       :component-did-update
-       (fn [this old-argv]
-         (let [new-args (rest (reagent/argv this))
-               new-data (js->clj (second new-args))
-               base-config (make-config chart-config new-data options)
-               all-configs (merge-configs base-config new-data options)]
-
-           (prn "component-did-update " chart-type
-             " //// chart-config " chart-config
-             " //// chart-reg-entry " chart-reg-entry
-             " //// base-config " base-config
-             " //// (all-config)" all-configs)
-
-           (js/Highcharts.mapChart. (reagent/dom-node this)
-                                 (clj->js all-configs))))})))
+    ret))

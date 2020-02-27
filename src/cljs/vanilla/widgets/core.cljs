@@ -4,86 +4,62 @@
             [vanilla.widgets.make-chart :as mc]
             [vanilla.widgets.make-map :as mm]))
 
-(defn make-widget [name id chart-config]
+(defn chart-content
+  [{:keys [name type]} source options]
 
-  ;(prn "make-widget " name "of type " id ", " chart-config)
-
-  (fn [data options]
-
-    ;(prn "in widget " id " / " name
-    ;  ;" //// data " data
-    ;  " //// options " options
-    ;  " //// chart-config " chart-config)
-
-    [basic/basic-widget name data options
-     [:div {:style {:width "95%" :height "100%"}}
-      [mc/make-chart chart-config data options]]]))
-
-(defn make-map-widget [name id chart-config]
-
-  ;(prn "make-widget " name "of type " id ", " chart-config)
-
-  (fn [data options]
-
-    ;(prn "in widget " id " / " name
-    ;  " //// data " data
-    ;  " //// options " options
-    ;  " //// chart-config " chart-config)
-
-    [basic/basic-widget name data options
-     [:div {:style {:width "95%" :height "100%"}}
-      [mm/make-chart chart-config data options]]]))
-
-
-
-(defn make-simple-widget [name type]
-
-  (let [widget @(rf/subscribe [:widget-type type])
+  (let [widget @(rf/subscribe [:widget-type name])
         build-fn (:build-fn widget)]
 
-    (prn "make-simple-widget " name "of type " type
-      " //// widget " widget
-      " //// build-fn " build-fn)
+    ;(prn "chart-content " name "of type " type
+    ;  " //// widget " widget
+      ;" //// data " @data
+      ;" //// build-fn " build-fn
 
-    (fn [data options]
-
-      [basic/basic-widget name data options
-       [:div.container
-        (build-fn name data options)]])))
+    (build-fn widget source options)))
 
 
+(defn widget
+  "analogous to widgets.core/make-widget, but not really.
+   This may be where our issue is..."
 
-(defn build-widget [{:keys [key basis type chart-types] :as widget}]
+  [{:keys [name key basis build-fn options] :as w} id s]
 
-  (let [chart-config @(rf/subscribe [:hc-type type])]
-
-    ;(prn "building widget " key " of " type
-    ;  " //// " basis "/" chart-types
-    ;  " //// chart-config " chart-config
-    ;  " //// widget " widget)
-
-
-    (condp = basis
-      :chart (make-widget key type chart-config)
-
-      :simple (make-simple-widget key type)
-
-      :map (make-map-widget key type chart-config))))
+  (let [ret (basic/basic-widget key options
+              ;[:div
+               (chart-content w s options))]
+    ;(prn "widget " w
+    ;  " //// source " s
+    ;  " //// ret " ret)
+    ret))
 
 
-(defn setup-widget [{:keys [key data-source type options] :as props}]
 
-  ;(prn "setup-widget " key "/" type
-  ;                   " //// data-source " data-source
-  ;                   " //// options " options
-  ;                   " //// props " props)
 
-  (if data-source
-    (let [data (rf/subscribe [:app-db data-source])]
+(defn widget-setup
+  "analogous to (widgets.core/setup-widget)"
 
-      ;(prn "attaching data " data-source
-      ;  " //// data "@data)
+  [w id]
+  (let [ret    (widget w id (:data-source w))]
+    ;(prn "widget-setup " id
+    ;  " //// data-source " (:data-source w)
+    ;  " //// source " source
+    ;  " //// ret")
+    ret))
 
-      [(build-widget props) @data options])
 
-    ((build-widget props) {} options)))
+
+
+(defn widget-wrapper
+  "analogous to grid/widget-wrapper"
+
+  [w id]
+
+  ;(prn "widget-wrapper (in) " w)
+
+  (let [content (widget-setup w id)
+        ret     [:div.widget w content]]
+
+    ;(prn "widget-wrapper " w " / " id
+    ;  " //// content " ret)
+
+    ret))

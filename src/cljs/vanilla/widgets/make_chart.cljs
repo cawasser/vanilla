@@ -2,7 +2,8 @@
   (:require [reagent.core :as reagent]
             [re-frame.core :as rf]
             [day8.re-frame.tracing :refer-macros [fn-traced]]
-            [vanilla.widgets.util :as util]))
+            [vanilla.widgets.util :as util]
+            [re-frame-highcharts.utils :as hc]))
 
 
 (declare default-conversion)
@@ -11,8 +12,8 @@
 (rf/reg-event-db
   :register-hc-type
   (fn-traced [db [_ type type-fn]]
-             ;(prn "registering highcharts type " type)
-             (assoc-in db [:hc-type type] type-fn)))
+    ;(prn "registering highcharts type " type)
+    (assoc-in db [:hc-type type] type-fn)))
 
 ;;;;;;;;;;;;;;;;;
 ;
@@ -23,7 +24,7 @@
   (let [chart-reg-entry @(rf/subscribe [:hc-type chart-type])
         format-type     (get-in data [:data :data-format])
         pc-fn           (get-in chart-reg-entry [:merge-plot-option format-type]
-                                (get-in chart-reg-entry [:merge-plot-option :default]))]
+                          (get-in chart-reg-entry [:merge-plot-option :default]))]
 
     ;(prn "plot-config " chart-type
     ; " ///// (format-type)" format-type
@@ -91,10 +92,10 @@
                        base-config plot-config (-> chart-config :chart-options))]
 
     ;(prn "make-config after " chart-type
-    ;  " //// (chart-config)" chart-config
+    ;  ;" //// (chart-config)" chart-config
     ;  " //// (data)" data-config
-    ;  " //// (base-config)" base-config
-    ;  " //// (plot-config)" plot-config
+    ;  ;" //// (base-config)" base-config
+    ;  ;" //// (plot-config)" plot-config
     ;  " //// (final-config)" final-config)
 
     final-config))
@@ -113,10 +114,10 @@
                      (assoc chart-config :series converted)
                      chart-config)]
 
-    ;(prn "merge-configs " chart-type
-    ;  " //// (chart-config) " chart-config
+    ;(prn "merge-config after " chart-type
+    ;  ;" //// (chart-config) " chart-config
     ;  " //// (data) " data
-    ;  " //// (converted)" converted
+    ;  ;" //// (converted)" converted)
     ;  " //// (ret)" ret)
 
 
@@ -148,12 +149,12 @@
 (defn add-the-n-conversion [n-name default-n chart-config data options]
 
   (let [series (get-in data [:data :series])
-        ret (for [{keys :keys data :data :as all} series]
-              (assoc all
-                :keys (conj keys n-name)
-                :data (into []
-                        (for [[x y] data]
-                          [x y default-n]))))]
+        ret    (for [{keys :keys data :data :as all} series]
+                 (assoc all
+                   :keys (conj keys n-name)
+                   :data (into []
+                           (for [[x y] data]
+                             [x y default-n]))))]
 
     ;(prn "add-the-n-conversion (from)" data
     ;  " //// (series) " series
@@ -173,8 +174,8 @@
 
   [id registry-data]
 
-  (prn "register-type " id
-   " //// (registry-data)" registry-data)
+  ;(prn "register-type " id
+  ; " //// (registry-data)" registry-data)
 
   (rf/dispatch [:register-hc-type id registry-data]))
 
@@ -185,47 +186,29 @@
   "creates the correct reagent 'hiccup' and react/class to implement a
   Highcharts.js UI component that can be embedded inside any valid hiccup"
 
-  [chart-config data options]
+  [widget source options]
 
   ;(prn " entering make-chart " chart-config)
 
-  (let [dom-node        (reagent/atom nil)
-        chart-type      (-> chart-config :chart-options :chart/type)
-        chart-reg-entry @(rf/subscribe [:hc-type chart-type])]
+  (let [data (rf/subscribe [:app-db source])
+        chart-config @(rf/subscribe [:hc-type (:type widget)])
+        base-config (make-config chart-config @data options)
+        all-configs (merge-configs base-config @data options)
+        ret [hc/chart {:chart-meta {:id (:key widget) :redo true}
+                       :chart-data (merge-configs base-config @data options)}]]
 
-    ;(prn "make-chart " chart-type
-    ;  " //// (chart-config)" chart-config
-    ;  " ////// (chart-reg-entry)" chart-reg-entry)
 
-    (reagent/create-class
-      {:reagent-render
-       (fn [args]
-         @dom-node                                          ; be sure to render if node changes
-         [:div {:style {:width (get options :viz/width "100%") :height "100%"}}])
+    ;(prn "make-chart " widget
+    ;  " //// base-config " base-config
+    ;  " //// all-configs " all-configs)
+      ;" //// options " options
+      ;" //// ret" ret
+      ;" //// data " data)
 
-       :component-did-mount
-       (fn [this]
-         (let [node (reagent/dom-node this)]
+    ret))
 
-           ;(prn "component-did-mount " chart-type)
 
-           (reset! dom-node node)))
 
-       :component-did-update
-       (fn [this old-argv]
-         (let [new-args (rest (reagent/argv this))
-               new-data (js->clj (second new-args))
-               base-config (make-config chart-config new-data options)
-               all-configs (merge-configs base-config new-data options)]
-
-           (prn "component-did-update " chart-type
-             " //// chart-config " chart-config
-             " //// chart-reg-entry " chart-reg-entry
-             " //// base-config " base-config
-             " //// (all-config)" all-configs)
-
-           (js/Highcharts.Chart. (reagent/dom-node this)
-             (clj->js all-configs))))})))
 
 ;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;
@@ -236,15 +219,15 @@
 
 (comment
 
-  {:chart-options {:chart/type :dependency-chart,
-                   :chart/supported-formats [:data-format/from-to-n :data-format/from-to-e :data-format/from-to],
-                   :chart {:type "dependencywheel"},
-                   :plot-options {:dataLabels {:color "#333",
-                                               :textPath {:enabled true, :attributes {:dy 5}},
-                                               :distance 10},
-                                  :size "95%"}},
+  {:chart-options     {:chart/type              :dependency-chart,
+                       :chart/supported-formats [:data-format/from-to-n :data-format/from-to-e :data-format/from-to],
+                       :chart                   {:type "dependencywheel"},
+                       :plot-options            {:dataLabels {:color    "#333",
+                                                              :textPath {:enabled true, :attributes {:dy 5}},
+                                                              :distance 10},
+                                                 :size       "95%"}},
    :merge-plot-option {:default ""},
-   :conversions {:default "",
-                 :data-format/from-to ""}}
+   :conversions       {:default             "",
+                       :data-format/from-to ""}}
 
   ())

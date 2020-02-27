@@ -9,6 +9,9 @@
     [cljs-uuid-utils.core :as uuid]))
 
 
+(set! js/toastr.options.timeOut (clj->js 1000))
+(set! js/toastr.options.extendedTimeOut (clj->js 0))
+
 (rf/reg-event-db
   :layout-message
   (fn-traced [db [_ response]]
@@ -32,7 +35,7 @@
 
 (defn get-build-fn [name]
   (:build-fn (->> widget-defs/widgets
-                  (filter #(= (:name %) name) )
+                  (filter #(= (:name %) name))
                   first)))
 
 ;; Helper function to set-layout to define function called for each value
