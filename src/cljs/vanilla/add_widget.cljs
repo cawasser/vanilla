@@ -233,27 +233,6 @@
 (defn add-widget-button
   "Creates a button that triggers a modal that allows the user to add a widget"
   []
-  ;(let [services (rf/subscribe [:services])
-  ;      selected (rf/subscribe [:selected-service])
-  ;      chosen-widget (rf/subscribe [:selected-widget])
-  ;      widget-cards (rf/subscribe [:all-widget-types])
-  ;      compatible-selection (rf/subscribe [:compatible-selections])]
-  ;    (fn []
-  ;      [:div.has-text-left
-  ;       [:button.button.is-link
-  ;        {:on-click #(do
-  ;                      ;(rf/dispatch [:set-modal-title "Add Data Source"])
-  ;                      ;(rf/dispatch [:set-modal-body ([:section.modal-card-body
-  ;                      ;                                [service-list @services @selected]]
-  ;                      ;                               [:section.modal-card-body
-  ;                      ;                                [widget-list @widget-cards @selected @chosen-widget]])])
-  ;                      ;(rf/dispatch [:set-modal-footer-button-text "Add"])
-  ;                      ;(rf/dispatch [:set-modal-footer-button-enabled @compatible-selection])
-  ;                      ;(rf/dispatch [:set-modal-footer-button-fn (add-widget (:name @chosen-widget) @selected)])
-  ;                      (rf/dispatch [:set-modal-active true]))} "Add"]])))
-
-
-
   (let [is-active (r/atom false)]
     (fn []
       [:div.has-text-left
