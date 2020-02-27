@@ -1,8 +1,4 @@
-(ns vanilla.modal
-  (:require
-    [re-frame.core :as rf]
-    [day8.re-frame.tracing :refer-macros [fn-traced]]
-    [reagent.core :as r]))
+(ns vanilla.modal)
 
 ; Refer to https://bulma.io/documentation/components/modal/
 ; for more about this modal
