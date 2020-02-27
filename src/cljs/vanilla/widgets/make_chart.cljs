@@ -186,16 +186,16 @@
   "creates the correct reagent 'hiccup' and react/class to implement a
   Highcharts.js UI component that can be embedded inside any valid hiccup"
 
-  [widget data options]
+  [widget source options]
 
   ;(prn " entering make-chart " chart-config)
 
-  (let [chart-config @(rf/subscribe [:hc-type (:type widget)])
+  (let [data (rf/subscribe [:app-db source])
+        chart-config @(rf/subscribe [:hc-type (:type widget)])
         base-config (make-config chart-config @data options)
         all-configs (merge-configs base-config @data options)
-        ret [:div {:style {:width (get options :viz/width "100%") :height "100%"}}
-             [hc/chart {:chart-meta {:id (:key widget) :redo true}
-                        :chart-data (merge-configs base-config @data options)}]]]
+        ret [hc/chart {:chart-meta {:id (:key widget) :redo true}
+                       :chart-data (merge-configs base-config @data options)}]]
 
 
     ;(prn "make-chart " widget

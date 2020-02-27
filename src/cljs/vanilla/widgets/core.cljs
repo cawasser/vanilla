@@ -5,7 +5,7 @@
             [vanilla.widgets.make-map :as mm]))
 
 (defn chart-content
-  [{:keys [name type]} data options]
+  [{:keys [name type]} source options]
 
   (let [widget @(rf/subscribe [:widget-type name])
         build-fn (:build-fn widget)]
@@ -15,7 +15,7 @@
       ;" //// data " @data
       ;" //// build-fn " build-fn
 
-    (build-fn widget data options)))
+    (build-fn widget source options)))
 
 
 (defn widget
@@ -25,8 +25,8 @@
   [{:keys [name key basis build-fn options] :as w} id s]
 
   (let [ret (basic/basic-widget key options
-              [:div
-               (chart-content w s options)])]
+              ;[:div
+               (chart-content w s options))]
     ;(prn "widget " w
     ;  " //// source " s
     ;  " //// ret " ret)
@@ -39,8 +39,7 @@
   "analogous to (widgets.core/setup-widget)"
 
   [w id]
-  (let [source (rf/subscribe [:app-db (:data-source w)])
-        ret    (widget w id source)]
+  (let [ret    (widget w id (:data-source w))]
     ;(prn "widget-setup " id
     ;  " //// data-source " (:data-source w)
     ;  " //// source " source
