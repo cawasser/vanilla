@@ -3133,38 +3133,36 @@ net.brehaut.ClojureTools = (function (SH) {
    :series  [{:name &quot;Basemap&quot;,
               :borderColor &quot;#A0A0A0&quot;,
               :nullColor &quot;rgba(200, 200, 200, 0.3)&quot;,
-              :showInLegend false
-             },
+              :showInLegend false}
+             ,
              {
               :name &quot;Separators&quot;,
               :type &quot;mapline&quot;,
               :nullColor &quot;#707070&quot;,
               :showInLegend false,
-              :enableMouseTracking false
-                  }
+              :enableMouseTracking false}
              {:type &quot;mappoint&quot;,
               :name &quot;Cities&quot;,
               :color &quot;#000000&quot;
-              :data [{
+              :data [
+                     {
                       :name &quot;Canberra&quot;,
                       :lat -35.2809,
                       :lon 149.13
-                      },
+                      :dataLabels {:align &quot;left&quot; :x 5 :verticalAlign &quot;middle&quot;}}
                      {
-                      :name &quot;Melbourne&quot;,
-                      :lat -37.840935,
-                      :lon 144.946457
-                     },
+                      :name &quot;Brisbane&quot;,
+                      :lat -27.47012,
+                      :lon 153.021072}
                      {
-                      :name &quot;Adelaide&quot;,
-                      :lat -34.921230,
-                      :lon 138.599503
-                     },
+                      :name &quot;Geraldton&quot;,
+                      :lat -28.782387,
+                      :lon 114.607513}
                      {
-                      :name &quot;Perth&quot;,
-                      :lat -31.953512,
-                      :lon 115.857048
-                     }]}]})</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#vanilla.bubble-service" name="vanilla.bubble-service"><h1 class="project-name">vanilla.bubble-service</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs">
+                      :name &quot;Wagga Wagga&quot;,
+                      :lat -35.117275,
+                      :lon 147.356522,
+                      :dataLabels {:align &quot;right&quot; :y 5 :verticalAlign &quot;middle&quot;}}]}]})</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#vanilla.bubble-service" name="vanilla.bubble-service"><h1 class="project-name">vanilla.bubble-service</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(ns vanilla.bubble-service
   (:require [clojure.tools.logging :as log]))</pre></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(defn fetch-data []
@@ -3244,7 +3242,43 @@ net.brehaut.ClojureTools = (function (SH) {
               :name &quot;Tons produced&quot;
               :states {:hover {:color &quot;#BADA55&quot;}}
               :dataLabels {:enabled true
-                           :format &quot;{point.name}&quot;}}]})</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#vanilla.current-time-service" name="vanilla.current-time-service"><h1 class="project-name">vanilla.current-time-service</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs">
+                           :format &quot;{point.name}&quot;}}
+             {:type &quot;mappoint&quot;,
+              :name &quot;Cities&quot;,
+              :color &quot;#000000&quot;
+              :data [{
+                      :name &quot;Canberra&quot;,
+                      :lat -35.2809,
+                      :lon 149.13}
+                     ,
+                     {
+                      :name &quot;Brisbane&quot;,
+                      :lat -27.47012,
+                      :lon 153.021072}
+                     ,
+                     {
+                      :name &quot;Geraldton&quot;,
+                      :lat -28.782387,
+                      :lon 114.607513}
+                     ,
+                     {
+                      :name &quot;Wagga Wagga&quot;,
+                      :lat -35.117275,
+                      :lon 147.356522}
+                     {
+                      :name &quot;Orlando&quot;,
+                      :lat 28.538336,
+                      :lon -81.379234}
+                     ,
+                     {
+                      :name &quot;San Diego&quot;,
+                      :lat 32.715736,
+                      :lon -117.161087}
+                     ,
+                     {
+                      :name &quot;Dulles&quot;,
+                      :lat 38.951666,
+                      :lon -77.448055}]}]})</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#vanilla.current-time-service" name="vanilla.current-time-service"><h1 class="project-name">vanilla.current-time-service</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(ns vanilla.current-time-service)</pre></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(defn fetch-data []
   ;(prn &quot;current-time Service&quot;)
@@ -3360,8 +3394,10 @@ This should not be pushed to the repo or AWS, it will be added to git ignore</p>
   ;; It is not called by any of our production code, so it is in this comment block
   (def vanilla-default
     {:dbtype db-type :dbname &quot;vanilla_default&quot;})
-  (initialize-database vanilla-default)                     ;; Initialize this on database structure changes, push changes to repo
-  (initialize-database vanilla-db)                          ;; Run this to create a local database for your app
+  ;; Initialize this on database structure changes, push changes to repo
+  (initialize-database vanilla-default)
+  ;; Run this to create a local database for your app
+  (initialize-database vanilla-db)
   ())</pre></td></tr><tr><td class="docs"><p>COMMENTS ;;;;</p>
 </td><td class="codes"></td></tr><tr><td class="docs"><p>Services table rich comment</p>
 </td><td class="codes"><pre class="brush: clojure">(comment
@@ -4619,7 +4655,7 @@ This should not be pushed to the repo or AWS, it will be added to git ignore</p>
   ;  &quot; //// data &quot; data)
   (let [content (widget/setup-widget props)
         ret     [:div
-                 (merge props {:class &quot;widget grid-toolbar&quot;
+                 (merge props {:class &quot;widget&quot;
                                :style {:background-color (get-in props [:options :viz/banner-color] &quot;yellow&quot;)
                                        :color            (get-in props [:options :viz/banner-text-color] &quot;black&quot;)}})
                  content]]
@@ -4856,7 +4892,7 @@ This should not be pushed to the repo or AWS, it will be added to git ignore</p>
                   (reset! is-active false))}
     button-text]
    [:button.button {:on-click #(reset! is-active false)} &quot;Cancel&quot;]])</pre></td></tr><tr><td class="docs">
-</td><td class="codes"></td></tr><tr><td class="docs"><p>This function creates a modal</p>
+</td><td class="codes"></td></tr><tr><td class="docs"><p>This function returns a Bulma modal component that can be customized for each use case.</p>
 
 <p>  More specifically this function takes in all the data used by a the modal components and
   creates the components and strings them together to return one fully built modal in return.</p>
@@ -5088,7 +5124,7 @@ This should not be pushed to the repo or AWS, it will be added to git ignore</p>
     :australia-map {:chart-options     {:chart/type              :australia-map
                                         :chart/supported-formats [:data-format/lat-lon-label]
                                         :chart                   {:map      &quot;countries/au/au-all&quot;
-                                                                  :zoomType &quot;x&quot;}
+                                                                  :zoomType &quot;xy&quot;}
                                         :yAxis                   {:title  {:align &quot;high&quot;}
                                                                   :labels {:overflow &quot;justify&quot;}}}
                     :merge-plot-option {:default plot-options}
@@ -5149,17 +5185,22 @@ This should not be pushed to the repo or AWS, it will be added to git ignore</p>
     [:div {:class &quot;vanilla.widgets.line-chart container&quot;
            :style {:height (get options :viz/height &quot;100%&quot;)
                    :width  &quot;100%&quot;}}
-     [:div {:class &quot;title-wrapper&quot;}
-      [:container.level {:style    {:background-color (util/rgba (get options :viz/banner-color {:r 150 :g 150 :b 150 :a 1}))}
-                         :on-click #(do
-                                      ;(prn &quot;showing header for &quot; name)
-                                      (rf/dispatch-sync [:configure-widget name]))}
+     [:div {:class &quot;title-wrapper grid-toolbar move-cursor&quot;
+            :cursor &quot;move&quot;}
+      [:container.level
+       {:style    {:background-color (util/rgba (get options :viz/banner-color {:r 150 :g 150 :b 150 :a 1}))}}
        [:div.level-left.has-text-left
-        [:h3 {:class    &quot;title&quot;
+        [:h3 {:class    &quot;title grid-content menu-cursor&quot;
+              :cursor &quot;context-menu&quot;
+              :on-mouse-down #(.stopPropagation %)
+              :on-click #(do
+                           ;(prn &quot;showing header for &quot; name)
+                           (rf/dispatch-sync [:configure-widget name]))
               :style    {:color (util/rgba (get options :viz/banner-text-color {:r 0 :g 0 :b 0 :a 1}))}}
          (get options :viz/title)]]
        [:div.level-right.has-text-centered
         [:button.delete.is-large {:style    {:margin-right &quot;10px&quot;}
+                                  :on-mouse-down #(.stopPropagation %)
                                   :on-click #(do
                                                (rf/dispatch [:remove-widget name])
                                                (.stopPropagation %))}]]]]
@@ -5291,11 +5332,6 @@ This should not be pushed to the repo or AWS, it will be added to git ignore</p>
           new-widgets (into [] (conj (notf widget-id (:widgets db)) mod-widget))]
       (u/save-layout new-widgets)
       (assoc db :widgets new-widgets))))</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(rf/reg-event-db
-  :widget-modal-active
-  (fn-traced
-    [db [_ val]]
-    (assoc db :widget-modal-active :true)))</pre></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(rf/reg-sub
   :chosen-widget
   (fn-traced
@@ -5319,11 +5355,7 @@ This should not be pushed to the repo or AWS, it will be added to git ignore</p>
 </td><td class="codes"><pre class="brush: clojure">(rf/reg-sub
   :configure-widget
   (fn [db _]
-    (:configure-widget db)))</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(rf/reg-sub
-  :widget-modal-active
-  (fn [db _]
-    (:widget-modal-active db)))</pre></td></tr><tr><td class="docs"><p>PUBLIC component</p>
+    (:configure-widget db)))</pre></td></tr><tr><td class="docs"><p>PUBLIC component</p>
 </td><td class="codes"></td></tr><tr><td class="docs"><p>This calls a modal to pop up to allow the user to change the title, text color and background color
   for the widget.</p>
 </td><td class="codes"><pre class="brush: clojure">(defn change-header
@@ -5410,7 +5442,7 @@ This should not be pushed to the repo or AWS, it will be added to git ignore</p>
     :continent-map {:chart-options     {:chart/type              :continent-map
                                         :chart/supported-formats [:data-format/cont-n]
                                         :chart                   {:map      &quot;custom/world-continents&quot;
-                                                                  :zoomType &quot;x&quot;}
+                                                                  :zoomType &quot;xy&quot;}
                                         :yAxis                   {:title  {:align &quot;high&quot;}
                                                                   :labels {:overflow &quot;justify&quot;}}}
                     :merge-plot-option {:default plot-options}
@@ -6320,7 +6352,7 @@ data to the :series, or rearranging the contents</p>
                :basis     :map
                :type      :australia-map
                :ret_types [:data-format/lat-lon-label]
-               :icon      &quot;/images/map-widget.png&quot;
+               :icon      &quot;/images/australia-map-widget.png&quot;
                :label     &quot;Australia Map&quot;
                :options   {:viz/title        &quot;Australia (map)&quot;
                            :viz/banner-color {:r 0xd2 :g 0xbf :b 0xd8 :a 1}

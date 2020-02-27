@@ -29,7 +29,7 @@
     :continent-map {:chart-options     {:chart/type              :continent-map
                                         :chart/supported-formats [:data-format/cont-n]
                                         :chart                   {:map      "custom/world-continents"
-                                                                  :zoomType "x"}
+                                                                  :zoomType "xy"}
                                         :yAxis                   {:title  {:align "high"}
                                                                   :labels {:overflow "justify"}}}
 
