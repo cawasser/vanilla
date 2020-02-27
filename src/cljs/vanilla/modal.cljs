@@ -62,7 +62,7 @@
 ;;;;;;;
 
 
-(defn create-modal
+(defn modal
   "This function returns a Bulma modal component that can be customized for each use case.
 
   More specifically this function takes in all the data used by a the modal components and
@@ -104,11 +104,11 @@
  "This is an example"
   [is-active]
   [:div
-   (create-modal {:is-active is-active
-                  :title "Example example"
-                  :modal-body-list [[:p "section one"]
-                                    [:p "section two"]]
-                  :footer-button-enabled :true
-                  :footer-button-fn #(prn "You did it!")
-                  :footer-button-text "Click here"})])
+   (modal {:is-active                    is-active
+           :title                 "Example example"
+           :modal-body-list       [[:p "section one"]
+                                   [:p "section two"]]
+           :footer-button-enabled :true
+           :footer-button-fn      #(prn "You did it!")
+           :footer-button-text    "Click here"})])
 

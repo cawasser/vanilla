@@ -3,6 +3,8 @@
 The modal usage is to be contained within the 
 [vanilla.modal](../src/cljs/vanilla/modal.cljs) namespace.
 
+The modal namespace uses the Bulma.io modal, found 
+[here](https://bulma.io/documentation/components/modal/).
 
 ### The Purpose
 

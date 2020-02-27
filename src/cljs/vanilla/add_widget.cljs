@@ -3,7 +3,7 @@
             [re-frame.core :as rf]
             [day8.re-frame.tracing :refer-macros [fn-traced]]
             [cljs-uuid-utils.core :as uuid]
-            [vanilla.modal :as modal]))
+            [vanilla.modal :refer [modal]]))
 
 
 ;;;; EVENTS
@@ -184,13 +184,13 @@
         compatible-selection (rf/subscribe [:compatible-selections])]
     (fn []
 
-      (modal/create-modal {:is-active             is-active
-                           :title                 "Add Data Source"
-                           :modal-body-list       [[service-list @services @selected]
-                                                   [widget-list @widget-cards @selected @chosen-widget]]
-                           :footer-button-enabled @compatible-selection
-                           :footer-button-fn      #(add-widget (:name @chosen-widget) @selected)
-                           :footer-button-text    "Add"}))))
+      (modal {:is-active                    is-active
+              :title                 "Add Data Source"
+              :modal-body-list       [[service-list @services @selected]
+                                      [widget-list @widget-cards @selected @chosen-widget]]
+              :footer-button-enabled @compatible-selection
+              :footer-button-fn      #(add-widget (:name @chosen-widget) @selected)
+              :footer-button-text    "Add"}))))
 
 
       ;[modal/modal-start (if @is-active {:class "is-active"})
