@@ -163,9 +163,12 @@
     "SQLite database connection spec."
     {:dbtype db-type :dbname "vanilla_default"})
 
-  (initialize-database vanilla-default)                     ;; Initialize this on database structure changes, push changes to repo
+  ;; Initialize this on database structure changes, push changes to repo
+  (initialize-database vanilla-default)
 
-  (initialize-database vanilla-db)                          ;; Run this to create a local database for your app
+
+  ;; Run this to create a local database for your app
+  (initialize-database vanilla-db)
 
   ())
 

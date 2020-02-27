@@ -10,36 +10,35 @@
    :series  [{:name "Basemap",
               :borderColor "#A0A0A0",
               :nullColor "rgba(200, 200, 200, 0.3)",
-              :showInLegend false
-             },
+              :showInLegend false}
+             ,
              {
               :name "Separators",
               :type "mapline",
               :nullColor "#707070",
               :showInLegend false,
-              :enableMouseTracking false
-                  }
+              :enableMouseTracking false}
+
              {:type "mappoint",
               :name "Cities",
               :color "#000000"
-              :data [{
+              :data [
+                     {
                       :name "Canberra",
                       :lat -35.2809,
                       :lon 149.13
-                      },
+                      :dataLabels {:align "left" :x 5 :verticalAlign "middle"}}
                      {
-                      :name "Melbourne",
-                      :lat -37.840935,
-                      :lon 144.946457
-                     },
+                      :name "Brisbane",
+                      :lat -27.47012,
+                      :lon 153.021072}
                      {
-                      :name "Adelaide",
-                      :lat -34.921230,
-                      :lon 138.599503
-                     },
+                      :name "Geraldton",
+                      :lat -28.782387,
+                      :lon 114.607513}
                      {
-                      :name "Perth",
-                      :lat -31.953512,
-                      :lon 115.857048
-                     }]}]})
+                      :name "Wagga Wagga",
+                      :lat -35.117275,
+                      :lon 147.356522,
+                      :dataLabels {:align "right" :y 5 :verticalAlign "middle"}}]}]})
 

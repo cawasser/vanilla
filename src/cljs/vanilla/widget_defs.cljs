@@ -97,7 +97,7 @@
                :type      :australia-map
                :build-fn  vanilla.widgets.make-map/make-map
                :ret_types [:data-format/lat-lon-label]
-               :icon      "/images/map-widget.png"
+               :icon      "/images/australia-map-widget.png"
                :label     "Australia Map"
                :options   {:viz/title             "Australia (map)"
                            :viz/banner-color      {:r 0xd2 :g 0xbf :b 0xd8 :a 1}

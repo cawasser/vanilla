@@ -1,5 +1,6 @@
 (ns vanilla.widgets.simple-text
   (:require [reagent.core :as r :refer [atom]]
+            [re-frame.core :as rf]
             [vanilla.widgets.basic-widget :as basic]))
 
 

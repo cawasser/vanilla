@@ -10,9 +10,9 @@
 
     [day8.re-frame.tracing :refer-macros [fn-traced]]
 
-    [vanilla.add-widget-modal :as modal]
+    [vanilla.add-widget :as add-wid]
     [vanilla.widgets.configure-widget :as wc]
-    [vanilla.login-modal :as login]
+    [vanilla.login :as login]
 
     [vanilla.grid :as grid]
 
@@ -124,7 +124,7 @@
   []
   (if (some? @(rf/subscribe [:get-current-user]))
     [:div.level-right.has-text-right
-     [modal/add-widget-button]
+     [add-wid/add-widget-button]
      [login/logout-button]]
     [:div.level-right.has-text-right
      [login/login-button]]))
@@ -138,7 +138,7 @@
      [:div.container.level.is-fluid {:width "100%"}
       [:div.level-left.has-text-left
        [wc/change-header (rf/subscribe [:configure-widget])]
-       [modal/version-number]]
+       [add-wid/version-number]]
       [top-right-buttons]]]]
    [widgets-grid]])
 
@@ -179,6 +179,7 @@
     (rf/dispatch-sync [:widget-type w]))
 
   (d/connect-to-data-sources)
+
 
   (r/render home-page (.getElementById js/document "app")))
 
