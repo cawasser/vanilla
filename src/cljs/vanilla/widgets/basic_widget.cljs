@@ -65,19 +65,19 @@
                                           :on-mouse-down #(.stopPropagation %)
                                           :on-click      #(do
                                                             (rf/dispatch [:remove-widget name])
-                                                            (.stopPropagation %))}]]]
+                                                            (.stopPropagation %))}]]]]
 
-              [:div {:class         (str (get options :viz/style-name "widget"))
-                     :style         {:width        "100%"
-                                     :height       "80%"
-                                     :marginRight  "50px"
-                                     :marginTop    "5px"
-                                     :cursor       :default
-                                     :border-style (debug-style options)
-                                     :align-items  :stretch
-                                     :display      :flex}
-                     :on-mouse-down #(.stopPropagation %)}
-               custom-content]]]]
+             [:div {:class         (str (get options :viz/style-name "widget"))
+                    :style         {:width        "100%"
+                                    :height       "80%"
+                                    :marginRight  "50px"
+                                    :marginTop    "5px"
+                                    :cursor       :default
+                                    :border-style (debug-style options)
+                                    :align-items  :stretch
+                                    :display      :flex}
+                    :on-mouse-down #(.stopPropagation %)}
+              custom-content]]]
 
     ;(prn "basic-widget " name
     ;  " //// ret " ret)
