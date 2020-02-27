@@ -91,11 +91,6 @@
       (u/save-layout new-widgets)
       (assoc db :widgets new-widgets))))
 
-(rf/reg-event-db
-  :widget-modal-active
-  (fn-traced
-    [db [_ val]]
-    (assoc db :widget-modal-active :true)))
 
 (rf/reg-sub
   :chosen-widget
@@ -130,10 +125,6 @@
   (fn [db _]
     (:configure-widget db)))
 
-(rf/reg-sub
-  :widget-modal-active
-  (fn [db _]
-    (:widget-modal-active db)))
 
 
 

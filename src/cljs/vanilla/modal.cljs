@@ -4,7 +4,8 @@
     [day8.re-frame.tracing :refer-macros [fn-traced]]
     [reagent.core :as r]))
 
-
+; Refer to https://bulma.io/documentation/components/modal/
+; for more about this modal
 
 
 ;;;;;;;;;;;;;;;;;;;;
@@ -62,7 +63,7 @@
 
 
 (defn create-modal
-  "This function creates a modal
+  "This function returns a Bulma modal component that can be customized for each use case.
 
   More specifically this function takes in all the data used by a the modal components and
   creates the components and strings them together to return one fully built modal in return.
