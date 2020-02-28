@@ -33,6 +33,10 @@ Using the REPL, execute the `(initialize-database)` function in the 'Rich Commen
 path of this file = project vanilla -> src -> clj -> vanilla -> db -> core.clj 
  
 
+# Important Note
 
-
-
+It is very important do get the "names' to match between in the service table and
+in service-def, and that the :data-format(s) need to match between the services table 
+and widget-defs so you can add new services/widgets to the UI; If you change the :data-format \
+of an existing service, we need to change the vanilla_default too by running vanilla.db.core using REPL
+and then push the revised vanilla_default to the repo.
