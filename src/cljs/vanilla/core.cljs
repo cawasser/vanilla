@@ -20,6 +20,8 @@
     [reitit.core :as re]
     [goog.events :as events]
     [goog.history.EventType :as HistoryEventType]
+    [clojure.string :as string]
+
 
 
     ; needed to register all the highcharts types
@@ -38,7 +40,8 @@
     [vanilla.widgets.scatter-chart]
     [vanilla.widgets.vari-pie-chart]
     [vanilla.widgets.continent-map]
-    [vanilla.widgets.australia-map]))
+    [vanilla.widgets.australia-map])
+  (:import goog.History))
 
 
 
@@ -95,6 +98,11 @@
   :<- [:route]
   (fn [route _]
     (-> route :data :name)))
+
+(rf/reg-sub
+  :route
+  (fn [db _]
+    (-> db :route)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;
@@ -181,10 +189,11 @@
 ;;;;;;;;;;
 ;
 ;    Navbar stuff
+;
 
 
 (defn nav-link
-  ""
+  "Take in a link, title/label, and page data so it can return a nav-link item"
   [uri title page]
   [:a.navbar-item
    {:href   uri
@@ -241,7 +250,7 @@
       (fn [event]
         (let [uri (or (not-empty (string/replace (.-token event) #"^.*#" "")) "/")]
           (rf/dispatch
-            [:navigate (reitit/match-by-path router uri)]))))
+            [:navigate (re/match-by-path router uri)]))))
     (.setEnabled true)))
 
 
@@ -264,7 +273,7 @@
   (rf/dispatch-sync [:initialize])
 
   ;; Set up page navigation and routing
-  (rf/dispatch-sync [:navigate (reitit/match-by-name router :home)])
+  (rf/dispatch-sync [:navigate (re/match-by-name router :home)])
 
 
   (ver/get-version)
