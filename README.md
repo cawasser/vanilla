@@ -48,6 +48,7 @@ This single-page application (SPA) provides a number of graphical widgets based 
 - [Adding new chart types](docs/adding-new-chart-types.md)
 - [Adding new widget types](docs/adding-new-widget-types.md)
 - [Supporting different data formats](docs/managing-data-formats.md)
+- [Modal Usage](docs/modal_useage.md)
 
 ### Running the application
 

@@ -1,4 +1,4 @@
-(ns vanilla.login-modal
+(ns vanilla.login
   (:require
     [vanilla.update-layout :as layout]
     [re-frame.core :as rf]

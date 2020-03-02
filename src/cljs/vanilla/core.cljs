@@ -10,10 +10,11 @@
 
     [day8.re-frame.tracing :refer-macros [fn-traced]]
 
-    [vanilla.add-widget-modal :as modal]
+    [vanilla.add-widget :as add-wid]
     [vanilla.widgets.configure-widget :as wc]
-    [vanilla.login-modal :as login]
     [vanilla.version :as ver]
+    [vanilla.login :as login]
+
 
     [vanilla.grid :as grid]
 
@@ -155,7 +156,7 @@
   []
   (if (some? @(rf/subscribe [:get-current-user]))
     [:div.level-right.has-text-right
-     [modal/add-widget-button]
+     [add-wid/add-widget-button]
      [login/logout-button]]
     [:div.level-right.has-text-right
      [login/login-button]]))
@@ -313,10 +314,12 @@
   (d/connect-to-data-sources)
 
 
+
   (hook-browser-navigation!)
 
   (mount-components))
   ;(r/render home-page (.getElementById js/document "app")))
+
 
 
 ;(start-dashboard)
