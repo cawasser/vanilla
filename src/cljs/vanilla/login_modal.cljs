@@ -218,3 +218,31 @@
 ;        [logout-button]
 ;        [login-button]))))
 
+
+(defn login-page
+  ""
+  []
+  (let [username (r/atom nil)
+        pass (r/atom nil)]
+    (fn []
+      [:div
+       [:div
+        [:header
+         [:h6 "Login"]]
+        [:section
+         [:label "Username:"
+          [:div
+           [input-element "username" username]]]
+         [:label "Password:"
+          [:div
+           [input-element "password"  pass]]]]
+        [:footer
+         [:button.button.is-success {:on-click #(do
+                                                  (attempt-login {:username @username
+                                                                  :pass @pass}))} "Login"]
+         [:button.button.is-info {:on-click #(do
+                                               (attempt-create-user {:username @username
+                                                                     :pass @pass}))} "Sign-up"]]]])))
+
+
+

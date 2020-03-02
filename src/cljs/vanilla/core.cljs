@@ -204,19 +204,20 @@
   ""
   []
   (r/with-let [expanded? (r/atom false)]
-              [:nav.navbar.is-info>div.container
-               [:div.navbar-brand
-                [:a.navbar-item {:href "/" :style {:font-weight :bold}} "sample-3"]
-                [:span.navbar-burger.burger
-                 {:data-target :nav-menu
-                  :on-click #(swap! expanded? not)
-                  :class (when @expanded? :is-active)}
-                 [:span][:span][:span]]]
-               [:div#nav-menu.navbar-menu
-                {:class (when @expanded? :is-active)}
-                [:div.navbar-end
-                 [nav-link "#/" "Home" :home]
-                 [nav-link "#/about" "About" :about]]]]))
+              [:nav.navbar.is-info
+               [:div.container
+                [:div.navbar-brand
+                 [:a.navbar-item {:href "/"
+                                  :style {:font-weight :bold}} "Black Hammer"]]
+                 ;[:span.navbar-burger.burger
+                 ; {:data-target :nav-menu
+                 ;  :on-click    #(swap! expanded? not)
+                 ;  :class       (when @expanded? :is-active)}]]
+                [:div#nav-menu.navbar-menu
+                 {:class (when @expanded? :is-active)}
+                 [:div.navbar-end
+                  [nav-link "#/" "Home" :home]
+                  [nav-link "#/about" "About" :about]]]]]))
 
 
 
@@ -226,12 +227,15 @@
 
 (def pages
   {:home #'home-page
-   :about #'about-page})
+   :about #'about-page
+   :login #'login/login-page})
 
 (def router
   (re/router
     [["/" :home]
-     ["/about" :about]]))
+     ["/about" :about]
+     ["/login" :login]]))
+
 
 (defn page
   []
@@ -243,7 +247,10 @@
 ;; -------------------------
 ;; History
 ;; must be called after routes have been defined
-(defn hook-browser-navigation! []
+(defn hook-browser-navigation!
+  ""
+  ;; TODO - What does this do exactly?
+  []
   (doto (History.)
     (events/listen
       HistoryEventType/NAVIGATE
@@ -261,7 +268,7 @@
 (defn mount-components
   "Right now we may not need to clear sub cache - find this out"
   []
-  ;(rf/clear-subscription-cache!)
+  (rf/clear-subscription-cache!)
   (r/render [#'page] (.getElementById js/document "app")))
 
 
