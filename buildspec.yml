@@ -1,5 +1,8 @@
 version: 0.2
 
+env:
+  git-credential-helper: yes
+
 phases:
   install:
     commands:
@@ -27,6 +30,8 @@ phases:
       - echo Building the Docker image...
       - docker build -t $REPOSITORY_URI:latest .
       - docker tag $REPOSITORY_URI:latest $REPOSITORY_URI:$IMAGE_TAG
+      - scripts/codebuild-git-wrapper.sh "$REPOSITORY_URI" "master"
+      - git log | head -100
   post_build:
     commands:
       - echo Build completed on `date`
