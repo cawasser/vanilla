@@ -10,13 +10,15 @@
 
     [day8.re-frame.tracing :refer-macros [fn-traced]]
 
-    [vanilla.add-widget :as add-wid]
-    [vanilla.widgets.configure-widget :as wc]
-    [vanilla.version :as ver]
+    [vanilla.home-page :as home]
     [vanilla.login :as login]
 
+    ;[vanilla.add-widget :as add-wid]
+    ;[vanilla.widgets.configure-widget :as wc]
+    ;[vanilla.grid :as grid]
 
-    [vanilla.grid :as grid]
+    [vanilla.version :as ver]
+
 
     [reitit.core :as re]
     [goog.events :as events]
@@ -131,57 +133,57 @@
 ;                   :handler         #(rf/dispatch-sync [:set-version %])}))
 
 
-(def width 1536)
-(def height 1024)
-(def rows 50)
-
-
-(defn- widgets-grid []
-  [grid/Grid {:id          "dashboard-widget-grid"
-              :cols        {:lg 12 :md 10 :sm 6 :xs 4 :xxs 2}
-              :width       width
-              :row-height  (/ height rows)
-              :breakpoints {:lg 2048 :md 1024 :sm 768 :xs 480 :xxs 0}
-              :data        @(rf/subscribe [:widgets])
-              :on-change   #();prn (str "layout change. prev " %1 " //// new " %2))
-              :item-props  {:class "widget-component"}}])
-
-
-
-
-(defn top-right-buttons
-  "Determine whether buttons in the top right of the dashboard show either:
-  - A login button
-  - An add widget button alongside a logout button"
-  []
-  (if (some? @(rf/subscribe [:get-current-user]))
-    [:div.level-right.has-text-right
-     [add-wid/add-widget-button]
-     [login/logout-button]]
-    [:div.level-right.has-text-right
-     [login/login-button]]))
-
-(defn home-page
-  "This is the start of the UI for our SPA"
-  []
-  [:div {:width "100%"}
-   [:div.container
-    [:div.content {:width "100%"}
-     [:div.container.level.is-fluid {:width "100%"}
-      [:div.level-left.has-text-left
-       [wc/change-header (rf/subscribe [:configure-widget])]
-       [ver/version-number]]
-      [top-right-buttons]]]]
-   [widgets-grid]])
+;(def width 1536)
+;(def height 1024)
+;(def rows 50)
+;
+;
+;(defn- widgets-grid []
+;  [grid/Grid {:id          "dashboard-widget-grid"
+;              :cols        {:lg 12 :md 10 :sm 6 :xs 4 :xxs 2}
+;              :width       width
+;              :row-height  (/ height rows)
+;              :breakpoints {:lg 2048 :md 1024 :sm 768 :xs 480 :xxs 0}
+;              :data        @(rf/subscribe [:widgets])
+;              :on-change   #();prn (str "layout change. prev " %1 " //// new " %2))
+;              :item-props  {:class "widget-component"}}])
+;
+;
+;
+;
+;(defn top-right-buttons
+;  "Determine whether buttons in the top right of the dashboard show either:
+;  - A login button
+;  - An add widget button alongside a logout button"
+;  []
+;  (if (some? @(rf/subscribe [:get-current-user]))
+;    [:div.level-right.has-text-right
+;     [add-wid/add-widget-button]
+;     [login/logout-button]]
+;    [:div.level-right.has-text-right
+;     [login/login-button]]))
+;
+;(defn home-page
+;  "This is the start of the UI for our SPA"
+;  []
+;  [:div {:width "100%"}
+;   [:div.container
+;    [:div.content {:width "100%"}
+;     [:div.container.level.is-fluid {:width "100%"}
+;      [:div.level-left.has-text-left
+;       [wc/change-header (rf/subscribe [:configure-widget])]
+;       [ver/version-number]]
+;      [top-right-buttons]]]]
+;   [widgets-grid]])
 
 
 ;;;;;;;;;;
 ;
 ;   About Page
 
-(defn about-page []
-  [:section.section
-   [:p "about about about"]])
+;(defn about-page []
+;  [:section.section
+;   [:p "about about about"]])
 
 
 
@@ -218,7 +220,8 @@
                  {:class (when @expanded? :is-active)}
                  [:div.navbar-end
                   [nav-link "#/" "Home" :home]
-                  [nav-link "#/about" "About" :about]]]]]))
+                  ;[nav-link "#/about" "About" :about]
+                  [nav-link "#/login" "Login" :login]]]]]))
 
 
 
@@ -227,14 +230,14 @@
 ;    Routing and Page management
 
 (def pages
-  {:home #'home-page
-   :about #'about-page
+  {:home #'home/home-page
+   ;:about #'about-page
    :login #'login/login-page})
 
 (def router
   (re/router
     [["/" :home]
-     ["/about" :about]
+     ;["/about" :about]
      ["/login" :login]]))
 
 
