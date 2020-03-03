@@ -1,7 +1,5 @@
 FROM openjdk:8-alpine
 
-#RUN apk add --no-cache bash
-
 WORKDIR /vanilla/
 
 COPY target/uberjar/vanilla.jar app.jar
@@ -20,4 +18,4 @@ ENV RABBIT_VHOST="/main"
 # By Copying it to vanilla_db it now can be used by our URI handlers
 COPY vanilla_default vanilla_db
 
-CMD ["java", "-jar", "app.jar"]
+ENTRYPOINT ["java", "-jar", "app.jar"]
