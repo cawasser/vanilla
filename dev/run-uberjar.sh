@@ -7,4 +7,4 @@ export RABBIT_PORT="5672"
 export RABBIT_USERNAME="guest"
 export RABBIT_PASSWORD="guest"
 
-java -jar target/uberjar/vanilla.jar
+java -jar ../target/uberjar/vanilla.jar
