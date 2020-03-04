@@ -14,7 +14,7 @@
 (rf/reg-event-db
   :set-current-user
   (fn-traced [db [_ username]]
-             (prn "Set currnet user" username)
+             (prn "Set current user" username)
              (layout/get-layout username)
              (assoc db :current-user username
                        :new-login true)))
