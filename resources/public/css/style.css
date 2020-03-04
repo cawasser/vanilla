@@ -21,3 +21,11 @@ body {
     padding: 10px;
 }
 
+
+.move-cursor {
+    cursor:move;
+}
+
+.menu-cursor {
+    cursor:context-menu;
+}
