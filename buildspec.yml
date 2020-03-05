@@ -25,13 +25,14 @@ phases:
     commands:
       - echo Entering build phase...
       - echo Build started on `date`
+      - chmod +x scripts/codebuild-git-wrapper.sh
+      - scripts/codebuild-git-wrapper.sh "https://github.com/cawasser/vanilla" "master"
+      - git log | head -100
       - LEIN_ROOT=true lein uberjar
       - echo Build started on `date`
       - echo Building the Docker image...
       - docker build -t $REPOSITORY_URI:latest .
       - docker tag $REPOSITORY_URI:latest $REPOSITORY_URI:$IMAGE_TAG
-      - scripts/codebuild-git-wrapper.sh "$REPOSITORY_URI" "master"
-      - git log | head -100
   post_build:
     commands:
       - echo Build completed on `date`
@@ -39,7 +40,7 @@ phases:
       - docker push $REPOSITORY_URI:latest
       - docker push $REPOSITORY_URI:$IMAGE_TAG
       - echo Writing image definitions file...
-      - printf '[{"name":"nodeapp","imageUri":"%s"}]' $REPOSITORY_URI:$IMAGE_TAG > imagedefinitions.json
+      - printf '[{"name":"staging-vanilla","imageUri":"%s"}]' $REPOSITORY_URI:$IMAGE_TAG > imagedefinitions.json
       - cat imagedefinitions.json 
 artifacts:
     files: imagedefinitions.json
