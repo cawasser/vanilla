@@ -121,74 +121,6 @@
 
 
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;
-; VERSION NUMBER
-;
-;
-;
-;(defn get-version []
-;  (GET "/version" {:headers         {"Accept" "application/transit+json"}
-;                   :response-format (ajax/json-response-format {:keywords? true})
-;                   :handler         #(rf/dispatch-sync [:set-version %])}))
-
-
-;(def width 1536)
-;(def height 1024)
-;(def rows 50)
-;
-;
-;(defn- widgets-grid []
-;  [grid/Grid {:id          "dashboard-widget-grid"
-;              :cols        {:lg 12 :md 10 :sm 6 :xs 4 :xxs 2}
-;              :width       width
-;              :row-height  (/ height rows)
-;              :breakpoints {:lg 2048 :md 1024 :sm 768 :xs 480 :xxs 0}
-;              :data        @(rf/subscribe [:widgets])
-;              :on-change   #();prn (str "layout change. prev " %1 " //// new " %2))
-;              :item-props  {:class "widget-component"}}])
-;
-;
-;
-;
-;(defn top-right-buttons
-;  "Determine whether buttons in the top right of the dashboard show either:
-;  - A login button
-;  - An add widget button alongside a logout button"
-;  []
-;  (if (some? @(rf/subscribe [:get-current-user]))
-;    [:div.level-right.has-text-right
-;     [add-wid/add-widget-button]
-;     [login/logout-button]]
-;    [:div.level-right.has-text-right
-;     [login/login-button]]))
-;
-;(defn home-page
-;  "This is the start of the UI for our SPA"
-;  []
-;  [:div {:width "100%"}
-;   [:div.container
-;    [:div.content {:width "100%"}
-;     [:div.container.level.is-fluid {:width "100%"}
-;      [:div.level-left.has-text-left
-;       [wc/change-header (rf/subscribe [:configure-widget])]
-;       [ver/version-number]]
-;      [top-right-buttons]]]]
-;   [widgets-grid]])
-
-
-;;;;;;;;;;
-;
-;   About Page
-
-;(defn about-page []
-;  [:section.section
-;   [:p "about about about"]])
-
-
-
-
-
 ;;;;;;;;;;
 ;
 ;    Navbar stuff
@@ -206,22 +138,18 @@
 (defn navbar
   ""
   []
-  (r/with-let [expanded? (r/atom false)]
-              [:nav.navbar.is-info
-               [:div.container
-                [:div.navbar-brand
-                 [:a.navbar-item {:href "/"
-                                  :style {:font-weight :bold}} "Black Hammer"]]
-                 ;[:span.navbar-burger.burger
-                 ; {:data-target :nav-menu
-                 ;  :on-click    #(swap! expanded? not)
-                 ;  :class       (when @expanded? :is-active)}]]
-                [:div#nav-menu.navbar-menu
-                 {:class (when @expanded? :is-active)}
-                 [:div.navbar-end
-                  [nav-link "#/" "Home" :home]
-                  ;[nav-link "#/about" "About" :about]
-                  [nav-link "#/login" "Login" :login]]]]]))
+  ;(let [logged-in (r/atom (some? @(rf/subscribe [:get-current-user])))]
+  ;  (fn []
+  [:nav.navbar.is-info
+   [:div.container
+    [:div.navbar-brand
+     [:a.navbar-item "Black Hammer"]]
+    [:div.nav-menu.navbar-menu
+     [:div.navbar-end
+      [nav-link "#/" "Home" :home]
+      (if (some? @(rf/subscribe [:get-current-user]))
+        [nav-link "#/logout" "Log Out" :logout]
+        [nav-link "#/login" "Login" :login])]]]])
 
 
 
@@ -231,15 +159,14 @@
 
 (def pages
   {:home #'home/home-page
-   ;:about #'about-page
-   :login #'login/login-page})
+   :login #'login/login-page
+   :logout #'login/logout-sequence})
 
 (def router
   (re/router
     [["/" :home]
-     ;["/about" :about]
-     ["/login" :login]]))
-
+     ["/login" :login]
+     ["/logout" :logout]]))
 
 (defn page
   []
@@ -272,7 +199,7 @@
 (defn mount-components
   "Right now we may not need to clear sub cache - find this out"
   []
-  (rf/clear-subscription-cache!)
+  ;(rf/clear-subscription-cache!)
   (r/render [#'page] (.getElementById js/document "app")))
 
 
@@ -283,8 +210,7 @@
   ;(prn "calling :initialize")
   (rf/dispatch-sync [:initialize])
 
-  ;; Set up page navigation and routing
-  (rf/dispatch-sync [:navigate (re/match-by-name router :home)])
+
 
 
   (ver/get-version)
@@ -316,7 +242,8 @@
 
   (d/connect-to-data-sources)
 
-
+  ;; Set up page navigation and routing
+  (rf/dispatch-sync [:navigate (re/match-by-name router :home)])
 
   (hook-browser-navigation!)
 

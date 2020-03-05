@@ -10,11 +10,6 @@
 
 
 
-
-
-
-
-
 (def width 1536)
 (def height 1024)
 (def rows 50)
@@ -33,16 +28,11 @@
 
 
 (defn top-right-buttons
-  "Determine whether buttons in the top right of the dashboard show either:
-  - A login button
-  - An add widget button alongside a logout button"
+  "Buttons in the top right of the dashboard, which right now is just an add widget button"
   []
   (if (some? @(rf/subscribe [:get-current-user]))
     [:div.level-right.has-text-right
-     [add-wid/add-widget-button]
-     [login/logout-button]]
-    [:div.level-right.has-text-right
-     [login/login-button]]))
+     [add-wid/add-widget-button]]))
 
 (defn home-page
   "This is the start of the UI for our SPA"
