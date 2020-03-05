@@ -56,6 +56,7 @@ Rose        | rose-y-n            |              | rose-y-e  |
 Stoplight   | entity              |              |           |
 simple-text | string              |              |           |
 data-table  | entities            |              |           |
+Arearange   | date-yl-yh
 
 
 

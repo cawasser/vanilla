@@ -16,6 +16,8 @@
               [vanilla.table-service]
               [vanilla.continent-map-service]
               [vanilla.australia-map-service]
+              [vanilla.arearange-service]
+              [vanilla.service-deps :as deps]
               [vanilla.service-deps :as deps]
               [clojure.tools.logging :as log]
               [trptcolin.versioneer.core :as version])
