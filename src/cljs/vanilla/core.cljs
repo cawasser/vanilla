@@ -49,7 +49,17 @@
                :hc-type {}
                ;:chosen-bg-color {:r 150 :g 150 :b 150 :a 1.0}
                ;:chosen-txt-color "white"
-               :configure-widget ""})))
+               :configure-widget ""
+               :theme "widget-dark"})))
+
+
+(rf/reg-event-db
+  :toggle-theme
+  (fn-traced [db _]
+    (prn ":toggle-theme")
+    (assoc db :theme (if (= "widget-dark" (:theme db)) "widget-light" "widget-dark"))))
+
+
 
 (rf/reg-event-db
   :widget-type
@@ -72,6 +82,11 @@
              (assoc db :services (:services services))))
 
 
+
+(rf/reg-sub
+  :theme
+  (fn [db _]
+    (:theme db)))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -116,6 +131,17 @@
               :item-props  {:class "widget-component"}}])
 
 
+; TODO: get some space between the controls!
+(defn top-left-controls
+  "theme button and the version number"
+  []
+  (let [theme (rf/subscribe [:theme])]
+    (fn []
+      [:div.level-left.has-text-left
+       [wc/change-header (rf/subscribe [:configure-widget])]
+       [:button.button.is-info {:on-click #(rf/dispatch [:toggle-theme])}
+        (if (= "widget-dark" @theme) "Light" "Dark")]
+       [add-wid/version-number]])))
 
 
 (defn top-right-buttons
@@ -137,9 +163,7 @@
    [:div.container
     [:div.content {:width "100%"}
      [:div.container.level.is-fluid {:width "100%"}
-      [:div.level-left.has-text-left
-       [wc/change-header (rf/subscribe [:configure-widget])]
-       [add-wid/version-number]]
+      [top-left-controls]
       [top-right-buttons]]]]
    [widgets-grid]])
 

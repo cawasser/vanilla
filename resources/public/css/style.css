@@ -4,14 +4,18 @@ h1 {
 
 body {
     background-image: url("/images/grey_wash_wall.png");
-    background-color: #cccccc;
+    background-color: #aaaaaa;
 }
 
 /* Simple text widget styles */
-/* TODO move to dashboard codebase */
+/* TODO is this even meaningful anymore? */
 
-.widget {
+.widget-light {
     background: #fff;
+}
+
+.widget-dark {
+  background-image: linear-gradient(to top, rgb(16, 16, 16), rgb(96, 96, 96) );
 }
 
 .widget .title-wrapper {
@@ -21,6 +25,10 @@ body {
     padding: 10px;
 }
 
+.spacing {
+  columns: 2
+  column-gap: 5px;
+}
 
 .move-cursor {
     cursor:move;

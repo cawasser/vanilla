@@ -45,9 +45,11 @@
 
   (fn []
 
-    [:div {:class "vanilla.widgets.line-chart container"
+
+    [:div {:class "vanilla widgets container"
            :style {:height (get options :viz/height "100%")
-                   :width  "100%"}}
+                   :width  "100%"
+                   :overflow "hidden"}}
      [:div {:class "title-wrapper grid-toolbar move-cursor"
             :cursor "move"}
       [:container.level
@@ -72,14 +74,18 @@
                                                (.stopPropagation %))}]]]]
 
 
-     [:div {:class         (str (get options :viz/style-name "widget"))
-            :style         {:width        "100%"
-                            :height       "80%"
-                            :marginRight  "50px"
+     [:div {:class         @(rf/subscribe [:theme])
+            :style         {
+                            ;:width        "100%"
+                            ;:height       "80%"
+                            ;:marginRight  "50px"
+                            :margin "auto"
                             :marginTop    "5px"
+                            :marginBottom "5px"
                             :cursor       :default
                             :border-style (debug-style options)
                             :align-items  :stretch
+                            :overflow "hidden"
                             :display      :flex}
             :on-mouse-down #(.stopPropagation %)}
 
