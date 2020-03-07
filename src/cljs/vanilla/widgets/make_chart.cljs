@@ -171,12 +171,12 @@
    'registry-data' provides a map of chart-options, plot-option
    configurations, and data conversion functions"
 
-  [id registry-data])
+  [id registry-data]
 
   ;(prn "register-type " id
   ; " //// (registry-data)" registry-data)
 
-  ;(rf/dispatch [:register-hc-type id registry-data]))
+  (rf/dispatch [:register-hc-type id registry-data]))
 
 
 
@@ -193,9 +193,9 @@
         chart-type      (-> chart-config :chart-options :chart/type)
         chart-reg-entry @(rf/subscribe [:hc-type chart-type])]
 
-    ;(prn "make-chart " chart-type
-    ;  " //// (chart-config)" chart-config
-    ;  " ////// (chart-reg-entry)" chart-reg-entry)
+    (prn "make-chart " chart-type
+      " //// (chart-config)" chart-config
+      " ////// (chart-reg-entry)" chart-reg-entry)
 
     (reagent/create-class
       {:reagent-render
@@ -218,8 +218,8 @@
                base-config (make-config chart-config new-data options)
                all-configs (merge-configs base-config new-data options)]
 
-           ;(prn "component-did-update " chart-type
-           ;  " //// chart-config " chart-config
+           (prn "component-did-update " chart-type
+             " //// chart-config " chart-config)
            ;  " //// chart-reg-entry " chart-reg-entry
            ;  " //// base-config " base-config
            ;  " //// (all-config)" all-configs)
