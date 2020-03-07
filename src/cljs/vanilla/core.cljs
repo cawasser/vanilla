@@ -33,7 +33,10 @@
     [vanilla.widgets.scatter-chart]
     [vanilla.widgets.vari-pie-chart]
     [vanilla.widgets.continent-map]
-    [vanilla.widgets.australia-map]))
+    [vanilla.widgets.australia-map]
+
+    [vanilla.dark-mode :as dark]
+    [vanilla.light-mode :as light]))
 
 
 
@@ -45,12 +48,12 @@
   (fn-traced
     [db _]
     (prn (str ":initialize handler "))
-    (merge db {:data-sources {}
-               :hc-type {}
+    (merge db {:data-sources     {}
+               :hc-type          {}
                ;:chosen-bg-color {:r 150 :g 150 :b 150 :a 1.0}
                ;:chosen-txt-color "white"
                :configure-widget ""
-               :theme "widget-dark"})))
+               :theme            "widget-dark"})))
 
 
 (rf/reg-event-db
@@ -64,22 +67,22 @@
 (rf/reg-event-db
   :widget-type
   (fn-traced [db [_ widget]]
-             ;(prn (str ":widget-type " widget))
-             (assoc-in db [:widget-types (:name widget)] widget)))
+    ;(prn (str ":widget-type " widget))
+    (assoc-in db [:widget-types (:name widget)] widget)))
 
 
 (rf/reg-event-db
   :set-version
   (fn-traced [db [_ version]]
-             ;(prn ":set-version " version)
-             (assoc db :version (:version version))))
+    ;(prn ":set-version " version)
+    (assoc db :version (:version version))))
 
 
 (rf/reg-event-db
   :set-services
   (fn-traced [db [_ services]]
-             ;(prn ":set-services " services)
-             (assoc db :services (:services services))))
+    ;(prn ":set-services " services)
+    (assoc db :services (:services services))))
 
 
 
@@ -137,9 +140,13 @@
   []
   (let [theme (rf/subscribe [:theme])]
     (fn []
+      (let [theme-js (if (= "widget-dark" @theme) dark/dark-theme light/light-theme)]
+        (prn @theme " / " (:vanilla-mode theme-js))
+        (js.Highcharts.setOptions (clj->js theme-js)))
+
       [:div.level-left.has-text-left
        [wc/change-header (rf/subscribe [:configure-widget])]
-       [:button.button.is-info {:on-click #(rf/dispatch [:toggle-theme])}
+       [:button.button.is-link {:on-click #(rf/dispatch [:toggle-theme])}
         (if (= "widget-dark" @theme) "Light" "Dark")]
        [add-wid/version-number]])))
 

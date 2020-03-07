@@ -193,9 +193,9 @@
         chart-type      (-> chart-config :chart-options :chart/type)
         chart-reg-entry @(rf/subscribe [:hc-type chart-type])]
 
-    (prn "make-chart " chart-type
-      " //// (chart-config)" chart-config
-      " ////// (chart-reg-entry)" chart-reg-entry)
+    ;(prn "make-chart " chart-type
+    ;  " //// (chart-config)" chart-config
+    ;  " ////// (chart-reg-entry)" chart-reg-entry)
 
     (reagent/create-class
       {:reagent-render
