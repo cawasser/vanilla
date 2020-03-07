@@ -218,8 +218,8 @@
                base-config (make-config chart-config new-data options)
                all-configs (merge-configs base-config new-data options)]
 
-           (prn "component-did-update " chart-type
-             " //// chart-config " chart-config)
+           ;(prn "component-did-update " chart-type
+           ;  " //// chart-config " chart-config)
            ;  " //// chart-reg-entry " chart-reg-entry
            ;  " //// base-config " base-config
            ;  " //// (all-config)" all-configs)

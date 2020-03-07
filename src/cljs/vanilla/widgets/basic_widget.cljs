@@ -44,24 +44,23 @@
   ;  " //// custom-content " custom-content)
 
   (fn []
-    [:div {:class "vanilla widgets container"
-           :style {:height (get options :viz/height "100%")
-                   :width  "100%"
-                   :overflow "hidden"}}
-     [:div {:class "title-wrapper grid-toolbar move-cursor"
-            :cursor "move"}
+    [:div.widgets.container
+     {:style {:height (get options :viz/height "100%")
+              :width  "100%"
+              :overflow "hidden"}}
+     [:div.title-wrapper.grid-toolbar.move-cursor {:cursor "move"}
       [:container.level
-       {:style    {:background-color (util/rgba (get options :viz/banner-color {:r 150 :g 150 :b 150 :a 1}))}}
+       {:style {:background-color (util/rgba (get options :viz/banner-color {:r 150 :g 150 :b 150 :a 1}))}}
 
 
        [:div.level-left.has-text-left
-        [:h3 {:class    "title grid-content menu-cursor"
-              :cursor "context-menu"
-              :on-mouse-down #(.stopPropagation %)
-              :on-click #(do
-                           ;(prn "showing header for " name)
-                           (rf/dispatch-sync [:configure-widget name]))
-              :style    {:color (util/rgba (get options :viz/banner-text-color {:r 0 :g 0 :b 0 :a 1}))}}
+        [:h3.title.grid-content.menu-cursor
+         {:cursor "context-menu"
+          :on-mouse-down #(.stopPropagation %)
+          :on-click #(do
+                       ;(prn "showing header for " name)
+                       (rf/dispatch-sync [:configure-widget name]))
+          :style    {:color (util/rgba (get options :viz/banner-text-color {:r 0 :g 0 :b 0 :a 1}))}}
          (get options :viz/title)]]
 
        [:div.level-right.has-text-centered

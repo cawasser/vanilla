@@ -145,11 +145,13 @@
         (prn @theme " / " (:vanilla-mode theme-js))
         (js.Highcharts.setOptions (clj->js theme-js)))
 
-      [:div.level-left.has-text-left
+      [:div.level-left.has-text-left.is-half
        [wc/change-header (rf/subscribe [:configure-widget])]
-       [:button.button.is-link {:on-click #(rf/dispatch [:toggle-theme])}
-        (if (= "widget-dark" @theme) "Light" "Dark")]
-       [add-wid/version-number]])))
+       [:div.level-item
+        [:button.button.is-link {:on-click #(rf/dispatch [:toggle-theme])}
+         (if (= "widget-dark" @theme) "Light" "Dark")]]
+       [:div.level-item
+        [add-wid/version-number]]])))
 
 
 (defn top-right-buttons
@@ -158,9 +160,12 @@
   - An add widget button alongside a logout button"
   []
   (if (some? @(rf/subscribe [:get-current-user]))
-    [:div.level-right.has-text-right
-     [add-wid/add-widget-button]
-     [login/logout-button]]
+    [:div.level-right.has-text-right.is-half
+     [:div.level-item
+        [add-wid/add-widget-button]]
+     [:div.level-item
+        [login/logout-button]]]
+
     [:div.level-right.has-text-right
      [login/login-button]]))
 
@@ -168,7 +173,7 @@
   "This is the start of the UI for our SPA"
   []
   [:div {:width "100%"}
-   [:div.container
+   [:div.container {:width "90%"}
     [:div.content {:width "100%"}
      [:div.container.level.is-fluid {:width "100%"}
       [top-left-controls]
