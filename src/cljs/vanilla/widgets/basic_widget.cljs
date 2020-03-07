@@ -44,7 +44,7 @@
   ;  " //// custom-content " custom-content)
 
   (fn []
-    [:div.widgets.container
+    [:div.widgets ;.container
      {:style {:height (get options :viz/height "100%")
               :width  "100%"
               :overflow "hidden"}}

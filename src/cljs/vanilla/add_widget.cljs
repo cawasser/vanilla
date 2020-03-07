@@ -10,42 +10,42 @@
 (rf/reg-event-db
   :add-widget
   (fn-traced [db [_ new-widget-type data-source]]
-             (let [next-id (:next-id db)
-                   widget-type (get-in db [:widget-types new-widget-type])
-                   current-user @(rf/subscribe [:get-current-user]) ;;get current user
-                   named-widget (assoc widget-type
-                                  :key (str next-id)
-                                  :data-source data-source
-                                  :username current-user    ;;add username key value to widget map
-                                  :data-grid {:x 0 :y 0 :w 5 :h 15})]
+    (let [next-id      (:next-id db)
+          widget-type  (get-in db [:widget-types new-widget-type])
+          current-user @(rf/subscribe [:get-current-user])  ;;get current user
+          named-widget (assoc widget-type
+                         :key (str next-id)
+                         :data-source data-source
+                         :username current-user             ;;add username key value to widget map
+                         :data-grid {:x 0 :y 0 :w 5 :h 15})]
 
-               (do
-                 ;(prn ":add-widget " new-widget-type
-                 ;  " //// widget-type " widget-type
-                 ;  " //// named-widget " named-widget)
-                 (assoc db
-                   :widgets (conj (:widgets db) named-widget)
-                   :next-id (uuid/uuid-string (uuid/make-random-uuid)))))))
+      (do
+        ;(prn ":add-widget " new-widget-type
+        ;  " //// widget-type " widget-type
+        ;  " //// named-widget " named-widget)
+        (assoc db
+          :widgets (conj (:widgets db) named-widget)
+          :next-id (uuid/uuid-string (uuid/make-random-uuid)))))))
 
 (rf/reg-event-db
   :init-selected-service
   (fn-traced [db _]
-             ;(prn (str ":init-selected-service " (first (:services db))))
-             (assoc db :selected-service (first (:services db)))))
+    ;(prn (str ":init-selected-service " (first (:services db))))
+    (assoc db :selected-service (first (:services db)))))
 
 
 (rf/reg-event-db
   :selected-service
   (fn-traced [db [_ s]]
-             ;(prn (str ":selected-service " s))
-             (assoc db :selected-service s)))
+    ;(prn (str ":selected-service " s))
+    (assoc db :selected-service s)))
 
 
 (rf/reg-event-db
   :selected-widget
   (fn-traced [db [_ w]]
-             ;(prn ":selected-widget " w))
-             (assoc db :selected-widget w)))
+    ;(prn ":selected-widget " w))
+    (assoc db :selected-widget w)))
 
 
 (rf/reg-sub
@@ -54,7 +54,7 @@
   :<- [:selected-widget]
   (fn [[selected-service selected-widget] _]
     (let [ret-val (if (some #{(keyword (:ret_type selected-service))}
-                            (:ret_types selected-widget)) true false)]
+                        (:ret_types selected-widget)) true false)]
       ret-val)))
 
 
@@ -100,8 +100,8 @@
   ;  " //// ret_types " (keyword (:ret_type selected)))
 
   (let [ret-val (filter #(if (some #{(keyword (:ret_type selected))}
-                                   (:ret_types %)) true false)
-                        (vals widgets))]
+                               (:ret_types %)) true false)
+                  (vals widgets))]
 
     ;(prn (str "filter-widgets " selected
     ;       " //// ret_types " (keyword (:ret_type selected))
@@ -177,14 +177,13 @@
 (defn add-widget-modal
   ""
   [is-active]
-  (let [services (rf/subscribe [:services])
-        selected (rf/subscribe [:selected-service])
-        chosen-widget (rf/subscribe [:selected-widget])
-        widget-cards (rf/subscribe [:all-widget-types])
+  (let [services             (rf/subscribe [:services])
+        selected             (rf/subscribe [:selected-service])
+        chosen-widget        (rf/subscribe [:selected-widget])
+        widget-cards         (rf/subscribe [:all-widget-types])
         compatible-selection (rf/subscribe [:compatible-selections])]
     (fn []
-
-      (modal {:is-active                    is-active
+      (modal {:is-active             is-active
               :title                 "Add Data Source"
               :modal-body-list       [[service-list @services @selected]
                                       [widget-list @widget-cards @selected @chosen-widget]]
@@ -193,41 +192,6 @@
               :footer-button-text    "Add"}))))
 
 
-      ;[modal/modal-start (if @is-active {:class "is-active"})
-      ;;[:div.modal (if @is-active {:class "is-active"})]
-      ; [modal/modal-background]
-      ; [modal/modal-card
-      ;  ;[:header.modal-card-head
-      ;  ; [:p.modal-card-title "Add Data Source"]
-      ;  ; [:button.delete {:aria-label "close"
-      ;  ;                  :on-click   #(reset! is-active false)}]]
-      ;  [modal/modal-header "Add Data Source" is-active]
-      ;
-      ;  ;[:section.model-card-body
-      ;  ; [:p (str "selected " @selected)]
-      ;  ; [:p (str "widget " @chosen-widget)]]
-      ;
-      ;  [modal/modal-body-section
-      ;    [service-list @services @selected]]
-      ;  [:section.modal-card-body
-      ;   [widget-list @widget-cards @selected @chosen-widget]]))))
-      ;
-      ;
-      ;  [modal/modal-footer  @compatible-selection
-      ;                       #(add-widget (:name @chosen-widget) @selected)
-      ;                       "Add"
-      ;                       is-active]]])))
-        ;[:footer.modal-card-foot
-        ; [:button.button.is-success
-        ;  {:disabled (not @compatible-selection)
-        ;   :on-click #(do
-        ;                                           ;(prn "picked widget " @chosen-widget @selected)
-        ;                                           (add-widget (:name @chosen-widget) @selected))}
-        ;                                           ;(reset! is-active false))
-        ;   ;:on-success #(reset! is-active false)}
-        ;
-        ;  "Add"]
-        ; [:button.button {:on-click #(reset! is-active false)} "Cancel"]]]])))
 
 
 (defn add-widget-button
@@ -236,9 +200,7 @@
   (let [is-active (r/atom false)]
     (fn []
       [:div.has-text-left
-       ;[:div.level-right.has-text-right
        [:button.button.is-link {:on-click #(swap! is-active not)} "Add"]
-       ;[:button.button.is-link {:on-click #(add-canned-widget)} "widget"]]
        [add-widget-modal is-active]])))
 
 
@@ -249,17 +211,4 @@
   []
   (let [version (rf/subscribe [:version])]
     (fn []
-      ;[:div.level-left.has-text-left
       [:h6.subtitle.is-6 @version])))
-
-;(defn version-number []
-;  (let [version   (rf/subscribe [:version])
-;        is-active (r/atom false)]
-;    (fn []
-;      [:div.container.level.is-fluid {:width "100%"}
-;       [:div.level-left.has-text-left
-;        [:h6.subtitle.is-6 @version]]
-;       [:div.level-right.has-text-right
-;        [:button.button.is-link {:on-click #(swap! is-active not)} "Add"]]
-;       ;[:button.button.is-link {:on-click #(add-canned-widget)} "widget"]]
-;       [add-widget-modal is-active]])))
