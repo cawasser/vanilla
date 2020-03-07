@@ -171,12 +171,12 @@
    'registry-data' provides a map of chart-options, plot-option
    configurations, and data conversion functions"
 
-  [id registry-data]
+  [id registry-data])
 
-  (prn "register-type " id
-   " //// (registry-data)" registry-data)
+  ;(prn "register-type " id
+  ; " //// (registry-data)" registry-data)
 
-  (rf/dispatch [:register-hc-type id registry-data]))
+  ;(rf/dispatch [:register-hc-type id registry-data]))
 
 
 
