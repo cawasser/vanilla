@@ -44,14 +44,13 @@
   ;  " //// custom-content " custom-content)
 
   (fn []
-    [:div.widgets ;.container
+    [:div.widgets.container
      {:style {:height (get options :viz/height "100%")
               :width  "100%"
               :overflow "hidden"}}
      [:div.title-wrapper.grid-toolbar.move-cursor {:cursor "move"}
-      [:container.level
+      [:div.level
        {:style {:background-color (util/rgba (get options :viz/banner-color {:r 150 :g 150 :b 150 :a 1}))}}
-
 
        [:div.level-left.has-text-left
         [:h3.title.grid-content.menu-cursor
