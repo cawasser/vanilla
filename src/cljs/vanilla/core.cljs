@@ -53,7 +53,8 @@
                ;:chosen-bg-color {:r 150 :g 150 :b 150 :a 1.0}
                ;:chosen-txt-color "white"
                :configure-widget ""
-               :theme            "widget-dark"})))
+               :theme            "widget-dark"
+               :last-user nil})))
 
 
 (rf/reg-event-db

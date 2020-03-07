@@ -17,6 +17,8 @@
              (prn "Set current user" username)
              (layout/get-layout username)
              (assoc db :current-user username
+                       :last-user username
+
                        :new-login true)))
 
 
@@ -34,6 +36,14 @@
                (js/toastr.success message)
                (js/toastr.error message))
              db))
+
+
+
+(rf/reg-sub
+  :last-user
+  (fn [db _]
+    (prn ":current-login " (:last-user db))
+    (:last-user db)))
 
 ;;;;;;;;;;;;;;;;;;;;;
 
@@ -127,7 +137,7 @@
 (defn login-pop-up                                          ;; Name should include modal instead of pop up
   "When the login button is clicked have this modal pop up"
   [is-active]
-  (let [username (r/atom nil)
+  (let [username (r/atom @(rf/subscribe [:last-user]))
         pass (r/atom nil)]
     (fn []
       [:div.modal (if @is-active {:class "is-active"})
