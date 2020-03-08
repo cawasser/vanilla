@@ -29,18 +29,17 @@
      :error-handler   #(rf/dispatch [:layout-message %])}))
 
 
-
+; remove a widget from the app-db
+;
+; *widget-id* (string 'guid') we use a guid as the :key or name of the widget, so we can
+; add multiple widgets of the same type, even when they get their data from the same
+; data-source. Each widget is unique.
+;
+; There is a bug here: we delete the widget form the local app-db EVEN if the server update call FAILS!
+;
 (rf/reg-event-db
   :remove-widget
   (fn-traced
-    "remove a widget from the app-db
-
-    *widget-id* (string 'guid') we use a guid as the :key or name of the widget, so we can
-    add multiple widgets of the same type, even when they get their data from the same
-    data-source. Each widget is unique.
-
-    There is a bug here: we delete the widget form the local app-db EVEN if the server update call FAILS!"
-
     [db [_ widget-id]]
     (delete-widget widget-id)
     ; TODO: this looks like a bug - we delete the widget from the app-db even if the server update fails!
@@ -65,7 +64,9 @@
 
 
 (defn basic-widget
-  "'wrapper' for all widgets. Provides a hiccup structure to get all widgets, regardless of the specific
+  "'wrapper' for all widgets.
+
+  Provides a hiccup structure to get all widgets, regardless of the specific
   content, have the same look, feel, and functionality (drag, change title text, etc.)
 
   *name* (string 'guid')    we use a guid as the :key or name of the widget, so we can add multiple widgets
@@ -75,15 +76,18 @@
 
   *options* (map)           map of options for drawing the widget. this call looks for the following keys:
 
-          _:viz/height_ (string)         height of the widget, defaults to '100%', can be '%' or 'px'
-          _:viz/banner-color_ (map)      color for the banner/header on the widget, defaults to 'gray' (rgba 150,150,150,1)
-          _:viz/banner-text-color_ (map) color for the title of the widget, defaults to 'black' (rgba 0,0,0,1)
-          _:viz/title_ (string)          text of the title
+  :viz/height (string)         height of the widget, defaults to '100%', can be '%' or 'px'
 
-  *custom-content* (hiccup)  he specific content for this widgets. This can be any hiccup, or a hiccup producing function. It
+  :viz/banner-color (map)      color for the banner/header on the widget, defaults to 'gray' (rgba 150,150,150,1)
+
+  :viz/banner-text-color (map) color for the title of the widget, defaults to 'black' (rgba 0,0,0,1)
+
+  :viz/title (string)          text of the title
+
+  *custom-content* (hiccup)  the specific content for this widgets. This can be any hiccup, or a hiccup producing function. It
   will be embedded as the most 'inside' content of the widget
 
-  _returns_ (hiccup) the content of a complete widget tha can be embedded into the UI"
+  _returns_ (hiccup) the content of a complete widget that can be embedded into the UI"
 
   [name data options custom-content]
 
