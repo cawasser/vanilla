@@ -8,7 +8,17 @@
 
 
 
-(defn delete-widget [widget-id]
+(defn delete-widget
+  "delete the selected widget from the server
+
+  *widget-id* (string 'guid') we use a guid as the :key or name of the widget, so we can
+  add multiple widgets of the same type, even when they get their data from the same
+  data-source. Each widget is unique.
+
+  Both callbacks provide an updated 'layout' of all the widgets, so the UI will be redrawn.
+  In the case of a failure, we assume the layout data will not have changed"
+
+  [widget-id]
   ;(prn "removing widget: " widget-id)
 
   (POST "/delete-widget"
@@ -22,22 +32,60 @@
 
 (rf/reg-event-db
   :remove-widget
-  (fn-traced [db [_ widget-id]]
-             (delete-widget widget-id)
-             (assoc db :widgets (remove #(= (:key %) widget-id) (:widgets db)))))
+  (fn-traced
+    "remove a widget from the app-db
+
+    *widget-id* (string 'guid') we use a guid as the :key or name of the widget, so we can
+    add multiple widgets of the same type, even when they get their data from the same
+    data-source. Each widget is unique.
+
+    There is a bug here: we delete the widget form the local app-db EVEN if the server update call FAILS!"
+
+    [db [_ widget-id]]
+    (delete-widget widget-id)
+    ; TODO: this looks like a bug - we delete the widget from the app-db even if the server update fails!
+    (assoc db :widgets (remove #(= (:key %) widget-id) (:widgets db)))))
 
 
 
+(defn debug-style
+  "uses the :viz/debug key in widget options to determine if we show a dotted border around the widget
 
+  *options* (map) the map of all the options for the widget, may or may not contain :viz/debug
 
-(defn debug-style [options]
-  (if (get-in options [:viz :debug] false)
+  The call defaults to 'false' so the border does NOT draw.
+
+  _returns_ (keyword)  :dotted or :none (default). This value is used to make the :border <val> key for drawing"
+
+  [options]
+  (if (get options :viz/debug false)
     :dotted
     :none))
 
 
 
-(defn basic-widget [name data options custom-content]
+(defn basic-widget
+  "'wrapper' for all widgets. Provides a hiccup structure to get all widgets, regardless of the specific
+  content, have the same look, feel, and functionality (drag, change title text, etc.)
+
+  *name* (string 'guid')    we use a guid as the :key or name of the widget, so we can add multiple widgets
+  of the same type, even when they get their data from the same data-source. Each widget is unique.
+
+  *data* (unused) remove?
+
+  *options* (map)           map of options for drawing the widget. this call looks for the following keys:
+
+          _:viz/height_ (string)         height of the widget, defaults to '100%', can be '%' or 'px'
+          _:viz/banner-color_ (map)      color for the banner/header on the widget, defaults to 'gray' (rgba 150,150,150,1)
+          _:viz/banner-text-color_ (map) color for the title of the widget, defaults to 'black' (rgba 0,0,0,1)
+          _:viz/title_ (string)          text of the title
+
+  *custom-content* (hiccup)  he specific content for this widgets. This can be any hiccup, or a hiccup producing function. It
+  will be embedded as the most 'inside' content of the widget
+
+  _returns_ (hiccup) the content of a complete widget tha can be embedded into the UI"
+
+  [name data options custom-content]
 
   ;(prn "basic-widget " name
   ;  " //// options " options
@@ -45,8 +93,8 @@
 
   (fn []
     [:div.widgets.container
-     {:style {:height (get options :viz/height "100%")
-              :width  "100%"
+     {:style {:height   (get options :viz/height "100%")
+              :width    "100%"
               :overflow "hidden"}}
      [:div.title-wrapper.grid-toolbar.move-cursor {:cursor "move"}
       [:div.level
@@ -54,34 +102,33 @@
 
        [:div.level-left.has-text-left
         [:h3.title.grid-content.menu-cursor
-         {:cursor "context-menu"
+         {:cursor        "context-menu"
           :on-mouse-down #(.stopPropagation %)
-          :on-click #(do
-                       ;(prn "showing header for " name)
-                       (rf/dispatch-sync [:configure-widget name]))
-          :style    {:color (util/rgba (get options :viz/banner-text-color {:r 0 :g 0 :b 0 :a 1}))}}
+          :on-click      #(do
+                            ;(prn "showing header for " name)
+                            (rf/dispatch-sync [:configure-widget name]))
+          :style         {:color (util/rgba (get options :viz/banner-text-color {:r 0 :g 0 :b 0 :a 1}))}}
          (get options :viz/title)]]
 
        [:div.level-right.has-text-centered
-        [:button.delete.is-large {:style    {:margin-right "10px"}
+        [:button.delete.is-large {:style         {:margin-right "10px"}
                                   :on-mouse-down #(.stopPropagation %)
-                                  :on-click #(do
-                                               (rf/dispatch [:remove-widget name])
-                                               (.stopPropagation %))}]]]]
-
+                                  :on-click      #(do
+                                                    (rf/dispatch [:remove-widget name])
+                                                    (.stopPropagation %))}]]]]
 
      [:div {:class         @(rf/subscribe [:theme])
             :style         {
                             :width        "100%"
                             :height       "90%"
                             ;:marginRight  "50px"
-                            :margin "auto"
+                            :margin       "auto"
                             :marginTop    "5px"
                             :marginBottom "5px"
                             :cursor       :default
                             :border-style (debug-style options)
                             :align-items  :stretch
-                            :overflow "hidden"
+                            :overflow     "hidden"
                             :display      :flex}
             :on-mouse-down #(.stopPropagation %)}
 
