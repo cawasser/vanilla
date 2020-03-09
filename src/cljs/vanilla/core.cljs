@@ -138,12 +138,13 @@
 (defn navbar
   ""
   []
-  ;(let [logged-in (r/atom (some? @(rf/subscribe [:get-current-user])))]
-  ;  (fn []
   [:nav.navbar.is-info
    [:div.container
     [:div.navbar-brand
-     [:a.navbar-item "Black Hammer"]]
+     [:img.navbar-item {:src "/images/bh_icon.png"
+                        :alt "Black Hammer"
+                        :height 90
+                        :width 200}]]
     [:div.nav-menu.navbar-menu
      [:div.navbar-end
       [nav-link "#/" "Home" :home]
@@ -178,18 +179,19 @@
 ;; -------------------------
 ;; History
 ;; must be called after routes have been defined
-(defn hook-browser-navigation!
-  ""
-  ;; TODO - What does this do exactly?
-  []
-  (doto (History.)
-    (events/listen
-      HistoryEventType/NAVIGATE
-      (fn [event]
-        (let [uri (or (not-empty (string/replace (.-token event) #"^.*#" "")) "/")]
-          (rf/dispatch
-            [:navigate (re/match-by-path router uri)]))))
-    (.setEnabled true)))
+;(defn hook-browser-navigation!
+;  ""
+;  ;; TODO - What does this do exactly?
+;  []
+;  ;(let [hist (history/History)])
+;  (doto (History.)
+;    (events/listen
+;      HistoryEventType/NAVIGATE    ;; Nav type
+;      (fn [event]                  ;; Nav callback
+;        (let [uri (or (not-empty (string/replace (.-token event) #"^.*#" "")) "/")]
+;          (rf/dispatch
+;            [:navigate (re/match-by-path router uri)]))))
+;    (.setEnabled true)))
 
 
 ;;;;;;;;;;;
@@ -245,7 +247,7 @@
   ;; Set up page navigation and routing
   (rf/dispatch-sync [:navigate (re/match-by-name router :home)])
 
-  (hook-browser-navigation!)
+  ;(hook-browser-navigation!)
 
   (mount-components))
   ;(r/render home-page (.getElementById js/document "app")))

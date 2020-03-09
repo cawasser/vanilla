@@ -202,7 +202,7 @@
 
 
 (defn login-page
-  ""
+  "Renders a basic html page with two forms, one for logging in and one for signing up a new user"
   []
   (let [username1 (r/atom nil)
         pass1 (r/atom nil)
