@@ -21,9 +21,9 @@
 
 
     [reitit.core :as re]
-    [goog.events :as events]
-    [goog.history.EventType :as HistoryEventType]
-    [clojure.string :as string]
+    [reitit.frontend.easy :as rfe]
+    [reitit.frontend.controllers :as rfc]
+    ;[clojure.string :as string]
 
 
 
@@ -69,11 +69,6 @@
              (assoc-in db [:widget-types (:name widget)] widget)))
 
 
-;(rf/reg-event-db
-;  :set-version
-;  (fn-traced [db [_ version]]
-;             ;(prn ":set-version " version)
-;             (assoc db :version (:version version))))
 
 
 (rf/reg-event-db
@@ -89,23 +84,49 @@
 ;
 ; Routing & Page Navigation
 
-(rf/reg-event-db
-  :navigate
-  (fn-traced
-    [db [_ route]]
-    (assoc db :route route)))
-
-
-(rf/reg-sub
-  :page
-  :<- [:route]
-  (fn [route _]
-    (-> route :data :name)))
 
 (rf/reg-sub
   :route
   (fn [db _]
     (-> db :route)))
+
+
+
+(rf/reg-sub
+  :page-id
+  :<- [:route]
+  (fn [route _]
+    (-> route :data :name)))
+
+(rf/reg-sub
+  :page
+  :<- [:route]
+  (fn [route _]
+    (-> route :data :view)))
+
+
+
+(rf/reg-event-db
+  :navigate
+  (fn-traced [db [_ match]]
+             (let [old-match (:common/route db)
+                   new-match (assoc match :controllers
+                                          (rfc/apply-controllers (:controllers old-match) match))]
+               (assoc db :route new-match))))
+
+(rf/reg-fx
+  :navigate-fx!
+  (fn-traced [[k & [params query]]]
+             (rfe/push-state k params query)))
+
+(rf/reg-event-fx
+  :navigate!
+  (fn-traced [_ [_ url-key params query]]
+             {:navigate-fx! [url-key params query]}))
+
+
+
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;
@@ -158,40 +179,36 @@
 ;
 ;    Routing and Page management
 
-(def pages
-  {:home #'home/home-page
-   :login #'login/login-page
-   :logout #'login/logout-sequence})
 
-(def router
-  (re/router
-    [["/" :home]
-     ["/login" :login]
-     ["/logout" :logout]]))
 
 (defn page
   []
-  [:div
-   [navbar]
-   [(pages @(rf/subscribe [:page]))]])
+  (if-let [page @(rf/subscribe [:page])]
+    [:div
+     [navbar]
+     [page]]))
 
 
-;; -------------------------
-;; History
-;; must be called after routes have been defined
-;(defn hook-browser-navigation!
-;  ""
-;  ;; TODO - What does this do exactly?
-;  []
-;  ;(let [hist (history/History)])
-;  (doto (History.)
-;    (events/listen
-;      HistoryEventType/NAVIGATE    ;; Nav type
-;      (fn [event]                  ;; Nav callback
-;        (let [uri (or (not-empty (string/replace (.-token event) #"^.*#" "")) "/")]
-;          (rf/dispatch
-;            [:navigate (re/match-by-path router uri)]))))
-;    (.setEnabled true)))
+(defn navigate! [match _]
+  (rf/dispatch [:navigate match]))
+
+(def router
+  (re/router
+    [["/" {:name        :home
+           :view        #'home/home-page}]
+           ;:controllers [{:start (fn [_] (rf/dispatch [:page/init-home]))}]}]
+     ["/login" {:name :login
+                :view #'login/login-page}]
+     ["/logout" {:name :logout
+                 :view #'login/logout-sequence}]]))
+
+(defn start-router! []
+  (rfe/start!
+    router
+    navigate!
+    {}))
+
+
 
 
 ;;;;;;;;;;;
@@ -201,7 +218,7 @@
 (defn mount-components
   "Right now we may not need to clear sub cache - find this out"
   []
-  ;(rf/clear-subscription-cache!)
+  (rf/clear-subscription-cache!)
   (r/render [#'page] (.getElementById js/document "app")))
 
 
@@ -213,7 +230,7 @@
   (rf/dispatch-sync [:initialize])
 
 
-
+  (start-router!)
 
   (ver/get-version)
   (get-services)
@@ -247,7 +264,7 @@
   ;; Set up page navigation and routing
   (rf/dispatch-sync [:navigate (re/match-by-name router :home)])
 
-  ;(hook-browser-navigation!)
+
 
   (mount-components))
   ;(r/render home-page (.getElementById js/document "app")))

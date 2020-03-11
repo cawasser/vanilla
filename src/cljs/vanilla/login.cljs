@@ -210,7 +210,7 @@
         pass2 (r/atom nil)]
     (fn []
       [:div.container
-       [:div.content {:width "50%"}
+       [:div.level-left {:width "50%"}
         [:header
          [:h2 "Login"]]
         [:section
@@ -224,7 +224,7 @@
          [:button.button.is-success {:on-click #(do
                                                   (attempt-login {:username @username1
                                                                   :pass @pass1}))} "Login"]]]
-       [:div.content {:width "50%"}
+       [:div.level-right {:width "50%"}
         [:header
          [:h2 "Sign-up"]]
         [:section
@@ -240,12 +240,18 @@
                                                                      :pass @pass2}))} "Sign-up"]]]])))
 
 
+(defn logout-page
+  ""
+  []
+  [:p "Thank you for using Vanilla!"])
+
+
 
 (defn logout-sequence
   ""
   []
   (rf/dispatch [:logout])
-  [login-page])
+  [logout-page])
 
 
 
