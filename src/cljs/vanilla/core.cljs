@@ -10,11 +10,22 @@
 
     [day8.re-frame.tracing :refer-macros [fn-traced]]
 
-    [vanilla.add-widget :as add-wid]
-    [vanilla.widgets.configure-widget :as wc]
+    [vanilla.home-page :as home]
     [vanilla.login :as login]
 
-    [vanilla.grid :as grid]
+    ;[vanilla.add-widget :as add-wid]
+    ;[vanilla.widgets.configure-widget :as wc]
+    ;[vanilla.grid :as grid]
+
+    [vanilla.version :as ver]
+
+
+    [reitit.core :as re]
+    [reitit.frontend.easy :as rfe]
+    [reitit.frontend.controllers :as rfc]
+    ;[clojure.string :as string]
+
+
 
     ; needed to register all the highcharts types
     [vanilla.widgets.area-chart]
@@ -33,7 +44,8 @@
     [vanilla.widgets.scatter-chart]
     [vanilla.widgets.vari-pie-chart]
     [vanilla.widgets.continent-map]
-    [vanilla.widgets.australia-map]))
+    [vanilla.widgets.australia-map])
+  (:import goog.History))
 
 
 
@@ -58,11 +70,6 @@
              (assoc-in db [:widget-types (:name widget)] widget)))
 
 
-(rf/reg-event-db
-  :set-version
-  (fn-traced [db [_ version]]
-             ;(prn ":set-version " version)
-             (assoc db :version (:version version))))
 
 
 (rf/reg-event-db
@@ -70,6 +77,54 @@
   (fn-traced [db [_ services]]
              ;(prn ":set-services " services)
              (assoc db :services (:services services))))
+
+
+
+
+;;;;;;;
+;
+; Routing & Page Navigation
+
+
+(rf/reg-sub
+  :route
+  (fn [db _]
+    (-> db :route)))
+
+
+
+(rf/reg-sub
+  :page-id
+  :<- [:route]
+  (fn [route _]
+    (-> route :data :name)))
+
+(rf/reg-sub
+  :page
+  :<- [:route]
+  (fn [route _]
+    (-> route :data :view)))
+
+
+
+(rf/reg-event-db
+  :navigate
+  (fn-traced [db [_ match]]
+             (let [old-match (:common/route db)
+                   new-match (assoc match :controllers
+                                          (rfc/apply-controllers (:controllers old-match) match))]
+               (assoc db :route new-match))))
+
+(rf/reg-fx
+  :navigate-fx!
+  (fn-traced [[k & [params query]]]
+             (rfe/push-state k params query)))
+
+(rf/reg-event-fx
+  :navigate!
+  (fn-traced [_ [_ url-key params query]]
+             {:navigate-fx! [url-key params query]}))
+
 
 
 
@@ -88,61 +143,84 @@
 
 
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;
 ;
-; VERSION NUMBER
+;    Navbar stuff
 ;
-;
-
-(defn get-version []
-  (GET "/version" {:headers         {"Accept" "application/transit+json"}
-                   :response-format (ajax/json-response-format {:keywords? true})
-                   :handler         #(rf/dispatch-sync [:set-version %])}))
 
 
-(def width 1536)
-(def height 1024)
-(def rows 50)
+(defn nav-link
+  "Take in a link, title/label, and page data so it can return a nav-link item"
+  [uri title page]
+  [:a.navbar-item
+   {:href   uri
+    :active (when (= page @(rf/subscribe [:page])) "active")}
+   title])
 
-
-(defn- widgets-grid []
-  [grid/Grid {:id          "dashboard-widget-grid"
-              :cols        {:lg 12 :md 10 :sm 6 :xs 4 :xxs 2}
-              :width       width
-              :row-height  (/ height rows)
-              :breakpoints {:lg 2048 :md 1024 :sm 768 :xs 480 :xxs 0}
-              :data        @(rf/subscribe [:widgets])
-              :on-change   #();prn (str "layout change. prev " %1 " //// new " %2))
-              :item-props  {:class "widget-component"}}])
-
-
-
-
-(defn top-right-buttons
-  "Determine whether buttons in the top right of the dashboard show either:
-  - A login button
-  - An add widget button alongside a logout button"
+(defn navbar
+  ""
   []
-  (if (some? @(rf/subscribe [:get-current-user]))
-    [:div.level-right.has-text-right
-     [add-wid/add-widget-button]
-     [login/logout-button]]
-    [:div.level-right.has-text-right
-     [login/login-button]]))
-
-(defn home-page
-  "This is the start of the UI for our SPA"
-  []
-  [:div {:width "100%"}
+  [:nav.navbar.is-info
    [:div.container
-    [:div.content {:width "100%"}
-     [:div.container.level.is-fluid {:width "100%"}
-      [:div.level-left.has-text-left
-       [wc/change-header (rf/subscribe [:configure-widget])]
-       [add-wid/version-number]]
-      [top-right-buttons]]]]
-   [widgets-grid]])
+    [:div.navbar-brand
+     [:img.navbar-item {:src "/images/bh_icon.png"
+                        :alt "Black Hammer"
+                        :height 90
+                        :width 200}]]
+    [:div.nav-menu.navbar-menu
+     [:div.navbar-end
+      [nav-link "#/" "Home" :home]
+      (if (some? @(rf/subscribe [:get-current-user]))
+        [nav-link "#/logout" "Log Out" :logout]
+        [nav-link "#/login" "Login" :login])]]]])
 
+
+
+;;;;;;;;;;;
+;
+;    Routing and Page management
+
+
+
+(defn page
+  []
+  (if-let [page @(rf/subscribe [:page])]
+    [:div
+     [navbar]
+     [page]]))
+
+
+(defn navigate! [match _]
+  (rf/dispatch [:navigate match]))
+
+(def router
+  (re/router
+    [["/" {:name        :home
+           :view        #'home/home-page}]
+           ;:controllers [{:start (fn [_] (rf/dispatch [:page/init-home]))}]}]
+     ["/login" {:name :login
+                :view #'login/login-page}]
+     ["/logout" {:name :logout
+                 :view #'login/logout-sequence}]]))
+
+(defn start-router! []
+  (rfe/start!
+    router
+    navigate!
+    {}))
+
+
+
+
+;;;;;;;;;;;
+;
+;   Initialize the application
+
+(defn mount-components
+  "Right now we may not need to clear sub cache - find this out"
+  []
+  (rf/clear-subscription-cache!)
+  (r/render [#'page] (.getElementById js/document "app")))
 
 
 (defn start-dashboard
@@ -152,7 +230,10 @@
   ;(prn "calling :initialize")
   (rf/dispatch-sync [:initialize])
 
-  (get-version)
+
+  (start-router!)
+
+  (ver/get-version)
   (get-services)
 
   ; TODO eliminate register-global-app-state-subscription (attach subscription in add-widget)
@@ -182,8 +263,14 @@
 
   (d/connect-to-data-sources)
 
+  ;; Set up page navigation and routing
+  (rf/dispatch-sync [:navigate (re/match-by-name router :home)])
 
-  (r/render home-page (.getElementById js/document "app")))
+
+
+  (mount-components))
+  ;(r/render home-page (.getElementById js/document "app")))
+
 
 
 ;(start-dashboard)

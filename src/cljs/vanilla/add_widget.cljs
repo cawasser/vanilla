@@ -5,8 +5,11 @@
             [cljs-uuid-utils.core :as uuid]
             [vanilla.modal :refer [modal]]))
 
+;;;;;;;;;;;;;;;;;
+;
+; EVENTS
+;
 
-;;;; EVENTS
 (rf/reg-event-db
   :add-widget
   (fn-traced [db [_ new-widget-type data-source]]
@@ -57,7 +60,7 @@
                             (:ret_types selected-widget)) true false)]
       ret-val)))
 
-
+;;;;;;;;;;;;;;;;;;;;;
 
 
 
@@ -244,13 +247,13 @@
 
 
 
-(defn version-number
-  "Returns the version number wrapped in a h6 element."
-  []
-  (let [version (rf/subscribe [:version])]
-    (fn []
-      ;[:div.level-left.has-text-left
-      [:h6.subtitle.is-6 @version])))
+;(defn version-number
+;  "Returns the version number wrapped in a h6 element."
+;  []
+;  (let [version (rf/subscribe [:version])]
+;    (fn []
+;      ;[:div.level-left.has-text-left
+;      [:h6.subtitle.is-6 @version])))
 
 ;(defn version-number []
 ;  (let [version   (rf/subscribe [:version])
