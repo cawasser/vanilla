@@ -104,6 +104,12 @@
                  :value @value
                  :on-change #(reset! value (-> % .-target .-value))}])
 
+;(defn form-element
+;  ""
+;  []
+;  [:form
+;   [:]])
+
 
 
 ;(defn login-pop-up                                          ;; Name should include modal instead of pop up
@@ -210,34 +216,34 @@
         pass2 (r/atom nil)]
     (fn []
       [:div.container
-       [:div.level-left {:width "50%"}
-        [:header
-         [:h2 "Login"]]
-        [:section
-         [:label "Username:"
-          [:div
-           [input-element "username" username1]]]
-         [:label "Password:"
-          [:div
-           [input-element "password"  pass1]]]]
-        [:footer
-         [:button.button.is-success {:on-click #(do
-                                                  (attempt-login {:username @username1
-                                                                  :pass @pass1}))} "Login"]]]
-       [:div.level-right {:width "50%"}
-        [:header
-         [:h2 "Sign-up"]]
-        [:section
-         [:label "Username:"
-          [:div
-           [input-element "username" username2]]]
-         [:label "Password:"
-          [:div
-           [input-element "password"  pass2]]]]
-        [:footer
-         [:button.button.is-info {:on-click #(do
-                                               (attempt-create-user {:username @username2
-                                                                     :pass @pass2}))} "Sign-up"]]]])))
+       [:div.level
+        [:div.level-left {:style {:width "50%"}}
+         [:div.content
+          [:h2 "Login"]
+          [:section
+           [:label "Username:"
+            [:div
+             [input-element "username" username1]]]
+           [:label "Password:"
+            [:div
+             [input-element "password"  pass1]]]]
+          [:button.button.is-success {:on-click #(do
+                                                   (attempt-login {:username @username1
+                                                                   :pass @pass1}))} "Login"]]]
+        [:div.level-right {:style {:width "50%"}}
+         [:div.content
+          [:h2 "Sign-up"]
+          [:section
+           [:label "Username:"
+            [:div
+             [input-element "username" username2]]]
+           [:label "Password:"
+            [:div
+             [input-element "password"  pass2]]]]
+          [:footer
+           [:button.button.is-info {:on-click #(do
+                                                 (attempt-create-user {:username @username2
+                                                                       :pass @pass2}))} "Sign-up"]]]]]])))
 
 
 (defn logout-page
