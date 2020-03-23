@@ -1,8 +1,9 @@
-(ns vanilla.sankey-service)
+(ns vanilla.sankey-service
+  (:require [clojure.tools.logging :as log]))
 
 
 (defn fetch-data []
-  (prn "Sankey Service")
+  (log/info "Sankey Service")
 
   {:title "Sankey Data"
    :data-format :data-format/from-to-n

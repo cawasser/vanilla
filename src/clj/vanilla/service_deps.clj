@@ -1,4 +1,20 @@
-(ns vanilla.service-deps)
+(ns vanilla.service-deps
+  (:require [vanilla.bubble-service]
+            [vanilla.heatmap-service]
+            [vanilla.network-service]
+            [vanilla.sankey-service]
+            [vanilla.scatter-service]
+            [vanilla.stoplight-service]
+            [vanilla.usage-12-hour-service]
+            [vanilla.spectrum-traces-service]
+            [vanilla.usage-data-service]
+            [vanilla.power-data-service]
+            [vanilla.current-time-service]
+            [vanilla.table-service]
+            [vanilla.continent-map-service]
+            [vanilla.australia-map-service]
+            [vanilla.power-measurement-service]))
+
 
 
 
@@ -11,6 +27,11 @@
    {:name    :edn-queue-service
     :read-fn :vanilla.edn-queue-source/start-listener
     :params  ["my-exchange" "some.queue"]}
+
+   {:name    :power-measurement-service
+    :read-fn :vanilla.power-measurement-service/fetch-data
+    :schedule {:in    [0 :seconds]
+               :every [1 :seconds]}}
 
    {:name    :usage-data
     :read-fn :vanilla.usage-data-service/fetch-data}

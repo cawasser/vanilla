@@ -38,6 +38,10 @@
        "data-format/x-y" "vanilla.spectrum-traces-service/spectrum-traces"
        "returns power over frequency"]
 
+      ["1300" "power-measurement-service" "Device Power"
+       "data-format/date-y" "vanilla.power-measurement-service/fetch-data"
+       "returns the last 20 power measurements from the device"]
+
       ["2000" "usage-data" "Usage Data"
        "data-format/label-y" "vanilla.usage-data-service/usage-data"
        "returns usage data over time"]
@@ -164,9 +168,12 @@
     "SQLite database connection spec."
     {:dbtype db-type :dbname "vanilla_default"})
 
-  (initialize-database vanilla-default)                     ;; Initialize this on database structure changes, push changes to repo
+  ;; Initialize this on database structure changes, push changes to repo
+  (initialize-database vanilla-default)
 
-  (initialize-database vanilla-db)                          ;; Run this to create a local database for your app
+
+  ;; Run this to create a local database for your app
+  (initialize-database vanilla-db)
 
   ())
 
@@ -216,60 +223,6 @@
   ; THIS is the function to setup the initial database!!!!!
   ;
   ;
-  (create-services!
-    vanilla-db
-    {:services
-     [["1000" "spectrum-traces" "Spectrum Traces"
-       "data-format/x-y" "vanilla.spectrum-traces-service/spectrum-traces"
-       "returns power over frequency"]
-
-      ["2000" "usage-data" "Usage Data"
-       "data-format/label-y" "vanilla.usage-data-service/usage-data"
-       "returns usage data over time"]
-
-      ["3000" "sankey-service" "Relationship Data"
-       "data-format/from-to-n" "vanilla.sankey-service/fetch-data"
-       "returns interdependencies between countries"]
-
-      ["4000" "bubble-service" "Bubble Data"
-       "data-format/x-y-n" "vanilla.bubble-service/fetch-data"
-       "returns x-y-n data for Fruits, Countries and MLB teams"]
-
-      ["5000" "network-service" "Network Data"
-       "data-format/from-to" "vanilla.network-service/fetch-data"
-       "returns interconnectivity data"]
-
-      ["6000" "power-data" "Power Data"
-       "data-format/x-y" "vanilla.power-data-service/power-data"
-       "returns quantity of fruit sold"]
-
-      ["7000" "heatmap-data" "Heatmap Data"
-       "data-format/grid-n" "vanilla.heatmap-service/heatmap-data"
-       "returns quantity of fruit sold per country"]
-
-      ["8000" "health-and-status-data" "Health and Status"
-       "data-format/entity" "vanilla.stoplight-service/fetch-data"
-       "returns green/yellow/red status for a collection of items"]
-
-      ["9000" "usage-12-hour-service" "12-hour Usage Data"
-       "data-format/rose-y-n" "vanilla.usage-12-hour-service/fetch-data"
-       "returns quantity of fruit sold per hour"]
-
-      ["10000" "scatter-service-data" "Scatter Data"
-       "data-format/x-y" "vanilla.scatter-service/fetch-data"
-       "returns height and weight for a sample of females and males"]
-
-      ["11000" "current-time" "Current Time"
-       "data-format/string" "vanilla.current-time-service/fetch-data"
-       "returns a simple text"]
-
-      ["12000" "table-service" "Data Table"
-       "data-format/entities" "vanilla.table-service/fetch-data"
-       "returns users' info"]
-
-      ["14000" "australia-map-service" "Australia Data"
-       "data-format/lat-lon-label" "vanilla.australia-map-service/fetch-data"
-       "returns location of various cities in Australia"]]})
 
 
   (create-services!
@@ -416,10 +369,10 @@
   (get-users vanilla-db)
 
   (verify-credentials vanilla-db
-                      {:username "chad" :pass "123"})
+    {:username "chad" :pass "123"})
 
   (verify-credentials vanilla-db
-                      {:username "chad" :pass "321"})
+    {:username "chad" :pass "321"})
 
 
   (drop-users-table vanilla-db)
@@ -432,13 +385,13 @@
 
 
   (defn y-conversion [chart-type d options]
-    (let [s (get-in d [:data :series])
+    (let [s   (get-in d [:data :series])
           ret (for [{:keys [name data]} s]
                 (assoc {}
                   :name name
                   :data (into []
-                              (for [x-val (range 0 (count data))]
-                                [x-val (get data x-val)]))))]
+                          (for [x-val (range 0 (count data))]
+                            [x-val (get data x-val)]))))]
 
       (prn "y-conversion " ret)
       (into [] ret)))

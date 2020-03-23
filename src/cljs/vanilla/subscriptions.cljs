@@ -73,7 +73,7 @@
 (rf/reg-sub
   :selected-widget
   (fn [db [_]]
-    (prn ":selected-widget subscription ")
+    ;(prn ":selected-widget subscription ")
     (get db :selected-widget)))
 
 
