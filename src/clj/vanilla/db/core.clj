@@ -96,7 +96,11 @@
 
       ["15000" "edn-queue-service" "EDN Queue"
        "data-format/string" "vanilla.edn-queue-source/start-listener"
-       "returns and messages published to the EDN Queue"]]}))
+       "returns and messages published to the EDN Queue"]
+
+      ["16000" "arearange-service" "AreaRange Data"
+       "data-format/date-yl-yh" "vanilla.arearange-service/fetch-data"
+       "returns low and high temperature of a day over time"]]}))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -171,7 +175,6 @@
   ;; Initialize this on database structure changes, push changes to repo
   (initialize-database vanilla-default)
 
-
   ;; Run this to create a local database for your app
   (initialize-database vanilla-db)
 
@@ -223,6 +226,67 @@
   ; THIS is the function to setup the initial database!!!!!
   ;
   ;
+<<<<<<< HEAD
+=======
+  (create-services!
+    vanilla-db
+    {:services
+     [["1000" "spectrum-traces" "Spectrum Traces"
+       "data-format/x-y" "vanilla.spectrum-traces-service/spectrum-traces"
+       "returns power over frequency"]
+
+      ["2000" "usage-data" "Usage Data"
+       "data-format/label-y" "vanilla.usage-data-service/usage-data"
+       "returns usage data over time"]
+
+      ["3000" "sankey-service" "Relationship Data"
+       "data-format/from-to-n" "vanilla.sankey-service/fetch-data"
+       "returns interdependencies between countries"]
+
+      ["4000" "bubble-service" "Bubble Data"
+       "data-format/x-y-n" "vanilla.bubble-service/fetch-data"
+       "returns x-y-n data for Fruits, Countries and MLB teams"]
+
+      ["5000" "network-service" "Network Data"
+       "data-format/from-to" "vanilla.network-service/fetch-data"
+       "returns interconnectivity data"]
+
+      ["6000" "power-data" "Power Data"
+       "data-format/x-y" "vanilla.power-data-service/power-data"
+       "returns quantity of fruit sold"]
+
+      ["7000" "heatmap-data" "Heatmap Data"
+       "data-format/grid-n" "vanilla.heatmap-service/heatmap-data"
+       "returns quantity of fruit sold per country"]
+
+      ["8000" "health-and-status-data" "Health and Status"
+       "data-format/entity" "vanilla.stoplight-service/fetch-data"
+       "returns green/yellow/red status for a collection of items"]
+
+      ["9000" "usage-12-hour-service" "12-hour Usage Data"
+       "data-format/rose-y-n" "vanilla.usage-12-hour-service/fetch-data"
+       "returns quantity of fruit sold per hour"]
+
+      ["10000" "scatter-service-data" "Scatter Data"
+       "data-format/x-y" "vanilla.scatter-service/fetch-data"
+       "returns height and weight for a sample of females and males"]
+
+      ["11000" "current-time" "Current Time"
+       "data-format/string" "vanilla.current-time-service/fetch-data"
+       "returns a simple text"]
+
+      ["12000" "table-service" "Data Table"
+       "data-format/entities" "vanilla.table-service/fetch-data"
+       "returns users' info"]
+
+      ["14000" "australia-map-service" "Australia Data"
+       "data-format/lat-lon-label" "vanilla.australia-map-service/fetch-data"
+       "returns location of various cities in Australia"]
+
+      ["15000" "arearange-service" "Area Range Data"
+       "data-format/date-yl-yh" "vanilla.arearange-service/fetch-data"
+       "returns temperature variation by day"]]})
+>>>>>>> master
 
 
   (create-services!

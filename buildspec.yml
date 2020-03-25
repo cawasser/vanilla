@@ -1,5 +1,8 @@
 version: 0.2
 
+env:
+  git-credential-helper: yes
+
 phases:
   install:
     commands:
@@ -22,6 +25,9 @@ phases:
     commands:
       - echo Entering build phase...
       - echo Build started on `date`
+      - chmod +x scripts/codebuild-git-wrapper.sh
+      - scripts/codebuild-git-wrapper.sh "https://github.com/cawasser/vanilla" "master"
+      - git log | head -100
       - LEIN_ROOT=true lein uberjar
       - echo Build started on `date`
       - echo Building the Docker image...
@@ -34,7 +40,7 @@ phases:
       - docker push $REPOSITORY_URI:latest
       - docker push $REPOSITORY_URI:$IMAGE_TAG
       - echo Writing image definitions file...
-      - printf '[{"name":"nodeapp","imageUri":"%s"}]' $REPOSITORY_URI:$IMAGE_TAG > imagedefinitions.json
+      - printf '[{"name":"staging-vanilla","imageUri":"%s"}]' $REPOSITORY_URI:$IMAGE_TAG > imagedefinitions.json
       - cat imagedefinitions.json 
 artifacts:
     files: imagedefinitions.json
