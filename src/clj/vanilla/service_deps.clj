@@ -1,5 +1,6 @@
 (ns vanilla.service-deps
   (:require [vanilla.bubble-service]
+            [vanilla.arearange-service]
             [vanilla.heatmap-service]
             [vanilla.network-service]
             [vanilla.sankey-service]
