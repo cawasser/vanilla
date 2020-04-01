@@ -98,7 +98,11 @@
        "data-format/string" "vanilla.edn-queue-source/start-listener"
        "returns and messages published to the EDN Queue"]
 
-      ["16000" "arearange-service" "AreaRange Data"
+      ["16000" "power-queue-service" "Power Queue"
+       "data-format/string" "vanilla.power-queue-source/start-listener"
+       "returns and messages published to the power Queue"]
+
+      ["17000" "arearange-service" "AreaRange Data"
        "data-format/date-yl-yh" "vanilla.arearange-service/fetch-data"
        "returns low and high temperature of a day over time"]]}))
 

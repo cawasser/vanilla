@@ -29,10 +29,14 @@
     :read-fn :vanilla.edn-queue-source/start-listener
     :params  ["my-exchange" "some.queue"]}
 
+   {:name    :power-queue-service
+    :read-fn :vanilla.power-queue-source/start-listener
+    :params  ["my-exchange" "power.queue"]}
+
    {:name    :power-measurement-service
-    :read-fn :vanilla.power-measurement-service/fetch-data
-    :schedule {:in    [0 :seconds]
-               :every [1 :seconds]}}
+    :read-fn :vanilla.power-measurement-service/fetch-data}
+    ;:schedule {:in    [0 :seconds]
+    ;           :every [1 :seconds]}}
 
    {:name    :usage-data
     :read-fn :vanilla.usage-data-service/fetch-data}

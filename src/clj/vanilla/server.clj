@@ -2,6 +2,7 @@
     (:require [dashboard-clj.core :as dash]
               [vanilla.environment]
               [vanilla.edn-queue-source]
+              [vanilla.power-queue-source]
               [vanilla.service-deps :as deps]
               [clojure.tools.logging :as log]
               [trptcolin.versioneer.core :as version])
