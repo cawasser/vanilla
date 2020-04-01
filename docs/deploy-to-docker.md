@@ -65,6 +65,10 @@ Build the rabbitmq image with:
 
     docker build -t my-rabbit .\rabbitmq\.
     
+If you want to run the power microservice, pull and build that repo and project.
+Building the docker image tagged `powerservice` .  Otherwise just comment
+out the power service section of the docker-compose.yml
+    
 Then to run both containers together:
 
     docker-compose up
