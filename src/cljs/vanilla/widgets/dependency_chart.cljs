@@ -1,5 +1,7 @@
 (ns vanilla.widgets.dependency-chart
-  (:require [vanilla.widgets.make-chart :as mc]))
+  (:require [vanilla.widgets.make-chart :as mc]
+            ["react-highcharts" :as ReactHighcharts]
+            ["highcharts/modules/dependency-wheel" :as addDependencyWheelModule]))
 
 
 ;(defn plot-options
@@ -51,6 +53,7 @@
 ; register all the data stuff so we have access to it
 ;
 (defn register-type []
+  (addDependencyWheelModule ReactHighcharts/Highcharts)
   (mc/register-type
     :dependency-chart {:chart-options     {:chart/type              :dependency-chart
                                            :chart/supported-formats [:data-format/from-to-n :data-format/from-to :data-format/from-to-e]

@@ -1,5 +1,7 @@
 (ns vanilla.widgets.sankey-chart
-  (:require [vanilla.widgets.make-chart :as mc]))
+  (:require [vanilla.widgets.make-chart :as mc]
+            ["react-highcharts" :as ReactHighcharts]
+            ["highcharts/modules/sankey" :as addSankeyModule]))
 
 
 
@@ -17,6 +19,7 @@
 ; register all the data stuff so we have access to it
 ;
 (defn register-type []
+  (addSankeyModule ReactHighcharts/Highcharts)
   (mc/register-type
     :sankey-chart {:chart-options
                    {:chart/type              :sankey-chart

@@ -1,7 +1,7 @@
 (ns vanilla.update-layout
   (:require
     [ajax.core :as ajax :refer [GET POST]]
-    [cljsjs.toastr]
+    ["toastr" :as toastr]
     [re-frame.core :as rf]
     [day8.re-frame.tracing :refer-macros [fn-traced]]
     [clojure.edn :as edn]
@@ -14,8 +14,8 @@
   (fn-traced [db [_ response]]
              (if (not (:new-login db))          ; if its first login dont show saved toast
                (if (= (:status response) 200)
-                 (js/toastr.success "Layout Saved!")
-                 (js/toastr.error "Layout Save Failed")))
+                 (toastr/success "Layout Saved!")
+                 (toastr/error "Layout Save Failed")))
              (assoc db :new-login false)))
 
 
@@ -32,7 +32,7 @@
 
 (defn get-build-fn [name]
   (:build-fn (->> widget-defs/widgets
-                  (filter #(= (:name %) name) )
+                  (filter #(= (:name %) name))
                   first)))
 
 ;; Helper function to set-layout to define function called for each value

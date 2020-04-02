@@ -2,8 +2,12 @@
   (:require [reagent.core :as reagent]
             [re-frame.core :as rf]
             [day8.re-frame.tracing :refer-macros [fn-traced]]
-            [vanilla.widgets.util :as util]))
+            [vanilla.widgets.util :as util]
+            ["react-highcharts" :as ReactHighcharts]
+            ["highcharts-more" :as HighchartsMore]))
 
+
+(HighchartsMore ReactHighcharts/Highcharts)
 
 (declare default-conversion)
 
@@ -189,43 +193,19 @@
 
   ;(prn " entering make-chart " chart-config)
 
-  (let [dom-node        (reagent/atom nil)
-        chart-type      (-> chart-config :chart-options :chart/type)
-        chart-reg-entry @(rf/subscribe [:hc-type chart-type])]
+  ; TODO: should make-chart return a (fn [])?
+  (let [chart-type      (-> chart-config :chart-options :chart/type)
+        chart-reg-entry @(rf/subscribe [:hc-type chart-type])
+        base-config (make-config chart-config data options)
+        all-configs (merge-configs base-config data options)]
 
     ;(prn "make-chart " chart-type
-    ;  " //// (chart-config)" chart-config
-    ;  " ////// (chart-reg-entry)" chart-reg-entry)
+    ;" //// (chart-config) " chart-config
+    ;" //// (chart-reg-entry) " chart-reg-entry
+    ;" //// (all-configs) " (get-in all-configs [:chart :type])
 
-    (reagent/create-class
-      {:reagent-render
-       (fn [args]
-         @dom-node                                          ; be sure to render if node changes
-         [:div {:style {:width (get options :viz/width "100%") :height "100%"}}])
-
-       :component-did-mount
-       (fn [this]
-         (let [node (reagent/dom-node this)]
-
-           ;(prn "component-did-mount " chart-type)
-
-           (reset! dom-node node)))
-
-       :component-did-update
-       (fn [this old-argv]
-         (let [new-args (rest (reagent/argv this))
-               new-data (js->clj (second new-args))
-               base-config (make-config chart-config new-data options)
-               all-configs (merge-configs base-config new-data options)]
-
-           ;(prn "component-did-update " chart-type
-           ;  " //// chart-config " chart-config
-           ;  " //// chart-reg-entry " chart-reg-entry
-           ;  " //// base-config " base-config
-           ;  " //// (all-config)" all-configs)
-
-           (js/Highcharts.Chart. (reagent/dom-node this)
-             (clj->js all-configs))))})))
+    [:div
+     [:> ReactHighcharts {:config all-configs}]]))
 
 ;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;

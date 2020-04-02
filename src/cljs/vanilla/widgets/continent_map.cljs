@@ -1,5 +1,6 @@
 (ns vanilla.widgets.continent-map
-  (:require [vanilla.widgets.make-map :as mm]))
+  (:require [vanilla.widgets.make-map :as mm]
+            ["@highcharts/map-collection/custom/world.geo.json" :as world-geo]))
 
 
 (defn plot-options
@@ -28,7 +29,7 @@
   (mm/register-type
     :continent-map {:chart-options     {:chart/type              :continent-map
                                         :chart/supported-formats [:data-format/cont-n]
-                                        :chart                   {:map      "custom/world-continents"
+                                        :chart                   {:map      world-geo
                                                                   :zoomType "xy"}
                                         :yAxis                   {:title  {:align "high"}
                                                                   :labels {:overflow "justify"}}}

@@ -2,7 +2,6 @@
   (:require [reagent.core :as r]
             [re-frame.core :as rf]
             [day8.re-frame.tracing :refer-macros [fn-traced]]
-            [cljsjs.react-color]
             [vanilla.widgets.util :as util]
             [ajax.core :as ajax :refer [GET POST]]))
 
