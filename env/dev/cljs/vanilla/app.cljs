@@ -1,4 +1,4 @@
-(ns^:figwheel-no-load vanilla.app
+(ns ^:dev/once vanilla.app
   (:require
     [vanilla.core :as core]
     [cljs.spec.alpha :as s]

@@ -164,11 +164,11 @@
   (vanilla.widgets.bar-chart/register-type)
   (vanilla.widgets.bubble-chart/register-type)
   (vanilla.widgets.column-chart/register-type)
-  (vanilla.widgets.dependency-chart/register-type)
+  ;(vanilla.widgets.dependency-chart/register-type)
   (vanilla.widgets.heatmap-chart/register-type)
   (vanilla.widgets.line-chart/register-type)
   (vanilla.widgets.network-graph-chart/register-type)
-  (vanilla.widgets.org-chart/register-type)
+  ;(vanilla.widgets.org-chart/register-type)
   (vanilla.widgets.pie-chart/register-type)
   (vanilla.widgets.rose-chart/register-type)
   (vanilla.widgets.sankey-chart/register-type)
@@ -182,7 +182,7 @@
 
   (d/connect-to-data-sources)
 
-
+  (prn "rendering home-page")
   (r/render home-page (.getElementById js/document "app")))
 
 

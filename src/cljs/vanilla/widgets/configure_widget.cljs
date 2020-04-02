@@ -2,7 +2,7 @@
   (:require [reagent.core :as r]
             [re-frame.core :as rf]
             [day8.re-frame.tracing :refer-macros [fn-traced]]
-            "react-color" :refer [CompactPicker]
+            ["react-color" :refer [CompactPicker]]
             [vanilla.update-layout :as u]
             [vanilla.modal :as modal]))
 
