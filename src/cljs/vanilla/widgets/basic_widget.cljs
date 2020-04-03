@@ -42,9 +42,9 @@
   ;  " //// options " options
   ;  " //// custom-content " custom-content)
 
-  (fn []
-
-    [:div {:class "vanilla.widgets.line-chart container"
+  ;(fn []
+  ;
+    [:div {:class "vanilla.widgets "
            :style {:height (get options :viz/height "100%")
                    :width  "100%"}}
      [:div {:class "title-wrapper grid-toolbar move-cursor"
@@ -82,5 +82,5 @@
                             :display      :flex}
             :on-mouse-down #(.stopPropagation %)}
 
-      custom-content]]))
+      custom-content]])
 

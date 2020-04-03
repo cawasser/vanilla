@@ -189,5 +189,4 @@
     ;  " //// (chart-config)" chart-config
     ;  " ////// (chart-reg-entry)" chart-reg-entry)
 
-    [:div
-     [:> ReactHighmaps {:config all-configs}]]))
+    [:> ReactHighmaps {:config all-configs}]))
