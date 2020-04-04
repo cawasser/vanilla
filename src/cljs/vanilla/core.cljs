@@ -18,6 +18,7 @@
 
     ["react-highcharts" :as ReactHighcharts]
     ["highcharts/modules/dependency-wheel" :as addDependencyWheelModule]
+    ["highcharts/modules/heatmap" :as addHeatmapModule]
     ["highcharts/modules/organization" :as addOrganizationModule]
     ["highcharts/modules/variable-pie" :as addVariablepieModule]
 
@@ -157,6 +158,7 @@
   ; why these work here but not in other places (like during load/compile?) is unknown, but they work here
   ;
   (addDependencyWheelModule ReactHighcharts/Highcharts)
+  (addHeatmapModule ReactHighcharts/Highcharts)
   (addOrganizationModule ReactHighcharts/Highcharts)
   (addVariablepieModule ReactHighcharts/Highcharts)
 

@@ -1,22 +1,21 @@
 (ns vanilla.widgets.heatmap-chart
   (:require [reagent.core :as r]
             [reagent.ratom :refer-macros [reaction]]
-            [vanilla.widgets.make-chart :as mc]
-            ["react-highcharts" :as ReactHighcharts]
-            ["highcharts/modules/heatmap" :as addHeatmapModule]))
+            [vanilla.widgets.make-chart :as mc]))
+
+
 
 ;;;;;;;;;;;;;;
 ;
 ; register all the data stuff so we have access to it
 ;
 (defn register-type []
-  (addHeatmapModule ReactHighcharts/Highcharts)
   (mc/register-type
     :heatmap-chart
     {:chart-options     {:chart/type              :heatmap-chart
                          :chart/supported-formats [:data-format/grid-n :data-format/grid-e :data-format/lat-lon-n :data-format/lat-lon-e]
                          :chart                   {:type            "heatmap"
-                                                   :zoomType        "x"
+                                                   :zoomType        "xy"
                                                    :marginTop       40
                                                    :marginBottom    80
                                                    :plotBorderWidth 1}
@@ -31,7 +30,7 @@
 
                          :colorAxis               {:min      0
                                                    :minColor "#FFFFFF"
-                                                   :maxColor "#006400"} ;Highcharts.getOptions().colors[0]}
+                                                   :maxColor "#006400"}
 
                          :legend                  {:align         "right"
                                                    :layout        "vertical"
@@ -40,9 +39,7 @@
                                                    :y             25
                                                    :symbolHeight  280}
                          :plotOptions             {:series {:dataLabels {:enabled true
-                                                                         :color   "#000000"}}}
-
-                         :series                  []}
+                                                                         :color   "#000000"}}}}
 
      :merge-plot-option {:default mc/default-plot-options}
 
