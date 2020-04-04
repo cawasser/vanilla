@@ -4,6 +4,8 @@
             ["highcharts/modules/sankey" :as addSankeyModule]))
 
 
+(addSankeyModule ReactHighcharts/Highcharts)
+
 
 ;(defn plot-options
 ;  [chart-config data options]
@@ -19,7 +21,6 @@
 ; register all the data stuff so we have access to it
 ;
 (defn register-type []
-  (addSankeyModule ReactHighcharts/Highcharts)
   (mc/register-type
     :sankey-chart {:chart-options
                    {:chart/type              :sankey-chart

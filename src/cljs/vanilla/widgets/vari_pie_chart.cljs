@@ -1,7 +1,6 @@
 (ns vanilla.widgets.vari-pie-chart
-  (:require [vanilla.widgets.make-chart :as mc]
-            ["react-highcharts" :as ReactHighcharts]
-            ["highcharts/modules/variable-pie" :as addVariablepieModule]))
+  (:require [vanilla.widgets.make-chart :as mc]))
+
 
 
 
@@ -89,7 +88,6 @@
 ; register all the data stuff so we have access to it
 ;
 (defn register-type []
-  (addVariablepieModule ReactHighcharts/Highcharts)
   (mc/register-type
     :vari-pie-chart {:chart-options     {:chart/type              :vari-pie-chart
                                          :chart/supported-formats [:data-format/label-y-n :data-format/label-y :data-format/label-y-e]

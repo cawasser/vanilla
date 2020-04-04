@@ -1,9 +1,8 @@
 (ns vanilla.widgets.org-chart
   (:require [reagent.core :as r]
             [reagent.ratom :refer-macros [reaction]]
-            [vanilla.widgets.make-chart :as mc]
-            ["react-highcharts" :as ReactHighcharts]
-            ["highcharts/modules/organization" :as addOrganizationModule]))
+            [vanilla.widgets.make-chart :as mc]))
+
 
 
 
@@ -33,7 +32,6 @@
 ; register all the data stuff so we have access to it
 ;
 (defn register-type []
-  (addOrganizationModule ReactHighcharts/Highcharts)
   (mc/register-type
     :org-chart {:chart-options     {:chart/type              :org-chart
                                     :chart/supported-formats [:data-format/from-to :data-format/from-to-n :data-format/from-to-e]

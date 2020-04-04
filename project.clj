@@ -99,7 +99,6 @@
                             :dependencies [[binaryage/devtools "0.9.11"]
                                            [cider/piggieback "0.4.2"]
                                            [doo "0.1.11"]
-                                           [figwheel-sidecar "0.5.19"]
                                            [pjstadig/humane-test-output "0.10.0"]
                                            [prone "2019-07-08"]
                                            [ring/ring-devel "1.8.0"]

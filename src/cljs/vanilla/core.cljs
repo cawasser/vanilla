@@ -16,6 +16,11 @@
 
     [vanilla.grid :as grid]
 
+    ["react-highcharts" :as ReactHighcharts]
+    ["highcharts/modules/dependency-wheel" :as addDependencyWheelModule]
+    ["highcharts/modules/organization" :as addOrganizationModule]
+    ["highcharts/modules/variable-pie" :as addVariablepieModule]
+
     ; needed to register all the highcharts types
     [vanilla.widgets.area-chart]
     [vanilla.widgets.arearange-chart]
@@ -149,7 +154,16 @@
   "Initialize all the data needed for the start of our SPA, ends by calling the UI to generate"
   []
 
-  ;(prn "calling :initialize")
+  ; why these work here but not in other places (like during load/compile?) is unknown, but they work here
+  ;
+  (addDependencyWheelModule ReactHighcharts/Highcharts)
+  (addOrganizationModule ReactHighcharts/Highcharts)
+  (addVariablepieModule ReactHighcharts/Highcharts)
+
+  ; but sankey does NOT work here! WTF highcharts?????????????
+  ;(addSankeyModule ReactHighcharts/Highcharts)
+
+  (prn "calling :initialize")
   (rf/dispatch-sync [:initialize])
 
   (get-version)
@@ -164,11 +178,11 @@
   (vanilla.widgets.bar-chart/register-type)
   (vanilla.widgets.bubble-chart/register-type)
   (vanilla.widgets.column-chart/register-type)
-  ;(vanilla.widgets.dependency-chart/register-type)
+  (vanilla.widgets.dependency-chart/register-type)
   (vanilla.widgets.heatmap-chart/register-type)
   (vanilla.widgets.line-chart/register-type)
   (vanilla.widgets.network-graph-chart/register-type)
-  ;(vanilla.widgets.org-chart/register-type)
+  (vanilla.widgets.org-chart/register-type)
   (vanilla.widgets.pie-chart/register-type)
   (vanilla.widgets.rose-chart/register-type)
   (vanilla.widgets.sankey-chart/register-type)
