@@ -250,7 +250,7 @@
   (let [version (rf/subscribe [:version])]
     (fn []
       ;[:div.level-left.has-text-left
-      [:h6.subtitle.is-6 @version])))
+      [:h6.subtitle.is-6.has-text-light @version])))
 
 ;(defn version-number []
 ;  (let [version   (rf/subscribe [:version])

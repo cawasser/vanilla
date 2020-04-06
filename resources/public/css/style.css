@@ -4,14 +4,14 @@ h1 {
 
 body {
     background-image: url("/images/grey_wash_wall.png");
-    background-color: #cccccc;
+    background-color: #2F4F4F;
 }
 
 /* Simple text widget styles */
 /* TODO move to dashboard codebase */
 
 .widget {
-    background: #fff;
+  background-image: linear-gradient(to top, rgb(16, 16, 16), rgb(96, 96, 96) );
 }
 
 .widget .title-wrapper {

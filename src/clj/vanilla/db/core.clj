@@ -95,7 +95,11 @@
 
       ["15000" "arearange-service" "AreaRange Data"
        "data-format/date-yl-yh" "vanilla.arearange-service/fetch-data"
-       "returns low and high temperature of a day over time"]]}))
+       "returns low and high temperature of a day over time"]
+
+      ["20000" "energy-use-service" "Energy Use by Sector"
+       "data-format/from-to-n" "vanilla.energy-use-service/fetch-data"
+       "returns energy source usage by sector"]]}))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;

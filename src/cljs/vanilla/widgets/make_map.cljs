@@ -2,6 +2,7 @@
   (:require [reagent.core :as reagent]
             [re-frame.core :as rf]
             [vanilla.widgets.util :as util]
+            [vanilla.dark-mode :as dark]
             ["react-highcharts/ReactHighmaps" :as ReactHighmaps]))
 
 (declare default-conversion)
@@ -80,7 +81,7 @@
 
         final-config (util/deep-merge-with
                        util/combine
-                       base-config plot-config (-> chart-config :chart-options))]
+                       base-config plot-config (-> chart-config :chart-options) dark/dark-theme)]
 
     ;(prn "make-config after " chart-type
     ;  " //// (chart-config)" chart-config

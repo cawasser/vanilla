@@ -49,7 +49,7 @@
                    :width  "100%"}}
      [:div {:class "title-wrapper grid-toolbar move-cursor"
             :cursor "move"}
-      [:container.level
+      [:div.container.level
        {:style    {:background-color (util/rgba (get options :viz/banner-color {:r 150 :g 150 :b 150 :a 1}))}}
 
 

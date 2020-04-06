@@ -21,7 +21,7 @@
 
              {:type "mappoint",
               :name "Cities",
-              :color "#000000"
+              :color "#eeeeee"
               :data [
                      {
                       :name "Canberra",

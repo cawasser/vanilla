@@ -17,6 +17,8 @@
               [vanilla.continent-map-service]
               [vanilla.australia-map-service]
               [vanilla.arearange-service]
+              [vanilla.energy-use-service]
+
               [vanilla.service-deps :as deps]
               [vanilla.service-deps :as deps]
               [clojure.tools.logging :as log]

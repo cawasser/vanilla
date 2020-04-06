@@ -4,7 +4,8 @@
             [day8.re-frame.tracing :refer-macros [fn-traced]]
             [vanilla.widgets.util :as util]
             ["react-highcharts" :as ReactHighcharts]
-            ["highcharts-more" :as HighchartsMore]))
+            ["highcharts-more" :as HighchartsMore]
+            [vanilla.dark-mode :as dark]))
 
 
 (HighchartsMore ReactHighcharts/Highcharts)
@@ -92,7 +93,7 @@
 
         final-config (util/deep-merge-with
                        util/combine
-                       base-config plot-config (-> chart-config :chart-options))]
+                       base-config plot-config (-> chart-config :chart-options) dark/dark-theme)]
 
     ;(prn "make-config after " chart-type
     ;  " //// (chart-config)" chart-config
@@ -205,7 +206,7 @@
     ;" //// (all-configs) " (get-in all-configs [:chart :type])
 
     ;[:div {:style {:height "100%" :width "100%" :display :flex}}
-     [:> ReactHighcharts {:config all-configs}]))
+    [:> ReactHighcharts {:config all-configs}]))
 
 ;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;
