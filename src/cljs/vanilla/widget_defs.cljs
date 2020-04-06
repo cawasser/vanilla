@@ -63,8 +63,8 @@
                ;:data-source :current-time
                :ret_types   [:data-format/string]
                :icon        "/images/simple-text-widget.png"
-               :label       "Current Time"
-               :options     {:viz/title        "Time"
+               :label       "Text"
+               :options     {:viz/title        "Text"
                              :viz/banner-color {:r 0x00 :g 0xff :b 0xff :a 1}}}
 
               {:name      :table-widget
@@ -174,7 +174,7 @@
               {:name      :line-widget
                :basis     :chart
                :type      :line-chart
-               :ret_types [:data-format/x-y :data-format/x-y-n :data-format/x-y-e :data-format/y]
+               :ret_types [:data-format/x-y :data-format/date-y :data-format/x-y-n :data-format/x-y-e :data-format/y]
                :icon      "/images/line-widget.png"
                :label     "Line"
                :options   {:viz/title        "Channels (line)"

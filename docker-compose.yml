@@ -1,0 +1,50 @@
+version: '3.7'
+
+services:
+  rabbitmq:
+    container_name: some-rabbit
+    ports:
+      - '15672:15672'
+    image: my-rabbit
+    networks:
+      - my-net
+
+  vanilladoc:
+    container_name: vanilla_doc
+    depends_on:
+      - rabbitmq
+    ports:
+      - '5000:5000'
+      - '7000:7000'
+    image: vanilla_doc
+    environment:
+      - RABBIT_HOST="rabbitmq"
+      - RABBIT_PORT=5672
+      - RABBIT_USERNAME="guest"
+      - RABBIT_PASSWORD="guest"
+      - RABBIT_VHOST="/main"
+    networks:
+      - my-net
+
+  powerdoc:
+    container_name: power_doc
+    depends_on:
+      - rabbitmq
+      - vanilladoc
+    ports:
+      - '5001:5001'
+      - '7001:7001'
+    image: powerservice
+    environment:
+      - PORT=5001
+      - SERVICE_DELAY=5000
+      - BROKER_HOST="rabbitmq"
+      - BROKER_PORT=5672
+      - BROKER_USERNAME="guest"
+      - BROKER_PASSWORD="guest"
+      - BROKER_VHOST="/main"
+    networks:
+      - my-net
+
+networks:
+  my-net:

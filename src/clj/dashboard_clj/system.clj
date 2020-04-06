@@ -1,5 +1,6 @@
 (ns dashboard-clj.system
   (:require [dashboard-clj.routes :as routes]
+            [dashboard-clj.components.system :as system]
             [dashboard-clj.components.webserver :as webserver]
             [dashboard-clj.components.scheduler :as scheduler]
             [dashboard-clj.components.websocket :as websocket]
@@ -31,4 +32,4 @@
 
 
 (defn start [http-port nrepl nrepl-port data-sources dev-mode?]
-  (component/start (->system http-port nrepl nrepl-port data-sources dev-mode?)))
+  (reset! system/system (component/start (->system http-port nrepl nrepl-port data-sources dev-mode?))))

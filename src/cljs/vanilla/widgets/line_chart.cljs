@@ -23,6 +23,21 @@
                                        :format  (:viz/labelFormat options "")}
                           :lineWidth  (:viz/lineWidth options 1)}}})
 
+(defn plot-options-date-y
+  [chart-config data options]
+
+  (prn "line/plot-options-date-y " chart-config)
+
+  {:xAxis       {:title {:text          (get-in data [:data :src/x-title] "x-axis")
+                         :allowDecimals (get-in options [:viz/x-allowDecimals] false)}
+                 :type "datetime"}
+   :yAxis       {:title {:text          (get-in data [:data :src/y-title] "y-axis")
+                         :allowDecimals (get-in options [:viz/y-allowDecimals] false)}}
+   :plotOptions {:series {:animation (:viz/animation options false)}
+                 :line   {:dataLabels {:enabled (:viz/dataLabels options false)
+                                       :format  (:viz/labelFormat options "")}
+                          :lineWidth  (:viz/lineWidth options 1)}}})
+
 
 (defn plot-options-y
   [chart-config data options]
@@ -47,13 +62,14 @@
 (defn register-type []
   (mc/register-type
     :line-chart {:chart-options     {:chart/type              :line-chart
-                                     :chart/supported-formats [:data-format/x-y :data-format/x-y-n :data-format/x-y-e :data-format/y]
+                                     :chart/supported-formats [:data-format/x-y :data-format/date-y :data-format/x-y-n :data-format/x-y-e :data-format/y]
                                      :chart                   {:type     "line"
                                                                :zoomType "x"}
                                      :yAxis                   {:title  {:align "high"}
                                                                :labels {:overflow "justify"}}}
 
                  :merge-plot-option {:data_format/x-y plot-options-x-y
+                                     :data_format/date-y plot-options-date-y
                                      :default         plot-options-y}
 
                  :conversions       {:default mc/default-conversion}}))

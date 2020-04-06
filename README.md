@@ -18,6 +18,8 @@ This single-page application (SPA) provides a number of graphical widgets based 
 
 > 0.3.5-SNAPSHOT. Added World Map and Continental Australia map widgets.
 
+> 0.3.6-SNAPSHOT. Added "queue service" to show messages received from "my-exchange/some.queue" via RabbitMQ.
+>
 ## Roadmap
 
 ### Client-side
@@ -38,7 +40,7 @@ This single-page application (SPA) provides a number of graphical widgets based 
 ### Services-side
 - [x] login
 - [x] reload widgets on user login
-- [ ] RabitMQ support using [Bunnicula](https://github.com/nomnom-insights/nomnom.bunnicula)
+- [X] RabitMQ support using [Bunnicula](https://github.com/nomnom-insights/nomnom.bunnicula)
 - [ ] Kafka support
 
 ## Development
@@ -55,7 +57,7 @@ This single-page application (SPA) provides a number of graphical widgets based 
 - [Running the code in 'Development Mode'](docs/development-mode.md)
 - [Deploy to Docker](docs/deploy-to-docker.md)
 - [Deploy to AWS](docs/deploy-to-aws.md)
-- [Working with AMQP (RabbitMQ/Bunnicula)]()
+- [Working with AMQP (RabbitMQ/Bunnicula)](docs/rabbitmq-setup.md)
 - [Working with Kafka]()
 - [Database Management](docs/database_management.md)
 
@@ -64,7 +66,7 @@ This single-page application (SPA) provides a number of graphical widgets based 
 ## Architecture
 
 ### Auto-Documentation
-[Marginalia](https://github.com/gdeer81/marginalia) and more specifically [lein-marginalia](https://github.com/gdeer81/lein-marginalia)has been added as a plugin to this project to keep a healthy level of documentation of our codebase and architecture. The plugin essentially scans through the project and creates an html "wiki" of how our project operates. It takes all our in line comments and can be added to easily to explain certain namespaces, functions, or design decisions.
+[Marginalia](https://github.com/gdeer81/marginalia) and more specifically [lein-marginalia](https://github.com/gdeer81/lein-marginalia) has been added as a plugin to this project to keep a healthy level of documentation of our codebase and architecture. The plugin essentially scans through the project and creates an html "wiki" of how our project operates. It takes all our in line comments and can be added to easily to explain certain namespaces, functions, or design decisions.
 
 To run the plugin and generate the aforementioned wiki simply use:
 

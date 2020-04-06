@@ -44,7 +44,7 @@
   :initialize
   (fn-traced
     [db _]
-    (prn (str ":initialize handler "))
+    ;(prn (str ":initialize handler "))
     (merge db {:data-sources {}
                :hc-type {}
                ;:chosen-bg-color {:r 150 :g 150 :b 150 :a 1.0}

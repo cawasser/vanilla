@@ -29,9 +29,6 @@
 
 
 
-
-
-
 (defn populate-services
   [database]
   (create-services!
@@ -40,6 +37,10 @@
      [["1000" "spectrum-traces" "Spectrum Traces"
        "data-format/x-y" "vanilla.spectrum-traces-service/spectrum-traces"
        "returns power over frequency"]
+
+      ["1300" "power-measurement-service" "Device Power"
+       "data-format/date-y" "vanilla.power-measurement-service/fetch-data"
+       "returns the last 20 power measurements from the device"]
 
       ["2000" "usage-data" "Usage Data"
        "data-format/label-y" "vanilla.usage-data-service/usage-data"
@@ -93,7 +94,15 @@
        "data-format/lat-lon-label" "vanilla.australia-map-service/fetch-data"
        "returns location of various cities in Australia"]
 
-      ["15000" "arearange-service" "AreaRange Data"
+      ["15000" "edn-queue-service" "EDN Queue"
+       "data-format/string" "vanilla.edn-queue-source/start-listener"
+       "returns and messages published to the EDN Queue"]
+
+      ["16000" "power-queue-service" "Power Queue"
+       "data-format/date-y" "vanilla.power-queue-source/start-listener"
+       "returns and messages published to the power Queue"]
+
+      ["17000" "arearange-service" "AreaRange Data"
        "data-format/date-yl-yh" "vanilla.arearange-service/fetch-data"
        "returns low and high temperature of a day over time"]]}))
 

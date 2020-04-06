@@ -25,7 +25,7 @@
 
         (when (= (get ?data 0) :data-source/event)
           (let [[_ [ds-name ds-data]] ?data]
-            ;(prn "received data " ds-name)
+            ;(prn "received data " ds-name ds-data)
             (rf/dispatch [:update-data-source ds-name ds-data])))
 
         (when (and

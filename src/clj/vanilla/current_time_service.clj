@@ -2,7 +2,7 @@
 
 
 (defn fetch-data []
-  ;(prn "current-time Service")
+  (prn "current-time Service")
 
   {:title "Current Time"
    :data-format :data-format/string
