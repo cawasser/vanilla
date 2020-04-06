@@ -17,11 +17,12 @@
 
 (defn start-listener [exchange queue]
   (let [power-processing-fn (fn [body parsed envelope components]
-                            (send-message {:title       "Queued Message"
-                                           :data-format :data-format/string
-                                           :exchange    exchange
-                                           :queue       queue
-                                           :text        parsed})
+                              (send-message parsed)
+                            ;(send-message {:title       "Queued Message"
+                            ;               :data-format :data-format/string
+                            ;               :exchange    exchange
+                            ;               :queue       queue
+                            ;               :text        parsed})
                             :ack)]
 
     (log/info "starting power-queue-source LISTENER")

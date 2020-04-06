@@ -86,15 +86,6 @@
             [1585590088612 -23.802975551874162] [1585590093614 -23.967078591100993]]})
 
 
-  (def current (get-map @pwr-measurement-spool (:name device)))
-  (:data current)
-  (concat (:data device) (:data current))
-  (def newDat (concat (:data device) (:data current)))
-  (< 4 (count newDat))
-  (#(if (< size (count %))
-      (into [] (drop (- (count newDat) 4) (into [] newDat)))
-      %))
-
 
   (new-measurement device 4)
 

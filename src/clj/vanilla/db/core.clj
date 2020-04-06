@@ -99,7 +99,7 @@
        "returns and messages published to the EDN Queue"]
 
       ["16000" "power-queue-service" "Power Queue"
-       "data-format/string" "vanilla.power-queue-source/start-listener"
+       "data-format/date-y" "vanilla.power-queue-source/start-listener"
        "returns and messages published to the power Queue"]
 
       ["17000" "arearange-service" "AreaRange Data"
@@ -230,8 +230,6 @@
   ; THIS is the function to setup the initial database!!!!!
   ;
   ;
-<<<<<<< HEAD
-=======
   (create-services!
     vanilla-db
     {:services
@@ -290,7 +288,6 @@
       ["15000" "arearange-service" "Area Range Data"
        "data-format/date-yl-yh" "vanilla.arearange-service/fetch-data"
        "returns temperature variation by day"]]})
->>>>>>> master
 
 
   (create-services!
