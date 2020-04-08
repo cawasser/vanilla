@@ -36,7 +36,7 @@ elements:
     - type: Component
       name: Sign in
       description: Handle user login
-      technology: tbd
+      technology: Buddy Auth
       tags: sign
       position: '100,400'
     - type: Component
