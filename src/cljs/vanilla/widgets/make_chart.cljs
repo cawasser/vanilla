@@ -7,7 +7,7 @@
             ["highcharts-more" :as HighchartsMore]
             [vanilla.dark-mode :as dark]))
 
-
+; required to make "extra" charts, like bubble and arearange, available.
 (HighchartsMore ReactHighcharts/Highcharts)
 
 (declare default-conversion)
