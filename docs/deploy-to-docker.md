@@ -21,7 +21,7 @@ Then, run the image in Docker:
 
     docker run -d -p 3500:5000 vanilla 
 
-The `-d` flag tells docker to disconnect form the running 
+The `-d` flag tells docker to disconnect from the running 
 process, so you will be sent back to the command prompt and
 the `-p` flag sets up a port mapping from 3000 inside the 
 container (where we designed our app to listen) and 3500 on 

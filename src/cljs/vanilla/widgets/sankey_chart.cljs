@@ -3,7 +3,7 @@
             ["react-highcharts" :as ReactHighcharts]
             ["highcharts/modules/sankey" :as addSankeyModule]))
 
-
+; required to make sankey charts available. does NOT work inside (start-dashboard) in ../core.cljs
 (addSankeyModule ReactHighcharts/Highcharts)
 
 

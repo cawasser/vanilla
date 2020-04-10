@@ -19,7 +19,10 @@
         <h1.title>Loading...</h1.title>
         <progress class="progress is-success" max="100">45%</progress>
     </div>
-    <div id="dashboard"></div>
+    <div id="dashboard">
+      <canvas id="globe-canvas" class="d-block" style="width: 100%; height: 100%;
+                        background-color: "#2F4F4F"/>
+    </div>
 
     <script type="text/javascript">
         var csrfToken = "{{csrf-token}}";
