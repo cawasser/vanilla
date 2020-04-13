@@ -1,7 +1,9 @@
 (ns vanilla.widgets.network-graph-chart
   (:require [reagent.core :as r]
             [reagent.ratom :refer-macros [reaction]]
-            [vanilla.widgets.make-chart :as mc]))
+            [vanilla.widgets.make-chart :as mc]
+            ["react-highcharts" :as ReactHighcharts]
+            ["highcharts/modules/networkgraph" :as addNetworkModule]))
 
 
 
@@ -31,6 +33,7 @@
 ; register all the data stuff so we have access to it
 ;
 (defn register-type []
+  (addNetworkModule ReactHighcharts/Highcharts)
   (mc/register-type
     :network-chart {:chart-options     {:chart/type              :network-chart
                                         :chart/supported-formats [:data-format/from-to :data-format/from-to-n :data-format/from-to-e]

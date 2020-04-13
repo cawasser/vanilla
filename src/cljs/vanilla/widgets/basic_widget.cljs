@@ -2,7 +2,6 @@
   (:require [reagent.core :as r]
             [re-frame.core :as rf]
             [day8.re-frame.tracing :refer-macros [fn-traced]]
-            [cljsjs.react-color]
             [vanilla.widgets.util :as util]
             [ajax.core :as ajax :refer [GET POST]]))
 
@@ -43,14 +42,14 @@
   ;  " //// options " options
   ;  " //// custom-content " custom-content)
 
-  (fn []
-
-    [:div {:class "vanilla.widgets.line-chart container"
+  ;(fn []
+  ;
+    [:div {:class "vanilla.widgets "
            :style {:height (get options :viz/height "100%")
                    :width  "100%"}}
      [:div {:class "title-wrapper grid-toolbar move-cursor"
             :cursor "move"}
-      [:container.level
+      [:div.container.level
        {:style    {:background-color (util/rgba (get options :viz/banner-color {:r 150 :g 150 :b 150 :a 1}))}}
 
 
@@ -83,5 +82,5 @@
                             :display      :flex}
             :on-mouse-down #(.stopPropagation %)}
 
-      custom-content]]))
+      custom-content]])
 

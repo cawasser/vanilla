@@ -1,5 +1,6 @@
 (ns vanilla.widgets.australia-map
-  (:require [vanilla.widgets.make-map :as mm]))
+  (:require [vanilla.widgets.make-map :as mm]
+            ["@highcharts/map-collection/countries/au/au-all.geo.json" :as aus-geo]))
 
 (defn plot-options
   [chart-config data options]
@@ -25,7 +26,7 @@
   (mm/register-type
     :australia-map {:chart-options     {:chart/type              :australia-map
                                         :chart/supported-formats [:data-format/lat-lon-label]
-                                        :chart                   {:map      "countries/au/au-all"
+                                        :chart                   {:map      aus-geo
                                                                   :zoomType "xy"}
                                         :yAxis                   {:title  {:align "high"}
                                                                   :labels {:overflow "justify"}}}

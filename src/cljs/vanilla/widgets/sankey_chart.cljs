@@ -1,6 +1,10 @@
 (ns vanilla.widgets.sankey-chart
-  (:require [vanilla.widgets.make-chart :as mc]))
+  (:require [vanilla.widgets.make-chart :as mc]
+            ["react-highcharts" :as ReactHighcharts]
+            ["highcharts/modules/sankey" :as addSankeyModule]))
 
+; required to make sankey charts available. does NOT work inside (start-dashboard) in ../core.cljs
+(addSankeyModule ReactHighcharts/Highcharts)
 
 
 ;(defn plot-options

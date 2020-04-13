@@ -10,7 +10,7 @@
 ;  {:plotOptions {:series {:animation (:viz/animation options false)}}})
 
 
-(def label-options {:dataLabels {:color    "#333"
+(def label-options {:dataLabels {:color    "#aaa"
                                  :textPath {:enabled    true
                                             :attributes {:dy 5}}
                                  :distance 10}

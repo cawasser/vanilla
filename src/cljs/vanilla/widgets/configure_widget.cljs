@@ -2,7 +2,7 @@
   (:require [reagent.core :as r]
             [re-frame.core :as rf]
             [day8.re-frame.tracing :refer-macros [fn-traced]]
-            [cljsjs.react-color]
+            ["react-color" :refer [CompactPicker]]
             [vanilla.update-layout :as u]
             [vanilla.modal :as modal]))
 
@@ -158,7 +158,7 @@
     [modal/modal-body-section
      [:h5 "Text Color: "
       [:div.container
-       [:> js/ReactColor.CompactPicker
+       [:> CompactPicker
         {:style            {:top "5px" :left "10px"}
          :color            @(rf/subscribe [:chosen-title-color])
          :onChangeComplete (fn [color _]
@@ -166,7 +166,7 @@
     [modal/modal-body-section
      [:h5 "Banner Color: "
       [:div.container
-       [:> js/ReactColor.CompactPicker
+       [:> CompactPicker
          {:style            {:top "5px" :left "10px"}
           :color            @(rf/subscribe [:chosen-banner-color])
           :onChangeComplete (fn [color _]

@@ -16,7 +16,7 @@
     ;  " //// chart-config " chart-config)
 
     [basic/basic-widget name data options
-     [:div {:style {:width "95%" :height "100%"}}
+     [:div {:style {:width "100%" :height "100%" :display :flex}}
       [mc/make-chart chart-config data options]]]))
 
 (defn make-map-widget [name id chart-config]
@@ -31,7 +31,7 @@
     ;  " //// chart-config " chart-config)
 
     [basic/basic-widget name data options
-     [:div {:style {:width "95%" :height "100%"}}
+     [:div {:style {:width "100%" :height "100%"  :display :flex}}
       [mm/make-chart chart-config data options]]]))
 
 
@@ -81,8 +81,8 @@
   (if data-source
     (let [data (rf/subscribe [:app-db data-source])]
 
-      ;(prn "attaching data " data-source
-      ;  " //// data "@data)
+      (prn "attaching data " data-source
+        " //// data "@data)
 
       [(build-widget props) @data options])
 

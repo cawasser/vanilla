@@ -3,6 +3,8 @@
             [reagent.ratom :refer-macros [reaction]]
             [vanilla.widgets.make-chart :as mc]))
 
+
+
 ;;;;;;;;;;;;;;
 ;
 ; register all the data stuff so we have access to it
@@ -13,7 +15,7 @@
     {:chart-options     {:chart/type              :heatmap-chart
                          :chart/supported-formats [:data-format/grid-n :data-format/grid-e :data-format/lat-lon-n :data-format/lat-lon-e]
                          :chart                   {:type            "heatmap"
-                                                   :zoomType        "x"
+                                                   :zoomType        "xy"
                                                    :marginTop       40
                                                    :marginBottom    80
                                                    :plotBorderWidth 1}
@@ -28,7 +30,7 @@
 
                          :colorAxis               {:min      0
                                                    :minColor "#FFFFFF"
-                                                   :maxColor "#006400"} ;Highcharts.getOptions().colors[0]}
+                                                   :maxColor "#006400"}
 
                          :legend                  {:align         "right"
                                                    :layout        "vertical"
@@ -36,10 +38,8 @@
                                                    :verticalAlign "top"
                                                    :y             25
                                                    :symbolHeight  280}
-                         :plotOptions             {}
-
-                         :series                  [{:dataLabels {:enabled true
-                                                                 :color   "#000000"}}]}
+                         :plotOptions             {:series {:dataLabels {:enabled true
+                                                                         :color   "#000000"}}}}
 
      :merge-plot-option {:default mc/default-plot-options}
 

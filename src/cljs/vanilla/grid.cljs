@@ -2,7 +2,7 @@
   (:require
     [reagent.core :as r]
     [re-frame.core :as rf]
-    [cljsjs.react-grid-layout]
+    ["react-grid-layout" :as ReactGridLayout]
     [vanilla.widgets.core :as widget]
     [day8.re-frame.tracing :refer-macros [fn-traced]]
     [vanilla.update-layout :as u]))
@@ -72,6 +72,7 @@
 (defn Grid
   [args]
 
+  ; TODO: can we just return the [:> ReactGridLayout/Responsive...]?
   (r/create-class
     ;; probably dont need this..
     {:should-component-update
@@ -91,15 +92,15 @@
        ;       " //// data " data))
 
        [:div.grid-container
-        (into [:> js/ReactGridLayout.Responsive {:id              id
-                                                 :class           "layout"
-                                                 :cols            cols
-                                                 :width           width
-                                                 :rowHeight       row-height
-                                                 :isDraggable     true
-                                                 :isResizable     true
-                                                 :draggableHandle ".grid-toolbar"
-                                                 :draggableCancel ".grid-content"
-                                                 :breakpoints     breakpoints
-                                                 :onLayoutChange  (partial onLayoutChange on-change data)}]
+        (into [:> ReactGridLayout/Responsive {:id              id
+                                              :class           "layout"
+                                              :cols            cols
+                                              :width           width
+                                              :rowHeight       row-height
+                                              :isDraggable     true
+                                              :isResizable     true
+                                              :draggableHandle ".grid-toolbar"
+                                              :draggableCancel ".grid-content"
+                                              :breakpoints     breakpoints
+                                              :onLayoutChange  (partial onLayoutChange on-change data)}]
           (mapv #(widget-wrapper % (:key %)) data))])}))

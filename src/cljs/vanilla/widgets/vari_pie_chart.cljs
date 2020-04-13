@@ -3,6 +3,7 @@
 
 
 
+
 (defn plot-options
   [chart-config data options]
 

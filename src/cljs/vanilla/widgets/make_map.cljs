@@ -1,7 +1,9 @@
 (ns vanilla.widgets.make-map
   (:require [reagent.core :as reagent]
             [re-frame.core :as rf]
-            [vanilla.widgets.util :as util]))
+            [vanilla.widgets.util :as util]
+            [vanilla.dark-mode :as dark]
+            ["react-highcharts/ReactHighmaps" :as ReactHighmaps]))
 
 (declare default-conversion)
 
@@ -79,7 +81,7 @@
 
         final-config (util/deep-merge-with
                        util/combine
-                       base-config plot-config (-> chart-config :chart-options))]
+                       base-config plot-config (-> chart-config :chart-options) dark/dark-theme)]
 
     ;(prn "make-config after " chart-type
     ;  " //// (chart-config)" chart-config
@@ -164,53 +166,28 @@
 
   [id registry-data]
 
-  (prn "register-type " id
-   " //// (registry-data)" registry-data)
+  ;(prn "register-type " id
+  ; " //// (registry-data)" registry-data)
 
   (rf/dispatch [:register-hc-type id registry-data]))
 
 
 
 (defn make-chart
-  "creates the correct reagent 'hiccup' and react/class to implement a
+  "creates the correct reagent 'hiccup' to implement a
   Highcharts.js UI component that can be embedded inside any valid hiccup"
 
   [chart-config data options]
 
   (let [dom-node        (reagent/atom nil)
         chart-type      (-> chart-config :chart-options :chart/type)
-        chart-reg-entry @(rf/subscribe [:hc-type chart-type])]
+        chart-reg-entry @(rf/subscribe [:hc-type chart-type])
+        base-config (make-config chart-config data options)
+        all-configs (merge-configs base-config data options)]
+
 
     ;(prn "MAKE-chart " chart-type
     ;  " //// (chart-config)" chart-config
     ;  " ////// (chart-reg-entry)" chart-reg-entry)
 
-    (reagent/create-class
-      {:reagent-render
-       (fn [args]
-         @dom-node                                          ; be sure to render if node changes
-         [:div {:style {:width (get options :viz/width "100%") :height "100%"}}])
-
-       :component-did-mount
-       (fn [this]
-         (let [node (reagent/dom-node this)]
-
-           ;(prn "component-did-mount " chart-type)
-
-           (reset! dom-node node)))
-
-       :component-did-update
-       (fn [this old-argv]
-         (let [new-args (rest (reagent/argv this))
-               new-data (js->clj (second new-args))
-               base-config (make-config chart-config new-data options)
-               all-configs (merge-configs base-config new-data options)]
-
-           ;(prn "component-did-update " chart-type
-           ;  " //// chart-config " chart-config
-           ;  " //// chart-reg-entry " chart-reg-entry
-           ;  " //// base-config " base-config
-           ;  " //// (all-config)" all-configs)
-
-           (js/Highcharts.mapChart. (reagent/dom-node this)
-                                 (clj->js all-configs))))})))
+    [:> ReactHighmaps {:config all-configs}]))

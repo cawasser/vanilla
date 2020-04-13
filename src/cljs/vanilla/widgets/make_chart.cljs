@@ -2,8 +2,13 @@
   (:require [reagent.core :as reagent]
             [re-frame.core :as rf]
             [day8.re-frame.tracing :refer-macros [fn-traced]]
-            [vanilla.widgets.util :as util]))
+            [vanilla.widgets.util :as util]
+            ["react-highcharts" :as ReactHighcharts]
+            ["highcharts-more" :as HighchartsMore]
+            [vanilla.dark-mode :as dark]))
 
+; required to make "extra" charts, like bubble and arearange, available.
+(HighchartsMore ReactHighcharts/Highcharts)
 
 (declare default-conversion)
 
@@ -11,8 +16,8 @@
 (rf/reg-event-db
   :register-hc-type
   (fn-traced [db [_ type type-fn]]
-             ;(prn "registering highcharts type " type)
-             (assoc-in db [:hc-type type] type-fn)))
+    ;(prn "registering highcharts type " type)
+    (assoc-in db [:hc-type type] type-fn)))
 
 ;;;;;;;;;;;;;;;;;
 ;
@@ -23,7 +28,7 @@
   (let [chart-reg-entry @(rf/subscribe [:hc-type chart-type])
         format-type     (get-in data [:data :data-format])
         pc-fn           (get-in chart-reg-entry [:merge-plot-option format-type]
-                                (get-in chart-reg-entry [:merge-plot-option :default]))]
+                          (get-in chart-reg-entry [:merge-plot-option :default]))]
 
     ;(prn "plot-config " chart-type
     ; " ///// (format-type)" format-type
@@ -88,7 +93,7 @@
 
         final-config (util/deep-merge-with
                        util/combine
-                       base-config plot-config (-> chart-config :chart-options))]
+                       base-config plot-config (-> chart-config :chart-options) dark/dark-theme)]
 
     ;(prn "make-config after " chart-type
     ;  " //// (chart-config)" chart-config
@@ -148,12 +153,12 @@
 (defn add-the-n-conversion [n-name default-n chart-config data options]
 
   (let [series (get-in data [:data :series])
-        ret (for [{keys :keys data :data :as all} series]
-              (assoc all
-                :keys (conj keys n-name)
-                :data (into []
-                        (for [[x y] data]
-                          [x y default-n]))))]
+        ret    (for [{keys :keys data :data :as all} series]
+                 (assoc all
+                   :keys (conj keys n-name)
+                   :data (into []
+                           (for [[x y] data]
+                             [x y default-n]))))]
 
     ;(prn "add-the-n-conversion (from)" data
     ;  " //// (series) " series
@@ -174,7 +179,7 @@
   [id registry-data]
 
   (prn "register-type " id
-   " //// (registry-data)" registry-data)
+    " //// (registry-data)" registry-data)
 
   (rf/dispatch [:register-hc-type id registry-data]))
 
@@ -189,43 +194,19 @@
 
   ;(prn " entering make-chart " chart-config)
 
-  (let [dom-node        (reagent/atom nil)
-        chart-type      (-> chart-config :chart-options :chart/type)
-        chart-reg-entry @(rf/subscribe [:hc-type chart-type])]
+  ; TODO: should make-chart return a (fn [])?
+  (let [chart-type      (-> chart-config :chart-options :chart/type)
+        chart-reg-entry @(rf/subscribe [:hc-type chart-type])
+        base-config     (make-config chart-config data options)
+        all-configs     (merge-configs base-config data options)]
 
     ;(prn "make-chart " chart-type
-    ;  " //// (chart-config)" chart-config
-    ;  " ////// (chart-reg-entry)" chart-reg-entry)
+    ;" //// (chart-config) " chart-config
+    ;" //// (chart-reg-entry) " chart-reg-entry
+    ;" //// (all-configs) " (get-in all-configs [:chart :type])
 
-    (reagent/create-class
-      {:reagent-render
-       (fn [args]
-         @dom-node                                          ; be sure to render if node changes
-         [:div {:style {:width (get options :viz/width "100%") :height "100%"}}])
-
-       :component-did-mount
-       (fn [this]
-         (let [node (reagent/dom-node this)]
-
-           ;(prn "component-did-mount " chart-type)
-
-           (reset! dom-node node)))
-
-       :component-did-update
-       (fn [this old-argv]
-         (let [new-args (rest (reagent/argv this))
-               new-data (js->clj (second new-args))
-               base-config (make-config chart-config new-data options)
-               all-configs (merge-configs base-config new-data options)]
-
-           ;(prn "component-did-update " chart-type
-           ;  " //// chart-config " chart-config
-           ;  " //// chart-reg-entry " chart-reg-entry
-           ;  " //// base-config " base-config
-           ;  " //// (all-config)" all-configs)
-
-           (js/Highcharts.Chart. (reagent/dom-node this)
-             (clj->js all-configs))))})))
+    ;[:div {:style {:height "100%" :width "100%" :display :flex}}
+    [:> ReactHighcharts {:config all-configs}]))
 
 ;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;
@@ -236,15 +217,15 @@
 
 (comment
 
-  {:chart-options {:chart/type :dependency-chart,
-                   :chart/supported-formats [:data-format/from-to-n :data-format/from-to-e :data-format/from-to],
-                   :chart {:type "dependencywheel"},
-                   :plot-options {:dataLabels {:color "#333",
-                                               :textPath {:enabled true, :attributes {:dy 5}},
-                                               :distance 10},
-                                  :size "95%"}},
+  {:chart-options     {:chart/type              :dependency-chart,
+                       :chart/supported-formats [:data-format/from-to-n :data-format/from-to-e :data-format/from-to],
+                       :chart                   {:type "dependencywheel"},
+                       :plot-options            {:dataLabels {:color    "#333",
+                                                              :textPath {:enabled true, :attributes {:dy 5}},
+                                                              :distance 10},
+                                                 :size       "95%"}},
    :merge-plot-option {:default ""},
-   :conversions {:default "",
-                 :data-format/from-to ""}}
+   :conversions       {:default             "",
+                       :data-format/from-to ""}}
 
   ())

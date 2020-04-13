@@ -13,6 +13,11 @@
     ;:schedule {:in    [0 :seconds]
     ;           :every [15 :seconds]}}
 
+   {:name     :energy-use-service
+    :read-fn  :vanilla.energy-use-service/fetch-data}
+   ;:schedule {:in    [0 :seconds]
+   ;           :every [15 :seconds]}}
+
    {:name :sankey-service
     :read-fn :vanilla.sankey-service/fetch-data}
    ;:schedule {:in    [0 :seconds]

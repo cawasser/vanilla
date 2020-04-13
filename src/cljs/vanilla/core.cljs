@@ -16,6 +16,12 @@
 
     [vanilla.grid :as grid]
 
+    ["react-highcharts" :as ReactHighcharts]
+    ["highcharts/modules/dependency-wheel" :as addDependencyWheelModule]
+    ["highcharts/modules/heatmap" :as addHeatmapModule]
+    ["highcharts/modules/organization" :as addOrganizationModule]
+    ["highcharts/modules/variable-pie" :as addVariablepieModule]
+
     ; needed to register all the highcharts types
     [vanilla.widgets.area-chart]
     [vanilla.widgets.arearange-chart]
@@ -149,7 +155,17 @@
   "Initialize all the data needed for the start of our SPA, ends by calling the UI to generate"
   []
 
-  ;(prn "calling :initialize")
+  ; why these work here but not in other places (like during load/compile?) is unknown, but they work here
+  ;
+  (addDependencyWheelModule ReactHighcharts/Highcharts)
+  (addHeatmapModule ReactHighcharts/Highcharts)
+  (addOrganizationModule ReactHighcharts/Highcharts)
+  (addVariablepieModule ReactHighcharts/Highcharts)
+
+  ; but sankey does NOT work here! WTF highcharts?????????????
+  ;(addSankeyModule ReactHighcharts/Highcharts)
+
+  (prn "calling :initialize")
   (rf/dispatch-sync [:initialize])
 
   (get-version)
@@ -182,7 +198,7 @@
 
   (d/connect-to-data-sources)
 
-
+  (prn "rendering home-page")
   (r/render home-page (.getElementById js/document "app")))
 
 

@@ -3,7 +3,7 @@
     [vanilla.update-layout :as layout]
     [re-frame.core :as rf]
     [reagent.core :as r]
-    [cljsjs.toastr]
+    ["toastr" :as toastr]
     [day8.re-frame.tracing :refer-macros [fn-traced]]
     [ajax.core :as ajax :refer [GET POST]]))
 
@@ -31,8 +31,8 @@
   :login-message
   (fn-traced [db [_ response message]]
              (if (= (:status response) 200)
-               (js/toastr.success message)
-               (js/toastr.error message))
+               (toastr/success message)
+               (toastr/error message))
              db))
 
 ;;;;;;;;;;;;;;;;;;;;;
