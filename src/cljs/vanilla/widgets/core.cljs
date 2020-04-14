@@ -81,8 +81,8 @@
   (if data-source
     (let [data (rf/subscribe [:app-db data-source])]
 
-      (prn "attaching data " data-source
-        " //// data "@data)
+      ;(prn "attaching data " data-source
+      ;  " //// data "@data)
 
       [(build-widget props) @data options])
 
