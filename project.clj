@@ -64,7 +64,8 @@
                  [seancorfield/next.jdbc "1.0.12"]
                  [org.clojure/tools.nrepl "0.2.13"]
                  [day8.re-frame/re-frame-10x "0.4.3"]
-                 [day8.re-frame/tracing "0.5.3"]]
+                 [day8.re-frame/tracing "0.5.3"]
+                 [clj-time "0.15.2"]]
 
   :min-lein-version "2.6.1"
 

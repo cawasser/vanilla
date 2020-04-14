@@ -2,7 +2,8 @@
   (:require [vanilla.widgets.table-widget]
             [vanilla.widgets.stoplight-widget]
             [vanilla.widgets.simple-text]
-            [vanilla.widgets.worldwind]))
+            [vanilla.widgets.worldwind]
+            [vanilla.widgets.timeline]))
 
 
 
@@ -78,6 +79,17 @@
                :options     {:viz/title        "3d World"
                              :viz/banner-color {:r 0x99 :g 0x00 :b 0xff :a 1}
                              :viz/banner-text-color white}}
+
+              {:name        :timeline-widget
+               :basis       :simple
+               :type        :timeline-widget
+               :build-fn    vanilla.widgets.timeline/make-widget
+               :ret_types   [:data-format/task-link]
+               :icon        "/images/timeline-widget.png"
+               :label       "Timeline"
+               :options     {:viz/title        "Timeline"
+                             :viz/banner-color {:r 0x99 :g 0xff :b 0x00 :a 1}
+                             :viz/banner-text-color black}}
 
               {:name      :table-widget
                :basis     :simple

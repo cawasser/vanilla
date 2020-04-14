@@ -178,8 +178,8 @@
 
   [id registry-data]
 
-  (prn "register-type " id
-    " //// (registry-data)" registry-data)
+  ;(prn "register-type " id
+  ;  " //// (registry-data)" registry-data)
 
   (rf/dispatch [:register-hc-type id registry-data]))
 

@@ -48,8 +48,8 @@
     (fn [data options]
 
       [basic/basic-widget name data options
-       [:div.container
-        (build-fn name data options)]])))
+       ;[:div.container
+        (build-fn name data options)])))
 
 
 

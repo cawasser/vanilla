@@ -67,7 +67,10 @@
     :read-fn :vanilla.australia-map-service/fetch-data}
 
    {:name :arearange-service
-    :read-fn :vanilla.arearange-service/fetch-data}])
+    :read-fn :vanilla.arearange-service/fetch-data}
+
+   {:name :task-service
+    :read-fn :vanilla.task-service/fetch-data}])
 
 
    ;:params   []

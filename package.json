@@ -13,6 +13,7 @@
     "react-color": "^2.18.0",
     "react-dom": "^16.7.0",
     "react-flip-move": "3.0.3",
+    "react-gantt-timeline": "^0.4.3",
     "react-grid-layout": "^0.18.3",
     "react-highcharts": "^16.1.0",
     "react-highlight.js": "1.0.7",
