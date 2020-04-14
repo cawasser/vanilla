@@ -1,7 +1,8 @@
 (ns vanilla.widget-defs
   (:require [vanilla.widgets.table-widget]
             [vanilla.widgets.stoplight-widget]
-            [vanilla.widgets.simple-text]))
+            [vanilla.widgets.simple-text]
+            [vanilla.widgets.worldwind]))
 
 
 
@@ -66,6 +67,17 @@
                :label       "Current Time"
                :options     {:viz/title        "Time"
                              :viz/banner-color {:r 0x00 :g 0xff :b 0xff :a 1}}}
+
+              {:name        :worldwind-widget
+               :basis       :simple
+               :type        :worldwind-widget
+               :build-fn    vanilla.widgets.worldwind/make-widget
+               :ret_types   [:data-format/lat-lon-label]
+               :icon        "/images/worldwind-widget.png"
+               :label       "3d World"
+               :options     {:viz/title        "3d World"
+                             :viz/banner-color {:r 0x99 :g 0x00 :b 0xff :a 1}
+                             :viz/banner-text-color white}}
 
               {:name      :table-widget
                :basis     :simple
