@@ -19,6 +19,7 @@
               [vanilla.arearange-service]
               [vanilla.energy-use-service]
               [vanilla.task-service]
+              [vanilla.carousel-service]
 
               [vanilla.service-deps :as deps]
               [vanilla.service-deps :as deps]

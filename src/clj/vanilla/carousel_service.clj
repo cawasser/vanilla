@@ -5,8 +5,7 @@
 (defn fetch-data []
   (log/info "Carousel FAKE Service")
 
-  {:title       "carousel Data"
+  {:title       "carousel data"
    :data-format :data-format/carousel
-
-   :data        {:data  "carousel fake data"}})
+   :data        "heatmap-data"})
 

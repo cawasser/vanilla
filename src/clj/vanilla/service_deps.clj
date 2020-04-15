@@ -70,7 +70,10 @@
     :read-fn :vanilla.arearange-service/fetch-data}
 
    {:name :task-service
-    :read-fn :vanilla.task-service/fetch-data}])
+    :read-fn :vanilla.task-service/fetch-data}
+
+   {:name :carousel-service
+    :read-fn :vanilla.carousel-service/fetch-data}])
 
 
    ;:params   []

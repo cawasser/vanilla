@@ -347,7 +347,7 @@
 
   (get-layout vanilla-db)
 
-  (get-user-layout vanilla-db {:username "chad"})
+  (get-user-layout vanilla-db {:username "austin"})
 
   (save-layout! vanilla-db {:layout test1})
 
@@ -364,7 +364,7 @@
 
   (delete-all-layouts! vanilla-db)
 
-  (delete-layout! vanilla-db {:id "123"})
+  (delete-layout! vanilla-db {:id "7ff54050-42bd-4837-b056-8916899cc0d0"})
   (delete-layout! vanilla-db {:id "213"})
 
   (drop-layout-table vanilla-db)

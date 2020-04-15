@@ -107,18 +107,18 @@
     []
 
     (do
-      (prn
-        "filter-services " services
-        " //// (chosen-widget) " chosen-widget
-        " //// ret_types " (:ret_types chosen-widget))
+      ;(prn
+      ;  "filter-services " services
+      ;  " //// (chosen-widget) " chosen-widget
+      ;  " //// ret_types " (:ret_types chosen-widget))
 
       (let [ret-val (filter #(if (some #{(keyword (:ret_type %))}
                                    (:ret_types chosen-widget)) true false)
                       services)]
 
-        (prn (str "filter-services " chosen-widget
-               " //// ret_types " (:ret_types chosen-widget)
-               " //// ret-val " ret-val))
+        ;(prn (str "filter-services " chosen-widget
+        ;       " //// ret_types " (:ret_types chosen-widget)
+        ;       " //// ret-val " ret-val))
 
         (into [] ret-val)))))
 

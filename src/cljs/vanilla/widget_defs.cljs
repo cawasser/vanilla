@@ -4,6 +4,7 @@
             [vanilla.widgets.simple-text]
             [vanilla.widgets.worldwind]
             [vanilla.widgets.timeline]
+            [vanilla.widgets.carousel]
             [vanilla.widgets.rough-widget]))
 
 
