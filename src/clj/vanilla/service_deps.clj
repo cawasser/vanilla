@@ -1,81 +1,103 @@
-(ns vanilla.service-deps)
+(ns vanilla.service-deps
+  (:require [vanilla.bubble-service]
+            [vanilla.heatmap-service]
+            [vanilla.network-service]
+            [vanilla.sankey-service]
+            [vanilla.scatter-service]
+            [vanilla.stoplight-service]
+            [vanilla.usage-12-hour-service]
+            [vanilla.spectrum-traces-service]
+            [vanilla.usage-data-service]
+            [vanilla.power-data-service]
+            [vanilla.current-time-service]
+            [vanilla.table-service]
+            [vanilla.continent-map-service]
+            [vanilla.australia-map-service]
+            [vanilla.arearange-service]
+            [vanilla.energy-use-service]
+            [vanilla.task-service]
+            [vanilla.terminal-location-service]
+            [vanilla.signal-path-service]))
 
 
 
 (def datasources
-  [{:name     :spectrum-traces
-    :read-fn  :vanilla.spectrum-traces-service/fetch-data}
-    ;:schedule {:in    [0 :seconds]
-    ;           :every [10 :seconds]}}
+  [{:name    :spectrum-traces
+    :read-fn :vanilla.spectrum-traces-service/fetch-data}
+   ;:schedule {:in    [0 :seconds]
+   ;           :every [10 :seconds]}}
 
-   {:name :terminal-location-service
+   {:name    :terminal-location-service
     :read-fn :vanilla.terminal-location-service/fetch-data}
 
-   {:name     :usage-data
-    :read-fn  :vanilla.usage-data-service/fetch-data}
-    ;:schedule {:in    [0 :seconds]
-    ;           :every [15 :seconds]}}
+   {:name    :signal-path-service
+    :read-fn :vanilla.signal-path-service/fetch-data}
 
-   {:name     :energy-use-service
-    :read-fn  :vanilla.energy-use-service/fetch-data}
+   {:name    :usage-data
+    :read-fn :vanilla.usage-data-service/fetch-data}
    ;:schedule {:in    [0 :seconds]
    ;           :every [15 :seconds]}}
 
-   {:name :sankey-service
+   {:name    :energy-use-service
+    :read-fn :vanilla.energy-use-service/fetch-data}
+   ;:schedule {:in    [0 :seconds]
+   ;           :every [15 :seconds]}}
+
+   {:name    :sankey-service
     :read-fn :vanilla.sankey-service/fetch-data}
    ;:schedule {:in    [0 :seconds]
    ;           :every [5 :seconds]}}
 
-   {:name :bubble-service
+   {:name    :bubble-service
     :read-fn :vanilla.bubble-service/fetch-data}
    ;:schedule {:in    [0 :seconds]
    ;           :every [5 :seconds]}}
 
-   {:name :network-service
+   {:name    :network-service
     :read-fn :vanilla.network-service/fetch-data}
    ;:schedule {:in    [0 :seconds]
    ;           :every [5 :seconds]}}
 
-   {:name     :power-data
-    :read-fn  :vanilla.power-data-service/fetch-data}
-    ;:schedule {:in    [0 :seconds]
-    ;           :every [30 :seconds]}}
+   {:name    :power-data
+    :read-fn :vanilla.power-data-service/fetch-data}
+   ;:schedule {:in    [0 :seconds]
+   ;           :every [30 :seconds]}}
 
-   {:name     :heatmap-data
-    :read-fn  :vanilla.heatmap-service/fetch-data}
-    ;:schedule {:in    [0 :seconds]
-    ;           :every [10 :seconds]}}
+   {:name    :heatmap-data
+    :read-fn :vanilla.heatmap-service/fetch-data}
+   ;:schedule {:in    [0 :seconds]
+   ;           :every [10 :seconds]}}
 
-   {:name :health-and-status-data
+   {:name    :health-and-status-data
     :read-fn :vanilla.stoplight-service/fetch-data}
-    ;:schedule {:in    [0 :seconds]
-    ;           :every [10 :seconds]}}
+   ;:schedule {:in    [0 :seconds]
+   ;           :every [10 :seconds]}}
 
-   {:name :usage-12-hour-service
+   {:name    :usage-12-hour-service
     :read-fn :vanilla.usage-12-hour-service/fetch-data}
 
-   {:name :scatter-service-data
+   {:name    :scatter-service-data
     :read-fn :vanilla.scatter-service/fetch-data}
 
-   {:name     :current-time
-    :read-fn  :vanilla.current-time-service/fetch-data}
+   {:name    :current-time
+    :read-fn :vanilla.current-time-service/fetch-data}
 
-   {:name :table-service
+   {:name    :table-service
     :read-fn :vanilla.table-service/fetch-data}
 
-   {:name :continent-map-service
+   {:name    :continent-map-service
     :read-fn :vanilla.continent-map-service/fetch-data}
 
-   {:name :australia-map-service
+   {:name    :australia-map-service
     :read-fn :vanilla.australia-map-service/fetch-data}
 
-   {:name :arearange-service
+   {:name    :arearange-service
     :read-fn :vanilla.arearange-service/fetch-data}
 
-   {:name :task-service
+   {:name    :task-service
     :read-fn :vanilla.task-service/fetch-data}])
 
 
-   ;:params   []
-   ;:schedule {:in    [0 :seconds]
-   ;           :every [5 :seconds]}}])
+;:params   []
+;:schedule {:in    [0 :seconds]
+;           :every [5 :seconds]}}])
