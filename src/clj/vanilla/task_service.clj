@@ -7,6 +7,11 @@
 
 (def built-in-formatter (f/formatters :date-time-no-ms))
 
+(def task-type ["fixed" "restricted" "public" "commercial"])
+
+(defn rand-task-type []
+  (get task-type (rand-int (count task-type))))
+
 (defn make-task
   [id start end]
 
@@ -18,7 +23,8 @@
     {:id    id
      :name  (str "Task " id)
      :start (f/unparse built-in-formatter s)
-     :end   (f/unparse built-in-formatter e)}))
+     :end   (f/unparse built-in-formatter e)
+     :type  (rand-task-type)}))
 
 (def tasks [[[0 0 0] [1 0 0]]
             [[0 1 0] [1 0 0]]
@@ -86,6 +92,23 @@
            (assoc :end (f/parse start))))
     (:data d))
 
-  (f (:data d))
+  (into #{} (map #(:type %) (:data d)))
+
+
+  (def colors ["blue" "green" "red" "yellow"])
+
+  (defn parse-types-to-color [data]
+    (let [color-count (:type (:data data))]))
+
+  (def types-set (into [] (into #{} (map #(:type %) (:data d)))))
+  (def type "fixed")
+  (assoc
+    d
+    :data (into []
+            (doall
+              (map (fn [{:keys [type] :as orig}]
+                     (assoc orig :color (get colors (.indexOf types-set type))))
+                (:data d)))))
+
 
   ())
