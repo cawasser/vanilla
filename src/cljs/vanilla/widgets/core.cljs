@@ -41,9 +41,9 @@
   (let [widget @(rf/subscribe [:widget-type type])
         build-fn (:build-fn widget)]
 
-    (prn "make-simple-widget " name "of type " type
-      " //// widget " widget
-      " //// build-fn " build-fn)
+    ;(prn "make-simple-widget " name "of type " type
+    ;  " //// widget " widget
+    ;  " //// build-fn " build-fn)
 
     (fn [data options]
 
@@ -81,8 +81,8 @@
   (if data-source
     (let [data (rf/subscribe [:app-db data-source])]
 
-      (prn "attaching data " data-source
-        " //// data "@data)
+      ;(prn "attaching data " data-source
+      ;  " //// data "@data)
 
       [(build-widget props) @data options])
 
