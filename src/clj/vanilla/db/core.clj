@@ -120,7 +120,17 @@
       ; 17
       ["21000" "task-service" "Tasks"
        "data-format/task-link" "vanilla.task-service/fetch-data"
-       "returns task on a schedule"]]}))
+       "returns task on a schedule"]
+
+      ; 18
+      ["22000" "signal-path-service" "Signal Paths"
+       "data-format/from-to-n" "vanilla.signal-path-service/fetch-data"
+       "returns signal path for missions"]
+
+      ; 19
+      ["23000" "terminal-location-service" "Terminal Locations"
+       "data-format/cont-n" "vanilla.terminal-location-service/fetch-data"
+       "returns terminal locations around the world"]]}))
 
 
 
