@@ -73,7 +73,7 @@
                :basis       :simple
                :type        :worldwind-widget
                :build-fn    vanilla.widgets.worldwind/make-widget
-               :ret_types   [:data-format/lat-lon-label]
+               :ret_types   [:data-format/lat-lon-label :data-format/cont-n]
                :icon        "/images/worldwind-widget.png"
                :label       "3d World"
                :options     {:viz/title        "3d World"
