@@ -80,8 +80,11 @@
 
 
 (defn make-widget [name data options]
+
+  (prn "ww widget " data)
+
   (let [cities    (location-layer "Cities" cities (.-YELLOW WorldWind/Color))
-        terminals (location-layer "Terminals" terminals (.-WHITE WorldWind/Color))
+        terminals (location-layer "Terminals" (get-in data [:data :data]) (.-WHITE WorldWind/Color))
         beams     (beam-layer "GDAs" beam-coverage)]
 
   ;(.log js/console ":simple-text" (str data) (str options))
@@ -90,7 +93,7 @@
                    :text-align   :center
                    :border-style (basic/debug-style options)}}
      [:> Globe {:layers    ["blue-marble"
-                            cities
+                            ;cities
                             terminals
                             beams]
                 :latitude  28.538336
