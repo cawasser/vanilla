@@ -4,7 +4,6 @@
             [datascript.core :as d]))
 
 
-(def filename "resources/public/excel/Demo.xlsx")
 (def sheet "SCN_NETWORK_CARRIER_VW")
 (def column-map {:A :satellite
                  :B :rx-beam
@@ -62,7 +61,7 @@
     ;       [from to 5]))))
 
 (defn- get-data-from-excel []
-  (excel/load-data filename sheet column-map post-fn)
+  (excel/load-data excel/filename sheet column-map post-fn)
   (into [] (query-for-data)))
 
 
@@ -81,15 +80,13 @@
 
 (comment
 
-  (def f "resources/public/excel/Demo.xlsx")
-
-  (excel/load-data f)
+  (excel/load-data excel/filename)
 
   (query-for-data)
 
-  (get-data-from-excel f)
+  (get-data-from-excel excel/filename)
 
-  (excel/load-data filename sheet column-map post-fn)
+  (excel/load-data excel/filename sheet column-map post-fn)
 
   ())
 

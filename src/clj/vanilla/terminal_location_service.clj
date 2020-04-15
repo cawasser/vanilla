@@ -4,7 +4,6 @@
             [datascript.core :as d]))
 
 
-(def filename "resources/public/excel/Demo.xlsx")
 (def sheet "Terminals")
 (def column-map {:C :name
                  :E :lat
@@ -14,7 +13,7 @@
 
 
 (defn- get-terminal-data []
-  (excel/load-data filename sheet column-map post-fn)
+  (excel/load-data excel/filename sheet column-map post-fn)
 
   (->> (d/q '[:find ?name ?lat ?lon
               :where [?e :name ?name]
