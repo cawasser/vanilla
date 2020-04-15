@@ -11,7 +11,9 @@
                  :C :rx-channel
                  :D :tx-beam
                  :E :tx-channel
-                 :H :mission-name})
+                 :H :mission-name
+                 :Z :bandwidth
+                 :AA :data-rate})
 (def post-fn #(map (fn [{:keys [satellite] :as m}]
                      (assoc m :satellite (int satellite)))
                 %))
@@ -21,39 +23,43 @@
 (defn- query-for-data []
   (->> (clojure.set/union
          ; :rx-channel -> :rx-beam
-         (->> (d/q '[:find ?from ?to
+         (->> (d/q '[:find ?from ?to ?bw
                      :where [?e :rx-channel ?from]
-                     [?e :rx-beam ?to]]
+                     [?e :rx-beam ?to]
+                     [?e :bandwidth ?bw]]
                 @excel/conn)
-           (map (fn [[from to]]
-                  [(str from ".") to])))
+           (map (fn [[from to bw]]
+                  [(str from ".") to bw])))
 
          ;rx-beam -> :satellite
-         (->> (d/q '[:find ?from ?to
+         (->> (d/q '[:find ?from ?to ?bw
                      :where [?e :rx-beam ?from]
-                     [?e :satellite ?to]]
+                     [?e :satellite ?to]
+                     [?e :bandwidth ?bw]]
                 @excel/conn)
-           (map (fn [[from to]]
-                  [from (str to)])))
+           (map (fn [[from to bw]]
+                  [from (str to) bw])))
 
          ;:satellite -> :tx-beam
-         (->>(d/q '[:find ?from ?to
+         (->>(d/q '[:find ?from ?to ?bw
                     :where [?e :satellite ?from]
-                    [?e :tx-beam ?to]]
+                    [?e :tx-beam ?to]
+                    [?e :bandwidth ?bw]]
                @excel/conn)
-           (map (fn [[from to]]
-                  [(str from) to])))
+           (map (fn [[from to bw]]
+                  [(str from) to bw])))
 
          ;:tx-beam -> :tx channel
-         (->> (d/q '[:find ?from ?to
+         (->> (d/q '[:find ?from ?to ?bw
                      :where [?e :tx-beam ?from]
-                     [?e :tx-channel ?to]]
+                     [?e :tx-channel ?to]
+                     [?e :bandwidth ?bw]]
                 @excel/conn)
-           (map (fn [[from to]]
-                  [from (str "." to)]))))
+           (map (fn [[from to bw]]
+                  [from (str "." to) bw]))))))
 
-    (map (fn [[from to]]
-           [from to 5]))))
+    ;(map (fn [[from to]]
+    ;       [from to 5]))))
 
 (defn- get-data-from-excel []
   (excel/load-data filename sheet column-map post-fn)

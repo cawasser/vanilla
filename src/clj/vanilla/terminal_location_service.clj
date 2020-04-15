@@ -31,7 +31,7 @@
 
   {:title "Terminal Locations"
    :data-format :data-format/cont-n
-   :data (get-terminal-data)})
+   :data (take 100 (get-terminal-data))})
 
 
 
