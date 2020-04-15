@@ -47,7 +47,8 @@
                  [ring/ring-json "0.5.0"]
                  [selmer "1.12.18"]
                  [thheller/shadow-cljs "2.8.94" :scope "provided"]
-
+                 [dk.ative/docjure "1.12.0"]
+                 [datascript "0.18.10"]
                  [trptcolin/versioneer "0.2.0"]
                  [environ "1.1.0"]
                  [ring "1.8.0"]

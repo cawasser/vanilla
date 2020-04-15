@@ -8,6 +8,9 @@
     ;:schedule {:in    [0 :seconds]
     ;           :every [10 :seconds]}}
 
+   {:name :terminal-location-service
+    :read-fn :vanilla.terminal-location-service/fetch-data}
+
    {:name     :usage-data
     :read-fn  :vanilla.usage-data-service/fetch-data}
     ;:schedule {:in    [0 :seconds]
