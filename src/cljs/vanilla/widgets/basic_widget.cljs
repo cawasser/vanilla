@@ -46,7 +46,7 @@
   ;
     [:div {:class "vanilla.widgets "
            :style {:height (get options :viz/height "100%")
-                   :width  "100%"}}
+                   :width  (get options :viz/width "100%")}}
      [:div {:class "title-wrapper grid-toolbar move-cursor"
             :cursor "move"}
       [:div.container.level

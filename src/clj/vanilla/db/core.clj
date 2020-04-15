@@ -120,7 +120,12 @@
       ; 17
       ["21000" "task-service" "Tasks"
        "data-format/task-link" "vanilla.task-service/fetch-data"
-       "returns task on a schedule"]]}))
+       "returns task on a schedule"]
+
+      ; 18
+      ["22000" "carousel-service" "Multi-Data Carousel"
+       "data-format/carousel" "vanilla.carousel-service/fetch-data"
+       "returns carousel widget that supports multiple widgets"]]}))
 
 
 
