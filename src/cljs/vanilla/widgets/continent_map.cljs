@@ -29,8 +29,6 @@
                :name  "data"
                :color "#FFFFFF"
                :data  (get-in data [:data :data])}]]
-
-    (prn "data-conversion " base)
     base))
 
 
