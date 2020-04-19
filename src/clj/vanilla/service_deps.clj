@@ -17,7 +17,8 @@
             [vanilla.energy-use-service]
             [vanilla.task-service]
             [vanilla.terminal-location-service]
-            [vanilla.signal-path-service]))
+            [vanilla.signal-path-service]
+            [vanilla.beam-location-service]))
 
 
 
@@ -29,6 +30,9 @@
 
    {:name    :terminal-location-service
     :read-fn :vanilla.terminal-location-service/fetch-data}
+
+   {:name    :beam-location-service
+    :read-fn :vanilla.beam-location-service/fetch-data}
 
    {:name    :signal-path-service
     :read-fn :vanilla.signal-path-service/fetch-data}
