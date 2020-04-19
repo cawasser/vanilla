@@ -53,10 +53,10 @@
   {:title       "Task Data"
    :data-format :data-format/task-link
 
-   :data        {:data  (make-tasks tasks)
+   :data        {:data  (make-tasks tasks)}})
 
-                 :links [{:id 1 :start 1 :end 2}
-                         {:id 2 :start 1 :end 3}]}})
+                 ;:links [{:id 1 :start 1 :end 2}
+                 ;        {:id 2 :start 1 :end 3}]}})
 
 
 
