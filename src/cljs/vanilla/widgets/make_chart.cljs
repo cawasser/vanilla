@@ -192,7 +192,7 @@
 
   [chart-config data options]
 
-  ;(prn " entering make-chart " chart-config)
+  (prn " entering make-chart " chart-config)
 
   ; TODO: should make-chart return a (fn [])?
   (let [chart-type      (-> chart-config :chart-options :chart/type)
@@ -200,10 +200,10 @@
         base-config     (make-config chart-config data options)
         all-configs     (merge-configs base-config data options)]
 
-    ;(prn "make-chart " chart-type
-    ;" //// (chart-config) " chart-config
-    ;" //// (chart-reg-entry) " chart-reg-entry
-    ;" //// (all-configs) " (get-in all-configs [:chart :type])
+    (prn "make-chart " chart-type
+    " //// (chart-config) " chart-config
+    " //// (chart-reg-entry) " chart-reg-entry
+    " //// (all-configs) " (get-in all-configs [:chart :type]))
 
     ;[:div {:style {:height "100%" :width "100%" :display :flex}}
     [:> ReactHighcharts {:config all-configs}]))

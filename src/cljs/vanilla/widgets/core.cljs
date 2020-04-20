@@ -57,10 +57,10 @@
 
   (let [chart-config @(rf/subscribe [:hc-type type])]
 
-    ;(prn "building widget " key " of " type
-    ;  " //// " basis "/" chart-types
-    ;  " //// chart-config " chart-config
-    ;  " //// widget " widget)
+    (prn "building widget " key " of " type
+      " //// " basis "/" chart-types
+      " //// chart-config " chart-config
+      " //// widget " widget)
 
 
     (condp = basis
@@ -73,16 +73,16 @@
 
 (defn setup-widget [{:keys [key data-source type options] :as props}]
 
-  ;(prn "setup-widget " key "/" type
-  ;                   " //// data-source " data-source
-  ;                   " //// options " options
-  ;                   " //// props " props)
+  (prn "setup-widget " key "/" type
+                     " //// data-source " data-source
+                     " //// options " options
+                     " //// props " props)
 
   (if data-source
     (let [data (rf/subscribe [:app-db data-source])]
 
-      ;(prn "attaching data " data-source
-      ;  " //// data "@data)
+      (prn "attaching data " data-source
+        " //// data "@data)
 
       [(build-widget props) @data options])
 
