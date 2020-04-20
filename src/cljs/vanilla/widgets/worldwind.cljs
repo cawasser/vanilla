@@ -2,7 +2,8 @@
   (:require [reagent.core :as r :refer [atom]]
             [vanilla.widgets.basic-widget :as basic]
             ["worldwindjs" :as WorldWind]
-            ["../js/worldwind-react-globe.js" :as Globe]))
+            ["../js/worldwind-react-globe.js" :as Globe]
+            [vanilla.mapping.layer-management :as lm]))
 
 
 
@@ -80,8 +81,11 @@
 
 
 (defn make-widget [name data options]
+
+  (prn "ww widget " data)
+
   (let [cities    (location-layer "Cities" cities (.-YELLOW WorldWind/Color))
-        terminals (location-layer "Terminals" terminals (.-WHITE WorldWind/Color))
+        terminals (location-layer "Terminals" (get-in data [:data :data]) (.-WHITE WorldWind/Color))
         beams     (beam-layer "GDAs" beam-coverage)]
 
   ;(.log js/console ":simple-text" (str data) (str options))
@@ -89,9 +93,10 @@
     [:div {:style {:width        "100%"
                    :text-align   :center
                    :border-style (basic/debug-style options)}}
-     [:> Globe {:layers    ["blue-marble"
-                            cities
-                            terminals
-                            beams]
+     [:> Globe {:layers    (lm/make-layers)
+                           ;["blue-marble"
+                           ; cities
+                           ; terminals
+                           ; beams]
                 :latitude  28.538336
                 :longitude -81.379234}]]))

@@ -48,7 +48,7 @@
   [name source-data options]
 
   [:> TimeLine (->> (:data (:data source-data))
-                 parse-times
+                 ;parse-times
                  parse-types-to-color)])
 
 

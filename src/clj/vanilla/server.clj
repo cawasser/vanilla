@@ -22,7 +22,6 @@
               [vanilla.carousel-service]
 
               [vanilla.service-deps :as deps]
-              [vanilla.service-deps :as deps]
               [clojure.tools.logging :as log]
               [trptcolin.versioneer.core :as version])
 

@@ -81,7 +81,6 @@
                       {:username "chad"
                        :pass "321"})
 
-  (get-all-users)
+  (get-all-users))
 
 
-  )
