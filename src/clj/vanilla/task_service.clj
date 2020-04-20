@@ -1,7 +1,38 @@
 (ns vanilla.task-service
   (:require [clojure.tools.logging :as log]
             [clj-time.core :as t]
-            [clj-time.format :as f]))
+            [clj-time.format :as f]
+            [vanilla.db.excel-data :as excel]
+            [datascript.core :as d]
+            [clojure.edn :as edn]))
+
+
+(def sheet "Missions")
+(def column-map {:A :name
+                 :B :organization
+                 :C :start-time
+                 :D :end-time})
+(def post-fn (fn [x] x))
+
+
+(defn- get-data []
+  (excel/load-data excel/filename sheet column-map post-fn)
+
+  (->> (d/q '[:find ?name ?organization ?start-time ?end-time
+              :where [?e :name ?name]
+              [?e :organization ?organization]
+              [?e :start-time ?start-time]
+              [?e :end-time ?end-time]]
+         @excel/conn)
+    (map (fn [[name organization start-time end-time]]
+           {:id    name
+            :name  name
+            :type  organization
+            :start start-time
+            :end   end-time}))
+    (into [])))
+
+
 
 
 
@@ -53,10 +84,10 @@
   {:title       "Task Data"
    :data-format :data-format/task-link
 
-   :data        {:data  (make-tasks tasks)}})
+   :data        {:data (get-data)}})                        ;(make-tasks tasks)}})
 
-                 ;:links [{:id 1 :start 1 :end 2}
-                 ;        {:id 2 :start 1 :end 3}]}})
+;:links [{:id 1 :start 1 :end 2}
+;        {:id 2 :start 1 :end 3}]}})
 
 
 
@@ -110,5 +141,26 @@
                      (assoc orig :color (get colors (.indexOf types-set type))))
                 (:data d)))))
 
+
+  ())
+
+
+(comment
+  (excel/load-data excel/filename sheet column-map post-fn)
+
+  (->> (d/q '[:find ?name ?organization ?start-time ?end-time
+              :where [?e :name ?name]
+              [?e :organization ?organization]
+              [?e :start-time ?start-time]
+              [?e :end-time ?end-time]]
+         @excel/conn)
+    (map (fn [[name organization start-time end-time]]
+           {:id    name
+            :type  organization
+            :start start-time
+            :end   end-time}))
+    (into []))
+
+  (get-data)
 
   ())
