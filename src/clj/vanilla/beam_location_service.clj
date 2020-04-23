@@ -18,16 +18,17 @@
 (defn- get-data []
   (excel/load-data excel/filename sheet column-map post-fn)
 
-  (->> (d/q '[:find ?name ?lat ?lon ?diam ?type
+  (->> (d/q '[:find ?name ?lat ?lon ?diam ?type ?city
               :where [?e :id ?name]
               [?e :lat ?lat]
               [?e :lon ?lon]
               [?e :diam ?diam]
-              [?e :type ?type]]
+              [?e :type ?type]
+              [?e :city ?city]]
          @excel/conn)
-    (map (fn [[name lat lon diam t]]
+    (map (fn [[name lat lon diam t city]]
            {:name name :lat lat :lon lon
-            :e {:type :diameter :diam diam :purpose t}}))))
+            :e {:type :diameter :diam diam :purpose t :city city}}))))
 
 
 (defn fetch-data []

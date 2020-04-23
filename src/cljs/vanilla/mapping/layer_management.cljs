@@ -30,36 +30,12 @@
              {:name "Dulles" :lat 38.951666 :lon -77.448055 :alt 100}])
 
 
-(def terminal-data [{:name "At-SEA" :lat 42.0989 :lon -25.09877 :alt 0}
-                    {:name "Boat Location 20", :lat 41.0, :lon 126.0, :atl 100}
-                    {:name "Dominican Republic", :lat 20.01, :lon -70.01, :atl 100}
-                    {:name "RX3", :lat 50.0, :lon -2.5, :atl 100}
-                    {:name "WP01", :lat -5.04, :lon -5.04, :atl 100}
-                    {:name "Boat Location 42", :lat -0.05, :lon 116.0, :atl 100}
-                    {:name "Guam", :lat 35.49, :lon 123.23, :atl 100}
-                    {:name "START", :lat -16.0, :lon 40.0, :atl 100}
-                    {:name "Boat Location 39", :lat 32.0, :lon 123.0, :atl 100}
-                    {:name "Fixed", :lat 0.0, :lon -118.0, :atl 100}
-                    {:name "Boat Location 44", :lat 30.0, :lon 130.0, :atl 100}
-                    {:name "Fixed", :lat 20.01, :lon -70.01, :atl 100}
-                    {:name "FIXED", :lat 25.0, :lon -10.0, :atl 100}
-                    {:name "Fixed", :lat 25.03, :lon -60.03, :atl 100}
-                    {:name "Guam", :lat 37.46, :lon 132.06, :atl 100}
-                    {:name "FIXED (NCA2/China)", :lat 31.0, :lon 113.0, :atl 100}
-                    {:name "Fixed", :lat 54.0, :lon 25.0, :atl 100}
-                    {:name "Guam", :lat 27.71, :lon 123.75, :atl 100}
-                    {:name "Boat Location 31", :lat 10.0, :lon 107.0, :atl 100}
-                    {:name "Boat Location 9", :lat 37.0, :lon 119.0, :atl 100}
-                    {:name "Boat Location 3", :lat 28.0, :lon 123.0, :atl 100}])
+(def beam-colors {"Broadcast" [0 1 0 0.15]
+                  "Spot" [1 0 1 0.5]
+                  "Adaptive" [0 0.3 1 0.5]
+                  "Protected" [0.2 0.2 0.6 0.5]
+                  "UHF" [1 0 1 0.5]})
 
-(def beam-coverage [{:name "BEAM-1" :lat 28.538336 :lon -81.379234 :diameter 1000000 :color (WorldWind/Color. 0 1 0 0.5)}
-                    {:name "BEAM-2" :lat 42.0989 :lon -25.09877 :diameter 500000 :color (WorldWind/Color. 1 0 1 0.5)}
-                    {:name "BEAM-4" :lat -35.117275 :lon 147.356522 :diameter 750000 :color (WorldWind/Color. 0 0.3 1 0.5)}
-                    {:name "BEAM-5" :lat -5.04 :lon -5.04 :diameter 250000 :color (WorldWind/Color. 0.2 0.2 0.6 0.5)}
-                    {:name "BEAM-6" :lat 27.71 :lon 123.75 :diameter 750000 :color (WorldWind/Color. 1 1 1 0.5)}])
-
-
-(def beam-2 [{:name "BEAM-7" :lat 32.715736 :lon -117.161087 :diameter 1000000 :color (WorldWind/Color. 1 1 0 0.5)}])
 
 
 (defn- location-layer [title data color]
@@ -80,15 +56,25 @@
     layer))
 
 
+(defn- beam-color [attributes beam]
+  (let [color (get beam-colors beam [1 1 1 0.5])
+        [r g b a] color]
+    (prn "beam color" beam "," color)
+
+    (set! (.-interiorColor attributes) (WorldWind/Color. r g b a))
+    (set! (.-outlineColor attributes) (WorldWind/Color. r g b a))))
+
+
 (defn- beam-layer [title data]
   (let [layer (WorldWind/RenderableLayer. title)]
     (doall (map (fn [d]
                   (let [attributes (WorldWind/ShapeAttributes.)
                         point      (WorldWind/Location. (:lat d) (:lon d))
-                        circle     (WorldWind/SurfaceCircle. point (:diameter d) attributes)]
+                        circle     (WorldWind/SurfaceCircle. point (get-in d [:e :diam]) attributes)]
 
-                    (set! (.-interiorColor attributes) (get d :color (WorldWind/Color. 1 1 1 0.5)))
-                    (set! (.-outlineColor attributes) (get d :color (WorldWind/Color. 1 1 1 0.5)))
+                    ;(set! (.-interiorColor attributes) (get (get-in d [:e :purpose]) beam-colors (WorldWind/Color. 1 1 1 0.5)))
+                    ;(set! (.-outlineColor attributes) (get (get-in d [:e :purpose]) beam-colors (WorldWind/Color. 1 1 1 0.5)))
+                    (beam-color attributes (get-in d [:e :purpose]))
 
                     (.addRenderable layer circle)))
              data))
@@ -98,10 +84,14 @@
 
 
 (defn make-layers []
-  ["blue-marble"
-   (location-layer "Cities" cities (.-YELLOW WorldWind/Color))
-   (location-layer "Terminals" terminal-data (.-WHITE WorldWind/Color))
-   (beam-layer "GDAs" beam-coverage)])
+  (let [beams (get-in @(rf/subscribe [:app-db :beam-location-service]) [:data :data])
+        terminals (get-in @(rf/subscribe [:app-db :terminal-location-service]) [:data :data])]
+    (prn "beams" beams beam-layer)
+
+    ["blue-marble"
+     (location-layer "Cities" cities (.-YELLOW WorldWind/Color))
+     (location-layer "Terminals" terminals (.-WHITE WorldWind/Color))
+     (beam-layer "GDAs" beams)])) ;beam-coverage)])
 
 
 
