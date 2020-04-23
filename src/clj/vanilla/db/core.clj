@@ -130,7 +130,12 @@
       ; 19
       ["23000" "terminal-location-service" "Terminal Locations"
        "data-format/cont-n" "vanilla.terminal-location-service/fetch-data"
-       "returns terminal locations around the world"]]}))
+       "returns terminal locations around the world"]
+
+      ;20
+      ["24000" "carousel-service" "Multi-Data Carousel"
+       "data-format/carousel" "vanilla.carousel-service/fetch-data"
+       "returns carousel widget that supports multiple widgets"]]}))
 
 
 
@@ -352,7 +357,7 @@
 
   (get-layout vanilla-db)
 
-  (get-user-layout vanilla-db {:username "chad"})
+  (get-user-layout vanilla-db {:username "austin"})
 
   (save-layout! vanilla-db {:layout test1})
 
@@ -369,7 +374,7 @@
 
   (delete-all-layouts! vanilla-db)
 
-  (delete-layout! vanilla-db {:id "123"})
+  (delete-layout! vanilla-db {:id "7ff54050-42bd-4837-b056-8916899cc0d0"})
   (delete-layout! vanilla-db {:id "213"})
 
   (drop-layout-table vanilla-db)

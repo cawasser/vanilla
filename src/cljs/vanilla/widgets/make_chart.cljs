@@ -203,7 +203,7 @@
     ;(prn "make-chart " chart-type
     ;" //// (chart-config) " chart-config
     ;" //// (chart-reg-entry) " chart-reg-entry
-    ;" //// (all-configs) " (get-in all-configs [:chart :type])
+    ;" //// (all-configs) " (get-in all-configs [:chart :type]))
 
     ;[:div {:style {:height "100%" :width "100%" :display :flex}}
     [:> ReactHighcharts {:config all-configs}]))

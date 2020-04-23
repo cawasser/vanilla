@@ -4,6 +4,7 @@
             [vanilla.widgets.simple-text]
             [vanilla.widgets.worldwind]
             [vanilla.widgets.timeline]
+            [vanilla.widgets.carousel]
             [vanilla.widgets.rough-widget]))
 
 
@@ -101,6 +102,17 @@
                :icon        "/images/timeline-widget.png"
                :label       "Timeline"
                :options     {:viz/title        "Timeline"
+                             :viz/banner-color {:r 0x99 :g 0xff :b 0x00 :a 1}
+                             :viz/banner-text-color black}}
+
+              {:name        :carousel-widget
+               :basis       :simple
+               :type        :carousel-widget
+               :build-fn    vanilla.widgets.carousel/make-widget
+               :ret_types   [:data-format/carousel]
+               :icon        "/images/carousel-widget.png"
+               :label       "Carousel"
+               :options     {:viz/title        "Carousel"
                              :viz/banner-color {:r 0x99 :g 0xff :b 0x00 :a 1}
                              :viz/banner-text-color black}}
 
