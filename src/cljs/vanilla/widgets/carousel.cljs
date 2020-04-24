@@ -255,20 +255,22 @@
   (let [is-widget-active (r/atom false)]
     [:div {:style {:width "100%" :height "100%"}}
      [:> CarouselProvider {:naturalSlideWidth  640
-                           :naturalSlideHeight 410
+                           :naturalSlideHeight 420
                            :totalSlides        (count contents)
                            :dragEnabled        false}
-      [:> Slider {:class "slider" :style {:width "100%" :height "100%"}}
-       (for [[idx c] (map-indexed vector contents)]
-         ^{:key idx} [:> Slide {:key idx :index idx} c])]
-
       [:div {:style {:display :flex :justify-content :center :align-items :center}}
        [:button.button.is-small {:on-click #(swap! is-widget-active not)} "+"]
        [:> ButtonFirst {:class "button is-small"} "First"]
        [:> ButtonBack {:class "button is-small"} "Back"]
        [:> ButtonNext {:class "button is-small"} "Next"]
        [:> ButtonLast {:class "button is-small"} "Last"]
-       [add-by-widget-modal is-widget-active]]]]))
+       [add-by-widget-modal is-widget-active]]
+
+      [:> Slider {:class "slider" :style {:width "100%" :height "100%"}}
+       (for [[idx c] (map-indexed vector contents)]
+         ^{:key idx} [:> Slide {:key idx :index idx} c])]]]))
+
+
 
       ;[:div {:style {:display :flex :justify-content :center :align-items :center}}
       ; (for [[idx c] (map-indexed vector contents)]
