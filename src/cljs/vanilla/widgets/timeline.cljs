@@ -47,9 +47,10 @@
 (defn make-widget
   [name source-data options]
 
-  [:> TimeLine (->> (:data (:data source-data))
-                 ;parse-times
-                 parse-types-to-color)])
+  [:> TimeLine (merge {:mode "year"}
+                 (->> (:data (:data source-data))
+                   ;parse-times
+                   parse-types-to-color))])
 
 
 

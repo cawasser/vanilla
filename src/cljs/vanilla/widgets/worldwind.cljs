@@ -10,7 +10,7 @@
 
 (defn make-widget [name data options]
 
-  (prn "ww widget " data)
+  ;(prn "ww widget " data)
 
   [:div {:style {:width        "100%"
                  :text-align   :center

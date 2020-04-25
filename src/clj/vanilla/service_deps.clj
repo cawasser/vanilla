@@ -34,6 +34,9 @@
    {:name    :beam-location-service
     :read-fn :vanilla.beam-location-service/fetch-data}
 
+   {:name :task-service
+    :read-fn :vanilla.task-service/fetch-data}
+
    {:name    :signal-path-service
     :read-fn :vanilla.signal-path-service/fetch-data}
 
@@ -97,9 +100,6 @@
 
    {:name    :arearange-service
     :read-fn :vanilla.arearange-service/fetch-data}
-
-   {:name :task-service
-    :read-fn :vanilla.task-service/fetch-data}
 
    {:name :carousel-service
     :read-fn :vanilla.carousel-service/fetch-data}])

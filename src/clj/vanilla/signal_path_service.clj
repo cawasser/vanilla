@@ -10,55 +10,58 @@
                  :C :rx-channel
                  :D :tx-beam
                  :E :tx-channel
-                 :H :mission-name
-                 :Z :bandwidth
-                 :AA :data-rate})
-(def post-fn #(map (fn [{:keys [satellite] :as m}]
-                     (assoc m :satellite (int satellite)))
-                %))
+                 :F :plan
+                 :G :mission-name
+                 :H :service
+                 :R :data-rate})
+(def post-fn
+  (fn [x] x))
+;#(map (fn [{:keys [satellite] :as m}]
+;        (assoc m :satellite (int satellite)))
+;   %))
 
 
 
 (defn- query-for-data []
   (->> (clojure.set/union
          ; :rx-channel -> :rx-beam
-         (->> (d/q '[:find ?from ?to ?bw
+         (->> (d/q '[:find ?from ?to ?data-rate
                      :where [?e :rx-channel ?from]
                      [?e :rx-beam ?to]
-                     [?e :bandwidth ?bw]]
+                     [?e :data-rate ?data-rate]]
                 @excel/conn)
-           (map (fn [[from to bw]]
-                  [(str from ".") to bw])))
+           (map (fn [[from to data-rate]]
+                  [(str from ".") to data-rate])))
 
          ;rx-beam -> :satellite
-         (->> (d/q '[:find ?from ?to ?bw
+         (->> (d/q '[:find ?from ?to ?data-rate
                      :where [?e :rx-beam ?from]
                      [?e :satellite ?to]
-                     [?e :bandwidth ?bw]]
+                     [?e :data-rate ?data-rate]]
                 @excel/conn)
-           (map (fn [[from to bw]]
-                  [from (str to) bw])))
+           (map (fn [[from to data-rate]]
+                  [from (str to) data-rate])))
 
          ;:satellite -> :tx-beam
-         (->>(d/q '[:find ?from ?to ?bw
-                    :where [?e :satellite ?from]
-                    [?e :tx-beam ?to]
-                    [?e :bandwidth ?bw]]
-               @excel/conn)
-           (map (fn [[from to bw]]
-                  [(str from) to bw])))
+         (->> (d/q '[:find ?from ?to ?data-rate
+                     :where [?e :satellite ?from]
+                     [?e :tx-beam ?to]
+                     [?e :data-rate ?data-rate]]
+                @excel/conn)
+           (map (fn [[from to data-rate]]
+                  [(str from) to data-rate])))
 
          ;:tx-beam -> :tx channel
-         (->> (d/q '[:find ?from ?to ?bw
+         (->> (d/q '[:find ?from ?to ?data-rate
                      :where [?e :tx-beam ?from]
                      [?e :tx-channel ?to]
-                     [?e :bandwidth ?bw]]
+                     [?e :data-rate ?data-rate]]
                 @excel/conn)
-           (map (fn [[from to bw]]
-                  [from (str "." to) bw]))))))
+           (map (fn [[from to data-rate]]
+                  [from (str "." to) data-rate]))))))
 
-    ;(map (fn [[from to]]
-    ;       [from to 5]))))
+;(map (fn [[from to]]
+;       [from to 5]))))
 
 (defn- get-data-from-excel []
   (excel/load-data excel/filename sheet column-map post-fn)
@@ -67,13 +70,16 @@
 
 
 
+
 (defn fetch-data []
   (log/info "Signal Path Service")
 
-  {:title "Signal Path Data"
+  {:title       "Signal Path Data"
    :data-format :data-format/from-to-n
-   :series [{:keys ["from" "to" "weight"]
-             :data (get-data-from-excel)}]})
+   :series      [{:keys ["from" "to" "weight"]
+                  :data (sort-by (juxt (fn [x] (get x 0))
+                                   (fn [x] (get x 1)))
+                          (get-data-from-excel))}]})
 
 
 
@@ -82,9 +88,9 @@
 
   (excel/load-data excel/filename)
 
-  (query-for-data)
+  (sort-by #(get % 0) (query-for-data))
 
-  (get-data-from-excel excel/filename)
+  (get-data-from-excel)
 
   (excel/load-data excel/filename sheet column-map post-fn)
 
