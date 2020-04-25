@@ -22,8 +22,8 @@
 (rf/reg-event-db
   :remove-widget
   (fn-traced [db [_ widget-id]]
-             (delete-widget widget-id)
-             (assoc db :widgets (remove #(= (:key %) widget-id) (:widgets db)))))
+    (delete-widget widget-id)
+    (assoc db :widgets (remove #(= (:key %) widget-id) (:widgets db)))))
 
 
 
@@ -35,31 +35,29 @@
     :none))
 
 
-(defn- widget-title-bar [options]
-  [:div.widget-banner.title-wrapper.grid-toolbar.move-cursor.level ;{:cursor "move"}
-   ;[:div.container.level
-    {:cursor "move"
-     :style    {:width "auto"
-                ;:display :flex
-                :background-color (util/rgba (get options :viz/banner-color {:r 150 :g 150 :b 150 :a 1}))}}
+(defn- widget-title-bar [name options]
+  [:div.widget-banner.title-wrapper.grid-toolbar.move-cursor
+   {:cursor "move"
+    :style  {:width            "auto"
+             :background-color (util/rgba (get options :viz/banner-color {:r 150 :g 150 :b 150 :a 1}))}}
 
-
+   [:div.container.level {:style {:width "auto"}}
     [:div.level-left.has-text-left
      [:h3.title.grid-content.menu-cursor
-      {:cursor "context-menu"
+      {:cursor        "context-menu"
        :on-mouse-down #(.stopPropagation %)
-       :on-click #(do
-                    ;(prn "showing header for " name)
-                    (rf/dispatch-sync [:configure-widget name]))
-       :style    {:color (util/rgba (get options :viz/banner-text-color {:r 0 :g 0 :b 0 :a 1}))}}
+       :on-click      #(do
+                         (prn "showing header for " name)
+                         (rf/dispatch-sync [:configure-widget name]))
+       :style         {:color (util/rgba (get options :viz/banner-text-color {:r 0 :g 0 :b 0 :a 1}))}}
       (get options :viz/title)]]
 
     [:div.level-right.has-text-centered
-     [:button.delete.is-large {:style    {:margin-right "10px"}
+     [:button.delete.is-large {:style         {:margin-right "10px"}
                                :on-mouse-down #(.stopPropagation %)
-                               :on-click #(do
-                                            (rf/dispatch [:remove-widget name])
-                                            (.stopPropagation %))}]]])
+                               :on-click      #(do
+                                                 (rf/dispatch [:remove-widget name])
+                                                 (.stopPropagation %))}]]]])
 
 
 (defn basic-widget [name data options custom-content]
@@ -70,20 +68,20 @@
 
   ;(fn []
   ;
-    [:div.widget-parent {:style {:height (get options :viz/height "100%")
-                                 :width  (get options :viz/width "100%")}}
-     (widget-title-bar options)
+  [:div.widget-parent {:style {:height (get options :viz/height "100%")
+                               :width  (get options :viz/width "100%")}}
+   (widget-title-bar name options)
 
-     [:div.widget.widget-content
-      {:style         {:width        "100%"
-                       :height       "100%"
-                       ;:marginRight  "50px"
-                       ;:marginTop    "5px"
-                       :cursor       :default
-                       :border-style (debug-style options)
-                       :align-items  :stretch
-                       :display      :flex}
-       :on-mouse-down #(.stopPropagation %)}
+   [:div.widget.widget-content
+    {:style         {:width        "100%"
+                     :height       "100%"
+                     ;:marginRight  "50px"
+                     ;:marginTop    "5px"
+                     :cursor       :default
+                     :border-style (debug-style options)
+                     :align-items  :stretch
+                     :display      :flex}
+     :on-mouse-down #(.stopPropagation %)}
 
-      custom-content]])
+    custom-content]])
 
