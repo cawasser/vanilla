@@ -36,20 +36,22 @@
 
 
 (defn- widget-title-bar [options]
-  [:div {:class "title-wrapper grid-toolbar move-cursor"
-         :cursor "move"}
-   [:div.container.level
-    {:style    {:background-color (util/rgba (get options :viz/banner-color {:r 150 :g 150 :b 150 :a 1}))}}
+  [:div.widget-banner.title-wrapper.grid-toolbar.move-cursor.level ;{:cursor "move"}
+   ;[:div.container.level
+    {:cursor "move"
+     :style    {:width "auto"
+                ;:display :flex
+                :background-color (util/rgba (get options :viz/banner-color {:r 150 :g 150 :b 150 :a 1}))}}
 
 
     [:div.level-left.has-text-left
-     [:h3 {:class    "title grid-content menu-cursor"
-           :cursor "context-menu"
-           :on-mouse-down #(.stopPropagation %)
-           :on-click #(do
-                        ;(prn "showing header for " name)
-                        (rf/dispatch-sync [:configure-widget name]))
-           :style    {:color (util/rgba (get options :viz/banner-text-color {:r 0 :g 0 :b 0 :a 1}))}}
+     [:h3.title.grid-content.menu-cursor
+      {:cursor "context-menu"
+       :on-mouse-down #(.stopPropagation %)
+       :on-click #(do
+                    ;(prn "showing header for " name)
+                    (rf/dispatch-sync [:configure-widget name]))
+       :style    {:color (util/rgba (get options :viz/banner-text-color {:r 0 :g 0 :b 0 :a 1}))}}
       (get options :viz/title)]]
 
     [:div.level-right.has-text-centered
@@ -57,7 +59,7 @@
                                :on-mouse-down #(.stopPropagation %)
                                :on-click #(do
                                             (rf/dispatch [:remove-widget name])
-                                            (.stopPropagation %))}]]]])
+                                            (.stopPropagation %))}]]])
 
 
 (defn basic-widget [name data options custom-content]
@@ -68,22 +70,20 @@
 
   ;(fn []
   ;
-    [:div {:class "vanilla widget"
-           :style {:height (get options :viz/height "100%")
-                   :width  (get options :viz/width "100%")}}
+    [:div.widget-parent {:style {:height (get options :viz/height "100%")
+                                 :width  (get options :viz/width "100%")}}
      (widget-title-bar options)
 
-
-     [:div {:class         (str (get options :viz/style-name "widget"))
-            :style         {:width        "100%"
-                            :height       "80%"
-                            :marginRight  "50px"
-                            :marginTop    "5px"
-                            :cursor       :default
-                            :border-style (debug-style options)
-                            :align-items  :stretch
-                            :display      :flex}
-            :on-mouse-down #(.stopPropagation %)}
+     [:div.widget.widget-content
+      {:style         {:width        "100%"
+                       :height       "100%"
+                       ;:marginRight  "50px"
+                       ;:marginTop    "5px"
+                       :cursor       :default
+                       :border-style (debug-style options)
+                       :align-items  :stretch
+                       :display      :flex}
+       :on-mouse-down #(.stopPropagation %)}
 
       custom-content]])
 
