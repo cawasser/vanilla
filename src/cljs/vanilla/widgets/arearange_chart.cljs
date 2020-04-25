@@ -22,8 +22,7 @@
                                           :chart/supported-formats [:data-format/date-yl-yh]
                                           :chart                   {:type     "arearange"
                                                                     :zoomType "x"
-                                                                    :scrollablePlotArea {:minWidth 600
-                                                                                         :scrollPositionX 1}}
+                                                                    :scrollablePlotArea {:scrollPositionX 1}}
 
                                           ; TODO: need to reconsider how to describe the x-axis...
                                           :xAxis                   {:type "datetime"
