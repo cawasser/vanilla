@@ -47,9 +47,19 @@
 (defn make-widget
   [name source-data options]
 
-  [:> TimeLine (->> (:data (:data source-data))
-                 ;parse-times
-                 parse-types-to-color)])
+  [:> TimeLine (merge {:style {:overflow :auto}
+                       :mode "year"
+                       :config {:dataViewPort
+                                {:task
+                                 {:showLabel true
+                                  :style {:borderRadius 1
+                                          :boxShadow "2px 2px 8px #888888"}}}}}
+
+
+
+                 (->> (:data (:data source-data))
+                   ;parse-times
+                   parse-types-to-color))])
 
 
 

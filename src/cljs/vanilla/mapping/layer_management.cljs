@@ -31,10 +31,14 @@
 
 
 (def beam-colors {"Broadcast" [0 1 0 0.15]
-                  "Spot" [1 0 1 0.5]
-                  "Adaptive" [0 0.3 1 0.5]
+                  "Spot"      [1 0 1 0.5]
+                  "Adaptive"  [0 0.3 1 0.5]
                   "Protected" [0.2 0.2 0.6 0.5]
-                  "UHF" [1 0 1 0.5]})
+                  "UHF"       [1 0 1 0.25]
+                  "Y"         [1 1 0 0.25]
+                  "B"         [0 0 1 0.25]
+                  "R"         [1 0 0 0.25]
+                  "G"         [0 1 0 0.25]})
 
 
 
@@ -45,7 +49,7 @@
     (set! (.-color textAttributes) color)
 
     (doall (map (fn [d]
-                  (let [point (WorldWind/Position. (:lat d) (:lon d) (:alt d))
+                  (let [point (WorldWind/Position. (:lat d) (:lon d) (get d :alt 100))
                         loc   (WorldWind/Location.)
                         name  (get d :name "Missing")
                         text  (WorldWind/GeographicText. point name)]
@@ -57,26 +61,32 @@
 
 
 (defn- beam-color [attributes beam]
-  (let [color (get beam-colors beam [1 1 1 0.5])
+  (let [color (get beam-colors beam [1 1 1 0.25])
         [r g b a] color]
-    (prn "beam color" beam "," color)
+    ;(prn "beam color" beam "," color)
 
     (set! (.-interiorColor attributes) (WorldWind/Color. r g b a))
-    (set! (.-outlineColor attributes) (WorldWind/Color. r g b a))))
+    (set! (.-outlineColor attributes) (WorldWind/Color. r g b 1.0))))
 
 
 (defn- beam-layer [title data]
   (let [layer (WorldWind/RenderableLayer. title)]
     (doall (map (fn [d]
-                  (let [attributes (WorldWind/ShapeAttributes.)
-                        point      (WorldWind/Location. (:lat d) (:lon d))
-                        circle     (WorldWind/SurfaceCircle. point (get-in d [:e :diam]) attributes)]
+                  (let [attributes     (WorldWind/ShapeAttributes.)
+                        point          (WorldWind/Location. (:lat d) (:lon d))
+                        label-pt       (WorldWind/Position. (:lat d) (:lon d) (get d :alt 100))
+                        circle         (WorldWind/SurfaceCircle. point (* 1.6 (get-in d [:e :diam])) attributes)
+                        textAttributes (WorldWind/TextAttributes.)
+                        text           (WorldWind/GeographicText. label-pt (get d :name "Missing"))]
 
-                    ;(set! (.-interiorColor attributes) (get (get-in d [:e :purpose]) beam-colors (WorldWind/Color. 1 1 1 0.5)))
-                    ;(set! (.-outlineColor attributes) (get (get-in d [:e :purpose]) beam-colors (WorldWind/Color. 1 1 1 0.5)))
                     (beam-color attributes (get-in d [:e :purpose]))
 
+                    (set! (.-color textAttributes) (.-WHITE WorldWind/Color))
+                    (set! (.-attributes text) textAttributes)
+                    (.addRenderable layer text)
+
                     (.addRenderable layer circle)))
+
              data))
     layer))
 
@@ -84,14 +94,16 @@
 
 
 (defn make-layers []
-  (let [beams (get-in @(rf/subscribe [:app-db :beam-location-service]) [:data :data])
+  (let [x-beams   (get-in @(rf/subscribe [:app-db :beam-location-service]) [:data :data])
         terminals (get-in @(rf/subscribe [:app-db :terminal-location-service]) [:data :data])]
-    (prn "beams" beams beam-layer)
+
+    ;(prn "x-beams" @(rf/subscribe [:app-db :beam-location-service]) x-beams)
+    ;(prn "terminals" @(rf/subscribe [:app-db :terminal-location-service]) terminals)
 
     ["blue-marble"
      (location-layer "Cities" cities (.-YELLOW WorldWind/Color))
      (location-layer "Terminals" terminals (.-WHITE WorldWind/Color))
-     (beam-layer "GDAs" beams)])) ;beam-coverage)])
+     (beam-layer "X Beams" x-beams)]))
 
 
 

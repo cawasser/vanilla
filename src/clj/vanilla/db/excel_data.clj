@@ -19,3 +19,35 @@
     (d/transact! conn)))
 
 
+
+
+(comment
+  (def sheet "Missions")
+  (def column-map {:A :name
+                   :B :organization
+                   :C :start-time
+                   :D :end-time})
+  (def post-fn (fn [x] x))
+
+  (load-workbook filename)
+
+  (->> (load-workbook filename)
+    (select-sheet  "Missions"))
+
+  (->> (load-workbook filename)
+    (select-sheet  "Missions")
+    row-seq)
+
+  (->> (load-workbook "resources/public/excel/Demo - 9102.xlsx")
+    (select-sheet "Missions")
+    (select-columns {:A :name :B :organization :C :start-time :D :end-time})
+    (drop 1))
+
+  (->> (load-workbook filename)
+    (select-sheet "SCN_NETWORK_CARRIER_VW")
+    (select-columns {:A :satellite :B :rx-beam :C :rx-channel :D :tx-beam
+                     :E :tx-channel :F :plan :G :mission-name :H :service
+                     :R :data-rate})
+    (drop 1))
+
+  ())

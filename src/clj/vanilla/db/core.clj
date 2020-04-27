@@ -135,7 +135,12 @@
       ;20
       ["24000" "carousel-service" "Multi-Data Carousel"
        "data-format/carousel" "vanilla.carousel-service/fetch-data"
-       "returns carousel widget that supports multiple widgets"]]}))
+       "returns carousel widget that supports multiple widgets"]
+
+      ;21
+      ["25000" "beam-service" "'General' Beam Data"
+       "data-format/lat-lon-e" "vanilla.beam-location-service/fetch-data"
+       "returns 'general' beam location data for 2D/3D display"]]}))
 
 
 
