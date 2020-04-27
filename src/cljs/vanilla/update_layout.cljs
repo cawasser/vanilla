@@ -23,16 +23,16 @@
   (POST "/services"
         {:format          (ajax/json-request-format {:keywords? true})
          :response-format (ajax/json-response-format {:keywords? true})
-         :params          {:sources sources}
+         :params          {:sources (clojure.core/pr-str sources)}
          :handler         (prn "Handled DS subscribe: " sources)
          :error-handler   (prn "Error handling DS subscribe" sources)}))
 
 
 
 (defn save-layout [layout]
-  (prn "saving layout: " (clojure.core/pr-str layout))
+  ;(prn "saving layout: " (clojure.core/pr-str layout))
 
-  ;(data-source-subscribe (mapv #(:data-source %) layout))
+  (data-source-subscribe (mapv #(:data-source %) layout))
 
   (POST "/save-layout"
         {:format          (ajax/json-request-format {:keywords? true})
