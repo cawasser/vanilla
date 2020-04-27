@@ -26,6 +26,18 @@
   component/Lifecycle
   (start [component]
 
+    (prn "WebsocketSERVER  "
+         "////Data-sources: " data-sources
+         ;"////handler: " handler
+         ;"////webserver-adapter: " webserver-adapter
+         ;"////options: " options
+         ;"////ring post: " ring-ajax-post
+         ;"////ring handshake" ring-ajax-get-or-ws-handshake
+         ;"////ch-recv: " ch-recv " /send " chsk-send!
+         ;"////connected-uids: " connected-uids
+         "////router: " router)
+
+
     (let [{:keys [ch-recv send-fn ajax-post-fn
                   ajax-get-or-ws-handshake-fn connected-uids]} (sente/make-channel-socket-server! webserver-adapter options)
           ch-out (async/chan (async/sliding-buffer 1000))
@@ -37,7 +49,7 @@
       (async/go-loop []
         (let [event (async/<! ch-out)]
           (doseq [cid (:any @connected-uids)]
-            ;(prn "sending " event " to " cid)
+            (prn "sending " event " to " cid)
             (send-fn cid event))
           (recur)))
 

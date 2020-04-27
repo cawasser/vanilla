@@ -18,9 +18,21 @@
                  (toastr/error "Layout Save Failed")))
              (assoc db :new-login false)))
 
+(defn data-source-subscribe [sources]
+
+  (POST "/services"
+        {:format          (ajax/json-request-format {:keywords? true})
+         :response-format (ajax/json-response-format {:keywords? true})
+         :params          {:sources sources}
+         :handler         (prn "Handled DS subscribe: " sources)
+         :error-handler   (prn "Error handling DS subscribe" sources)}))
+
+
 
 (defn save-layout [layout]
-  ;(prn "saving layout: " (clojure.core/pr-str layout))
+  (prn "saving layout: " (clojure.core/pr-str layout))
+
+  ;(data-source-subscribe (mapv #(:data-source %) layout))
 
   (POST "/save-layout"
         {:format          (ajax/json-request-format {:keywords? true})
@@ -64,8 +76,9 @@
                                               :options ((:options conversion) options)))
                                           data)]
 
-                 ;(prn ":set-layout CONVERTED: " converted-data
-                 ;     "///// nextid: " highestNextid)
+                 ;(prn ":set-layout CONVERTED:  " converted-data)
+
+                 (data-source-subscribe (mapv #(:data-source %) converted-data))
 
                  (assoc db :widgets converted-data
                            :next-id (uuid/uuid-string (uuid/make-random-uuid))))
