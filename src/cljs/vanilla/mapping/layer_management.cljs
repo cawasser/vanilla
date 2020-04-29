@@ -27,7 +27,13 @@
              {:name "Wagga Wagga" :lat -35.117275 :lon 147.356522 :alt 100}
              {:name "Orlando" :lat 28.538336 :lon -81.379234 :alt 100}
              {:name "San Diego" :lat 32.715736 :lon -117.161087 :alt 100}
-             {:name "Dulles" :lat 38.951666 :lon -77.448055 :alt 100}])
+             {:name "Dulles" :lat 38.951666 :lon -77.448055 :alt 100}
+             {:name "Montreal" :lat 45.50884 :lon -73.58781 :alt 100}
+             {:name "London" :lat 51.50853 :lon -0.12574 :alt 100}
+             {:name "Mumbai" :lat 19.07283 :lon 72.88261 :alt 100}
+             {:name "Tokyo" :lat 35.6895 :lon 139.69171 :alt 100}
+             {:name "Sau Paulo" :lat -23.5475 :lon -46.63611 :alt 100}
+             {:name "Cartagena" :lat 10.39972 :lon -75.51444 :alt 100}])
 
 
 (def beam-colors {"Broadcast" [0 1 0 0.15]
