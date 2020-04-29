@@ -1,6 +1,7 @@
 (ns vanilla.url-handlers
   (:require
     [vanilla.db.core :as db]
+    [vanilla.service-deps :as service-deps]
     [clojure.core]))
 
 
@@ -8,12 +9,23 @@
 ;
 ; HTML endpoint handlers
 
+(defn get-map [service-list id]
+  (->> service-list
+       (filter #(= (:name %) id))
+       first))
 
 (defn get-services []
   (db/get-services db/vanilla-db))
 
 (defn subscribe-to-services [services]
-  (prn "URL handler subscribe: " (distinct (clojure.core/read-string services))))
+
+  (let [distinct-str (into [] (distinct (clojure.core/read-string services)))
+        new-service-deps (mapv #(get-map service-deps/datasources %) distinct-str)]
+
+    (prn "URL handler subscribing: " distinct-str
+         "/////// DEFS: " new-service-deps)
+
+    (reset! service-deps/empty-sources new-service-deps)))
 
 
 (def from-sqlite {:id :key :data_source :data-source :data_grid :data-grid})
@@ -68,6 +80,19 @@
 
 
 (comment
+
+  (def services
+    "[:sankey-service :usage-data :bubble-service :scatter-service-data :sankey-service]")
+
+  (def new-service-deps
+    [{:name :sankey-service, :read-fn :vanilla.sankey-service/fetch-data}
+     {:name :usage-data, :read-fn :vanilla.usage-data-service/fetch-data}
+     {:name :bubble-service, :read-fn :vanilla.bubble-service/fetch-data}
+     {:name :scatter-service-data, :read-fn :vanilla.scatter-service/fetch-data}])
+
+  (def tmp (into [] (distinct (clojure.core/read-string services))))
+  (mapv #(get-map service-deps/datasources %) tmp)
+  @service-deps/empty-sources
 
   (create-user
     {:username "chad-uri-handler"

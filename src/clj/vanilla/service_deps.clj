@@ -20,7 +20,8 @@
             [vanilla.signal-path-service]
             [vanilla.beam-location-service]))
 
-
+(def empty-sources
+  (atom []))
 
 (def datasources
   [{:name    :spectrum-traces
