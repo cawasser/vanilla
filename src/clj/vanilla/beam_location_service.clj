@@ -29,7 +29,7 @@
               [?e :city ?city]]
          @excel/conn)
     (map (fn [[name lat lon radius t city]]
-           {:name (str "X" (int name)) :lat lat :lon lon
+           {:name (str "X" name) :lat lat :lon lon
             :e {:diam (* radius 2) :purpose t :city city}}))))
 
 

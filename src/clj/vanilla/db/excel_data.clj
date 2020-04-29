@@ -24,7 +24,7 @@
 (comment
   (def sheet "Missions")
   (def column-map {:A :name
-                   :B :organization
+                   :E :organization
                    :C :start-time
                    :D :end-time})
   (def post-fn (fn [x] x))
@@ -32,16 +32,25 @@
   (load-workbook filename)
 
   (->> (load-workbook filename)
-    (select-sheet  "Missions"))
+    (select-sheet  "Sat-Power-1000"))
 
   (->> (load-workbook filename)
-    (select-sheet  "Missions")
-    row-seq)
+    (select-sheet  "Sat-Power-1000")
+    row-seq
+    (drop 1)
+    (take 1))
 
-  (->> (load-workbook "resources/public/excel/Demo - 9102.xlsx")
-    (select-sheet "Missions")
-    (select-columns {:A :name :B :organization :C :start-time :D :end-time})
-    (drop 1))
+  (->> (load-workbook filename)
+    (select-sheet "Sat-Power-1000")
+    (select-columns {:A :satellite :B :freq :C :cp1 :D :cp2 :E :cp3})
+    (drop 1)
+    (take 5)
+    (d/transact! conn))
+
+  (->> (load-workbook filename)
+    (select-sheet "Sat-Power-1000")
+    (select-columns column-map))
+
 
   (->> (load-workbook filename)
     (select-sheet "SCN_NETWORK_CARRIER_VW")
@@ -49,5 +58,16 @@
                      :E :tx-channel :F :plan :G :mission-name :H :service
                      :R :data-rate})
     (drop 1))
+
+
+
+  (->> (load-workbook filename)
+    (select-sheet  "Sat-Power-1000")
+    row-seq
+    (remove nil?)
+    (map cell-seq)
+    (map #(map read-cell-value %)))
+
+
 
   ())
