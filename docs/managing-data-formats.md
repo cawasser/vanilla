@@ -57,8 +57,14 @@ Stoplight   | entity              |              |           |
 simple-text | string              |              |           |
 data-table  | entities            |              |           |
 Arearange   | date-yl-yh
+Continent Map  (2D)| cont-n |
+Australia Map (2D) | lat-lon-label |
+WorldWind (3D)   | lat-lon-label | lat-lon-e | cont-n |
+Timeline    | task-link |
 
 
+The Carousel widget is special. It is designed to hold _any_ widget "content," meaning the guts of a widget (minus the
+banner bar, title, controls, etc.)
 
 
 ### Data Source Format Support
