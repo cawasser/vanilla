@@ -5,7 +5,8 @@
             [vanilla.widgets.worldwind]
             [vanilla.widgets.timeline]
             [vanilla.widgets.carousel]
-            [vanilla.widgets.rough-widget]))
+            [vanilla.widgets.rough-widget]
+            [vanilla.widgets.storm-diagram-widget]))
 
 
 
@@ -81,6 +82,18 @@
                :label       "Hand drawn"
                :options     {:viz/title        "Hand drawn"
                              :viz/banner-color {:r 0xc0 :g 0x00 :b 0xc0 :a 1}
+                             :viz/banner-text-color white}}
+
+              {:name        :storm-diagram-widget
+               :basis       :simple
+               :type        :storm-diagram-widget
+               :build-fn    vanilla.widgets.storm-diagram-widget/make-widget
+               :ret_types   [:data-format/x-y :data-format/x-y-n :data-format/x-y-e :data-format/y
+                             :data-format/lat-lon-label :data-format/cont-n]
+               :icon        "/images/rough-widget.png"
+               :label       "Diagram"
+               :options     {:viz/title        "Diagram"
+                             :viz/banner-color {:r 0xc0 :g 0xc0 :b 0x0a :a 1}
                              :viz/banner-text-color white}}
 
               {:name        :worldwind-widget
