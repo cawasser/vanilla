@@ -6,6 +6,7 @@
     "highcharts": "^7.2.1",
     "highcharts-more": "^0.1.7",
     "highlight.js": "9.15.10",
+    "jquery": "^3.5.0",
     "minimist": "^1.2.5",
     "mobx": "^4.15.4",
     "mobx-react": "^5.4.4",
