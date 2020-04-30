@@ -15,19 +15,20 @@
     <link rel="icon" type="image/png" href="images/vanilla-icon.png" />
 
     <style>
-    #splash {
+    .splash {
       background-image: url('images/blackhammersplash.png');
+      background-repeat: no-repeat;
     }
     </style>
 
   </head>
   <body>
-    <div id="app">
+    <div id="app" class="splash" style="width: 100vw; height: 100vh; background-color: #2F4F4F">
         <h1.title style="color:white">Loading...</h1.title>
         <progress class="progress is-success" max="100">45%</progress>
     </div>
-    <div id="dashboard">
-      <canvas id="splash" class="d-block" style="width: 100vw; height: 100vh; background-color: #2F4F4F"></canvas>
+    <div>
+      <canvas class="d-block" style="width: 100vw; height: 100vh; background-color: #2F4F4F"></canvas>
     </div>
 
     <script type="text/javascript">
