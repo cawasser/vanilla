@@ -7,11 +7,11 @@
 (def schema {})
 (def conn (d/create-conn schema))
 
-(def filename "resources/public/excel/Demo.xlsx")
+(def filename "public/excel/Demo.xlsx")
 
 
 (defn load-data [filename sheet column-map post-fn]
-  (->> (load-workbook filename)
+  (->> (load-workbook-from-resource filename)
     (select-sheet sheet)
     (select-columns column-map)
     (drop 1)
