@@ -285,7 +285,10 @@
 
   (let [version (rf/subscribe [:version])]
     (fn []
-      [:h6.subtitle.is-6.has-text-light @version])))
+      [:div.control
+       [:div.tags.has-addons
+        [:span.tag.is-dark "version"]
+        [:span.tag.is-dark @version]]])))
 
 
 
