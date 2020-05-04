@@ -64,7 +64,8 @@
 (defn verify-user-password
     "Take in a user and password and determine if they are in the database"
     [credentials]
-    ;(prn "url handlers verify creds - " credentials)
+    ;(prn "url handlers verify creds - " credentials
+    ;     "#######" (some? (db/verify-credentials db/vanilla-db credentials)))
     (some? (db/verify-credentials db/vanilla-db credentials)))
 
 (defn get-requested-user

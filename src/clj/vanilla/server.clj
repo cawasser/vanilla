@@ -34,7 +34,7 @@
                                           "vanilla"
                                           "vanilla"
                                           "version number not found"))
-  (dash/start @deps/empty-sources))
+  (dash/start deps/datasources))    ;@deps/empty-sources
 
 (defn -main [& [port]]
   (start-dashboard))

@@ -3,6 +3,7 @@
     [vanilla.update-layout :as layout]
     [re-frame.core :as rf]
     [reagent.core :as r]
+    [dashboard-clj.core :as d]
     ["toastr" :as toastr]
     [day8.re-frame.tracing :refer-macros [fn-traced]]
     [ajax.core :as ajax :refer [GET POST]]))
@@ -77,7 +78,8 @@
   (if (= bool-val true)
     (do
       (rf/dispatch [:login-message {:status 200} "Welcome to Vanilla!"])
-      (rf/dispatch-sync [:set-current-user username]))
+      (rf/dispatch-sync [:set-current-user username])
+      (d/connect-to-data-sources))
     (do
       (rf/dispatch [:login-message {:status 500} "Login failed, try again"])
       [login-failed-pop-up])))

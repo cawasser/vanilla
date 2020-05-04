@@ -196,7 +196,7 @@
   (doseq [w defs/widgets]
     (rf/dispatch-sync [:widget-type w]))
 
-  (d/connect-to-data-sources)
+  ;(d/connect-to-data-sources)
 
   (prn "rendering home-page")
   (r/render home-page (.getElementById js/document "app")))
