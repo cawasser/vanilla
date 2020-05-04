@@ -17,6 +17,22 @@
    :series        []})
 
 
+(defn data-conversion [chart-type data options]
+
+  (let [base [{:name "Basemap"
+               :borderColor "#A0A0A0"
+               :showInLegend false}
+              {:name "Separators"
+               :type "mapline"
+               :nullColor "#707070"
+               :showInLegend false
+               :enableMouseTracking false}
+              {:type  "mappoint"
+               :name  "data"
+               :color "#FFFFFF"
+               :data  (get-in data [:data :data])}]]
+    base))
+
 
 ;;;;;;;;;;;;;;
 ;
@@ -33,6 +49,6 @@
 
                     :merge-plot-option {:default plot-options}
 
-                    :conversions       {:default mm/default-conversion}}))
+                    :conversions       {:default data-conversion}}))
 
 

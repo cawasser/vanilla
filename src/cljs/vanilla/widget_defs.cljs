@@ -1,7 +1,11 @@
 (ns vanilla.widget-defs
   (:require [vanilla.widgets.table-widget]
             [vanilla.widgets.stoplight-widget]
-            [vanilla.widgets.simple-text]))
+            [vanilla.widgets.simple-text]
+            [vanilla.widgets.worldwind]
+            [vanilla.widgets.timeline]
+            [vanilla.widgets.carousel]
+            [vanilla.widgets.rough-widget]))
 
 
 
@@ -66,6 +70,51 @@
                :label       "Current Time"
                :options     {:viz/title        "Time"
                              :viz/banner-color {:r 0x00 :g 0xff :b 0xff :a 1}}}
+
+              {:name        :rough-widget
+               :basis       :simple
+               :type        :rough-widget
+               :build-fn    vanilla.widgets.rough-widget/make-widget
+               :ret_types   [:data-format/x-y :data-format/x-y-n :data-format/x-y-e :data-format/y
+                             :data-format/lat-lon-label :data-format/cont-n]
+               :icon        "/images/rough-widget.png"
+               :label       "Hand drawn"
+               :options     {:viz/title        "Hand drawn"
+                             :viz/banner-color {:r 0xc0 :g 0x00 :b 0xc0 :a 1}
+                             :viz/banner-text-color white}}
+
+              {:name        :worldwind-widget
+               :basis       :simple
+               :type        :worldwind-widget
+               :build-fn    vanilla.widgets.worldwind/make-widget
+               :ret_types   [:data-format/lat-lon-label :data-format/lat-lon-e :data-format/cont-n]
+               :icon        "/images/worldwind-widget.png"
+               :label       "3d World"
+               :options     {:viz/title        "3d World"
+                             :viz/banner-color {:r 0x99 :g 0x00 :b 0xff :a 1}
+                             :viz/banner-text-color white}}
+
+              {:name        :timeline-widget
+               :basis       :simple
+               :type        :timeline-widget
+               :build-fn    vanilla.widgets.timeline/make-widget
+               :ret_types   [:data-format/task-link]
+               :icon        "/images/timeline-widget.png"
+               :label       "Timeline"
+               :options     {:viz/title        "Timeline"
+                             :viz/banner-color {:r 0x99 :g 0xff :b 0x00 :a 1}
+                             :viz/banner-text-color black}}
+
+              {:name        :carousel-widget
+               :basis       :simple
+               :type        :carousel-widget
+               :build-fn    vanilla.widgets.carousel/make-widget
+               :ret_types   [:data-format/carousel]
+               :icon        "/images/carousel-widget.png"
+               :label       "Carousel"
+               :options     {:viz/title        "Carousel"
+                             :viz/banner-color {:r 0x99 :g 0xff :b 0x00 :a 1}
+                             :viz/banner-text-color black}}
 
               {:name      :table-widget
                :basis     :simple

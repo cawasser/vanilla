@@ -47,7 +47,8 @@
                  [ring/ring-json "0.5.0"]
                  [selmer "1.12.18"]
                  [thheller/shadow-cljs "2.8.94" :scope "provided"]
-
+                 [dk.ative/docjure "1.12.0"]
+                 [datascript "0.18.10"]
                  [trptcolin/versioneer "0.2.0"]
                  [environ "1.1.0"]
                  [ring "1.8.0"]
@@ -64,7 +65,9 @@
                  [seancorfield/next.jdbc "1.0.12"]
                  [org.clojure/tools.nrepl "0.2.13"]
                  [day8.re-frame/re-frame-10x "0.4.3"]
-                 [day8.re-frame/tracing "0.5.3"]]
+                 [day8.re-frame/tracing "0.5.3"]
+                 [clj-time "0.15.2"]
+                 [monoid/rough-cljs "1.0.0"]]
 
   :min-lein-version "2.6.1"
 

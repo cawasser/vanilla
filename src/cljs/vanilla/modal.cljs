@@ -91,8 +91,8 @@
    [modal-background]
    [modal-card
     (modal-header title is-active)
-    (for [item modal-body-list]
-       [modal-body-section item])
+    (for [[idx item] (map-indexed vector modal-body-list)]
+       ^{:key idx} [modal-body-section item])
     (modal-footer footer-button-enabled footer-button-fn footer-button-text is-active)]])
 
 

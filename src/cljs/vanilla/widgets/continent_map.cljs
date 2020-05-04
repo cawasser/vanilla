@@ -3,21 +3,33 @@
             ["@highcharts/map-collection/custom/world.geo.json" :as world-geo]))
 
 
+
+
 (defn plot-options
   [chart-config data options]
 
   ;(prn "column/plot-options " chart-config)
 
-  {:plotOptions   {:series {:animation (:viz/animation options false)}
-                   :bar    {:dataLabels   {:enabled (get options :viz/dataLabels false)
-                                           :format  (get options :viz/labelFormat "")}
-                            :pointPadding 0.2}}
+  {:plotOptions   {:series {:animation (:viz/animation options false)}}
    :mapNavigation {:enabled       true
-                   :buttonOptions {:verticalAlign "bottom"}}
+                   :buttonOptions {:verticalAlign "bottom"}}})
 
-   :colorAxis     {:min 0}
 
-   :series        []})
+(defn data-conversion [chart-type data options]
+
+  (let [base [{:name "Basemap"
+               :borderColor "#A0A0A0"
+               :showInLegend false}
+              {:name "Separators"
+               :type "mapline"
+               :nullColor "#707070"
+               :showInLegend false
+               :enableMouseTracking false}
+              {:type  "mappoint"
+               :name  "data"
+               :color "#FFFFFF"
+               :data  (get-in data [:data :data])}]]
+    base))
 
 
 
@@ -36,5 +48,5 @@
 
                     :merge-plot-option {:default plot-options}
 
-                    :conversions       {:default mm/default-conversion}}))
+                    :conversions       {:default data-conversion}}))
 

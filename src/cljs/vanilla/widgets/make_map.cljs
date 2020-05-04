@@ -186,7 +186,9 @@
         all-configs (merge-configs base-config data options)]
 
 
-    ;(prn "MAKE-chart " chart-type
+;    (prn "MAKE-map " chart-type
+      ;" //// (data) " data
+;      " //// (all-configs) " all-configs
     ;  " //// (chart-config)" chart-config
     ;  " ////// (chart-reg-entry)" chart-reg-entry)
 
