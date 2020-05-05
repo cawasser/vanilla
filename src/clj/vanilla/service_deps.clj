@@ -20,7 +20,7 @@
             [vanilla.signal-path-service]
             [vanilla.beam-location-service]))
 
-(def empty-sources
+(def subscribed-sources
   (atom []))
 
 (def datasources

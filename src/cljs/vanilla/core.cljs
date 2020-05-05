@@ -86,11 +86,11 @@
 ;
 ;
 
-(defn get-services []
-  (GET "/services" {:headers         {"Accept" "application/transit+json"}
-                    :response-format (ajax/json-response-format {:keywords? true})
-                    :handler         #(rf/dispatch-sync [:set-services %])}))
-
+;(defn get-services []
+;  (GET "/services" {:headers         {"Accept" "application/transit+json"}
+;                    :response-format (ajax/json-response-format {:keywords? true})
+;                    :handler         #(rf/dispatch-sync [:set-services %])}))
+;
 
 
 
@@ -169,7 +169,7 @@
   (rf/dispatch-sync [:initialize])
 
   (get-version)
-  (get-services)
+  ;(get-services)
 
   ; TODO eliminate register-global-app-state-subscription (attach subscription in add-widget)
   (subs/register-global-app-state-subscription)

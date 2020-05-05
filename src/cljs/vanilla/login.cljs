@@ -79,6 +79,7 @@
     (do
       (rf/dispatch [:login-message {:status 200} "Welcome to Vanilla!"])
       (rf/dispatch-sync [:set-current-user username])
+      (layout/get-services)
       (d/connect-to-data-sources))
     (do
       (rf/dispatch [:login-message {:status 500} "Login failed, try again"])

@@ -1,36 +1,31 @@
 (ns dashboard-clj.components.websocket
   (:require [com.stuartsierra.component :as component]
     [taoensso.sente :as sente]
+    [clojure.tools.logging :as log]
     [clojure.core.async :as async]
     [dashboard-clj.data-source :as ds]))
 
 (defmulti -client-ev-handler (fn [_ y] (:id y)))
 
-(defn client-ev-handler [data-sources ev-msg]
-  (-client-ev-handler data-sources ev-msg))
+(defn client-ev-handler [sources ev-msg]
+  (-client-ev-handler sources ev-msg))
 
-(defmethod -client-ev-handler :default [sources {:as ev-msg :keys [event id ?data ring-req ?reply-fn send-fn]}]
-  (let [session (:session ring-req)
-        uid (:uid session)]
-  (println "un handled client event" uid
-           "////" id
-           "////" event
-           "////" ?data)))
+(defmethod -client-ev-handler :default
+  [sources {:as ev-msg :keys [?reply-fn ch-recv client-id connected-uids uid event id ring-req ?data send-fn]}]
+  (case id
+    :chsk/uidport-open  (log/info "Port open to UID: " uid)
+    :chsk/uidport-close (log/info "Port closed to UID: " uid)   ;; probably trigger some subscription cleanup here if user didnt logout
+    :chsk/ws-ping       (log/info "Websocket ping")
+    (println "un-handled client event" id)))
 
-;(defmethod -client-ev-handler :chsk/uidport-open
-;  [uid]
-;  (prn "UID ***** OPEN: " uid )) ;" //// " event " //// " ?data " //// " id))
-;
-;(defmethod -client-ev-handler :chsk/ws-ping
-;  [id]
-;  (prn "Pinged from ws: " id ))  ;" uid " uid " event " event))
 
 (defmethod -client-ev-handler :dashboard-clj.core/sync
   [{:as ctx :keys [data-sources chsk-send!]} {:as ev-msg :keys [?reply-fn ch-recv client-id connected-uids uid event id ring-req ?data send-fn]}]
-  (doseq [event (map #(ds/data->event (:name %) (deref (:data %)))
-                  data-sources)]
-    (prn "Dashboard/sync: " ev-msg
-         "////" chsk-send!)
+  (doseq [event (map #(ds/data->event (:name %) (deref (:data %))) data-sources)]
+
+    (log/info "Dashboard/sync event sending: " (get-in (second (second event)) [:data :title]) " to UID: " uid)
+
+    ;; chsk-send! and send-fn are the same here, dont think it matter which we use
     (chsk-send! uid event)))  ;:sente/all-users-without-uid
 
 
@@ -129,6 +124,80 @@
               :request-method :get},
    :?data nil,
    :send-fn [taoensso.sente$make_channel_socket_server_BANG_$send_fn__25287 0x4002dbb4 "taoensso.sente$make_channel_socket_server_BANG_$send_fn__25287@4002dbb4"]})
+
+
+  ;;dashboard core sync
+
+  ;(def ctx
+  ;  {:data-sources (#dashboard_clj.data_source.DataSource{:name :usage-data,
+  ;                                                        :read-fn :vanilla.usage-data-service/fetch-data,
+  ;                                                        :params nil,
+  ;                                                        :schedule nil,
+  ;                                                        :data #object[clojure.lang.Atom 0x7601f8e1 {:status :ready,
+  ;                                                                                                    :val {:title "Usage Data",
+  ;                                                                                                          :data-format :data-format/label-y,
+  ;                                                                                                          :src/x-title "Fruit",
+  ;                                                                                                          :src/y-title "Qty.",
+  ;                                                                                                          :series [{:keys ["name" "y"],
+  ;                                                                                                                    :data [["Apples" 86.5233863614918]
+  ;                                                                                                                           ["Pears" 95.2867326648154]
+  ;                                                                                                                           ["Oranges" 69.16955373938431]
+  ;                                                                                                                           ["Plums" 25.517902763676116]
+  ;                                                                                                                           ["Bananas" 79.40914129582353]
+  ;                                                                                                                           ["Peaches" 30.47924606668271]
+  ;                                                                                                                           ["Prunes" 22.77266086451992]
+  ;                                                                                                                           ["Avocados" 87.56229626275015]]}]}}],
+  ;                                                        :output-chan #object[clojure.core.async.impl.channels.ManyToManyChannel 0x33036845 "clojure.core.async.impl.channels.ManyToManyChannel@33036845"]}
+  ;                   #dashboard_clj.data_source.DataSource{:name :carousel-service,
+  ;                                                         :read-fn :vanilla.carousel-service/fetch-data,
+  ;                                                         :params nil,
+  ;                                                         :schedule nil,
+  ;                                                         :data #object[clojure.lang.Atom 0x3d600af {:status :ready,
+  ;                                                                                                    :val {:title "carousel data",
+  ;                                                                                                          :data-format
+  ;                                                                                                                 :data-format/carousel,
+  ;                                                                                                          :data "heatmap-data"}}],
+  ;                                                         :output-chan #object[clojure.core.async.impl.channels.ManyToManyChannel 0x2fabf39 "clojure.core.async.impl.channels.ManyToManyChannel@2fabf39"]}),
+  ;   :chsk-send! #object[taoensso.sente$make_channel_socket_server_BANG_$send_fn__25287 0x604c36b8 "taoensso.sente$make_channel_socket_server_BANG_$send_fn__25287@604c36b8"]} )
+  ;
+  ;
+  (def event
+    [:data-source/event [:carousel-service {:data
+                                            {:title "carousel data",
+                                             :data-format :data-format/carousel,
+                                             :data "heatmap-data"}}]])
+
+  (get-in (second (second event)) [:data :title])
+
+  ;(def data-sources
+  ;  (#dashboard_clj.data_source.DataSource{:name :usage-data,
+  ;                                         :read-fn :vanilla.usage-data-service/fetch-data,
+  ;                                         :params nil,
+  ;                                         :schedule nil,
+  ;                                         :data #object[clojure.lang.Atom 0x7601f8e1 {:status :ready,
+  ;                                                                                     :val {:title "Usage Data",
+  ;                                                                                           :data-format :data-format/label-y,
+  ;                                                                                           :src/x-title "Fruit",
+  ;                                                                                           :src/y-title "Qty.",
+  ;                                                                                           :series [{:keys ["name" "y"],
+  ;                                                                                                     :data [["Apples" 86.5233863614918]
+  ;                                                                                                            ["Pears" 95.2867326648154]
+  ;                                                                                                            ["Oranges" 69.16955373938431]
+  ;                                                                                                            ["Plums" 25.517902763676116]
+  ;                                                                                                            ["Bananas" 79.40914129582353]
+  ;                                                                                                            ["Peaches" 30.47924606668271]
+  ;                                                                                                            ["Prunes" 22.77266086451992]
+  ;                                                                                                            ["Avocados" 87.56229626275015]]}]}}],
+  ;                                         :output-chan #object[clojure.core.async.impl.channels.ManyToManyChannel 0x33036845 "clojure.core.async.impl.channels.ManyToManyChannel@33036845"]}
+  ;    #dashboard_clj.data_source.DataSource{:name :carousel-service,
+  ;                                          :read-fn :vanilla.carousel-service/fetch-data,
+  ;                                          :params nil, :schedule nil,
+  ;                                          :data #object[clojure.lang.Atom 0x3d600af {:status :ready,
+  ;                                                                                     :val {:title "carousel data",
+  ;                                                                                           :data-format :data-format/carousel,
+  ;                                                                                           :data "heatmap-data"}}],
+  ;                                          :output-chan #object[clojure.core.async.impl.channels.ManyToManyChannel 0x2fabf39 "clojure.core.async.impl.channels.ManyToManyChannel@2fabf39"]}))
+
 
 
   ()

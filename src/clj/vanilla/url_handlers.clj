@@ -17,7 +17,7 @@
 (defn get-services []
   (db/get-services db/vanilla-db))
 
-(defn subscribe-to-services [services]
+(defn subscribe-to-services [user services]
 
   (let [distinct-str (into [] (distinct (clojure.core/read-string services)))
         new-service-deps (mapv #(get-map service-deps/datasources %) distinct-str)]
@@ -25,7 +25,7 @@
     (prn "URL handler subscribing: " distinct-str
          "/////// DEFS: " new-service-deps)
 
-    (reset! service-deps/empty-sources new-service-deps)))
+    (reset! service-deps/subscribed-sources new-service-deps)))
 
 
 (def from-sqlite {:id :key :data_source :data-source :data_grid :data-grid})
@@ -64,8 +64,7 @@
 (defn verify-user-password
     "Take in a user and password and determine if they are in the database"
     [credentials]
-    ;(prn "url handlers verify creds - " credentials
-    ;     "#######" (some? (db/verify-credentials db/vanilla-db credentials)))
+    ;(prn "url handlers verify creds - " credentials)
     (some? (db/verify-credentials db/vanilla-db credentials)))
 
 (defn get-requested-user

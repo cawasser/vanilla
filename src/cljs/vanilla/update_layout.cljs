@@ -9,6 +9,17 @@
     [cljs-uuid-utils.core :as uuid]))
 
 
+(defn get-services []
+  (GET "/services" {:headers         {"Accept" "application/transit+json"}
+                    :response-format (ajax/json-response-format {:keywords? true})
+                    :handler         #(rf/dispatch-sync [:set-services %])}))
+
+
+;(rf/reg-sub
+;  :active-widgets-by-user
+;  (fn [db _]
+;    (get db :widgets)))
+
 (rf/reg-event-db
   :layout-message
   (fn-traced [db [_ response]]
@@ -23,7 +34,7 @@
   (POST "/services"
         {:format          (ajax/json-request-format {:keywords? true})
          :response-format (ajax/json-response-format {:keywords? true})
-         :params          {:sources (clojure.core/pr-str sources)}
+         :params          {:user @(rf/subscribe [:get-current-user]) :sources (clojure.core/pr-str sources)}
          :handler         (prn "Handled DS subscribe: " sources)
          :error-handler   (prn "Error handling DS subscribe" sources)}))
 
