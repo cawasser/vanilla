@@ -32,7 +32,7 @@
                                :R :data-rate}
                   :post-fn    (fn [x] x)}
                  {:sheet      "Missions"
-                  :column-map {:A :name
+                  :column-map {:A :task-name
                                :B :organization
                                :C :start-time
                                :D :end-time}
