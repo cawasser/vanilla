@@ -10,6 +10,8 @@
 
 (def filename "public/excel/Demo.xlsx")
 
+; drf: "data reduction factor"
+(def drf 10)
 
 (def excel-defs [{:sheet      "Beams"
                   :column-map {:A :band
@@ -45,7 +47,36 @@
                                :N :tx-beam
                                :O :rx-beam
                                :P :rx-channel}
-                  :post-fn (fn [x] x)}])
+                  :post-fn (fn [x] x)}
+                 {:sheet "Sat-Power-1000"
+                  :column-map {:A :satellite-id
+                               :B :freq
+                               :C :channel-1-power
+                               :D :channel-2-power
+                               :E :channel-3-power}
+                  :post-fn (fn [x] (take-nth drf x))}
+                 {:sheet "Sat-Power-2000"
+                  :column-map {:A :satellite-id
+                               :B :freq
+                               :C :channel-1-power
+                               :D :channel-2-power
+                               :E :channel-3-power}
+                  :post-fn (fn [x] (take-nth drf x))}
+                 {:sheet "Sat-Power-3000"
+                  :column-map {:A :satellite-id
+                               :B :freq
+                               :C :channel-1-power
+                               :D :channel-2-power
+                               :E :channel-3-power}
+                  :post-fn (fn [x] (take-nth drf x))}
+                 {:sheet "Sat-Power-4000"
+                  :column-map {:A :satellite-id
+                               :B :freq
+                               :C :channel-1-power
+                               :D :channel-2-power
+                               :E :channel-3-power}
+                  :post-fn (fn [x] (take-nth drf x))}])
+
 
 
 (defn- load-data [filename sheet column-map post-fn]

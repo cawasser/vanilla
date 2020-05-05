@@ -11,7 +11,7 @@
 
 (defn- get-data []
   (->> (d/q '[:find ?name ?organization ?start-time ?end-time
-              :where [?e :name ?name]
+              :where [?e :task-name ?name]
               [?e :organization ?organization]
               [?e :start-time ?start-time]
               [?e :end-time ?end-time]]

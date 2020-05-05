@@ -15,7 +15,7 @@
 ;
 
 
-(def colors ["blue" "green" "red" "yellow"])
+(def colors ["blue" "green" "red" "goldenrod" "purple"])
 
 
 (defn parse-types-to-color [data]
@@ -45,6 +45,8 @@
 
 (defn make-widget
   [name source-data options]
+
+  (prn "timeline " source-data)
 
   [:> TimeLine (merge {:style {:overflow :auto
                                :backgroundColor "#2F4F4F"}
