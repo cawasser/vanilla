@@ -44,8 +44,8 @@
                                :E :lat
                                :F :lon
                                :M :satellite-id
-                               :N :tx-channel
-                               :O :tx-beam
+                               :N :tx-beam
+                               :O :tx-channel
                                :P :rx-beam
                                :Q :rx-channel}
                   :post-fn    (fn [x] x)}
