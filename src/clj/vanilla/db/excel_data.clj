@@ -13,14 +13,13 @@
 ; drf: "data reduction factor"
 (def drf 10)
 
-(def excel-defs [{:sheet      "Beams"
+(def excel-defs [{:sheet      "X-Beams"
                   :column-map {:A :band
                                :B :beam-id
                                :C :lat
                                :D :lon
                                :E :radius
-                               :F :type
-                               :G :city}
+                               :G :type}
                   :post-fn    (fn [x] x)}
                  {:sheet      "SCN_NETWORK_CARRIER_VW"
                   :column-map {:A :satellite-id

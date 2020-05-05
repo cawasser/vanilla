@@ -8,18 +8,17 @@
 
 
 (defn- get-data []
-  (->> (d/q '[:find ?name ?lat ?lon ?radius ?type ?city
+  (->> (d/q '[:find ?name ?lat ?lon ?radius ?type
               :where [?e :band "X"]
               [?e :beam-id ?name]
               [?e :lat ?lat]
               [?e :lon ?lon]
               [?e :radius ?radius]
-              [?e :type ?type]
-              [?e :city ?city]]
+              [?e :type ?type]]
          @excel/conn)
     (map (fn [[name lat lon radius t city]]
            {:name (str "X" name) :lat lat :lon lon
-            :e {:diam (* radius 2) :purpose t :city city}}))))
+            :e {:diam (* radius 2) :purpose t}}))))
 
 
 (defn fetch-data []

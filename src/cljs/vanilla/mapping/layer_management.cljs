@@ -36,12 +36,7 @@
              {:name "Cartagena" :lat 10.39972 :lon -75.51444 :alt 100}])
 
 
-(def beam-colors {"Broadcast" [0 1 0 0.15]
-                  "Spot"      [1 0 1 0.5]
-                  "Adaptive"  [0 0.3 1 0.5]
-                  "Protected" [0.2 0.2 0.6 0.5]
-                  "UHF"       [1 0 1 0.25]
-                  "Y"         [1 1 0 0.25]
+(def beam-colors {"Y"         [1 1 0 0.25]
                   "B"         [0 0 1 0.25]
                   "R"         [1 0 0 0.25]
                   "G"         [0 1 0 0.25]})
