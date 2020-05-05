@@ -4,24 +4,13 @@
             [datascript.core :as d]))
 
 
-(def sheet "Beams")
-(def column-map {:A :band
-                 :B :id
-                 :C :lat
-                 :D :lon
-                 :E :radius
-                 :F :type
-                 :G :city})
-(def post-fn (fn [x] x))
 
 
 
 (defn- get-data []
-  (excel/load-data excel/filename sheet column-map post-fn)
-
   (->> (d/q '[:find ?name ?lat ?lon ?radius ?type ?city
               :where [?e :band "X"]
-              [?e :id ?name]
+              [?e :beam-id ?name]
               [?e :lat ?lat]
               [?e :lon ?lon]
               [?e :radius ?radius]
@@ -29,7 +18,7 @@
               [?e :city ?city]]
          @excel/conn)
     (map (fn [[name lat lon radius t city]]
-           {:name (str "X" (int name)) :lat lat :lon lon
+           {:name (str "X" name) :lat lat :lon lon
             :e {:diam (* radius 2) :purpose t :city city}}))))
 
 
@@ -43,8 +32,6 @@
 
 
 (comment
-  (excel/load-data excel/filename sheet column-map post-fn)
-
   (sort-by :name (get-data))
 
   ())
