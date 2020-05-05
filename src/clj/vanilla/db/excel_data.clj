@@ -39,43 +39,44 @@
                                :C :start-time
                                :D :end-time}
                   :post-fn    (fn [x] x)}
-                 {:sheet "Terminals"
+                 {:sheet      "Terminals"
                   :column-map {:C :terminal-id
                                :E :lat
                                :F :lon
-                               :M :tx-channel
-                               :N :tx-beam
-                               :O :rx-beam
-                               :P :rx-channel}
-                  :post-fn (fn [x] x)}
-                 {:sheet "Sat-Power-1000"
+                               :M :satellite-id
+                               :N :tx-channel
+                               :O :tx-beam
+                               :P :rx-beam
+                               :Q :rx-channel}
+                  :post-fn    (fn [x] x)}
+                 {:sheet      "Sat-Power-1000"
                   :column-map {:A :satellite-id
                                :B :freq
                                :C :channel-1-power
                                :D :channel-2-power
                                :E :channel-3-power}
-                  :post-fn (fn [x] (take-nth drf x))}
-                 {:sheet "Sat-Power-2000"
+                  :post-fn    (fn [x] (take-nth drf x))}
+                 {:sheet      "Sat-Power-2000"
                   :column-map {:A :satellite-id
                                :B :freq
                                :C :channel-1-power
                                :D :channel-2-power
                                :E :channel-3-power}
-                  :post-fn (fn [x] (take-nth drf x))}
-                 {:sheet "Sat-Power-3000"
+                  :post-fn    (fn [x] (take-nth drf x))}
+                 {:sheet      "Sat-Power-3000"
                   :column-map {:A :satellite-id
                                :B :freq
                                :C :channel-1-power
                                :D :channel-2-power
                                :E :channel-3-power}
-                  :post-fn (fn [x] (take-nth drf x))}
-                 {:sheet "Sat-Power-4000"
+                  :post-fn    (fn [x] (take-nth drf x))}
+                 {:sheet      "Sat-Power-4000"
                   :column-map {:A :satellite-id
                                :B :freq
                                :C :channel-1-power
                                :D :channel-2-power
                                :E :channel-3-power}
-                  :post-fn (fn [x] (take-nth drf x))}])
+                  :post-fn    (fn [x] (take-nth drf x))}])
 
 
 
