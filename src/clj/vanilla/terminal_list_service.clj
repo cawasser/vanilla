@@ -27,6 +27,7 @@
                 [?e :rx-beam ?rx-beam]
                 [?e :rx-channel ?rx-channel]]
            @excel/conn)
+      (sort-by first)
       (map (fn [[t lat lon s txb txc rxb rxc]]
              {:terminal-id  t
               :lat          lat
