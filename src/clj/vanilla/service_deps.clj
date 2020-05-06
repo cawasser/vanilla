@@ -19,9 +19,8 @@
             [vanilla.task-service]
             [vanilla.terminal-location-service]
             [vanilla.usage-12-hour-service]
-            [vanilla.usage-data-service]))
-
-
+            [vanilla.usage-data-service]
+            [vanilla.terminal-list-service]))
 
 
 
@@ -30,6 +29,9 @@
     :read-fn :vanilla.spectrum-traces-service/fetch-data}
    ;:schedule {:in    [0 :seconds]
    ;           :every [10 :seconds]}}
+
+   {:name :carousel-service
+    :read-fn :vanilla.carousel-service/fetch-data}
 
    {:name    :terminal-location-service
     :read-fn :vanilla.terminal-location-service/fetch-data}
@@ -120,10 +122,5 @@
    {:name    :arearange-service
     :read-fn :vanilla.arearange-service/fetch-data}
 
-   {:name :carousel-service
-    :read-fn :vanilla.carousel-service/fetch-data}])
-
-
-;:params   []
-;:schedule {:in    [0 :seconds]
-;           :every [5 :seconds]}}])
+   {:name    :terminal-list-service
+    :read-fn :vanilla.terminal-list-service/fetch-data}])
