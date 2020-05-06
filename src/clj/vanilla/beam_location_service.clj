@@ -7,31 +7,34 @@
 
 
 
-(defn- get-data []
+(defn- get-data [band]
   (->> (d/q '[:find ?name ?lat ?lon ?radius ?type
-              :where [?e :band "X"]
+              :where [?e :band ?band]
               [?e :beam-id ?name]
               [?e :lat ?lat]
               [?e :lon ?lon]
               [?e :radius ?radius]
-              [?e :type ?type]]
-         @excel/conn)
+              [?e :type ?type]
+              :in $ ?band]
+         @excel/conn band)
     (map (fn [[name lat lon radius t city]]
            {:name (str "X" name) :lat lat :lon lon
             :e {:diam (* radius 2) :purpose t}}))))
 
 
-(defn fetch-data []
-  (log/info "Beam Locations")
+(defn fetch-data [band]
+  (log/info "Beam Locations" band "band")
 
   {:title "Beam Locations"
    :data-format :data-format/lat-lon-e
-   :data (get-data)})
+   :data (get-data band)})
 
 
 
 (comment
-  (sort-by :name (get-data))
+  (sort-by :name (get-data "X"))
+
+  (sort-by :name (get-data "Ka"))
 
   ())
 

@@ -21,6 +21,14 @@
                                :E :radius
                                :G :type}
                   :post-fn    (fn [x] x)}
+                 {:sheet      "Ka-Beams"
+                  :column-map {:A :band
+                               :B :beam-id
+                               :C :lat
+                               :D :lon
+                               :E :radius
+                               :G :type}
+                  :post-fn    (fn [x] x)}
                  {:sheet      "SCN_NETWORK_CARRIER_VW"
                   :column-map {:A :satellite-id
                                :B :tx-beam

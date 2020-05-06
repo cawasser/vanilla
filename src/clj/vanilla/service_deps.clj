@@ -52,8 +52,13 @@
     :read-fn :vanilla.channel-power-service/fetch-data
     :params ["Sat-Power-4000" "4000"]}
 
-   {:name    :beam-location-service
-    :read-fn :vanilla.beam-location-service/fetch-data}
+   {:name    :x-beam-location-service
+    :read-fn :vanilla.beam-location-service/fetch-data
+    :params ["X"]}
+
+   {:name    :ka-beam-location-service
+    :read-fn :vanilla.beam-location-service/fetch-data
+    :params ["Ka"]}
 
    {:name :task-service
     :read-fn :vanilla.task-service/fetch-data}
