@@ -140,7 +140,13 @@
       ;21
       ["25000" "beam-service" "'General' Beam Data"
        "data-format/lat-lon-e" "vanilla.beam-location-service/fetch-data"
-       "returns 'general' beam location data for 2D/3D display"]]}))
+       "returns 'general' beam location data for 2D/3D display"]
+
+      ;22
+      ["26000" "terminal-list-service" "List of Terminals"
+       "data-format/entities" "vanilla.terminal-list-service/fetch-data"
+       "returns a collection of Terminals and their properties"]]}))
+
 
 
 
