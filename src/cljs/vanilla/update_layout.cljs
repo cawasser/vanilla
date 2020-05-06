@@ -5,6 +5,7 @@
     [re-frame.core :as rf]
     [day8.re-frame.tracing :refer-macros [fn-traced]]
     [clojure.edn :as edn]
+    [dashboard-clj.core :as d]
     [vanilla.widget-defs :as widget-defs]
     [cljs-uuid-utils.core :as uuid]))
 
@@ -90,6 +91,7 @@
                  ;(prn ":set-layout CONVERTED:  " converted-data)
 
                  (data-source-subscribe (mapv #(:data-source %) converted-data))
+                 ;(d/connect-to-data-sources)
 
                  (assoc db :widgets converted-data
                            :next-id (uuid/uuid-string (uuid/make-random-uuid))))

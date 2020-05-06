@@ -3,6 +3,7 @@
     [taoensso.sente :as sente]
     [clojure.tools.logging :as log]
     [clojure.core.async :as async]
+    [vanilla.subscription-manager :as subman]
     [dashboard-clj.data-source :as ds]))
 
 (defmulti -client-ev-handler (fn [_ y] (:id y)))
@@ -13,7 +14,9 @@
 (defmethod -client-ev-handler :default
   [sources {:as ev-msg :keys [?reply-fn ch-recv client-id connected-uids uid event id ring-req ?data send-fn]}]
   (case id
-    :chsk/uidport-open  (log/info "Port open to UID: " uid)
+    :chsk/uidport-open  (do
+                          (log/info "Port open to UID: " uid)
+                          (subman/add-empty-user uid))          ;; when new user connection opens, create a subscription for them
     :chsk/uidport-close (log/info "Port closed to UID: " uid)   ;; probably trigger some subscription cleanup here if user didnt logout
     :chsk/ws-ping       (log/info "Websocket ping")
     (println "un-handled client event" id)))
@@ -22,11 +25,9 @@
 (defmethod -client-ev-handler :dashboard-clj.core/sync
   [{:as ctx :keys [data-sources chsk-send!]} {:as ev-msg :keys [?reply-fn ch-recv client-id connected-uids uid event id ring-req ?data send-fn]}]
   (doseq [event (map #(ds/data->event (:name %) (deref (:data %))) data-sources)]
-
-    (log/info "Dashboard/sync event sending: " (get-in (second (second event)) [:data :title]) " to UID: " uid)
-
-    ;; chsk-send! and send-fn are the same here, dont think it matter which we use
-    (chsk-send! uid event)))  ;:sente/all-users-without-uid
+    (when (some #(= (first (second event)) %) (subman/get-subbed-sources uid))
+      (log/info "Dashboard/sync event sending: " (get-in (second (second event)) [:data :title]) " to UID: " uid)
+      (chsk-send! uid event))))      ;; chsk-send! and send-fn are the same here, dont think it matters which we use
 
 
 
@@ -167,7 +168,7 @@
                                              :data-format :data-format/carousel,
                                              :data "heatmap-data"}}]])
 
-  (get-in (second (second event)) [:data :title])
+  (get-in (first (second event)) [:data :title])
 
   ;(def data-sources
   ;  (#dashboard_clj.data_source.DataSource{:name :usage-data,

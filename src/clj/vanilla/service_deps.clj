@@ -20,9 +20,6 @@
             [vanilla.signal-path-service]
             [vanilla.beam-location-service]))
 
-(def subscribed-sources
-  (atom []))
-
 (def datasources
   [{:name    :spectrum-traces
     :read-fn :vanilla.spectrum-traces-service/fetch-data}

@@ -1,7 +1,7 @@
 (ns vanilla.url-handlers
   (:require
     [vanilla.db.core :as db]
-    [vanilla.service-deps :as service-deps]
+    [vanilla.subscription-manager :as subman]
     [clojure.core]))
 
 
@@ -19,13 +19,12 @@
 
 (defn subscribe-to-services [user services]
 
-  (let [distinct-str (into [] (distinct (clojure.core/read-string services)))
-        new-service-deps (mapv #(get-map service-deps/datasources %) distinct-str)]
+  (let [distinct-str (into [] (distinct (clojure.core/read-string services)))]
+        ;new-service-deps (mapv #(get-map service-deps/datasources %) distinct-str)]
 
-    (prn "URL handler subscribing: " distinct-str
-         "/////// DEFS: " new-service-deps)
+    ;(prn "URL handler subscribing: " distinct-str)
 
-    (reset! service-deps/subscribed-sources new-service-deps)))
+    (subman/add-subscribers user distinct-str)))
 
 
 (def from-sqlite {:id :key :data_source :data-source :data_grid :data-grid})
