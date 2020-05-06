@@ -270,8 +270,8 @@
         is-widget-active (r/atom false)]
     (fn []
       [:div.has-text-left
-       [:button.button.is-link {:on-click #(swap! is-source-active not)} "Add Source"]
-       [:button.button.is-link {:on-click #(swap! is-widget-active not)} "Add Widget"]
+       [:button.button.is-info {:on-click #(swap! is-source-active not)} "Add Source"]
+       [:button.button.is-info {:on-click #(swap! is-widget-active not)} "Add Widget"]
        [add-by-source-modal is-source-active]
        [add-by-widget-modal is-widget-active]])))
 
