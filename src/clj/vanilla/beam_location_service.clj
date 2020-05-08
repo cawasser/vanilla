@@ -18,7 +18,7 @@
               :in $ ?band]
          @excel/conn band)
     (map (fn [[name lat lon radius t city]]
-           {:name (str "X" name) :lat lat :lon lon
+           {:name (str band name) :lat lat :lon lon
             :e {:diam (* radius 2) :purpose t}}))))
 
 
