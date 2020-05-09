@@ -16,8 +16,7 @@
 
 (defn connect-to-data-sources []
   (let [{:keys  [chsk ch-recv send-fn state]} (sente/make-channel-socket! "/chsk"
-                                                                          {:client-id @(rf/subscribe [:get-current-user])
-                                                                           "/" (uuid/make-random-uuid)}
+                                                                          {:client-id @(rf/subscribe [:get-current-user])}
                                                                           {:type :auto})]
 
     (asyncm/go-loop []
@@ -29,7 +28,7 @@
 
         (when (= (get ?data 0) :data-source/event)
           (let [[_ [ds-name ds-data]] ?data]
-            (prn "received data " ds-name)
+            (prn "received data " ds-name "////" ds-data)
             (rf/dispatch [:update-data-source ds-name ds-data])))
 
         (when (and

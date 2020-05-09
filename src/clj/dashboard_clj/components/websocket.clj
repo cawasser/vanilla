@@ -17,7 +17,9 @@
     :chsk/uidport-open  (do
                           (log/info "Port open to UID: " uid)
                           (subman/add-empty-user uid))          ;; when new user connection opens, create a subscription for them
-    :chsk/uidport-close (log/info "Port closed to UID: " uid)   ;; probably trigger some subscription cleanup here if user didnt logout
+    :chsk/uidport-close (do
+                          (log/info "Port closed to UID: " uid)
+                          (subman/remove-user uid))         ;; when connection closes, cleanup users subscriptions.
     :chsk/ws-ping       (log/info "Websocket ping")
     (println "un-handled client event" id)))
 
@@ -47,8 +49,9 @@
       (async/go-loop []
         (let [event (async/<! ch-out)]
           (doseq [cid (:any @connected-uids)]
-            ;(prn "sending " event " to " cid)
-            (send-fn cid event))
+            (when (some #(= (first (second event)) %) (subman/get-subbed-sources cid))
+              (prn "Sending " (first (second event)) " to " cid "on channel" ch-out)
+              (send-fn cid event)))
           (recur)))
 
       (assoc component
