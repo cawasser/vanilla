@@ -84,24 +84,6 @@
 
 (comment
 
-  (def services
-    "[:sankey-service :usage-data :bubble-service :scatter-service-data :sankey-service]")
-
-  (defn get-map
-    [service-list id]
-    (->> service-list
-         (filter #(= (:name %) id))
-         first))
-
-  (def new-service-deps
-    [{:name :sankey-service, :read-fn :vanilla.sankey-service/fetch-data}
-     {:name :usage-data, :read-fn :vanilla.usage-data-service/fetch-data}
-     {:name :bubble-service, :read-fn :vanilla.bubble-service/fetch-data}
-     {:name :scatter-service-data, :read-fn :vanilla.scatter-service/fetch-data}])
-
-  (def tmp (into [] (distinct (clojure.core/read-string services))))
-  (mapv #(get-map service-deps/datasources %) tmp)
-  @service-deps/empty-sources
 
   (create-user
     {:username "chad-uri-handler"
