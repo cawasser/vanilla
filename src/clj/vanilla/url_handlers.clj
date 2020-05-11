@@ -9,21 +9,17 @@
 ;
 ; HTML endpoint handlers
 
-(defn get-map [service-list id]
-  (->> service-list
-       (filter #(= (:name %) id))
-       first))
-
-(defn get-services []
+(defn get-services
+  "Retrieves full service list from the db"
+  []
   (db/get-services db/vanilla-db))
 
-(defn subscribe-to-services [user services]
+(defn subscribe-to-services
+  "Handles subscribing a user to the vector of data sources currently on their dashboard"
+  [user services]
 
   (let [distinct-str (into [] (distinct (clojure.core/read-string services)))]
-        ;new-service-deps (mapv #(get-map service-deps/datasources %) distinct-str)]
-
     ;(prn "URL handler subscribing: " distinct-str)
-
     (subman/add-subscribers user distinct-str)))
 
 
@@ -35,21 +31,29 @@
 ; :id -> :key
 ; :data_source -> :data-source
 ; :data_grid -> :data-grid
-(defn get-layout [user]
+(defn get-layout
+  "Retrieves a users layout from the db"
+  [user]
   (map #(clojure.set/rename-keys % from-sqlite) (db/get-user-layout db/vanilla-db {:username user})))
 
 
-(defn save-layout [new-layout]
+(defn save-layout
+  "Saves a users entire widget layout to the db"
+  [new-layout]
   ;(prn "SAVE-LAYOUT Handler: " new-layout)
   ;read in the stringed json, order the maps by keys, then remove all keys
   (let [ordered (map #(vals %) (map #(into (sorted-map) %) (clojure.core/read-string new-layout)))]
     ;(prn "SAVE-LAYOUT Handler: " ordered)
     (db/save-layout! db/vanilla-db {:layout ordered})))
 
-(defn update-widget [widget]
+(defn update-widget
+  "Updates a single widget for a user"
+  [widget]
   (db/create-layout! db/vanilla-db (assoc (clojure.set/rename-keys (clojure.core/read-string widget) to-sqlite) :username "testHuman")))
 
-(defn delete-widget [id]
+(defn delete-widget
+  "Removes a widget by its uuid"
+  [id]
   (db/delete-layout! db/vanilla-db {:id id}))
 
 
@@ -82,6 +86,12 @@
 
   (def services
     "[:sankey-service :usage-data :bubble-service :scatter-service-data :sankey-service]")
+
+  (defn get-map
+    [service-list id]
+    (->> service-list
+         (filter #(= (:name %) id))
+         first))
 
   (def new-service-deps
     [{:name :sankey-service, :read-fn :vanilla.sankey-service/fetch-data}

@@ -4,6 +4,7 @@
     [clojure.tools.logging :as log]
     [clojure.core.async :as async]
     [vanilla.subscription-manager :as subman]
+     [dashboard-clj.components.system :as system]
     [dashboard-clj.data-source :as ds]))
 
 (defmulti -client-ev-handler (fn [_ y] (:id y)))
@@ -50,7 +51,7 @@
         (let [event (async/<! ch-out)]
           (doseq [cid (:any @connected-uids)]
             (when (some #(= (first (second event)) %) (subman/get-subbed-sources cid))
-              (prn "Sending " (first (second event)) " to " cid "on channel" ch-out)
+              ;(prn "Sending " (first (second event)) " to " cid "from channel" ch-out)
               (send-fn cid event)))
           (recur)))
 

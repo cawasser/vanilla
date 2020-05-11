@@ -15,7 +15,6 @@
     (let [new-data (apply (resolve-fn read-fn) params)]
       (reset! data new-data)
       (async/go
-        (prn "outputting: " output-chan "///name: " name)
         (async/>! output-chan (data->event name new-data))))))
 
 (defn new-data-source [{:keys [name read-fn params schedule]}]
@@ -39,5 +38,5 @@
     (catch Throwable e
       (throw (ex-info (str "Could not resolve symbol on the classpath, did you require the file that contains the symbol " kw "?") {:kw kw})))))
 
-(defn- resolve-fn [fn-name]
+(defn resolve-fn [fn-name]
   (kw->fn fn-name))

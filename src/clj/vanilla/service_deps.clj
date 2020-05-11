@@ -22,9 +22,9 @@
 
 (def datasources
   [{:name    :spectrum-traces
-    :read-fn :vanilla.spectrum-traces-service/fetch-data
-   :schedule {:in    [0 :seconds]
-              :every [10 :seconds]}}
+    :read-fn :vanilla.spectrum-traces-service/fetch-data}
+   ;:schedule {:in    [0 :seconds]
+   ;           :every [10 :seconds]}}
 
    {:name    :terminal-location-service
     :read-fn :vanilla.terminal-location-service/fetch-data}

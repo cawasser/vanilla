@@ -35,9 +35,7 @@
   (POST "/services"
         {:format          (ajax/json-request-format {:keywords? true})
          :response-format (ajax/json-response-format {:keywords? true})
-         :params          {:user @(rf/subscribe [:get-current-user]) :sources (clojure.core/pr-str sources)}
-         :handler         (prn "Handled DS subscribe: " [:services %])
-         :error-handler   (prn "Error handling DS subscribe" [:services %])}))
+         :params          {:user @(rf/subscribe [:get-current-user]) :sources (clojure.core/pr-str sources)}}))
 
 
 
@@ -91,7 +89,6 @@
                  ;(prn ":set-layout CONVERTED:  " converted-data)
 
                  (data-source-subscribe (mapv #(:data-source %) converted-data))
-                 ;(rf/dispatch [:update-data-source ds-name ds-data])
 
                  (assoc db :widgets converted-data
                            :next-id (uuid/uuid-string (uuid/make-random-uuid))))
