@@ -218,10 +218,8 @@
                     [widget-card name label icon chosen-widget widgets]])]])
 
 
-
 (defn add-by-source-modal
   "modal to allow the user to pick new widgets by first picking the data source they want"
-
   [is-active]
 
   (let [services             (rf/subscribe [:services])
@@ -285,7 +283,10 @@
 
   (let [version (rf/subscribe [:version])]
     (fn []
-      [:h6.subtitle.is-6.has-text-light @version])))
+      [:div.control
+       [:div.tags.has-addons
+        [:span.tag.is-dark "version"]
+        [:span.tag.is-dark @version]]])))
 
 
 
