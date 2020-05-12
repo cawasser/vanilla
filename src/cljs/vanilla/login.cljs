@@ -1,6 +1,7 @@
 (ns vanilla.login
   (:require
     [vanilla.update-layout :as layout]
+    [cljs.core.async :as a]
     [re-frame.core :as rf]
     [reagent.core :as r]
     [dashboard-clj.core :as d]
@@ -26,7 +27,7 @@
   (fn-traced [db _]
              (prn "Logging out")
              (layout/get-layout nil)    ;;clear page of widgets
-             (dissoc db :current-user)))
+             (dissoc db :current-user :data-sources :services)))
 
 (rf/reg-event-db
   :login-message
