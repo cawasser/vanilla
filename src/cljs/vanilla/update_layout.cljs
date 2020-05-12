@@ -7,7 +7,8 @@
     [clojure.edn :as edn]
     [dashboard-clj.core :as d]
     [vanilla.widget-defs :as widget-defs]
-    [cljs-uuid-utils.core :as uuid]))
+    [cljs-uuid-utils.core :as uuid]
+    [vanilla.data-source-subscribe :as ds]))
 
 
 (defn get-services []
@@ -30,19 +31,11 @@
                  (toastr/error "Layout Save Failed")))
              (assoc db :new-login false)))
 
-(defn data-source-subscribe [sources]
-
-  (POST "/services"
-        {:format          (ajax/json-request-format {:keywords? true})
-         :response-format (ajax/json-response-format {:keywords? true})
-         :params          {:user @(rf/subscribe [:get-current-user]) :sources (clojure.core/pr-str sources)}}))
-
-
 
 (defn save-layout [layout]
   ;(prn "saving layout: " (clojure.core/pr-str layout))
 
-  (data-source-subscribe (mapv #(:data-source %) layout))
+  (ds/data-source-subscribe (mapv #(:data-source %) layout))
 
   (POST "/save-layout"
         {:format          (ajax/json-request-format {:keywords? true})
@@ -88,7 +81,7 @@
 
                  ;(prn ":set-layout CONVERTED:  " converted-data)
 
-                 (data-source-subscribe (mapv #(:data-source %) converted-data))
+                 (ds/data-source-subscribe (mapv #(:data-source %) converted-data))
 
                  (assoc db :widgets converted-data
                            :next-id (uuid/uuid-string (uuid/make-random-uuid))))

@@ -1,7 +1,8 @@
 (ns vanilla.mapping.layer-management
   (:require [re-frame.core :as rf]
             [day8.re-frame.tracing :refer-macros [fn-traced]]
-            ["worldwindjs" :as WorldWind]))
+            ["worldwindjs" :as WorldWind]
+            [vanilla.data-source-subscribe :as ds]))
 
 
 
@@ -100,6 +101,9 @@
 
 
 (defn make-layers []
+  ; TODO: this is a hack for the following hack (does NOT unsubscribe to sources when widget closes)
+  (ds/data-source-subscribe [:beam-location-service :terminal-location-service])
+
   (let [x-beams   (get-in @(rf/subscribe [:app-db :beam-location-service]) [:data :data])
         terminals (get-in @(rf/subscribe [:app-db :terminal-location-service]) [:data :data])]
 

@@ -9,7 +9,8 @@
             ["react-highcharts/ReactHighmaps" :as ReactHighmaps]
             ["pure-react-carousel" :refer [CarouselProvider Slider Slide
                                            Dot DotGroup
-                                           ButtonFirst ButtonBack ButtonNext ButtonLast]]))
+                                           ButtonFirst ButtonBack ButtonNext ButtonLast]]
+            [vanilla.data-source-subscribe :as ds]))
 
 
 (defn heatmap-data* []
@@ -283,6 +284,10 @@
   ;(prn "Making carousel widget: " data
   ;     "///data?data? destringed\\\\ " (edn/read-string (:data (:data data)))
   ;     "/////options: " options)
+
+  ; TODO: this is a hack for the following hack (does NOT unsubscribe to sources when widget closes)
+  (ds/data-source-subscribe [:spectrum-traces :power-data])
+
 
   (let [sources [(big-chart "Sat1 Power" :spectrum-traces)
                  (big-chart "Sat2 Power" :power-data)
