@@ -46,7 +46,7 @@
 (defn make-widget
   [name source-data options]
 
-  (prn "timeline " source-data)
+;  (prn "timeline" source-data)
 
   [:> TimeLine (merge {:style {:overflow :auto
                                :backgroundColor "#2F4F4F"}
