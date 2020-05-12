@@ -16,10 +16,10 @@
                     :handler         #(rf/dispatch-sync [:set-services %])}))
 
 
-;(rf/reg-sub
-;  :active-widgets-by-user
-;  (fn [db _]
-;    (get db :widgets)))
+(rf/reg-sub
+  :active-widgets-by-user
+  (fn [db _]
+    (get db :widgets)))
 
 (rf/reg-event-db
   :layout-message
