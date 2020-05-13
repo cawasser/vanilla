@@ -85,6 +85,12 @@
 
 (comment
 
+  ;; Leaving this large rich comment block here to allow anyone doing future work on this websocket to easily
+  ;; see what the contents of the maps are that come in from the websocket events, as well as be able to test
+  ;; functions on them from the repl without needing to add prints back in and re-parse large console outputs.
+  ;;
+  ;; the names match up the variable names being used in the handler functions above.
+
   (def ev-msg
 
   {:?reply-fn nil,
@@ -171,8 +177,6 @@
                                             {:title "carousel data",
                                              :data-format :data-format/carousel,
                                              :data "heatmap-data"}}]])
-
-  (get-in (first (second event)) [:data :title])
 
   ;(def data-sources
   ;  (#dashboard_clj.data_source.DataSource{:name :usage-data,
