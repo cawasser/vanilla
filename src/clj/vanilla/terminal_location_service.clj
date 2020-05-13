@@ -4,19 +4,12 @@
             [datascript.core :as d]))
 
 
-(def sheet "Terminals")
-(def column-map {:C :name
-                 :E :lat
-                 :F :lon})
-(def post-fn (fn [x] x))
 
 
 
 (defn- get-terminal-data []
-  (excel/load-data excel/filename sheet column-map post-fn)
-
   (->> (d/q '[:find ?name ?lat ?lon
-              :where [?e :name ?name]
+              :where [?e :terminal-id ?name]
               [?e :lat ?lat]
               [?e :lon ?lon]]
          @excel/conn)
@@ -30,14 +23,11 @@
 
   {:title "Terminal Locations"
    :data-format :data-format/cont-n
-   :data (take 100 (get-terminal-data))})
+   :data (get-terminal-data)})
 
 
 
 (comment
-  (excel/load-data filename sheet column-map post-fn)
-
-
   (->> (d/q '[:find ?name ?lat ?lon
               :where [?e :name ?name]
               [?e :lat ?lat]

@@ -1,24 +1,26 @@
 (ns vanilla.service-deps
-  (:require [vanilla.bubble-service]
+  (:require [vanilla.australia-map-service]
+            [vanilla.arearange-service]
+            [vanilla.beam-location-service]
+            [vanilla.bubble-service]
+            [vanilla.channel-power-service]
+            [vanilla.continent-map-service]
+            [vanilla.current-time-service]
+            [vanilla.energy-use-service]
             [vanilla.heatmap-service]
             [vanilla.network-service]
+            [vanilla.power-data-service]
             [vanilla.sankey-service]
             [vanilla.scatter-service]
-            [vanilla.stoplight-service]
-            [vanilla.usage-12-hour-service]
+            [vanilla.signal-path-service]
             [vanilla.spectrum-traces-service]
-            [vanilla.usage-data-service]
-            [vanilla.power-data-service]
-            [vanilla.current-time-service]
+            [vanilla.stoplight-service]
             [vanilla.table-service]
-            [vanilla.continent-map-service]
-            [vanilla.australia-map-service]
-            [vanilla.arearange-service]
-            [vanilla.energy-use-service]
             [vanilla.task-service]
             [vanilla.terminal-location-service]
-            [vanilla.signal-path-service]
-            [vanilla.beam-location-service]))
+            [vanilla.usage-12-hour-service]
+            [vanilla.usage-data-service]
+            [vanilla.terminal-list-service]))
 
 (def datasources
   [{:name    :spectrum-traces
@@ -26,11 +28,35 @@
    ;:schedule {:in    [0 :seconds]
    ;           :every [10 :seconds]}}
 
+   {:name :carousel-service
+    :read-fn :vanilla.carousel-service/fetch-data}
+
    {:name    :terminal-location-service
     :read-fn :vanilla.terminal-location-service/fetch-data}
 
-   {:name    :beam-location-service
-    :read-fn :vanilla.beam-location-service/fetch-data}
+   {:name    :channel-power-1000-service
+    :read-fn :vanilla.channel-power-service/fetch-data
+    :params ["Sat-Power-1000" "1000"]}
+
+   {:name    :channel-power-2000-service
+    :read-fn :vanilla.channel-power-service/fetch-data
+    :params ["Sat-Power-2000" "2000"]}
+
+   {:name    :channel-power-3000-service
+    :read-fn :vanilla.channel-power-service/fetch-data
+    :params ["Sat-Power-3000" "3000"]}
+
+   {:name    :channel-power-4000-service
+    :read-fn :vanilla.channel-power-service/fetch-data
+    :params ["Sat-Power-4000" "4000"]}
+
+   {:name    :x-beam-location-service
+    :read-fn :vanilla.beam-location-service/fetch-data
+    :params ["X"]}
+
+   {:name    :ka-beam-location-service
+    :read-fn :vanilla.beam-location-service/fetch-data
+    :params ["Ka"]}
 
    {:name :task-service
     :read-fn :vanilla.task-service/fetch-data}
@@ -99,10 +125,5 @@
    {:name    :arearange-service
     :read-fn :vanilla.arearange-service/fetch-data}
 
-   {:name :carousel-service
-    :read-fn :vanilla.carousel-service/fetch-data}])
-
-
-;:params   []
-;:schedule {:in    [0 :seconds]
-;           :every [5 :seconds]}}])
+   {:name    :terminal-list-service
+    :read-fn :vanilla.terminal-list-service/fetch-data}])

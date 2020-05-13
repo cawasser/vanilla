@@ -7,19 +7,11 @@
             [clojure.edn :as edn]))
 
 
-(def sheet "Missions")
-(def column-map {:A :name
-                 :B :organization
-                 :C :start-time
-                 :D :end-time})
-(def post-fn (fn [x] x))
 
 
 (defn- get-data []
-  (excel/load-data excel/filename sheet column-map post-fn)
-
   (->> (d/q '[:find ?name ?organization ?start-time ?end-time
-              :where [?e :name ?name]
+              :where [?e :task-name ?name]
               [?e :organization ?organization]
               [?e :start-time ?start-time]
               [?e :end-time ?end-time]]

@@ -20,6 +20,7 @@
     ["highcharts/modules/heatmap" :as addHeatmapModule]
     ["highcharts/modules/organization" :as addOrganizationModule]
     ["highcharts/modules/variable-pie" :as addVariablepieModule]
+    ["highcharts/modules/boost"]
 
     ; needed to register all the highcharts types
     [vanilla.widgets.area-chart]
