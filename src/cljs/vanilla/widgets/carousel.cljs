@@ -293,7 +293,8 @@
   ;     "/////options: " options)
 
   ; TODO: this is a hack for the following hack (does NOT unsubscribe to sources when widget closes)
-  (ds/data-source-subscribe [:spectrum-traces :power-data])
+  (ds/data-source-subscribe [:channel-power-1000-service :channel-power-2000-service
+                             :channel-power-3000-service :channel-power-4000-service])
 
   (let [sources [(big-chart "Signal Power (1000)" :channel-power-1000-service)
                  (big-chart "Signal Power (2000)" :channel-power-2000-service)
