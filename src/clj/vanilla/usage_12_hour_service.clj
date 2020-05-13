@@ -10,21 +10,26 @@
 
 
 (def hours ["0000h" "0100h" "0200h" "0300h" "0400h" "0600h"
-            "0700h" "0800h" "0900h" "1000h" "1100h"])
+            "0700h" "0800h" "0900h" "1000h" "1100h" "1200h"
+            "1300h" "1400h" "1500h" "1600h" "1700h" "1800h"
+            "1900h" "2000h" "2100h" "2200h" "2300h"])
 
 (defn fetch-data []
-  (log/info "12-hour Usage Service")
+  (log/info "24-hour Usage Service")
 
-  {:title       "12-hour Usage Data"
+  {:title       "24-hour Usage Data"
    :data-format :data-format/rose-y-n
    :src/x-title "time"
-   :src/y-title "tons"
+   :src/y-title "Mbps"
    :series      [
-                 (make-map "Apple" hours 200)
-                 (make-map "Pears" hours 200)
-                 (make-map "Grapes" hours 200)
-                 (make-map "Oranges" hours 200)
-                 (make-map "Bananas" hours 200)]})
+                 (make-map "1000 X" hours 200)
+                 (make-map "1000 Ka" hours 200)
+                 (make-map "2000 X" hours 200)
+                 (make-map "2000 Ka" hours 200)
+                 (make-map "3000 X" hours 200)
+                 (make-map "3000 Ka" hours 200)
+                 (make-map "4000 X" hours 200)
+                 (make-map "4000 Ka" hours 200)]})
 
 
 

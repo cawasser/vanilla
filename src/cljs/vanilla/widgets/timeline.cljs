@@ -15,7 +15,7 @@
 ;
 
 
-(def colors ["blue" "green" "red" "yellow"])
+(def colors ["blue" "green" "red" "goldenrod" "purple"])
 
 
 (defn parse-types-to-color [data]
@@ -43,19 +43,22 @@
     ret))
 
 
-
 (defn make-widget
   [name source-data options]
 
-  [:> TimeLine (merge {:style {:overflow :auto}
+;  (prn "timeline" source-data)
+
+  [:> TimeLine (merge {:style {:overflow :auto
+                               :backgroundColor "#2F4F4F"}
                        :mode "year"
-                       :config {:dataViewPort
-                                {:task
-                                 {:showLabel true
-                                  :style {:borderRadius 1
-                                          :boxShadow "2px 2px 8px #888888"}}}}}
-
-
+                       :config {:taskList {:task {:style {:backgroundColor "#2F4F4F"
+                                                          :color  "white"}}}
+                                :dataViewPort {:rows {:style {:backgroundColor "#2F4F4F"
+                                                              :borderBottom "solid 0.5px #cfcfcd"}}
+                                               :task {:showLabel true
+                                                      :style {:borderRadius 1
+                                                              :boxShadow "2px 2px 8px #888888"
+                                                              :backgroundColor "#2F4F4F"}}}}}
 
                  (->> (:data (:data source-data))
                    ;parse-times

@@ -9,25 +9,24 @@
   ;     " //// data " data
   ;     " //// (options) " options)
 
-  ( let [header (get-in data [:data :meta-data])
-         body (get-in data [:data :series])]
+  (let [header (get-in data [:data :meta-data])
+        body   (get-in data [:data :series])]
 
     ;(prn "header " header
     ;     " //// body " body)
 
-    [:div.container
-      [:table-container
-       [:table.is-hoverable {:style {:width          "100%"
-                                     :border-spacing "15px"
-                                     :table-layout   :fixed}}
-        [:thead
-         [:tr
-          (for [h header]
-            ^{:key (str (get h :name))} [:th (str (get h :name))])]]
+    [:div.table-container
+     [:table.table.is-hoverable
+      [:thead
+       [:tr
+        (for [h header]
+          ^{:key (str (:name h))} [:th (str (:name h))])]]
 
-        [:tbody
+      [:tbody
+       (doall
          (for [b body]
+           ^{:key (str b)}
            [:tr
-             (for [[k v] b]
-               (do
-                 ^{:key (str v)}[:td (str v)]))])]]]]))
+            (for [[k v] b]
+              (do
+                [:td (str v)]))]))]]]))

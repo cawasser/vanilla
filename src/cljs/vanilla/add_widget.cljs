@@ -132,11 +132,11 @@
   [services selected]
 
   (if (nil? selected)
-    (rf/dispatch-sync [:init-selected-service]))
+    (rf/dispatch-sync [:init-selected-service])
 
-  [:div.container
-   [:table-container
-    [:table.is-hoverable
+  ;[:div.container
+   [:div.table-container
+    [:table.table.is-hoverable
      [:thead
       [:tr [:th "Name"] [:th "Description"]]]
      [:tbody
@@ -145,10 +145,11 @@
           (do
             ^{:key name}
             [:tr {:class    (if (= (:name selected) name) "is-selected" "")
-                  :style    {:background-color (if (= (:name selected) name) "lightgreen" "")}
+                  :style    {:background-color (if (= (:name selected) name) "royalblue" "")
+                             :color (if (= (:name selected) name) "white" "")}
                   :on-click #(do
                                (rf/dispatch [:selected-service (selected-service services name)]))}
-             [:td name] [:td doc_string]])))]]]])
+             [:td name] [:td doc_string]])))]]]))
 
 
 (defn compatible-service-list
@@ -159,8 +160,8 @@
   (let [compatible-services (filter-services services chosen-widget)]
 
     [:div.container
-     [:table-container
-      [:table.is-hoverable
+     [:div.table-container
+      [:table.table.is-hoverable
        [:thead
         [:tr [:th "Name"] [:th "Description"]]]
        [:tbody
@@ -169,7 +170,7 @@
             (do
               ^{:key name}
               [:tr {:class    (if (= (:name selected) name) "is-selected" "")
-                    :style    {:background-color (if (= (:name selected) name) "lightgreen" "")}
+                    :style    {:background-color (if (= (:name selected) name) "royalblue" "")}
                     :on-click #(do
                                  (rf/dispatch [:selected-service (selected-service compatible-services name)]))}
                [:td name] [:td doc_string]])))]]]]))
@@ -183,7 +184,7 @@
   [name label img chosen-widget widgets]
 
   [:div.card {:class    (if (= (:name chosen-widget) name) "is-selected" "")
-              :style    {:background-color (if (= (:name chosen-widget) name) "lightgreen" "")}
+              :style    {:background-color (if (= (:name chosen-widget) name) "royalblue" "")}
               :on-click #(rf/dispatch [:selected-widget (selected-widget widgets name)])}
 
    [:div.image
@@ -270,8 +271,8 @@
         is-widget-active (r/atom false)]
     (fn []
       [:div.has-text-left
-       [:button.button.is-link {:on-click #(swap! is-source-active not)} "Add Source"]
-       [:button.button.is-link {:on-click #(swap! is-widget-active not)} "Add Widget"]
+       [:button.button.is-info {:on-click #(swap! is-source-active not)} "Add Source"]
+       [:button.button.is-info {:on-click #(swap! is-widget-active not)} "Add Widget"]
        [add-by-source-modal is-source-active]
        [add-by-widget-modal is-widget-active]])))
 
