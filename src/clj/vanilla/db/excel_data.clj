@@ -87,9 +87,9 @@
 
 
 
-(defn- load-data [filename sheet column-map post-fn]
-  (log/info "Loading " filename "/" sheet)
-  (->> (load-workbook-from-resource filename)
+(defn- load-data [workbook sheet column-map post-fn]
+  (log/info "Loading " sheet)
+  (->> workbook
     (select-sheet sheet)
     (select-columns column-map)
     (drop 1)
@@ -97,18 +97,42 @@
     (d/transact! conn)))
 
 
-(defn init-from-excel []
-  (log/info "Init From Excel")
-  (doall
-    (map (fn [{:keys [sheet column-map post-fn]}]
-           (load-data filename sheet column-map post-fn))
-      excel-defs)))
+(defn init-from-excel [filename defs]
+  (log/info "Init From Excel" filename)
+
+  (try
+    (with-open [workbook (load-workbook-from-resource filename)]
+      (doall
+        (map (fn [{:keys [sheet column-map post-fn]}]
+               (load-data workbook sheet column-map post-fn))
+          defs)))
+    (catch Exception e (log/error "Exception: " (.getMessage e)))
+    (finally (log/info "Excel file" filename "not loaded!"))))
 
 
 
 
 
 (comment
+
+
+  (with-open [workbook (load-workbook-from-resource filename)]
+    workbook)
+  (with-open [workbook (load-workbook-from-resource "shabbay")]
+    workbook)
+
+  (try
+    (with-open [workbook (load-workbook-from-resource "shabbay")]
+      workbook)
+    (catch Exception e (log/error "Exception: " (.getMessage e)))
+    (finally (log/info "No Excel file found" filename)))
+
+
+
+  (try
+    (/ 1 0)
+    (catch Exception e (log/error "caught exception: " (.getMessage e))))
+
   (def sheet "Missions")
   (def column-map {:A :name
                    :B :organization

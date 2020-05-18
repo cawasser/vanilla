@@ -35,7 +35,7 @@
                                           "vanilla"
                                           "vanilla"
                                           "version number not found"))
-  (excel/init-from-excel)
+  (excel/init-from-excel excel/filename excel/excel-defs)
 
   (dash/start deps/datasources))
 
