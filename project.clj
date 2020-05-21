@@ -2,7 +2,7 @@
 
   :description "Vanilla Dashboard - a simple dashboard built on dashboard-clj"
   :url ""
-
+  :repositories [["sonatype" "https://oss.sonatype.org/content/repositories/snapshots"]]
   :dependencies [[buddy/buddy-auth "2.2.0"]
                  [buddy/buddy-core "1.6.0"]
                  [buddy/buddy-hashers "1.4.0"]
@@ -67,7 +67,8 @@
                  [day8.re-frame/re-frame-10x "0.4.3"]
                  [day8.re-frame/tracing "0.5.3"]
                  [clj-time "0.15.2"]
-                 [monoid/rough-cljs "1.0.0"]]
+                 [monoid/rough-cljs "1.0.0"]
+                 [org.clojure/spec-alpha2 "0.2.177-SNAPSHOT"]]
 
   :min-lein-version "2.6.1"
 
