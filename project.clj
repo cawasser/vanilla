@@ -113,7 +113,8 @@
                                            [com.cemerick/piggieback "0.2.2"]
                                            [org.clojure/tools.nrepl "0.2.13"]
                                            [org.clojure/tools.namespace "0.3.1"]
-                                           [org.clojure/java.classpath "0.3.0"]]
+                                           [org.clojure/java.classpath "0.3.0"]
+                                           [org.clojure/test.check "0.9.0"]]
 
                             :plugins      [[com.jakemccrary/lein-test-refresh "0.24.1"]
                                            [jonase/eastwood "0.3.5"]

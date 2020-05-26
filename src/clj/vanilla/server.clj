@@ -24,7 +24,8 @@
               [vanilla.service-deps :as deps]
               [clojure.tools.logging :as log]
               [trptcolin.versioneer.core :as version]
-              [vanilla.db.excel-data :as excel])
+              [vanilla.db.excel-data :as excel]
+              [vanilla.specs.dataspecs :as vsd])
 
     (:gen-class))
 
