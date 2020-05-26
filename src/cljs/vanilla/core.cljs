@@ -6,7 +6,6 @@
     [vanilla.subscriptions :as subs]
     [vanilla.widget-defs :as defs]
     [ajax.core :refer [GET POST] :as ajax]
-    [cljs-uuid-utils.core :as uuid]
 
     [day8.re-frame.tracing :refer-macros [fn-traced]]
 
@@ -77,21 +76,6 @@
   (fn-traced [db [_ services]]
              ;(prn ":set-services " services)
              (assoc db :services (:services services))))
-
-
-
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;
-; SERVICES LIST NUMBER
-;
-;
-
-(defn get-services []
-  (GET "/services" {:headers         {"Accept" "application/transit+json"}
-                    :response-format (ajax/json-response-format {:keywords? true})
-                    :handler         #(rf/dispatch-sync [:set-services %])}))
-
 
 
 
@@ -170,7 +154,6 @@
   (rf/dispatch-sync [:initialize])
 
   (get-version)
-  (get-services)
 
   ; TODO eliminate register-global-app-state-subscription (attach subscription in add-widget)
   (subs/register-global-app-state-subscription)
@@ -197,7 +180,6 @@
   (doseq [w defs/widgets]
     (rf/dispatch-sync [:widget-type w]))
 
-  (d/connect-to-data-sources)
 
   (prn "rendering home-page")
   (r/render home-page (.getElementById js/document "app")))

@@ -22,8 +22,6 @@
             [vanilla.usage-data-service]
             [vanilla.terminal-list-service]))
 
-
-
 (def datasources
   [{:name    :spectrum-traces
     :read-fn :vanilla.spectrum-traces-service/fetch-data}

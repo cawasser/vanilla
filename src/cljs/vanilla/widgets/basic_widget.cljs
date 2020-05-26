@@ -6,6 +6,11 @@
             [ajax.core :as ajax :refer [GET POST]]))
 
 
+(defn get-data-source [widgets key]
+  (:data-source (->> widgets
+                  (filter #(= (:key %) key))
+                  first)))
+
 
 (defn delete-widget [widget-id]
   ;(prn "removing widget: " widget-id)
@@ -23,7 +28,8 @@
   :remove-widget
   (fn-traced [db [_ widget-id]]
     (delete-widget widget-id)
-    (assoc db :widgets (remove #(= (:key %) widget-id) (:widgets db)))))
+    (assoc db :widgets (remove #(= (:key %) widget-id) (:widgets db))
+              :data-sources (dissoc (:data-sources db) (get-data-source @(rf/subscribe [:active-widgets-by-user]) widget-id)))))
 
 
 

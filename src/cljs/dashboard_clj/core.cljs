@@ -14,9 +14,11 @@
 
 
 (defn connect-to-data-sources []
-  (let [{:keys  [chsk ch-recv send-fn state]} (sente/make-channel-socket! "/chsk" {:type :auto})]
+  (let [{:keys  [chsk ch-recv send-fn state]} (sente/make-channel-socket! "/chsk"
+                                                                          {:client-id @(rf/subscribe [:get-current-user])}
+                                                                          {:type :auto})]
 
-    (asyncm/go-loop []
+    (async/go-loop []
       (let [{:keys [event id ?data send-fn]} (async/<! ch-recv)]
 
         ;(prn "received some data " event

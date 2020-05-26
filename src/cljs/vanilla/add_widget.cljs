@@ -219,10 +219,8 @@
                     [widget-card name label icon chosen-widget widgets]])]])
 
 
-
 (defn add-by-source-modal
   "modal to allow the user to pick new widgets by first picking the data source they want"
-
   [is-active]
 
   (let [services             (rf/subscribe [:services])

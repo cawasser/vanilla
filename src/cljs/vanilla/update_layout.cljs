@@ -5,9 +5,22 @@
     [re-frame.core :as rf]
     [day8.re-frame.tracing :refer-macros [fn-traced]]
     [clojure.edn :as edn]
+    [dashboard-clj.core :as d]
     [vanilla.widget-defs :as widget-defs]
-    [cljs-uuid-utils.core :as uuid]))
+    [cljs-uuid-utils.core :as uuid]
+    [vanilla.data-source-subscribe :as ds]))
 
+
+(defn get-services []
+  (GET "/services" {:headers         {"Accept" "application/transit+json"}
+                    :response-format (ajax/json-response-format {:keywords? true})
+                    :handler         #(rf/dispatch-sync [:set-services %])}))
+
+
+(rf/reg-sub
+  :active-widgets-by-user
+  (fn [db _]
+    (get db :widgets)))
 
 (rf/reg-event-db
   :layout-message
@@ -21,6 +34,8 @@
 
 (defn save-layout [layout]
   ;(prn "saving layout: " (clojure.core/pr-str layout))
+
+  (ds/data-source-subscribe (mapv #(:data-source %) layout))
 
   (POST "/save-layout"
         {:format          (ajax/json-request-format {:keywords? true})
@@ -64,8 +79,9 @@
                                               :options ((:options conversion) options)))
                                           data)]
 
-                 ;(prn ":set-layout CONVERTED: " converted-data
-                 ;     "///// nextid: " highestNextid)
+                 ;(prn ":set-layout CONVERTED:  " converted-data)
+
+                 (ds/data-source-subscribe (mapv #(:data-source %) converted-data))
 
                  (assoc db :widgets converted-data
                            :next-id (uuid/uuid-string (uuid/make-random-uuid))))
