@@ -1,33 +1,34 @@
 (ns vanilla.server
-    (:require [dashboard-clj.core :as dash]
-              [vanilla.environment]
+  (:require [dashboard-clj.core :as dash]
+            [vanilla.environment]
 
-              [vanilla.bubble-service]
-              [vanilla.heatmap-service]
-              [vanilla.network-service]
-              [vanilla.sankey-service]
-              [vanilla.scatter-service]
-              [vanilla.stoplight-service]
-              [vanilla.usage-12-hour-service]
-              [vanilla.spectrum-traces-service]
-              [vanilla.usage-data-service]
-              [vanilla.power-data-service]
-              [vanilla.current-time-service]
-              [vanilla.table-service]
-              [vanilla.continent-map-service]
-              [vanilla.australia-map-service]
-              [vanilla.arearange-service]
-              [vanilla.energy-use-service]
-              [vanilla.task-service]
-              [vanilla.carousel-service]
+            [vanilla.bubble-service]
+            [vanilla.heatmap-service]
+            [vanilla.network-service]
+            [vanilla.sankey-service]
+            [vanilla.scatter-service]
+            [vanilla.stoplight-service]
+            [vanilla.usage-12-hour-service]
+            [vanilla.spectrum-traces-service]
+            [vanilla.usage-data-service]
+            [vanilla.power-data-service]
+            [vanilla.current-time-service]
+            [vanilla.table-service]
+            [vanilla.continent-map-service]
+            [vanilla.australia-map-service]
+            [vanilla.arearange-service]
+            [vanilla.energy-use-service]
+            [vanilla.task-service]
+            [vanilla.carousel-service]
 
-              [vanilla.service-deps :as deps]
-              [clojure.tools.logging :as log]
-              [trptcolin.versioneer.core :as version]
-              [vanilla.db.excel-data :as excel]
-              [vanilla.specs.dataspecs :as vsd])
+            [vanilla.service-deps :as deps]
+            [clojure.tools.logging :as log]
+            [trptcolin.versioneer.core :as version]
+            [vanilla.db.excel-data :as excel]
+            [vanilla.specs.dataspecs :as vsd]
+            [clojure.spec-alpha2 :as s])
 
-    (:gen-class))
+  (:gen-class))
 
 
 
@@ -37,8 +38,9 @@
                                           "vanilla"
                                           "version number not found"))
   (excel/init-from-excel)
+  (log/info "start-dashboard ::data-format-valid keyword this should be true = " (s/valid? ::vsd/data-format-valid :data-format/lat-lon-label)
 
-  (dash/start deps/datasources))
+    (dash/start deps/datasources)))
 
 (defn -main [& [port]]
   (start-dashboard))
