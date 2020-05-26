@@ -25,7 +25,10 @@
             [clojure.tools.logging :as log]
             [trptcolin.versioneer.core :as version]
             [vanilla.db.excel-data :as excel]
-            [vanilla.specs.dataspecs :as vsd]
+            [tests.dataformat :as td]
+            [tests.lat-lon-label :as tlll]
+            [gen.dataformat :as gd]
+            [gen.lat-lon-label :as glll]
             [clojure.spec-alpha2 :as s])
 
   (:gen-class))
@@ -38,9 +41,20 @@
                                           "vanilla"
                                           "version number not found"))
   (excel/init-from-excel)
-  (log/info "start-dashboard ::data-format-valid keyword this should be true = " (s/valid? ::vsd/data-format-valid :data-format/lat-lon-label)
-
-    (dash/start deps/datasources)))
+  (dash/start deps/datasources))
 
 (defn -main [& [port]]
+  (log/info "")
+  (log/info "")
+  (log/info "**** RUNNING TESTS")
+  (log/info "")
+  (td/run-tests)
+  (tlll/run-tests)
+  (log/info "")
+  (log/info "")
+  (log/info "**** GENERATING DATA")
+  (log/info "")
+  (gd/gen-data)
+  (glll/gen-data)
+  (log/info "")
   (start-dashboard))
