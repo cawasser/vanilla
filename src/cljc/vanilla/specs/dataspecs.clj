@@ -49,12 +49,18 @@
 (s/defop bounded-float
          "Specs a float with bounded range (<= min float-value max)"
          [min max]
-         (s/and float? #(<= min % max)))
+         (s/and (s/or (float? double?) #(<= min % max))))
 
 ;
 ; specs for the lat-lon-label data format
 ;
-(s/def ::is-valid-latitude (bounded-float min-latitude max-latitude))
-(s/def ::is-valid-longitude (bounded-float min-longitude max-longitude))
+(s/def ::lat (bounded-float min-latitude max-latitude))
+(s/def ::lon (bounded-float min-longitude max-longitude))
+;(s/def ::lat ::is-float)
+;(s/def ::lon ::is-float)
+(s/def ::name ::is-string)
+(s/def ::lat-lon-label (s/keys :req [::name ::lat ::lon]))
+(s/def ::lat-lon-label-un (s/keys :req-un [::name ::lat ::lon]))
+(s/def ::lat-lon-label-vector (s/coll-of ::lat-lon-label-un :kind vector?))
 
 
