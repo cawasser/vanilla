@@ -23,7 +23,8 @@
 
               [vanilla.service-deps :as deps]
               [clojure.tools.logging :as log]
-              [trptcolin.versioneer.core :as version])
+              [trptcolin.versioneer.core :as version]
+              [vanilla.db.excel-data :as excel])
 
     (:gen-class))
 
@@ -34,6 +35,8 @@
                                           "vanilla"
                                           "vanilla"
                                           "version number not found"))
+  (excel/init-from-excel excel/filename excel/excel-defs)
+
   (dash/start deps/datasources))
 
 (defn -main [& [port]]

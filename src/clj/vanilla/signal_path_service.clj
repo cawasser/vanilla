@@ -4,69 +4,57 @@
             [datascript.core :as d]))
 
 
-(def sheet "SCN_NETWORK_CARRIER_VW")
-(def column-map {:A :satellite
-                 :B :rx-beam
-                 :C :rx-channel
-                 :D :tx-beam
-                 :E :tx-channel
-                 :F :plan
-                 :G :mission-name
-                 :H :service
-                 :R :data-rate})
-(def post-fn
-  (fn [x] x))
 ;#(map (fn [{:keys [satellite] :as m}]
 ;        (assoc m :satellite (int satellite)))
 ;   %))
 
 
 
-(defn- query-for-data []
-  (->> (clojure.set/union
-         ; :rx-channel -> :rx-beam
-         (->> (d/q '[:find ?from ?to ?data-rate
-                     :where [?e :rx-channel ?from]
-                     [?e :rx-beam ?to]
-                     [?e :data-rate ?data-rate]]
-                @excel/conn)
-           (map (fn [[from to data-rate]]
-                  [(str from ".") to data-rate])))
+(defn- get-data []
+  (into []
+    (->> (clojure.set/union
+           (->> (d/q '[:find ?from ?to ?data-rate
+                       :where [?e :rx-channel ?from]
+                       [?e :rx-beam ?to]
+                       [?e :data-rate ?data-rate]]
+                  @excel/conn)
+             (map (fn [[from to data-rate]]
+                    [(str from ".") to data-rate])))
+           ; :rx-channel -> :rx-beam
+           (->> (d/q '[:find ?from ?to ?data-rate
+                       :where [?e :rx-channel ?from]
+                       [?e :rx-beam ?to]
+                       [?e :data-rate ?data-rate]]
+                  @excel/conn)
+             (map (fn [[from to data-rate]]
+                    [(str from ".") to data-rate])))
 
-         ;rx-beam -> :satellite
-         (->> (d/q '[:find ?from ?to ?data-rate
-                     :where [?e :rx-beam ?from]
-                     [?e :satellite ?to]
-                     [?e :data-rate ?data-rate]]
-                @excel/conn)
-           (map (fn [[from to data-rate]]
-                  [from (str to) data-rate])))
+           ;rx-beam -> :satellite
+           (->> (d/q '[:find ?from ?to ?data-rate
+                       :where [?e :rx-beam ?from]
+                       [?e :satellite-id ?to]
+                       [?e :data-rate ?data-rate]]
+                  @excel/conn)
+             (map (fn [[from to data-rate]]
+                    [from (str to) data-rate])))
 
-         ;:satellite -> :tx-beam
-         (->> (d/q '[:find ?from ?to ?data-rate
-                     :where [?e :satellite ?from]
-                     [?e :tx-beam ?to]
-                     [?e :data-rate ?data-rate]]
-                @excel/conn)
-           (map (fn [[from to data-rate]]
-                  [(str from) to data-rate])))
+           ;:satellite -> :tx-beam
+           (->> (d/q '[:find ?from ?to ?data-rate
+                       :where [?e :satellite-id ?from]
+                       [?e :tx-beam ?to]
+                       [?e :data-rate ?data-rate]]
+                  @excel/conn)
+             (map (fn [[from to data-rate]]
+                    [(str from) to data-rate])))
 
-         ;:tx-beam -> :tx channel
-         (->> (d/q '[:find ?from ?to ?data-rate
-                     :where [?e :tx-beam ?from]
-                     [?e :tx-channel ?to]
-                     [?e :data-rate ?data-rate]]
-                @excel/conn)
-           (map (fn [[from to data-rate]]
-                  [from (str "." to) data-rate]))))))
-
-;(map (fn [[from to]]
-;       [from to 5]))))
-
-(defn- get-data-from-excel []
-  (excel/load-data excel/filename sheet column-map post-fn)
-  (into [] (query-for-data)))
-
+           ;:tx-beam -> :tx channel
+           (->> (d/q '[:find ?from ?to ?data-rate
+                       :where [?e :tx-beam ?from]
+                       [?e :tx-channel ?to]
+                       [?e :data-rate ?data-rate]]
+                  @excel/conn)
+             (map (fn [[from to data-rate]]
+                    [from (str "." to) data-rate])))))))
 
 
 
@@ -79,7 +67,7 @@
    :series      [{:keys ["from" "to" "weight"]
                   :data (sort-by (juxt (fn [x] (get x 0))
                                    (fn [x] (get x 1)))
-                          (get-data-from-excel))}]})
+                          (get-data))}]})
 
 
 

@@ -38,6 +38,13 @@
              ;(prn "get services")
              {:services (h/get-services) :status 200})})
 
+  (POST "/services" req
+   {:status 200
+    :headers {"Content-Type" "text/json; charset=utf-8"}
+    :body (do
+            ;(prn "POSTED these services: " (get-in req [:params :sources]))
+            {:services (h/subscribe-to-services (get-in req [:params :user]) (get-in req [:params :sources])) :status 200})})
+
 ;;;;; Layout Saving Routes
 
   (GET "/layout" req

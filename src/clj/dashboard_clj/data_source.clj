@@ -4,6 +4,8 @@
 (declare resolve-fn)
 (declare data->event)
 
+(def data-sources (atom {}))
+
 (defprotocol FetchableDataSource
   (fetch [this]))
 
@@ -36,5 +38,5 @@
     (catch Throwable e
       (throw (ex-info (str "Could not resolve symbol on the classpath, did you require the file that contains the symbol " kw "?") {:kw kw})))))
 
-(defn- resolve-fn [fn-name]
+(defn resolve-fn [fn-name]
   (kw->fn fn-name))

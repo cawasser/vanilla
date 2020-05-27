@@ -66,3 +66,9 @@ new widgets, just revised default layout
 > text allow the user to change the color of the text
 
 > 0.3.2-SNAPSHOT. the Stoplight and Time widget type is available once again. Also a new "table" widget
+
+> 0.3.3-SNAPSHOT. Addition of widget layout saving and loading from the database
+
+> 0.3.4-SNAPSHOT. New modal so user can "customize" a widget: banner color, title text, and title text color.
+
+> 0.3.5-SNAPSHOT. Added World Map and Continental Australia map widgets.
