@@ -19,7 +19,8 @@
     (->> (d/q '[:find [(pull ?e [*]) ...]
                 :where [?e :terminal-id]]
            @excel/conn)
-      (sort-by first))))
+      (sort-by first)
+      (map #(dissoc % :satellite-id)))))
 
 
 (defn fetch-data []
