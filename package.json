@@ -19,7 +19,6 @@
     "react-grid-layout": "^0.18.3",
     "react-highcharts": "^16.1.0",
     "react-highlight.js": "1.0.7",
-    "react-virtualized": "9.21.2",
     "roughjs": "4.1.4",
     "scheduler": "^0.19.1",
     "shadow-cljs": "^2.8.94",

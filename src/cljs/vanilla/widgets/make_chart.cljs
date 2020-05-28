@@ -4,13 +4,11 @@
             [day8.re-frame.tracing :refer-macros [fn-traced]]
             [vanilla.widgets.util :as util]
             ["highcharts" :as Highcharts]
-            ["react-highcharts" :as ReactHighcharts]
             ["highcharts-more" :as HighchartsMore]
-            ["react-virtualized" :refer [AutoSizer]]
             [vanilla.dark-mode :as dark]))
 
 ; required to make "extra" charts, like bubble and arearange, available.
-(HighchartsMore ReactHighcharts/Highcharts)
+(HighchartsMore Highcharts)
 
 (declare default-conversion)
 
@@ -203,64 +201,37 @@
         base-config     (make-config chart-config data options)
         all-configs     (merge-configs base-config data options)]
 
-    (prn "make-chart " chart-type
-         ;" //// (chart-config) " chart-config
-         ;" //// (chart-reg-entry) " chart-reg-entry
-         " //// (all-configs) " all-configs )
+        ;(prn "make-chart " chart-type
+        ; " //// (chart-config) " chart-config
+        ; " //// (chart-reg-entry) " chart-reg-entry
+        ; " //// (all-configs) " all-configs )
 
+    (reagent/create-class
+      {:reagent-render
+       (fn [args]
+         ;@dom-node                                          ; be sure to render if node changes
+         [:div#hc {:style {:width "100%" :height "100%"}}])
 
-    [:div
-      [:> Highcharts/chart {:config all-configs}]]))
+       :component-did-mount
+       (fn [this]
+         [:> (Highcharts/chart (reagent/dom-node this) (clj->js all-configs))])})))
 
-
-    ;(reagent/create-class
-    ;  {:reagent-render
-    ;   (fn [args]
-    ;     @dom-node                                          ; be sure to render if node changes
-    ;     [:div {:style {:width (get options :viz/width "100%") :height "100%"}}])
-    ;
-    ;   :component-did-mount
-    ;   (fn [this]
-    ;     (let [node (reagent/dom-node this)]
-    ;
-    ;       ;(prn "component-did-mount " chart-type)
-    ;
-    ;       (reset! dom-node node)))
-    ;
-    ;   :component-did-update
-    ;   (fn [this ]
-    ;
-    ;       ;(prn "component-did-update " chart-type
-    ;       ;     " //// chart-config " chart-config
-    ;       ;     " //// chart-reg-entry " chart-reg-entry
-    ;       ;     " //// base-config " base-config
-    ;       ;     " //// (all-config)" all-configs)
-    ;
-    ;       (Highcharts/Chart all-configs))})))
-
-
-;[:div {:style {:height "100%" :width "100%" :display :flex}}
-
-    ;[:> ReactHighcharts {:config (update-in all-configs [:chart]
-    ;                                        assoc :height 300 :width 800)}]))
-
-
-     ;[:> AutoSizer (fn [m]
-     ;               (prn "MMMMMMM: " (js->clj m :keywordize-keys true))
-     ;               (let [mm (js->clj m :keywordize-keys true)
-     ;                     final-config (update-in all-configs [:chart]
-     ;                                             assoc :height (:height mm) :width (:width mm))]
-     ;                 ;(prn "Final-config: "  final-config)
-     ;                 (reagent/as-element
-     ;                   [:div#hc {:style {:height "100%" :width "100%"}}
-     ;                    [:> ReactHighcharts {:config final-config}]])))]))
-
-    ;[:> AutoSizer (fn [m]
-    ;                (prn "MMMMMMM: " (js->clj m :keywordize-keys true))
-    ;                ;(let [mm (js->clj m :keywordize-keys true)
-    ;                ;      final-config (update-in all-configs [:chart]
-    ;                ;                              assoc :height (:height mm) :width (:width mm))]
-    ;                  (reagent/as-element [:> ReactHighcharts {:config all-configs}]))]))
+;; in case we need to add :component-did-update in later, it used to look like this before shadow-cljs
+        ;:component-did-update
+        ;(fn [this old-argv]
+        ;  (let [new-args (rest (reagent/argv this))
+        ;        new-data (js->clj (second new-args))
+        ;        base-config (make-config chart-config new-data options)
+        ;        all-configs (merge-configs base-config new-data options)]
+        ;
+        ;    (prn "component-did-update " chart-type
+        ;         " //// chart-config " chart-config
+        ;         " //// chart-reg-entry " chart-reg-entry
+        ;         " //// base-config " base-config
+        ;         " //// (all-config)" all-configs)
+        ;
+        ;    (js/Highcharts.Chart. (reagent/dom-node this)
+        ;                          (clj->js all-configs)))
 
 ;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;
