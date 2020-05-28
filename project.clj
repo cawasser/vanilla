@@ -67,7 +67,8 @@
                  [day8.re-frame/re-frame-10x "0.4.3"]
                  [day8.re-frame/tracing "0.5.3"]
                  [clj-time "0.15.2"]
-                 [monoid/rough-cljs "1.0.0"]]
+                 [monoid/rough-cljs "1.0.0"]
+                 [etaoin "0.3.6"]]
 
   :min-lein-version "2.6.1"
 

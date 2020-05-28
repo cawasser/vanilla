@@ -146,15 +146,17 @@
           [:div
            [input-element "password"  pass]]]]
         [:footer.modal-card-foot
-         [:button.button.is-info {:on-click #(do
-                                               (attempt-login {:username @username
-                                                               :pass @pass})
-                                               (reset! is-active false))} "Login"]
+         [:button#do-login.button.is-info
+          {:on-click #(do
+                        (attempt-login {:username @username
+                                        :pass @pass})
+                        (reset! is-active false))} "Login"]
 
-         [:button.button.is-success {:on-click #(do
-                                                  (attempt-create-user {:username @username
-                                                                        :pass @pass})
-                                                  (reset! is-active false))} "Sign-up"]
+         [:button#do-signup.button.is-success
+          {:on-click #(do
+                        (attempt-create-user {:username @username
+                                              :pass @pass})
+                        (reset! is-active false))} "Sign-up"]
 
          [:button.button {:on-click #(reset! is-active false)} "Cancel"]]]])))
 
@@ -168,7 +170,7 @@
       [:div.has-text-left
         ;[:p (str (attempt-get-all-users))] ;; This prints all users to lein run, but crashes UI
         [:div.level-right.has-text-right
-          [:button.button.is-info {:on-click #(swap! is-active not)} "Login"]]
+          [:button#login.button.is-info {:on-click #(swap! is-active not)} "Login"]]
         [login-pop-up is-active]])))
 
 
@@ -189,11 +191,11 @@
     [:section.modal-card-body
      [:p "Are you sure you want to log out?"]]
     [:footer.modal-card-foot
-     [:button.button.is-danger {:on-click #(do
-                                             (rf/dispatch-sync [:logout])
-                                             (reset! is-active false))} "Logout"]
+     [:button#do-logout.button.is-danger {:on-click #(do
+                                                       (rf/dispatch-sync [:logout])
+                                                       (reset! is-active false))} "Logout"]
 
-     [:button.button {:on-click #(reset! is-active false)} "Cancel"]]]])
+     [:button#do-cancel.button {:on-click #(reset! is-active false)} "Cancel"]]]])
 
 
 (defn logout-button
