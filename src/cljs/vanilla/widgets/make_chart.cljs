@@ -253,7 +253,7 @@
    :conversions       {:default             "",
                        :data-format/from-to ""}}
 
-  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  ;;;;;;;;;;;;ALL-CONFIGS;;;;;;;;;;;;; for future reference
   {:legendBackgroundColor "rgba(48, 48, 48, 0.8)",
    :labels {:style {:color "#CCC"}},
    :dataLabelsColor "#444",
@@ -307,7 +307,6 @@
    :title {:text "", :style {:labels {:fontFamily "monospace", :color "#FFFFFF"},
                              :color "#FFF", :font "16px Lucida Grande, Lucida Sans Unicode, Verdana, Arial, Helvetica, sans-serif"}},
    :chart {:borderRadius 0,
-           :width 763,
            :type "pie",
            :plotBorderWidth 0,
            :borderWidth 0,
@@ -316,8 +315,7 @@
            :plotBackgroundColor nil,
            :plotShadow false,
            :backgroundColor {:linearGradient {:x1 0, :y1 0, :x2 0, :y2 1},
-                             :stops [[0 "rgb(96, 96, 96)"] [1 "rgb(16, 16, 16)"]]},
-           :height 362},
+                             :stops [[0 "rgb(96, 96, 96)"] [1 "rgb(16, 16, 16)"]]}},
    :yAxis {:title {:align "high",
                    :style {:color "#AAA", :font "bold 12px Lucida Grande, Lucida Sans Unicode, Verdana, Arial, Helvetica, sans-serif"}},
            :labels {:overflow "justify",
