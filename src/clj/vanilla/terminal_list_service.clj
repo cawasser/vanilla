@@ -20,7 +20,8 @@
                 :where [?e :terminal-id]]
            @excel/conn)
       (sort-by first)
-      (map #(dissoc % :satellite-id)))))
+      (map #(dissoc % :db/id)))))
+
 
 
 (defn fetch-data []
@@ -42,5 +43,6 @@
               :where [?e :terminal-id]]
         @excel/conn)
     (sort-by first))
+
 
   ())

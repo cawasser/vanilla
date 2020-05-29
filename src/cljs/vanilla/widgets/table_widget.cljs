@@ -27,6 +27,31 @@
          (for [b body]
            ^{:key (str b)}
            [:tr
-            (for [[k v] b]
-              (do
-                [:td (str v)]))]))]]]))
+            (for [{:keys [key]} header]
+              [:td (str (get b (keyword key)))])]))]]]))
+
+
+
+
+(comment
+  (def data @(re-frame.core/subscribe [:app-db :terminal-list-service]))
+  (def body (get-in data [:data :series]))
+  (def header (get-in data [:data :meta-data]))
+
+  (for [b body]
+    (for [{:keys [key]} header]
+      (get b (keyword key))))
+
+  (for [b body
+        {:keys [key]} header]
+    (get b (keyword key)))
+
+  (for [b body]
+    ^{:key (str b)}
+    [:tr
+     (for [{:keys [key]} header]
+       [:td (str (get b (keyword key)))])])
+
+
+  ())
+
