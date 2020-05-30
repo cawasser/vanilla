@@ -49,6 +49,7 @@
   (require '[etaoin.keys :as k])
 
   (def driver (chrome))
+  (def driver (firefox))
 
   (go driver
     "localhost:5000")
@@ -68,6 +69,9 @@
     "1234")
   (click driver
     {:tag :button :id :do-login})
+
+
+  (screenshot driver "etaoin/test/post-login.png")
 
 
   (click driver
