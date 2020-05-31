@@ -27,14 +27,20 @@
 
   * c-path - path to the 'candidate', the image you are testing
 
-  * r-path - the location to write out the resulting image, which wil be the visual 'difference'
+  * r-path - the location to write out the resulting image, which will be the visual 'difference'
              between the candidate and the master, this image will be the same size as the 'master'
 
   This function uses Java-interop to access the ImageIO and BufferedImage classes
 
-  Any pixels that are different will trigger writing the 'candidate' pixel to the result"
+  Any pixels that are different will trigger writing the 'candidate' pixel to the result
+
+  NOTE: we need to use (doseq...) here instead of the more usual (for ..) because
+  'for' doesn't handle side-effects (i.e., mutability, like atoms or Java objects). In this case
+  (doseq...) works the same since it can support multiple bindings, but side-effecting function in the
+  body are okay. See https://clojuredocs.org/clojure.core/doseq"
 
   [m-path c-path r-path filename]
+
   (let [master (load-image m-path filename)
         candidate (load-image c-path filename)
         newName (compare-name r-path filename)
