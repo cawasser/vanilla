@@ -57,10 +57,10 @@
 
   (let [chart-config @(rf/subscribe [:hc-type type])]
 
-    ;(prn "building widget " key " of " type
-    ;  " //// " basis "/" chart-types
-    ;  " //// chart-config " chart-config
-    ;  " //// widget " widget)
+    (prn "building widget " key " of " type
+      " //// " basis "/" chart-types
+      " //// chart-config " chart-config
+      " //// widget " widget)
 
 
     (condp = basis

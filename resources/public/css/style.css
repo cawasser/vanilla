@@ -23,7 +23,8 @@ body {
 
 .widget-parent {
         display: flex;
-        flex-flow:column;
+        overflow: hidden;
+        flex-flow: column;
         height: 100%;
 }
 

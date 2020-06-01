@@ -209,7 +209,7 @@
     (reagent/create-class
       {:reagent-render
        (fn [args]
-         ;@dom-node                                          ; be sure to render if node changes
+         ;@dom-node                                          ; be sure to render if node changes, doesnt seem necessary
          [:div#hc {:style {:width "100%" :height "100%"}}])
 
        :component-did-mount
