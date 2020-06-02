@@ -24,6 +24,7 @@
   (log/info " ")
   (log/info "   data set")
   (log/info " ")
+  (log/info "generate series ::vsd/data-format-valid: " (gen/sample (s/gen ::vsd/data-format-valid)))
   (log/info "generate series ::vsd/data-format-in-set: " (gen/sample (s/gen ::vsd/data-format-in-set)))
 
   (log/info " ")

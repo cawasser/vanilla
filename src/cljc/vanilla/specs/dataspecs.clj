@@ -49,7 +49,8 @@
 (s/defop bounded-float
          "Specs a float with bounded range (<= min float-value max)"
          [min max]
-         (s/and (s/or (float? double?) #(<= min % max))))
+         (s/and float? #(<= min % max)))
+
 
 ;
 ; specs for the lat-lon-label data format
