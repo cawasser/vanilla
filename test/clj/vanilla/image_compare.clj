@@ -35,9 +35,12 @@
   Any pixels that are different will trigger writing the 'candidate' pixel to the result
 
   NOTE: we need to use (doseq...) here instead of the more usual (for ..) because
-  'for' doesn't handle side-effects (i.e., mutability, like atoms or Java objects). In this case
+  'for' is lazy and doesn't handle side-effects (i.e., mutability, like atoms or Java objects). In this case
   (doseq...) works the same since it can support multiple bindings, but side-effecting function in the
-  body are okay. See https://clojuredocs.org/clojure.core/doseq"
+  body are okay. See https://clojuredocs.org/clojure.core/doseq
+
+  NOTE 2: we could use (for...) by wrapping it in a (doall...) which will force evaluation of the
+  side-effecting code, but (doseq...) is probably more idiomatic in this case."
 
   [m-path c-path r-path filename]
 
@@ -73,6 +76,21 @@
     (ImageIO/write result "png" (File. newName)))
 
   (save-image-diffs "etaoin/master/" "etaoin/test/" "etaoin/result/" "post-login")
+
+
+
+  (let [master (load-image "etaoin/master/" filename)
+        candidate (load-image "etaoin/test/" filename)
+        newName (compare-name "etaoin/result/" filename)
+        result (BufferedImage. (.getWidth master) (.getHeight master) (.getType master))]
+    (doall
+      (for [x (range (.getWidth master))
+            y (range (.getHeight master))]
+        (let [t (.getRGB candidate x y)
+              diff (Math/abs (- t (.getRGB master x y)))]
+          (if (not= 0 diff)
+            (.setRGB result x y t)))))
+    (ImageIO/write result "png" (File. newName)))
 
   ())
 
