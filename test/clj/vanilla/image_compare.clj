@@ -1,6 +1,7 @@
 (ns vanilla.image-compare
   (:require [clojure.test :refer :all]
-            [clojure.tools.logging :as log])
+            [clojure.tools.logging :as log]
+            [clojure.java.io :as io])
   (:import (java.awt.image BufferedImage)
            (javax.imageio ImageIO)
            (java.io File)))
@@ -15,7 +16,7 @@
 (defn- load-image
   "loads a PGN file of the given filename at the path provided
 
-  * path     - relative path to the file
+  * path     - relative path to the file. will create the path if needed
 
   * filename - base name of the file, not including path or extension (assumed to be PNG)
 
@@ -42,9 +43,10 @@
 
 
 (defn- compare-name
-  "create a valid filename to use for the 'result' image
+  "create a valid fully-qualified filename to use for the 'result' image
 
-  * path     - relative path to the location ofr storing the new file
+  * path     - relative path to the location for storing the new file, the path will be
+               created if it does not exist
 
   * filename - base name of the file, not including path or extension (assumed to be PNG)
 
@@ -53,20 +55,15 @@
 
   *Assumptions/Errors*
 
-  1. Assumes the path exists or will throw a Java Exception, specifically:
+  1. Assumes the path ends with the correct path separator, usually '/' or it will create an
+  invalid fully-qualified filename
 
-          Execution error (IIOException) at javax.imageio.ImageIO/read (ImageIO.java:1302).
-          Can't read input file!
-
-  2. Assumes the path ends with the correct path separator, usually '/' or will throw:
-
-          Execution error (IIOException) at javax.imageio.ImageIO/read (ImageIO.java:1302).
-          Can't read input file!
-
-  3. Assumes the file is a PNG (portable network graphics). IIOException again.
+  2. Assumes the file will be a PNG (portable network graphics).
 
   "
   [path filename]
+  (if (not (.isDirectory (io/file path)))
+    (.mkdir (File. path)))
   (str path filename ".png"))
 
 
@@ -74,7 +71,17 @@
 ; TODO: save-image-diffs is TOO SLOW to be practical in Clojure - use Java directly
 ;
 (defn save-image-diffs
-  "compare 2 images and save a new image that just includes the differences in pixels
+  "compare 2 images and save a new image that just includes the differences in pixels.
+
+  This function does NOT attempt any error protection or handling, prefering to pass that
+  off to those calling this function. Typically this will be a testing framework, which
+  may have its own mechanisms for handling such situations. In fact, it is conceivable
+  that provoking and error is exactly the purpose in making a call which the caller expects
+  to fail!
+
+  Additionally, given the nature of this function, there isn't much that can be done
+  within scope to 'correct' or 'retry' if either the directory or the file itself are
+  missing.
 
   * m-path - path to the 'master' image, the one presumed to be correct
 
@@ -171,6 +178,20 @@
           (if (not= 0 diff)
             (.setRGB result x y t)))))
     (ImageIO/write result "png" (File. newName)))
+
+  (.isDirectory (io/file "etaoin/master/"))
+  (.isDirectory (io/file "etaoin/trial/"))
+
+  (.mkdir (File. "etaoin/master/"))
+  (.mkdir (File. "etaoin/trial/"))
+
+  (if (not (.isDirectory (io/file "etaoin/trial/")))
+    (.mkdir (File. "etaoin/trial/")))
+
+  (compare-name "etaoin/trial/" "sample")
+
+
+  (ImageIO/read (File. (str "etaoin/trial/" "post-login" ".png")))
 
 
   ; some working examples
