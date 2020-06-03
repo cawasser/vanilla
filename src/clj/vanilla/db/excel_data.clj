@@ -87,14 +87,18 @@
 
 
 
-(defn- load-data [workbook sheet column-map post-fn]
-  (log/info "Loading " sheet)
-  (->> workbook
-    (select-sheet sheet)
-    (select-columns column-map)
-    (drop 1)
-    post-fn
-    (d/transact! conn)))
+(defn- load-data
+  ([workbook sheet column-map]
+   (load-data workbook sheet column-map (fn [x] x)))
+
+  ([workbook sheet column-map post-fn]
+   (log/info "Loading " sheet)
+   (->> workbook
+     (select-sheet sheet)
+     (select-columns column-map)
+     (drop 1)
+     post-fn
+     (d/transact! conn))))
 
 
 (defn init-from-excel [filename defs]
@@ -165,6 +169,23 @@
   (map (fn [{:keys [sheet column-map post-fn]}]
          [filename sheet column-map post-fn])
     excel-defs)
+
+
+  (with-open [workbook (load-workbook-from-resource filename)]
+    (load-data workbook "Missions" {:A :task-name
+                                    :B :organization
+                                    :C :start-time
+                                    :D :end-time}))
+
+  (d/q
+    '[:find ?task-name
+      :where [?e :task-name ?task-name]]
+    @conn)
+
+  (d/q
+    '[:find [(pull ?e [*]) ...]
+      :where [?e :task-name _]]
+    @conn)
 
 
   ())

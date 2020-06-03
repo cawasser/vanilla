@@ -34,9 +34,11 @@
 
 
 (comment
-  (d/q '[:find [(pull ?e [*]) ...]
-         :where [?e :terminal-id]]
-    @excel/conn)
+  (->>
+    (d/q '[:find [(pull ?e [*]) ...]
+           :where [?e :terminal-id]]
+      @excel/conn)
+    (take 10))
 
 
   (->> (d/q '[:find [(pull ?e [*]) ...]
