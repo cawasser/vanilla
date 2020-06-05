@@ -1,7 +1,7 @@
 (ns tests.lat-lon-label
   (:require [clojure.spec-alpha2 :as s]
             [clojure.tools.logging :as log]
-            [vanilla.specs.dataspecs :as vsd]))
+            [vanilla.specs.latlonlabel :as vsd]))
 
 ;
 ; some test data for specing lat-lon-label
