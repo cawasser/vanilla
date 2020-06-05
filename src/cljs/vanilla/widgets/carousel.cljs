@@ -171,6 +171,8 @@
 
 (defn carousel [contents]
 
+  (prn "Carousel contents: " contents)
+
   (let [is-widget-active (r/atom false)]
     ;[:div {:style {:width "100%" :height "100%"}}
      [:> CarouselProvider {:style {:width "100%" :height "100%"}
@@ -214,20 +216,15 @@
 
     (carousel
       (for [[idx s] (map-indexed vector sources)]
-
-        (r/reactify-component
+        (r/create-element
           (r/create-class
             {:reagent-render
              (fn [args]
-               [:div {:style {:width "100%" :height "100%"}}])
+               [:div {:style {:width "100%" :height "100%" :display :flex}}])
 
              :component-did-mount
              (fn [this]
                ^{:key idx} [:> (Highcharts/chart (r/dom-node this) (clj->js s))])}))))))
-
-
-      ;(for [[idx s] (map-indexed vector sources)]
-      ;  ^{:key idx} [:> ReactHighcharts {:config s}]))))
 
 
 
