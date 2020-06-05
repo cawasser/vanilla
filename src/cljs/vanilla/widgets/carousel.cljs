@@ -174,10 +174,11 @@
   (prn "Carousel contents: " contents)
 
   (let [is-widget-active (r/atom false)]
-    ;[:div {:style {:width "100%" :height "100%"}}
+    ;[:div#Carousel {:style {:width "100%" :height "100%"}}
      [:> CarouselProvider {:style {:width "100%" :height "100%"}
-                           :naturalSlideWidth  640
-                           :naturalSlideHeight 420
+                           :naturalSlideWidth  500
+                           :naturalSlideHeight 230
+                           ;:isIntrinsicHeight  true
                            :totalSlides        (count contents)
                            :dragEnabled        false}
       [:div {:style {:display :flex :justify-content :center :align-items :center}}
@@ -220,7 +221,7 @@
           (r/create-class
             {:reagent-render
              (fn [args]
-               [:div {:style {:width "100%" :height "100%" :display :flex}}])
+               [:div#chartSlide {:style {:width "100%" :height "100%"}}])
 
              :component-did-mount
              (fn [this]
