@@ -48,3 +48,8 @@
    :series      (get-data)})
 
 
+(comment
+
+  (vanilla.subscription-manager/refresh-source :terminal-list-service)
+
+  ())
