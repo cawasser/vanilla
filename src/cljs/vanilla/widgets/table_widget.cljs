@@ -5,7 +5,7 @@
 
 (defn make-widget [name data options]
 
-  ;(prn ":grid make-widget" name
+  ;(prn "table-widget" name
   ;     " //// data " data
   ;     " //// (options) " options)
 
@@ -13,20 +13,20 @@
         body   (get-in data [:data :series])]
 
     ;(prn "header " header
-    ;     " //// body " body)
+    ;     " //// body " body)s
 
-    [:div.table-container
-     [:table.table.is-hoverable
+    [:div.table-container {:style {:width "100%" :height "100%"}}
+     [:table.table.is-hoverable {:style {:width "100%" :height "100%"}}
       [:thead
        [:tr
-        (for [h header]
-          ^{:key (str (:name h))} [:th (str (:name h))])]]
+        (for [[idx h] (map-indexed vector header)]
+          ^{:key idx} [:th (str (:name h))])]]
 
       [:tbody
        (doall
-         (for [b body]
-           ^{:key (str b)}
+         (for [[idx b] (map-indexed vector body)]
+           ^{:key idx}
            [:tr
             (for [[k v] b]
               (do
-                [:td (str v)]))]))]]]))
+                ^{:key k} [:td (str v)]))]))]]]))

@@ -87,6 +87,7 @@
                              :style {:labels {:fontFamily "monospace", :color "#FFFFFF"},
                                      :color  "#FFF", :font "16px Lucida Grande, Lucida Sans Unicode, Verdana, Arial, Helvetica, sans-serif"}},
      :chart                 {:type            "line",
+                             :reflow          true,
                              :zoomType        "x",
                              :backgroundColor {:linearGradient {:x1 0, :y1 0, :x2 0, :y2 1},
                                                :stops          [[0 "rgb(96, 96, 96)"] [1 "rgb(16, 16, 16)"]]},
@@ -170,8 +171,6 @@
 
 
 (defn carousel [contents]
-
-  (prn "Carousel contents: " contents)
 
   (let [is-widget-active (r/atom false)]
     ;[:div#Carousel {:style {:width "100%" :height "100%"}}

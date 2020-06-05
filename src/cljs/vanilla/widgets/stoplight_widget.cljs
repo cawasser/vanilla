@@ -14,6 +14,7 @@
     ^{:key id}
     [:button.button {:style    {:background-color c
                                 :width            "20%"
+                                :height           "20%"
                                 :border-spacing   "5px"}
                      :on-click #(.log js/console (str "clicked " id))}
      id]))
@@ -42,6 +43,7 @@
 
   [:table-container
    [:table.is-hoverable {:style {:width          "100%"
+                                 :height         "100%"
                                  :border-spacing "15px"
                                  :table-layout   :fixed}}
     [:tbody
