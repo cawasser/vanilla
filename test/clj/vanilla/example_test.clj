@@ -3,3 +3,7 @@
 
 (deftest example-passing-test
   (is (= 1 1)))
+
+
+(deftest another-test
+  (is (= true false)))
