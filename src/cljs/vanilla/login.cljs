@@ -25,9 +25,21 @@
 (rf/reg-event-db
   :logout
   (fn-traced [db _]
-             (prn "Logging out")
-             (layout/get-layout nil)    ;;clear page of widgets
-             (dissoc db :current-user :data-sources :services)))
+    (prn "Logging out" (:current-user db))
+
+    ; we can just launch this and assume the server cleans up.
+    ; if there are any problems, the server will clean up when we
+    ; close the web page anyway
+    ;
+    (POST "/logout"
+      {:format          (ajax/json-request-format {:keywords? true})
+       :response-format (ajax/json-response-format {:keywords? true})
+       :params          {:user (:current-user db)}
+       :handler         #()
+       :error-handler   #()})
+
+    (layout/get-layout nil)                                 ;;clear page of widgets
+    (dissoc db :current-user :data-sources :services)))
 
 (rf/reg-event-db
   :login-message
