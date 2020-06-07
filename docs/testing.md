@@ -79,6 +79,6 @@ the expected value, and the actual value used in the `(is...)` check
 
 ## Resources
 
-[Cursive Test Integration](https://cursive-ide.com/userguide/testing.html)
-[Example-based Unit Testing in Clojure](https://purelyfunctional.tv/mini-guide/example-based-unit-testing-in-clojure/)
-[Testing in Clojure (practicalli)](https://practicalli.github.io/clojure/testing/)
+- [Cursive Test Integration](https://cursive-ide.com/userguide/testing.html)
+- [Example-based Unit Testing in Clojure](https://purelyfunctional.tv/mini-guide/example-based-unit-testing-in-clojure/)
+- [Testing in Clojure (practicalli)](https://practicalli.github.io/clojure/testing/)
