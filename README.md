@@ -56,6 +56,9 @@ This single-page application (SPA) provides a number of graphical widgets based 
 - [Modal Usage](docs/modal_useage.md)
 - [Using Excel]()
 - [Using Datascript]()
+- Working at the REPL
+  - [On the Server](docs/repl-driven-server.md)
+  - [On the Client]()
 
 ### Running the application
 
