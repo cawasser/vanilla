@@ -114,5 +114,5 @@ Diagrams are generated "automatically" by ???
 
 ## Some Additional Resouces to Consider
 
-[Write the Docs](https://www.writethedocs.org)
-[Dynadoc](https://github.com/oakes/Dynadoc)
+- [Write the Docs](https://www.writethedocs.org)
+- [Dynadoc](https://github.com/oakes/Dynadoc)
