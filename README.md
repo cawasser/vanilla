@@ -56,6 +56,7 @@ This single-page application (SPA) provides a number of graphical widgets based 
 - [Modal Usage](docs/modal_useage.md)
 - [Using Excel]()
 - [Using Datascript]()
+- [Testing](docs/testing.md)
 
 ### Running the application
 
@@ -111,7 +112,7 @@ Diagrams are generated "automatically" by ???
 
 
 
-## FAQ
+## Some Additional Resouces to Consider
 
-
-[Write the Docs](https://www.writethedocs.org)
+- [Write the Docs](https://www.writethedocs.org)
+- [Dynadoc](https://github.com/oakes/Dynadoc)
