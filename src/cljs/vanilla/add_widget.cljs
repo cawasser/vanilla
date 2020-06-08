@@ -239,6 +239,10 @@
                     [widget-card name label icon chosen-widget widgets]])]])
 
 
+(defn filtered [services]
+  "filters the services list shown in the modal"  ;only removes carousel currently due to specific carousel button addition
+  (vec (remove #(= "carousel-service" (:keyword %)) services)))
+
 (defn add-by-source-modal
   "modal to allow the user to pick new widgets by first picking the data source they want"
   [is-active]
@@ -251,7 +255,7 @@
     (fn []
       (modal {:is-active             is-active
               :title                 "Add Data Source"
-              :modal-body-list       [[service-list @services @selected]
+              :modal-body-list       [[service-list (filtered @services) @selected]
                                       [widget-list @widget-cards @selected @chosen-widget]]
               :footer-button-enabled @compatible-selection
               :footer-button-fn      #(add-widget (:name @chosen-widget) @selected)
@@ -324,6 +328,10 @@
                                   :data-format/x-y-e
                                   :data-format/y]
                       :icon "/images/bubble-widget.png"})
+
+  (def services (rf/subscribe [:services]))
+  @services
+  (vec (remove #(= "carousel-service" (:keyword %)) @services))
 
   (def services [{:id "1000", :keyword "spectrum-traces", :name "Spectrum Traces",
                   :ret_type "data-format/x-y", :read_fn "vanilla.spectrum-traces-service/spectrum-traces"}
