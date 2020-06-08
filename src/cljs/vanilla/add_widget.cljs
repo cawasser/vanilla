@@ -276,7 +276,7 @@
     (fn []
 
       (modal {:is-active             is-active
-              :title                 "Add Carousel"
+              :title                 "Add Widget"
               :modal-body-list       [[all-widget-list @widget-cards @chosen-widget]
                                       [compatible-service-list @services @chosen-widget @selected]]
               :footer-button-enabled @compatible-selection
@@ -328,10 +328,6 @@
                                   :data-format/x-y-e
                                   :data-format/y]
                       :icon "/images/bubble-widget.png"})
-
-  (def services (rf/subscribe [:services]))
-  @services
-  (vec (remove #(= "carousel-service" (:keyword %)) @services))
 
   (def services [{:id "1000", :keyword "spectrum-traces", :name "Spectrum Traces",
                   :ret_type "data-format/x-y", :read_fn "vanilla.spectrum-traces-service/spectrum-traces"}
