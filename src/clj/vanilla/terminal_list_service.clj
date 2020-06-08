@@ -16,27 +16,12 @@
 
 (defn- get-data []
   (into []
-    (->> (d/q '[:find ?terminal-id ?lat ?lon
-                ?satellite-id ?tx-beam ?tx-channel ?rx-beam ?rx-channel
-                :where [?e :terminal-id ?terminal-id]
-                [?e :lat ?lat]
-                [?e :lon ?lon]
-                [?e :satellite-id ?satellite-id]
-                [?e :tx-beam ?tx-beam]
-                [?e :tx-channel ?tx-channel]
-                [?e :rx-beam ?rx-beam]
-                [?e :rx-channel ?rx-channel]]
+    (->> (d/q '[:find [(pull ?e [*]) ...]
+                :where [?e :terminal-id]]
            @excel/conn)
       (sort-by first)
-      (map (fn [[t lat lon s txb txc rxb rxc]]
-             {:terminal-id  t
-              :lat          lat
-              :lon          lon
-              :satellite-id s
-              :tx-beam      txb
-              :tx-channel   txc
-              :rx-beam      rxb
-              :rx-channel   rxc})))))
+      (map #(dissoc % :db/id)))))
+
 
 
 (defn fetch-data []
@@ -48,3 +33,18 @@
    :series      (get-data)})
 
 
+(comment
+  (->>
+    (d/q '[:find [(pull ?e [*]) ...]
+           :where [?e :terminal-id]]
+      @excel/conn)
+    (take 10))
+
+
+  (->> (d/q '[:find [(pull ?e [*]) ...]
+              :where [?e :terminal-id]]
+        @excel/conn)
+    (sort-by first))
+
+
+  ())
