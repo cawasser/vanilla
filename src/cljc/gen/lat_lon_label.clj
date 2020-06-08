@@ -2,7 +2,7 @@
   (:require [clojure.spec-alpha2 :as s]
             [clojure.spec-alpha2.gen :as gen]
             [clojure.tools.logging :as log]
-            [vanilla.specs.dataspecs :as vsd]))
+            [vanilla.specs.latlonlabel :as vsd]))
 
 
 (defn gen-data []

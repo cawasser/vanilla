@@ -2,7 +2,8 @@
   (:require [clojure.spec-alpha2 :as s]
             [clojure.spec-alpha2.gen :as gen]
             [clojure.tools.logging :as log]
-            [vanilla.specs.dataspecs :as vsd]))
+            [vanilla.specs.util :as vsu]
+            [vanilla.specs.dataformat :as vsd]))
 
 
 (defn gen-data []
@@ -14,7 +15,7 @@
   (log/info " ")
 
   (log/info "generate ::vsd/data-format-in-set: " (gen/generate (s/gen ::vsd/data-format-in-set)))
-  (log/info "generate ::vsd/is-keyword: " (gen/generate (s/gen ::vsd/is-keyword)))
+  (log/info "generate ::vsd/is-keyword: " (gen/generate (s/gen ::vsu/is-keyword)))
 
   ;
   ;this didn't work if ::data-format-valid had the keyword check first in the s/and!!!

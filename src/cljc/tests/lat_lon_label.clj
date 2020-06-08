@@ -1,6 +1,7 @@
 (ns tests.lat-lon-label
   (:require [clojure.spec-alpha2 :as s]
             [clojure.tools.logging :as log]
+            [vanilla.specs.util :as vsu]
             [vanilla.specs.latlonlabel :as vsd]))
 
 ;
@@ -34,8 +35,8 @@
   (log/info "   valid? tests")
   (log/info " ")
 
-  (log/info "      ::is-vector 42 should be false = " (s/valid? ::vsd/is-vector 42))
-  (log/info "      ::is-vector [] should be true = " (s/valid? ::vsd/is-vector []))
+  (log/info "      ::is-vector 42 should be false = " (s/valid? ::vsu/is-vector 42))
+  (log/info "      ::is-vector [] should be true = " (s/valid? ::vsu/is-vector []))
   (log/info "      ::vsd/lat-lon-label single-lat-lon-label should be true = " (s/valid? ::vsd/lat-lon-label single-lat-lon-label))
   (log/info "      ::vsd/lat-lon-label-un single-lat-lon-label-un should be true = " (s/valid? ::vsd/lat-lon-label-un single-lat-lon-label-un))
   (log/info "      ::vsd/lat-lon-label-un single-lat-lon-label-un-dif-lat-name should be false = " (s/valid? ::vsd/lat-lon-label-un single-lat-lon-label-un-dif-lat-name))
