@@ -116,6 +116,17 @@
                              :viz/banner-color {:r 0x99 :g 0xff :b 0x00 :a 1}
                              :viz/banner-text-color black}}
 
+              {:name        :sankey-carousel-widget
+               :basis       :simple
+               :type        :sankey-carousel-widget
+               :build-fn    vanilla.widgets.carousel/make-sankey-widget
+               :ret_types   [:data-format/carousel]
+               :icon        "/images/carousel-widget.png"
+               :label       "Carousel"
+               :options     {:viz/title        "Sankey Carousel"
+                             :viz/banner-color {:r 0x99 :g 0xff :b 0x00 :a 1}
+                             :viz/banner-text-color black}}
+
               {:name      :table-widget
                :basis     :simple
                :type      :table-widget
