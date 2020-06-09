@@ -64,10 +64,27 @@
 
   {:title       "Signal Path Data"
    :data-format :data-format/from-to-n
-   :series      [{:keys ["from" "to" "weight"]
+   :series      [{:type  :sankey
+                  :name "Signal Paths"
+                  :keys ["from" "to" "weight"]
                   :data (sort-by (juxt (fn [x] (get x 0))
                                    (fn [x] (get x 1)))
-                          (get-data))}]})
+                          (get-data))
+                  :showInLegend true}
+                 {:type  :sankey
+                  :name "Languages"
+                  :keys ["from" "to" "weight"]
+                  :data (vanilla.sankey-service/make-data)
+                  :showInLegend true
+                  :visible false}
+                 {:type  :sankey
+                  :name "Energy"
+                  :keys ["from" "to" "weight"]
+                  :data (vanilla.energy-use-service/make-data)
+                  :showInLegend true
+                  :visible false}]})
+
+
 
 
 
