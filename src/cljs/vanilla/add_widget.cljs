@@ -318,7 +318,6 @@
       [:div.has-text-left
        [:button.button.is-info {:on-click #(swap! is-source-active not)} "Add Source"]
        [:button.button.is-info {:on-click #(add-carousel)} "Add Carousel"]
-       [:button.button.is-info {:on-click #(rf/dispatch [:add-sankey-carousel])} "Add Sankey"]
        [add-by-source-modal is-source-active]])))
        ;[add-by-widget-modal is-widget-active]
 

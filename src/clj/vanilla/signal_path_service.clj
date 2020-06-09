@@ -63,7 +63,7 @@
   (log/info "Signal Path Service")
 
   {:title       "Signal Path Data"
-   :data-format :data-format/from-to-n
+   :data-format :data-format/grouped-from-to-n
    :series      [{:type  :sankey
                   :name "Signal Paths"
                   :keys ["from" "to" "weight"]
@@ -75,14 +75,14 @@
                   :name "Languages"
                   :keys ["from" "to" "weight"]
                   :data (vanilla.sankey-service/make-data)
-                  :showInLegend true
-                  :visible false}
+                  :showInLegend true}
+                  ;:visible false}
                  {:type  :sankey
                   :name "Energy"
                   :keys ["from" "to" "weight"]
                   :data (vanilla.energy-use-service/make-data)
-                  :showInLegend true
-                  :visible false}]})
+                  :showInLegend true}]})
+                  ;:visible false}]})
 
 
 
