@@ -5,7 +5,8 @@
             [re-frame.core :as rf]
             [clojure.edn :as edn]
             [vanilla.modal :refer [modal]]
-            ["react-highcharts" :as ReactHighcharts]
+            ["highcharts" :as Highcharts]
+            ["highcharts-more" :as HighchartsMore]
             ["react-highcharts/ReactHighmaps" :as ReactHighmaps]
             ["pure-react-carousel" :refer [CarouselProvider Slider Slide
                                            Dot DotGroup
@@ -219,7 +220,7 @@
     (carousel
       (for [[idx s] (map-indexed vector sources)]
        (do
-         (prn "make-sankey-widget " s)
+         ;(prn "make-sankey-widget " s)
          (r/create-element
            ^{:key idx} (m/make-chart chart-config
                          {:data {:series [s]}}
