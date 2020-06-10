@@ -7,10 +7,10 @@
 
 
 (defn- plot-options [chart-config data options]
-  (prn "heat-map/plot-options" data)
+  ;(prn "heat-map/plot-options" data)
   (let [ret {:xAxis {:categories (get-in data [:data :series 0 :categories :x])}
              :yAxis {:categories (get-in data [:data :series 0 :categories :y])}}]
-    (prn "options" ret)
+    ;(prn "options" ret)
     ret))
 
 
