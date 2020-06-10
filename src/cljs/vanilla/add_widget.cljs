@@ -25,6 +25,23 @@
           :next-id (uuid/uuid-string (uuid/make-random-uuid)))))))
 
 (rf/reg-event-db
+  :add-carousel
+  (fn-traced [db]
+             (let [next-id      (:next-id db)
+                   widget-type  (get-in db [:widget-types :carousel-widget])
+                   current-user @(rf/subscribe [:get-current-user])  ;;get current user
+                   named-widget (assoc widget-type
+                                  :key (str next-id)
+                                  :data-source :carousel-service
+                                  :username current-user             ;;add username key value to widget map
+                                  :data-grid {:x 0 :y 0 :w 5 :h 15 :isResizable false})]  ;;carousel size is locked and cant be resized
+
+               (do
+                 (assoc db
+                   :widgets (conj (:widgets db) named-widget)
+                   :next-id (uuid/uuid-string (uuid/make-random-uuid)))))))
+
+(rf/reg-event-db
   :init-selected-service
   (fn-traced [db _]
     ;(prn (str ":init-selected-service " (first (:services db))))
@@ -60,6 +77,9 @@
 
 (defn add-widget [new-widget selected-source]
   (rf/dispatch [:add-widget new-widget (keyword (:keyword selected-source))]))
+
+(defn add-carousel []   ;;no args for now, this will change once we figure out a modal solution
+  (rf/dispatch [:add-carousel]))
 
 
 
@@ -237,7 +257,8 @@
               :footer-button-fn      #(add-widget (:name @chosen-widget) @selected)
               :footer-button-text    "Add"}))))
 
-
+;; this is currently not is use (replaced by add-carousel)
+;; leaving it in case we want it back in the future
 (defn add-by-widget-modal
   "modal to allow the user to pick a widget and then select a compatible data-source"
 
@@ -270,9 +291,9 @@
     (fn []
       [:div.has-text-left
        [:button.button.is-info {:on-click #(swap! is-source-active not)} "Add Source"]
-       [:button.button.is-info {:on-click #(swap! is-widget-active not)} "Add Widget"]
-       [add-by-source-modal is-source-active]
-       [add-by-widget-modal is-widget-active]])))
+       [:button.button.is-info {:on-click #(add-carousel)} "Add Carousel"]
+       [add-by-source-modal is-source-active]])))
+       ;[add-by-widget-modal is-widget-active]
 
 
 
