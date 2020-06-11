@@ -56,6 +56,7 @@ This single-page application (SPA) provides a number of graphical widgets based 
 - [Modal Usage](docs/modal_useage.md)
 - [Using Excel](docs/excel-and-datascript.md)
 - [Using Datascript](docs/excel-and-datascript.md)
+- [How Widgets Work](docs/how-widgets-work.md)
 
 ### Running the application
 

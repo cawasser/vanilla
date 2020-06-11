@@ -124,7 +124,7 @@
 
       ; 18
       ["22000" "signal-path-service" "Signal Paths"
-       "data-format/from-to-n" "vanilla.signal-path-service/fetch-data"
+       "data-format/grouped-from-to-n" "vanilla.signal-path-service/fetch-data"
        "returns signal path for missions"]
 
       ; 19
@@ -133,9 +133,9 @@
        "returns terminal locations around the world"]
 
       ;20
-      ["24000" "carousel-service" "Multi-Data Carousel"
-       "data-format/carousel" "vanilla.carousel-service/fetch-data"
-       "returns carousel widget that supports multiple widgets"]
+      ;["24000" "carousel-service" "Multi-Data Carousel"
+      ; "data-format/carousel" "vanilla.carousel-service/fetch-data"
+      ; "returns carousel widget that supports multiple widgets"]
 
       ;21
       ["25000" "x-beam-location-service" "X-band Beam Data"
