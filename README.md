@@ -57,6 +57,9 @@ This single-page application (SPA) provides a number of graphical widgets based 
 - [Using Excel](docs/excel-and-datascript.md)
 - [Using Datascript](docs/excel-and-datascript.md)
 - [How Widgets Work](docs/how-widgets-work.md)
+- Working at the REPL
+  - [On the Server](docs/repl-driven-server.md)
+  - [On the Client]()
 
 ### Running the application
 

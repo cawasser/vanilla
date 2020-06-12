@@ -20,13 +20,17 @@
             [vanilla.terminal-location-service]
             [vanilla.usage-12-hour-service]
             [vanilla.usage-data-service]
-            [vanilla.terminal-list-service]))
+            [vanilla.terminal-list-service]
+            [vanilla.repl-test-data]))
 
 (def datasources
   [{:name    :spectrum-traces
     :read-fn :vanilla.spectrum-traces-service/fetch-data}
    ;:schedule {:in    [0 :seconds]
    ;           :every [10 :seconds]}}
+
+   {:name    :repl-test-data
+    :read-fn :vanilla.repl-test-data/fetch-data}
 
    {:name :carousel-service
     :read-fn :vanilla.carousel-service/fetch-data}

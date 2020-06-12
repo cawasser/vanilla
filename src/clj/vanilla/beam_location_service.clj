@@ -26,6 +26,11 @@
    :data (get-data band)})
 
 
+(comment
+
+  (vanilla.subscription-manager/refresh-source :x-beam-location-service))
+
+
 
 (comment
   (sort-by :name (get-data "X"))
