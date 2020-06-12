@@ -95,10 +95,12 @@
                (.addRenderable layer circle)))
 
         data))
+    (prn "Beam Layer: " layer
+         "Data: " data)
     layer))
 
 
-
+;merge everything into one layer, one atom that holds the layer that has everything in it, when it changes, the map the needs to refresh
 
 (defn make-layers []
   ; TODO: this is a hack for the following hack (does NOT unsubscribe to sources when widget closes)
@@ -128,6 +130,6 @@
 (comment
   (def beam-2 [{:name "BEAM-7" :lat -28.538336 :lon 81.379234 :diameter 1000000 :color (WorldWind/Color. 1 1 0 0.5)}])
 
-  (def b (beam-layer "GDAs" beam-2))
+  (def b (beam-layer "GDAs" beam-2 true))
 
   ())

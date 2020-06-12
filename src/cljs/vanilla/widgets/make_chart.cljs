@@ -207,8 +207,10 @@
         ; " //// (all-configs) " all-configs )
 
     (reagent/create-class
-      {:reagent-render
-       (fn [args]
+      {:display-name (str chart-type)
+
+       :reagent-render
+       (fn []
          ;@dom-node                                          ; be sure to render if node changes, doesnt seem necessary
          [:div#hc {:style {:width "100%" :height "100%"}}])
 

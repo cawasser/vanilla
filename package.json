@@ -15,14 +15,18 @@
     "react-color": "^2.18.0",
     "react-dom": "^16.7.0",
     "react-flip-move": "3.0.3",
+    "react-fontawesome": "^1.7.1",
     "react-gantt-timeline": "^0.4.3",
     "react-grid-layout": "^0.18.3",
     "react-highcharts": "^16.1.0",
     "react-highlight.js": "1.0.7",
+    "reactstrap": "^8.4.1",
     "roughjs": "4.1.4",
     "scheduler": "^0.19.1",
     "shadow-cljs": "^2.8.94",
     "toastr": "^2.1.4",
+    "worldwind-react-globe": "1.2.0",
+    "worldwind-react-globe-bs4": "1.0.3",
     "worldwindjs": "^1.7.2"
   },
   "devDependencies": {}
