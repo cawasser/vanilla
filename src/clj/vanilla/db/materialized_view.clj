@@ -273,13 +273,13 @@
                 (apply union)
                 sort
                 first
-                (f/unparse datetime-formatter))
+                .toDate)
 
        :end   (->> (map #(:start-set %) args)
                 (apply union)
                 sort
                 first
-                (f/unparse datetime-formatter))})
+                .toDate)})
     {}))
 
 

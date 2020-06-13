@@ -4,7 +4,6 @@
             [cljs-time.format :as f]))
 
 (def built-in-formatter (f/formatters :date-time-no-ms))
-(def datetime-formatter (f/formatter "ddHHmmz MMM yyyy"))
 
 
 
@@ -30,8 +29,8 @@
                       (doall
                         (map (fn [{:keys [start end] :as orig}]
                                (-> orig
-                                 (assoc :start (f/parse datetime-formatter start))
-                                 (assoc :end (f/parse datetime-formatter end))))
+                                 (assoc :start (f/parse built-in-formatter start))
+                                 (assoc :end (f/parse built-in-formatter end))))
                           (:data data)))))]
     ret))
 
