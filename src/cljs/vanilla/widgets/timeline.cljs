@@ -4,15 +4,8 @@
             [cljs-time.format :as f]))
 
 (def built-in-formatter (f/formatters :date-time-no-ms))
+(def datetime-formatter (f/formatter "ddHHmmz MMM yyyy"))
 
-;(def local-data {:data  [{:id  1 :start (t/now)
-;                          :end (t/plus (t/now) (t/months 1)) :name "Demo Task 1"}
-;                         {:id  2 :start (t/plus (t/now) (t/months 1))
-;                          :end (t/plus (t/now) (t/months 1) (t/weeks 2) (t/days 4) (t/hours 9)) :name "Demo Task 2"}]
-;
-;                 :links [{:id 1 :start 1 :end 2}
-;                         {:id 2 :start 1 :end 3}]})
-;
 
 
 (def colors ["blue" "green" "red" "goldenrod" "purple"])
@@ -37,8 +30,8 @@
                       (doall
                         (map (fn [{:keys [start end] :as orig}]
                                (-> orig
-                                 (assoc :start (f/parse built-in-formatter start))
-                                 (assoc :end (f/parse built-in-formatter end))))
+                                 (assoc :start (f/parse datetime-formatter start))
+                                 (assoc :end (f/parse datetime-formatter end))))
                           (:data data)))))]
     ret))
 
@@ -46,11 +39,11 @@
 (defn make-widget
   [name source-data options]
 
-;  (prn "timeline" source-data)
+  (prn "timeline" source-data)
 
   [:> TimeLine (merge {:style {:overflow :auto
                                :backgroundColor "#2F4F4F"}
-                       :mode "year"
+                       :mode "month"
                        :config {:taskList {:task {:style {:backgroundColor "#2F4F4F"
                                                           :color  "white"}}}
                                 :dataViewPort {:rows {:style {:backgroundColor "#2F4F4F"

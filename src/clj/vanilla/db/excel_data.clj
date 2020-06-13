@@ -13,49 +13,49 @@
 ; drf: "data reduction factor"
 (def drf 10)
 
-(def excel-defs [{:sheet      "X-Beams"
-                  :column-map {:A :band
-                               :B :beam-id
-                               :C :lat
-                               :D :lon
-                               :E :radius
-                               :G :type}
-                  :post-fn    (fn [x] x)}
-                 {:sheet      "Ka-Beams"
-                  :column-map {:A :band
-                               :B :beam-id
-                               :C :lat
-                               :D :lon
-                               :E :radius
-                               :G :type}
-                  :post-fn    (fn [x] x)}
-                 {:sheet      "SCN_NETWORK_CARRIER_VW"
-                  :column-map {:A :satellite-id
-                               :B :tx-beam
-                               :C :tx-channel
-                               :D :rx-beam
-                               :E :rx-channel
-                               :F :plan
-                               :G :mission-id
-                               :H :service
-                               :R :data-rate}
-                  :post-fn    (fn [x] x)}
-                 {:sheet      "Missions"
-                  :column-map {:A :task-name
-                               :B :organization
-                               :C :start-time
-                               :D :end-time}
-                  :post-fn    (fn [x] x)}
-                 {:sheet      "Terminals"
-                  :column-map {:C :terminal-id
-                               :E :lat
-                               :F :lon
-                               :M :satellite-id
-                               :N :tx-beam
-                               :O :tx-channel
-                               :P :rx-beam
-                               :Q :rx-channel}
-                  :post-fn    (fn [x] x)}
+(def excel-defs [;{:sheet      "X-Beams"
+                  ;:column-map {:A :band
+                  ;             :B :beam-id
+                  ;             :C :lat
+                  ;             :D :lon
+                  ;             :E :radius
+                  ;             :G :type}
+                  ;:post-fn    (fn [x] x)
+                 ;{:sheet      "Ka-Beams"
+                 ; :column-map {:A :band
+                 ;              :B :beam-id
+                 ;              :C :lat
+                 ;              :D :lon
+                 ;              :E :radius
+                 ;              :G :type}
+                 ; :post-fn    (fn [x] x)}
+                 ;{:sheet      "SCN_NETWORK_CARRIER_VW"
+                 ; :column-map {:A :satellite-id
+                 ;              :B :tx-beam
+                 ;              :C :tx-channel
+                 ;              :D :rx-beam
+                 ;              :E :rx-channel
+                 ;              :F :plan
+                 ;              :G :mission-id
+                 ;              :H :service
+                 ;              :R :data-rate}
+                 ; :post-fn    (fn [x] x)}
+                 ;{:sheet      "Missions"
+                 ; :column-map {:A :task-name
+                 ;              :B :organization
+                 ;              :C :start-time
+                 ;              :D :end-time}
+                 ; :post-fn    (fn [x] x)}
+                 ;{:sheet      "Terminals"
+                 ; :column-map {:C :terminal-id
+                 ;              :E :lat
+                 ;              :F :lon
+                 ;              :M :satellite-id
+                 ;              :N :tx-beam
+                 ;              :O :tx-channel
+                 ;              :P :rx-beam
+                 ;              :Q :rx-channel}
+                 ; :post-fn    (fn [x] x)}
                  {:sheet      "Sat-Power-1000"
                   :column-map {:A :satellite-id
                                :B :freq
@@ -69,21 +69,21 @@
                                :C :channel-1-power
                                :D :channel-2-power
                                :E :channel-3-power}
-                  :post-fn    (fn [x] (take-nth drf x))}
-                 {:sheet      "Sat-Power-3000"
-                  :column-map {:A :satellite-id
-                               :B :freq
-                               :C :channel-1-power
-                               :D :channel-2-power
-                               :E :channel-3-power}
-                  :post-fn    (fn [x] (take-nth drf x))}
-                 {:sheet      "Sat-Power-4000"
-                  :column-map {:A :satellite-id
-                               :B :freq
-                               :C :channel-1-power
-                               :D :channel-2-power
-                               :E :channel-3-power}
                   :post-fn    (fn [x] (take-nth drf x))}])
+                 ;{:sheet      "Sat-Power-3000"
+                 ; :column-map {:A :satellite-id
+                 ;              :B :freq
+                 ;              :C :channel-1-power
+                 ;              :D :channel-2-power
+                 ;              :E :channel-3-power}
+                 ; :post-fn    (fn [x] (take-nth drf x))}
+                 ;{:sheet      "Sat-Power-4000"
+                 ; :column-map {:A :satellite-id
+                 ;              :B :freq
+                 ;              :C :channel-1-power
+                 ;              :D :channel-2-power
+                 ;              :E :channel-3-power}
+                 ; :post-fn    (fn [x] (take-nth drf x))}])
 
 
 
@@ -193,29 +193,30 @@
 
 ; basics building blocks of processing SCN_ and Ka Beams sheets as 'event logs'
 (comment
-  (def context {:sheet      "SCN_NETWORK_CARRIER_VW"
-                :column-map {:A :satellite-id
-                             ;:B :tx-beam
-                             ;:C :tx-channel
-                             ;:D :rx-beam
-                             ;:E :rx-channel
-                             ;:F :plan-id
-                             :G :mission-id
-                             ;:K :tx-term-lat
-                             ;:L :tx-term-lon
-                             ;:N :rx-term-lat
-                             ;:O :rx-term-lon
-                             ;:Q :tx-term-id
-                             ;:R :rx-term-id
-                             :S :start-epoch
-                             :T :end-epoch
-                             :U :data-rate}
-                :post-fn    (fn [x] x)})
+  (def signal-path-context
+    {:sheet      "SCN_NETWORK_CARRIER_VW"
+     :column-map {:A :satellite-id
+                  :B :tx-beam
+                  :C :tx-channel
+                  :D :rx-beam
+                  :E :rx-channel
+                  :F :plan-id
+                  :G :mission-id
+                  :K :tx-term-lat
+                  :L :tx-term-lon
+                  :N :rx-term-lat
+                  :O :rx-term-lon
+                  :Q :tx-term-id
+                  :R :rx-term-id
+                  :S :start-epoch
+                  :T :end-epoch
+                  :U :data-rate}
+     :post-fn    (fn [x] x)})
 
 
   (def scn (->> (load-workbook "resources/public/excel/Demo - 9102.xlsx")
-             (select-sheet (:sheet context))
-             (select-columns (:column-map context))
+             (select-sheet (:sheet signal-path-context))
+             (select-columns (:column-map signal-path-context))
              (drop 1)))
   (count scn)
 
@@ -239,92 +240,6 @@
                      scn)
                 flatten))
   (take 3 events)
-
-
-  ;; at this point we have the epochs (notional):
-  ;;
-  ;#{"0000000Z JAN 2020" "010000Z JAN 2020" "020000Z JAN 2020"}
-  ;
-  ;; and the "events" (notional):
-  ;;
-  ;'({:epoch "000000Z JAN 2020" :event :add :data {:mission-id "M-1"}}
-  ;  {:epoch "000000Z JAN 2020" :event :add :data {:mission-id "M-2"}}
-  ;  {:epoch "010000Z JAN 2020" :event :add :data {:mission-id "M-3"}}
-  ;  {:epoch "020000Z JAN 2020" :event :remove :data {:mission-id "M-1"}})
-  ;
-  ;; our goal is to have the data organized like this (notional):
-  ;;
-  ;; NB: this represents "materialized views" or "reductions over the events"
-  ;;
-  ;{"000000Z JAN 2020" #{{:mission-id "M-1"} {:mission-id "M-2"}} ;; add M-1, :add M-2
-  ; "010000Z JAN 2020" #{{:mission-id "M-1"} {:mission-id "M-2"} {:mission-id "M-3"}} ;; :add M-3
-  ; "020000Z JAN 2020" #{{:mission-id "M-2"} {:mission-id "M-3"}}} ;; :remove M-1
-  ;
-  ;
-  ;
-
-
-  ;(defn accumulate-events* [accum event]
-  ;  (prn "accum" event)
-  ;  (condp = (:event event)
-  ;    :add (conj accum (:data event))
-  ;    :remove (disj accum (:data event))))
-  ;
-  ;(accumulate-events* #{} (first events))
-  ;(accumulate-events* #{} (second events))
-  ;(map #(accumulate-events* #{} %) events)
-  ;
-  ;
-  ;(accumulate-events* #{} (-> epoch-events first :data first))
-  ;(accumulate-events* #{} (-> epoch-events first :data second))
-  ;(map #(accumulate-events* #{} %) (-> epoch-events first :data))
-  ;
-  ;; lets work the 'outermost' recursion first, the one that processes a single epoch
-  ;(defn accumulate-epoch [accum evt]
-  ;  (loop [a accum
-  ;         e evt]
-  ;    (prn "recur" a)
-  ;    (if (empty? e)
-  ;      a
-  ;      (recur (accumulate-events* a (first e)) (rest e)))))
-  ;
-  ;(def accum #{})
-  ;(def evt (-> epoch-events first :data))
-  ;(first evt)
-  ;(rest evt)
-  ;(empty? (rest (rest evt)))
-  ;(accumulate-epoch #{} (-> epoch-events first :data))
-  ;(accumulate-epoch #{} (-> epoch-events second :data))
-  ;
-  ;(accumulate-epoch
-  ;  (accumulate-epoch #{} (-> epoch-events first :data))
-  ;  (-> epoch-events second :data))
-  ;
-  ;; so far, so good
-  ;
-  ;; now let's accumulate all the epochs
-  ;(def acc-map {})
-  ;(def epochs (take 2 epoch-list))
-  ;
-  ;(defn find-events [epoch events]
-  ;  (filter #(= epoch (:epoch %)) events))
-  ;
-  ;(defn accumulate-epochs [acc-map epochs events]
-  ;  (loop [a   acc-map
-  ;         e   epochs
-  ;         evt events]
-  ;    (prn "acc-epochs" a)
-  ;    (if (empty? e)
-  ;      a
-  ;      (recur
-  ;        (assoc a (first e)
-  ;          (merge
-  ;            (get a (first e))
-  ;            (accumulate-epoch (get a (first e)) (find-events (first e) evt))))
-  ;        (rest e)
-  ;        evt))))
-  ;
-
 
 
 
@@ -366,10 +281,6 @@
   (events-for events (nth epochs 4))
 
 
-  ; build an empty state-map
-  ;
-
-
   (defn apply-event [accum event]
     (condp = (:event event)
       :add (conj accum (:data event))
@@ -381,7 +292,7 @@
   (defn apply-epoch-events [accum events]
     (loop [a accum
            e events]
-      (prn "apply-epoch-events" a)
+      ;(prn "apply-epoch-events" a)
       (if (empty? e)
         a
         (recur (apply-event a (first e)) (rest e)))))
@@ -398,8 +309,6 @@
 
   (defn empty-state-map [epochs]
     (zipmap epochs (repeat #{})))
-
-  (def state-atom (atom (empty-state-map (take 5 epochs))))
 
   (let [last-accum (atom #{})]
     (for [epoch (keys @state-atom)]
@@ -418,6 +327,8 @@
           (swap! state-atom assoc epoch current-accum)
           (reset! last-accum current-accum)))))
 
+
+  (def state-atom (atom (empty-state-map (take 5 epochs))))
 
   (apply-events state-atom (take 6 events))
   (apply-events state-atom events)
@@ -444,24 +355,47 @@
 
   ; signal-path - this DOES depend on the epochs, each epoch should be it's own :series
   ;
-  (def signal-path {:series [{:name "000000Z JAN 2020"
-                              :keys ["from" "to" "weight"]
-                              :data [["txCH-1" "txB-1" 7186]
-                                     ["txB-1" "SAT-1" 7186]
-                                     ["SAT-1" "rxB-1" 7186]
-                                     ["rxB-1" "rxCH-1" 7186]]}
-                             {:name "010000Z JAN 2020"
-                              :keys ["from" "to" "weight"]
-                              :data [["txCH-2" "txB-1" 7186]
-                                     ["txB-1" "SAT-1" 7186]
-                                     ["SAT-1" "rxB-1" 7186]
-                                     ["rxB-1" "rxCH-4" 7186]]}
-                             {:name "020000Z JAN 2020"
-                              :keys ["from" "to" "weight"]
-                              :data [["txCH-1" "txB-1" 7186]
-                                     ["txB-1" "SAT-1" 7186]
-                                     ["SAT-1" "rxB-1" 7186]
-                                     ["rxB-1" "rxCH-1" 7186]]}]})
+  (def test-signal-path [{:name         "000000Z JAN 2020"
+                          :showInLegend true
+                          :keys         ["from" "to" "weight"]
+                          :data         [["txCH-1" "txB-1" 7186] ["txB-1" "SAT-1" 7186] ["SAT-1" "rxB-1" 7186] ["rxB-1" "rxCH-1" 7186]
+                                         ["txCH-a" "txB-a" 7186] ["txB-a" "SAT-2" 7186] ["SAT-2" "rxB-a" 7186] ["rxB-a" "rxCH-a" 7186]]}
+                         {:name         "010000Z JAN 2020"
+                          :showInLegend true
+                          :keys         ["from" "to" "weight"]
+                          :data         [["txCH-2" "txB-1" 7186] ["txB-1" "SAT-1" 7186] ["SAT-1" "rxB-1" 7186] ["rxB-1" "rxCH-4" 7186]
+                                         ["txCH-a" "txB-a" 7186] ["txB-a" "SAT-2" 7186] ["SAT-2" "rxB-a" 7186] ["rxB-a" "rxCH-a" 7186]
+                                         ["txCH-b" "txB-a" 7186] ["txB-a" "SAT-2" 7186] ["SAT-2" "rxB-a" 7186] ["rxB-a" "rxCH-q" 7186]]}
+                         {:name         "020000Z JAN 2020"
+                          :showInLegend true
+                          :keys         ["from" "to" "weight"]
+                          :data         [["txCH-1" "txB-1" 7186] ["txB-1" "SAT-1" 7186] ["SAT-1" "rxB-1" 7186] ["rxB-1" "rxCH-1" 7186]
+                                         ["txCH-2" "txB-1" 7186] ["txB-1" "SAT-1" 7186] ["SAT-1" "rxB-1" 7186] ["rxB-1" "rxCH-4" 7186]
+                                         ["txCH-a" "txB-a" 7186] ["txB-a" "SAT-2" 7186] ["SAT-2" "rxB-a" 7186] ["rxB-a" "rxCH-a" 7186]
+                                         ["txCH-b" "txB-a" 7186] ["txB-a" "SAT-2" 7186] ["SAT-2" "rxB-a" 7186] ["rxB-a" "rxCH-q" 7186]]}])
+
+  (defn event-path [{:keys [satellite-id tx-beam tx-channel rx-beam
+                            rx-channel tx-term-id rx-term-id data-rate]}]
+    [[tx-term-id tx-channel data-rate]
+     [tx-channel tx-beam data-rate]
+     [tx-beam satellite-id data-rate]
+     [satellite-id :rx-beam data-rate]
+     [rx-beam rx-channel data-rate]
+     [rx-channel rx-term-id data-rate]])
+
+  (defn build-signal-path [epoch events]
+    {:name         epoch
+     :showInLegend true
+     :keys         ["from" "to" "weight"]
+     :data         (map #(event-path %) events)})
+
+  (defn signal-path-query [epoch-map]
+    (for [[epoch events] epoch-map]
+      (build-signal-path epoch events)))
+
+  (signal-path-query @state-atom)
+
+
   ())
 
 

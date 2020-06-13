@@ -202,31 +202,33 @@
 
 
 (defn make-sankey-widget [name data options]
-  ;(prn "Making sankey carousel widget: " data)
-  ;     "///data?data? destringed\\\\ " (edn/read-string (:data (:data data)))
-  ;     "/////options: " options)
-
   ; TODO: this is a hack for the following hack (does NOT unsubscribe to sources when widget closes)
   (ds/data-source-subscribe [:signal-path-service])
 
   (let [data @(rf/subscribe [:app-db :signal-path-service])
         chart-config @(rf/subscribe [:hc-type :sankey-chart])
-        sources (for [i (range (count (get-in data [:data :series])))]
-                  (get-in data [:data :series i]))]
+        sources (get-in data [:data :series])]
 
-    ;(prn "Making sankey carousel widget: " sources
+    ;(prn "Making sankey carousel widget: " data " //// " sources)
     ;  " //// chart-config " chart-config)
 
     (carousel
       (for [[idx s] (map-indexed vector sources)]
        (do
-         ;(prn "make-sankey-widget " s)
+         ;(prn "make-sankey-chart " s)
          (r/create-element
            ^{:key idx} (m/make-chart chart-config
                          {:data {:series [s]}}
                          {:series {:showInLegend true :visible false}})))))))
 
 
+(comment
+  (def data @(rf/subscribe [:app-db :signal-path-service]))
+
+  (def sources (get-in data [:data :series]))
+
+
+  ())
 
 
 
