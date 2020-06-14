@@ -445,7 +445,7 @@
                (drop 1)))
 
   (def row {:tx-term-id   "TINKR", :start-epoch "222000Z JUL 2020",
-            :data-rate    2048.0, :plan-id "9102TRI20S",
+            :data-rate    2048.0, :plan-id "PLAN-1",
             :tx-channel   "000-010", :rx-term-lon "132.22",
             :tx-term-lat  "-14.31", :rx-term-id "TRIKR",
             :rx-channel   "000-010", :tx-term-lon "132.22",
@@ -479,17 +479,17 @@
   (def smaller-data
     [{:id    "TRI FP",
       :name  "TRI FP",
-      :type  "9102TRI20S",
+      :type  "PLAN-1",
       :start "2020-07-22T12:00:00.000Z",
       :end   "2020-07-22T16:00:00.000Z"}
      {:id    "TRI FP",
       :name  "TRI FP",
-      :type  "9102TRI20S",
+      :type  "PLAN-1",
       :start "2020-07-22T16:00:00.000Z",
       :end   "2020-07-28T20:00:00.000Z"}
      {:id    "TRI FP",
       :name  "TRI FP",
-      :type  "9102TRI20S",
+      :type  "PLAN-1",
       :start "2020-07-22T16:00:00.000Z",
       :end   "2020-07-23T20:00:00.000Z"}])
 

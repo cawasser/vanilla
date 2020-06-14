@@ -116,81 +116,6 @@
 
 
 
-; basic building block of fetching data from a spreadsheet
-(comment
-
-
-  (with-open [workbook (load-workbook-from-resource filename)]
-    workbook)
-  (with-open [workbook (load-workbook-from-resource "shabbay")]
-    workbook)
-
-  (try
-    (with-open [workbook (load-workbook-from-resource "shabbay")]
-      workbook)
-    (catch Exception e (log/error "Exception: " (.getMessage e)))
-    (finally (log/info "No Excel file found" filename)))
-
-
-
-  (try
-    (/ 1 0)
-    (catch Exception e (log/error "caught exception: " (.getMessage e))))
-
-  (def sheet "Missions")
-  (def column-map {:A :name
-                   :B :organization
-                   :C :start-time
-                   :D :end-time})
-  (def post-fn (fn [x] x))
-
-  (load-workbook filename)
-
-  (->> (load-workbook filename)
-    (select-sheet "Missions"))
-
-  (->> (load-workbook filename)
-    (select-sheet "Missions")
-    row-seq)
-
-  (->> (load-workbook "resources/public/excel/Demo - 9102.xlsx")
-    (select-sheet "Missions")
-    (select-columns {:A :name :B :organization :C :start-time :D :end-time})
-    (drop 1))
-
-  (->> (load-workbook filename)
-    (select-sheet "SCN_NETWORK_CARRIER_VW")
-    (select-columns {:A :satellite :B :rx-beam :C :rx-channel :D :tx-beam
-                     :E :tx-channel :F :plan :G :mission-id :H :service
-                     :R :data-rate})
-    (drop 1))
-
-
-  (map (fn [{:keys [sheet column-map post-fn]}]
-         [filename sheet column-map post-fn])
-    excel-defs)
-
-
-  (with-open [workbook (load-workbook-from-resource filename)]
-    (load-data workbook "Missions" {:A :task-name
-                                    :B :organization
-                                    :C :start-time
-                                    :D :end-time}))
-
-  (d/q
-    '[:find ?task-name
-      :where [?e :task-name ?task-name]]
-    @conn)
-
-  (d/q
-    '[:find [(pull ?e [*]) ...]
-      :where [?e :task-name _]]
-    @conn)
-
-
-  ())
-
-
 ; basics building blocks of processing SCN_ and Ka Beams sheets as 'event logs'
 (comment
   (def signal-path-context
@@ -214,7 +139,7 @@
      :post-fn    (fn [x] x)})
 
 
-  (def scn (->> (load-workbook "resources/public/excel/Demo - 9102.xlsx")
+  (def scn (->> (load-workbook "resources/public/excel/Demo.xlsx")
              (select-sheet (:sheet signal-path-context))
              (select-columns (:column-map signal-path-context))
              (drop 1)))
