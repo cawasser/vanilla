@@ -37,10 +37,11 @@
              {:name "Cartagena" :lat 10.39972 :lon -75.51444 :alt 100}])
 
 
-(def beam-colors {"Y"         [1 1 0 0.25]
-                  "B"         [0 0 1 0.25]
-                  "R"         [1 0 0 0.25]
-                  "G"         [0 1 0 0.25]})
+(def beam-colors {"Y" [1 1 0 0.25]
+                  "B" [0 0 1 0.25]
+                  "R" [1 0 0 0.25]
+                  "G" [0 1 0 0.25]
+                  "O" [1 0.27 0 0.25]})
 
 
 
@@ -51,8 +52,8 @@
     (set! (.-color textAttributes) color)
 
     (doall (map (fn [d]
-                  (let [point (WorldWind/Position. (:lat d) (:lon d) (get d :alt 100))
-                        loc   (WorldWind/Location.)
+                  ;(prn "location-layer d" d)
+                  (let [point (WorldWind/Position. (:lat d) (:lon d) (get d :alt 200))
                         name  (get d :name "Missing")
                         text  (WorldWind/GeographicText. point name)]
 
@@ -79,6 +80,7 @@
   (let [layer (WorldWind/RenderableLayer. title)]
     (doall
       (map (fn [d]
+             ;(prn "beam-layer d" d)
              (let [attributes     (WorldWind/ShapeAttributes.)
                    point          (WorldWind/Location. (:lat d) (:lon d))
                    label-pt       (WorldWind/Position. (:lat d) (:lon d) (get d :alt 100))
@@ -90,7 +92,7 @@
 
                (set! (.-color textAttributes) (.-WHITE WorldWind/Color))
                (set! (.-attributes text) textAttributes)
-               (.addRenderable layer text)
+               ;(.addRenderable layer text)
 
                (.addRenderable layer circle)))
 
@@ -99,23 +101,28 @@
 
 
 
+(defn- find-epoch [epoch events]
+  (filter #(= epoch (:name %)) events))
 
 (defn make-layers []
   ; TODO: this is a hack for the following hack (does NOT unsubscribe to sources when widget closes)
   (ds/data-source-subscribe [:x-beam-location-service :terminal-location-service :ka-beam-location-service])
 
   (let [x-beams   (get-in @(rf/subscribe [:app-db :x-beam-location-service]) [:data :data])
-        ka-beams (get-in @(rf/subscribe [:app-db :ka-beam-location-service]) [:data :data])
-        terminals (get-in @(rf/subscribe [:app-db :terminal-location-service]) [:data :data])]
+        ka-beams  (get-in @(rf/subscribe [:app-db :ka-beam-location-service]) [:data :data])
+        terminals (get-in @(rf/subscribe [:app-db :terminal-location-service]) [:data :data])
+        epoch     "170400Z JUL 2020"]
 
-    ;(prn "x-beams" @(rf/subscribe [:app-db :beam-location-service]) x-beams)
+    ;(prn "ka-beams" ka-beams)
+    ;(prn "ka-beams[2]" (get-in ka-beams [2 :data]))
     ;(prn "terminals" @(rf/subscribe [:app-db :terminal-location-service]) terminals)
 
+    ; use the 4th (index 3) epoch as an example
+
     ["blue-marble"
-     (location-layer "Cities" cities (.-YELLOW WorldWind/Color))
-     (location-layer "Terminals" terminals (.-WHITE WorldWind/Color))
-     (beam-layer "X Beams" x-beams true)
-     (beam-layer "Ka Beams"ka-beams false)]))
+     (beam-layer "Ka Beams" (->> (find-epoch epoch ka-beams) first :data) false)
+     (location-layer "Terminals" (->> (find-epoch epoch terminals) first :data) (.-WHITE WorldWind/Color))
+     (location-layer "Cities" cities (.-YELLOW WorldWind/Color))]))
 
 
 
@@ -129,5 +136,31 @@
   (def beam-2 [{:name "BEAM-7" :lat -28.538336 :lon 81.379234 :diameter 1000000 :color (WorldWind/Color. 1 1 0 0.5)}])
 
   (def b (beam-layer "GDAs" beam-2))
+
+
+  ; working out how to get just one epoch from the epochal-data
+  (def ka-beams (get-in @(rf/subscribe [:app-db :ka-beam-location-service]) [:data :data]))
+  (get-in ka-beams [2 :data])
+  (map :name ka-beams)
+
+  (def terminals (get-in @(rf/subscribe [:app-db :terminal-location-service]) [:data :data]))
+  (map :name terminals)
+  (clojure.set/intersection
+    (into #{} (map :name ka-beams))
+    (into #{} (map :name terminals)))
+
+  #{"161200Z JUL 2020"
+    "170400Z JUL 2020"
+    "172000Z JUL 2020"
+    "190000Z JUL 2020"
+    "211600Z JUL 2020"
+    "230000Z JUL 2020"}
+
+  (def epoch "170400Z JUL 2020")
+  (def epoch "161607Z JUL 2020")
+  (def epoch "190000Z JUL 2020")
+  (->> (find-epoch epoch ka-beams) first :data)
+  (->> (find-epoch epoch terminals) first :data)
+
 
   ())

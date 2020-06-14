@@ -346,7 +346,7 @@
 
 (def beam-context
   {:file       "resources/public/excel/Demo.xlsx"
-   :sheet      "Ka-Beams"
+   :sheet      "Beams"
    :column-map {:A :satellite-id
                 :B :band
                 :C :beam-id
