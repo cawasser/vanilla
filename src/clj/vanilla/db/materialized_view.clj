@@ -404,12 +404,29 @@
 
 
 (defn ka-beam-query []
-  (event-query ka-beam-context ka-event-state build-signal-path))
+  (event-query ka-beam-context ka-event-state build-ka-beam-data))
 
 
 
 (comment
+  (signal-path-query)
+
   (mission-query)
+
+  (terminal-location-query)
+
+  (ka-beam-query)
+
+
+  {:start-epoch "161200Z JUL 2020",
+   :band "Ka",
+   :type "R",
+   :radius 111000.0,
+   :lon 129.564,
+   :lat -32.633,
+   :end-epoch "230000Z JUL 2020",
+   :beam-id 2.0,
+   :satellite-id "QUK2"}
 
   ())
 
