@@ -332,7 +332,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (def signal-path-context
-  {:file       "resources/public/excel/Demo - 9102.xlsx"
+  {:file       "resources/public/excel/Demo.xlsx"
    :sheet      "SCN_NETWORK_CARRIER_VW"
    :column-map {:A :satellite-id :B :tx-beam :C :tx-channel :D :rx-beam
                 :E :rx-channel :F :plan-id :G :mission-id :K :tx-term-lat
@@ -341,7 +341,7 @@
    :post-fn    (fn [x] x)})
 
 (def ka-beam-context
-  {:file       "resources/public/excel/Demo - 9102.xlsx"
+  {:file       "resources/public/excel/Demo.xlsx"
    :sheet      "Ka-Beams"
    :column-map {:A :satellite-id
                 :B :band
