@@ -294,16 +294,16 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defn- ka-beam-data
+(defn- beam-data
   "build the data needed to present a ka-beam location in a timeline widget"
 
-  [{:keys [satellite-id beam-id radius lat lon type]}]
+  [band {:keys [satellite-id beam-id radius lat lon type]}]
 
   {:name (str (condp = satellite-id
                 "SAT1" "1"
                 "SAT2" "2"
                 :default "?")
-           "-Ka-" beam-id)
+           "-" band "-" beam-id)
    :lat  lat
    :lon  lon
    :e    {:diam    (* radius 2)
@@ -311,13 +311,16 @@
 
 
 
-(defn- build-ka-beam-data
+(defn- build-beam-data
   "for each set of events, get the locations of all the Ka beams"
 
-  [epoch events]
+  [band epoch events]
   {:name epoch
    :data (into #{}
-           (map #(ka-beam-data %) events))})
+           (map #(if (= band (:band %))
+                   (beam-data band %)
+                   {})
+             events))})
 
 
 
@@ -341,7 +344,7 @@
                 :R :rx-term-id :S :start-epoch :T :end-epoch :U :data-rate}
    :post-fn    (fn [x] x)})
 
-(def ka-beam-context
+(def beam-context
   {:file       "resources/public/excel/Demo.xlsx"
    :sheet      "Ka-Beams"
    :column-map {:A :satellite-id
@@ -401,11 +404,11 @@
 ; ka-event-state holds the results of the 'reducer' over all the epochal changes to
 ; the state of 'everything' loaded by the 'ka Beam' sheet
 ;
-(def ka-event-state (atom ()))
+(def beam-event-state (atom ()))
 
 
-(defn ka-beam-query []
-  (event-query ka-beam-context ka-event-state build-ka-beam-data))
+(defn beam-query [band]
+  (event-query beam-context beam-event-state (partial build-beam-data band)))
 
 
 
@@ -416,18 +419,19 @@
 
   (terminal-location-query)
 
-  (ka-beam-query)
+  (beam-query "X")
+  (beam-query "Ka")
 
 
-  {:start-epoch "161200Z JUL 2020",
-   :band "Ka",
-   :type "R",
-   :radius 111000.0,
-   :lon 129.564,
-   :lat -32.633,
-   :end-epoch "230000Z JUL 2020",
-   :beam-id 2.0,
-   :satellite-id "QUK2"}
+  {:start-epoch  "161200Z JUL 2020",
+   :band         "Ka",
+   :type         "R",
+   :radius       111000.0,
+   :lon          29.564,
+   :lat          32.633,
+   :end-epoch    "230000Z JUL 2020",
+   :beam-id      2,
+   :satellite-id "SAT2"}
 
   ())
 
@@ -444,14 +448,14 @@
                (select-columns (:column-map ka-beam-context))
                (drop 1)))
 
-  (def row {:tx-term-id   "TINKR", :start-epoch "222000Z JUL 2020",
+  (def row {:tx-term-id   "TRML-1", :start-epoch "222000Z JUL 2020",
             :data-rate    2048.0, :plan-id "PLAN-1",
-            :tx-channel   "000-010", :rx-term-lon "132.22",
-            :tx-term-lat  "-14.31", :rx-term-id "TRIKR",
-            :rx-channel   "000-010", :tx-term-lon "132.22",
-            :mission-id   "TRI FP", :end-epoch "230000Z JUL 2020",
-            :satellite-id "QUK2", :tx-beam "KX3",
-            :rx-term-lat  "-14.31", :rx-beam "KR3"})
+            :tx-channel   "1", :rx-term-lon "132.22",
+            :tx-term-lat  "-14.31", :rx-term-id "TRML-2",
+            :rx-channel   "1", :tx-term-lon "32.22",
+            :mission-id   "MISSION-1", :end-epoch "230000Z JUL 2020",
+            :satellite-id "SAT2", :tx-beam "3",
+            :rx-term-lat  "-34.31", :rx-beam "3"})
   (:start-epoch row)
 
   (f/parse (f/formatter "ddHHmm MMM yyyy") "010000 JAN 2020")
@@ -477,18 +481,18 @@
     (map #(:data %) missions))
 
   (def smaller-data
-    [{:id    "TRI FP",
-      :name  "TRI FP",
+    [{:id    "MISSION-1",
+      :name  "MISSION-1",
       :type  "PLAN-1",
       :start "2020-07-22T12:00:00.000Z",
       :end   "2020-07-22T16:00:00.000Z"}
-     {:id    "TRI FP",
-      :name  "TRI FP",
+     {:id    "MISSION-1",
+      :name  "MISSION-1",
       :type  "PLAN-1",
       :start "2020-07-22T16:00:00.000Z",
       :end   "2020-07-28T20:00:00.000Z"}
-     {:id    "TRI FP",
-      :name  "TRI FP",
+     {:id    "MISSION-1",
+      :name  "MISSION-1",
       :type  "PLAN-1",
       :start "2020-07-22T16:00:00.000Z",
       :end   "2020-07-23T20:00:00.000Z"}])

@@ -15,12 +15,13 @@
 
   {:title       "Beam Locations"
    :data-format :data-format/lat-lon-e
-   :data        (mv/ka-beam-query)})
+   :data        (mv/beam-query band)})
 
 
 (comment
 
   (vanilla.subscription-manager/refresh-source :x-beam-location-service)
+  (vanilla.subscription-manager/refresh-source :ka-beam-location-service)
 
   ())
 
