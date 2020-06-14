@@ -140,8 +140,8 @@
 
 (defn- sat-tag [id]
   (condp = id
-    "QUK1" "-"
-    "QUK2" "_"
+    "SAT1" "-"
+    "SAT2" "_"
     :default ".."))
 
 
@@ -300,8 +300,9 @@
   [{:keys [satellite-id beam-id radius lat lon type]}]
 
   {:name (str (condp = satellite-id
-                "QUK1" "1"
-                "QUK2" "2")
+                "SAT1" "1"
+                "SAT2" "2"
+                :default "?")
            "-Ka-" beam-id)
    :lat  lat
    :lon  lon
@@ -431,11 +432,17 @@
   ())
 
 (comment
+  ka-beam-context
 
   (def missions (->> (load-workbook (:file signal-path-context))
                   (select-sheet (:sheet signal-path-context))
                   (select-columns (:column-map signal-path-context))
                   (drop 1)))
+
+  (def beams (->> (load-workbook (:file ka-beam-context))
+               (select-sheet (:sheet ka-beam-context))
+               (select-columns (:column-map ka-beam-context))
+               (drop 1)))
 
   (def row {:tx-term-id   "TINKR", :start-epoch "222000Z JUL 2020",
             :data-rate    2048.0, :plan-id "9102TRI20S",
