@@ -22,19 +22,29 @@
 
 
 
-(def cities [{:name "Canberra" :lat -35.2809 :lon 149.13 :alt 100}
-             {:name "Brisbane" :lat -27.47012 :lon 153.021072 :alt 100}
-             {:name "Geraldton" :lat -28.782387 :lon 114.607513 :alt 100}
-             {:name "Wagga Wagga" :lat -35.117275 :lon 147.356522 :alt 100}
-             {:name "Orlando" :lat 28.538336 :lon -81.379234 :alt 100}
-             {:name "San Diego" :lat 32.715736 :lon -117.161087 :alt 100}
-             {:name "Dulles" :lat 38.951666 :lon -77.448055 :alt 100}
-             {:name "Montreal" :lat 45.50884 :lon -73.58781 :alt 100}
-             {:name "London" :lat 51.50853 :lon -0.12574 :alt 100}
-             {:name "Mumbai" :lat 19.07283 :lon 72.88261 :alt 100}
-             {:name "Tokyo" :lat 35.6895 :lon 139.69171 :alt 100}
-             {:name "Sau Paulo" :lat -23.5475 :lon -46.63611 :alt 100}
-             {:name "Cartagena" :lat 10.39972 :lon -75.51444 :alt 100}])
+(def cities [{:name "Canberra" :lat -35.2809 :lon 149.13}
+             {:name "Brisbane" :lat -27.47012 :lon 153.021072}
+             {:name "Perth" :lat -31.924193 :lon 115.822557}
+             {:name "Sydney" :lat -33.853310 :lon 151.214847}
+             {:name "Orlando" :lat 28.538336 :lon -81.379234}
+             {:name "San Diego" :lat 32.715736 :lon -117.161087}
+             {:name "Dulles" :lat 38.951666 :lon -77.448055}
+             {:name "Montreal" :lat 45.50884 :lon -73.58781}
+             {:name "London" :lat 51.50853 :lon -0.12574}
+             {:name "Mumbai" :lat 19.07283 :lon 72.88261}
+             {:name "Tokyo" :lat 35.6895 :lon 139.69171}
+             {:name "Sau Paulo" :lat -23.5475 :lon -46.63611}
+             {:name "Cartagena" :lat 10.39972 :lon -75.51444}
+             {:name "Monrovia" :lat 6.304379 :lon -10.790660}
+             {:name "Cairo" :lat 30.061963 :lon 31.247398}
+             {:name "Cape Town" :lat -34.089061 :lon 18.357140}
+             {:name "Paris" :lat 48.868328 :lon 2.343648}
+             {:name "Berlin" :lat 52.509535 :lon 52.509535}
+             {:name "Rome" :lat 41.910453 :lon 12.486864}
+             {:name "Moscow" :lat 55.742574 :lon 37.632079}
+             {:name "Beijing" :lat 39.876019 :lon 116.394211}
+             {:name "Shanghai" :lat 31.240985 :lon 121.387871}
+             {:name "Jakarta" :lat -6.227934 :lon 106.778561}])
 
 
 (def beam-colors {"Y" [1 1 0 0.25]
