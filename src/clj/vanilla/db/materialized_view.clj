@@ -274,11 +274,10 @@
                 sort
                 first
                 .toDate)
-
-       :end   (->> (map #(:start-set %) args)
+       :end   (->> (map #(:end-set %) args)
                 (apply union)
                 sort
-                first
+                last
                 .toDate)})
     {}))
 
@@ -507,6 +506,10 @@
     (apply union)
     sort
     first)
+  (->> (map #(:end-set %) args)
+    (apply union)
+    sort
+    last)
   (f/unparse datetime-formatter)
 
   ())

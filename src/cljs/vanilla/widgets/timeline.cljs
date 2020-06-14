@@ -20,6 +20,7 @@
                                      (assoc orig :color (get colors
                                                           (.indexOf types-set type))))
                                 (:data data)))))]
+    (prn "parse-types-to-color" ret)
     ret))
 
 (defn parse-times [data]
