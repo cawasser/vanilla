@@ -20,7 +20,7 @@
                                      (assoc orig :color (get colors
                                                           (.indexOf types-set type))))
                                 (:data data)))))]
-    (prn "parse-types-to-color" ret)
+    ;(prn "parse-types-to-color" ret)
     ret))
 
 (defn parse-times [data]
@@ -39,11 +39,11 @@
 (defn make-widget
   [name source-data options]
 
-  (prn "timeline" source-data)
+  ;(prn "timeline" source-data)
 
   [:> TimeLine (merge {:style {:overflow :auto
                                :backgroundColor "#2F4F4F"}
-                       :mode "month"
+                       :mode "year"
                        :config {:taskList {:task {:style {:backgroundColor "#2F4F4F"
                                                           :color  "white"}}}
                                 :dataViewPort {:rows {:style {:backgroundColor "#2F4F4F"
