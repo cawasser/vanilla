@@ -35,11 +35,15 @@
              {:name "Tokyo" :lat 35.6895 :lon 139.69171}
              {:name "Sau Paulo" :lat -23.5475 :lon -46.63611}
              {:name "Cartagena" :lat 10.39972 :lon -75.51444}
+             {:name "Lima" :lat -12.125264 :lon -77.054384}
+             {:name "Sanitago" :lat -33.477272 :lon -70.668214}
+             {:name "Buenos Aires" :lat -34.597042 :lon -58.460822}
+             {:name "Manaus" :lat -3.096636 :lon -59.969071}
              {:name "Monrovia" :lat 6.304379 :lon -10.790660}
              {:name "Cairo" :lat 30.061963 :lon 31.247398}
              {:name "Cape Town" :lat -34.089061 :lon 18.357140}
              {:name "Paris" :lat 48.868328 :lon 2.343648}
-             {:name "Berlin" :lat 52.509535 :lon 52.509535}
+             {:name "Berlin" :lat 52.509535 :lon 13.409717}
              {:name "Rome" :lat 41.910453 :lon 12.486864}
              {:name "Moscow" :lat 55.742574 :lon 37.632079}
              {:name "Beijing" :lat 39.876019 :lon 116.394211}
@@ -116,7 +120,7 @@
 
 (defn make-layers []
   ; TODO: this is a hack for the following hack (does NOT unsubscribe to sources when widget closes)
-  (ds/data-source-subscribe [:x-beam-location-service :terminal-location-service :ka-beam-location-service])
+  (ds/data-source-subscribe [:terminal-location-service :ka-beam-location-service])
 
   (let [x-beams   (get-in @(rf/subscribe [:app-db :x-beam-location-service]) [:data :data])
         ka-beams  (get-in @(rf/subscribe [:app-db :ka-beam-location-service]) [:data :data])

@@ -40,19 +40,11 @@
 
    {:name    :channel-power-1000-service
     :read-fn :vanilla.channel-power-service/fetch-data
-    :params ["Sat-Power-1000" "1000"]}
+    :params ["(SAT1)" "SAT1"]}
 
    {:name    :channel-power-2000-service
     :read-fn :vanilla.channel-power-service/fetch-data
-    :params ["Sat-Power-2000" "2000"]}
-
-   ;{:name    :channel-power-3000-service
-   ; :read-fn :vanilla.channel-power-service/fetch-data
-   ; :params ["Sat-Power-3000" "3000"]}
-   ;
-   ;{:name    :channel-power-4000-service
-   ; :read-fn :vanilla.channel-power-service/fetch-data
-   ; :params ["Sat-Power-4000" "4000"]}
+    :params ["(SAT2)" "SAT2"]}
 
    {:name    :x-beam-location-service
     :read-fn :vanilla.beam-location-service/fetch-data

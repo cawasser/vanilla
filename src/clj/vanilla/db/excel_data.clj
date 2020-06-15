@@ -56,14 +56,14 @@
                  ;              :P :rx-beam
                  ;              :Q :rx-channel}
                  ; :post-fn    (fn [x] x)}
-                 {:sheet      "Sat-Power-1000"
+                 {:sheet      "Sat-Power-1"
                   :column-map {:A :satellite-id
                                :B :freq
                                :C :channel-1-power
                                :D :channel-2-power
                                :E :channel-3-power}
                   :post-fn    (fn [x] (take-nth drf x))}
-                 {:sheet      "Sat-Power-2000"
+                 {:sheet      "Sat-Power-2"
                   :column-map {:A :satellite-id
                                :B :freq
                                :C :channel-1-power
