@@ -11,6 +11,7 @@ body {
 /* TODO move to dashboard codebase */
 
 .widget {
+  overflow: hidden;
   background-image: linear-gradient(to top, rgb(16, 16, 16), rgb(96, 96, 96) );
 }
 
@@ -23,7 +24,8 @@ body {
 
 .widget-parent {
         display: flex;
-        flex-flow:column;
+        overflow: hidden;
+        flex-flow: column;
         height: 100%;
 }
 
@@ -32,6 +34,7 @@ body {
 }
 
 .widget-content {
+                 overflow: hidden;
                  flex: 1 1 auto;
 }
 

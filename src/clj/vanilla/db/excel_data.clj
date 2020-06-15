@@ -87,28 +87,56 @@
 
 
 
-(defn- load-data [filename sheet column-map post-fn]
-  (log/info "Loading " filename "/" sheet)
-  (->> (load-workbook-from-resource filename)
-    (select-sheet sheet)
-    (select-columns column-map)
-    (drop 1)
-    post-fn
-    (d/transact! conn)))
+(defn- load-data
+  ([workbook sheet column-map]
+   (load-data workbook sheet column-map (fn [x] x)))
+
+  ([workbook sheet column-map post-fn]
+   (log/info "Loading " sheet)
+   (->> workbook
+     (select-sheet sheet)
+     (select-columns column-map)
+     (drop 1)
+     post-fn
+     (d/transact! conn))))
 
 
-(defn init-from-excel []
-  (log/info "Init From Excel")
-  (doall
-    (map (fn [{:keys [sheet column-map post-fn]}]
-           (load-data filename sheet column-map post-fn))
-      excel-defs)))
+(defn init-from-excel [filename defs]
+  (log/info "Init From Excel" filename)
+
+  (try
+    (with-open [workbook (load-workbook-from-resource filename)]
+      (doall
+        (map (fn [{:keys [sheet column-map post-fn]}]
+               (load-data workbook sheet column-map post-fn))
+          defs)))
+    (catch Exception e (log/error "Exception: " (.getMessage e)))
+    (finally (log/info "Excel file" filename "not loaded!"))))
 
 
 
 
 
 (comment
+
+
+  (with-open [workbook (load-workbook-from-resource filename)]
+    workbook)
+  (with-open [workbook (load-workbook-from-resource "shabbay")]
+    workbook)
+
+  (try
+    (with-open [workbook (load-workbook-from-resource "shabbay")]
+      workbook)
+    (catch Exception e (log/error "Exception: " (.getMessage e)))
+    (finally (log/info "No Excel file found" filename)))
+
+
+
+  (try
+    (/ 1 0)
+    (catch Exception e (log/error "caught exception: " (.getMessage e))))
+
   (def sheet "Missions")
   (def column-map {:A :name
                    :B :organization
@@ -141,6 +169,23 @@
   (map (fn [{:keys [sheet column-map post-fn]}]
          [filename sheet column-map post-fn])
     excel-defs)
+
+
+  (with-open [workbook (load-workbook-from-resource filename)]
+    (load-data workbook "Missions" {:A :task-name
+                                    :B :organization
+                                    :C :start-time
+                                    :D :end-time}))
+
+  (d/q
+    '[:find ?task-name
+      :where [?e :task-name ?task-name]]
+    @conn)
+
+  (d/q
+    '[:find [(pull ?e [*]) ...]
+      :where [?e :task-name _]]
+    @conn)
 
 
   ())

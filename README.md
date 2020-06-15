@@ -54,9 +54,8 @@ This single-page application (SPA) provides a number of graphical widgets based 
 - [Adding new widget types](docs/adding-new-widget-types.md)
 - [Supporting different data formats](docs/managing-data-formats.md)
 - [Modal Usage](docs/modal_useage.md)
-- [Using Excel]()
-- [Using Datascript]()
-- [Testing](docs/testing.md)
+- [Using Excel](docs/excel-and-datascript.md)
+- [Using Datascript](docs/excel-and-datascript.md)
 
 ### Running the application
 
@@ -112,7 +111,7 @@ Diagrams are generated "automatically" by ???
 
 
 
-## Some Additional Resouces to Consider
+## FAQ
 
-- [Write the Docs](https://www.writethedocs.org)
-- [Dynadoc](https://github.com/oakes/Dynadoc)
+
+[Write the Docs](https://www.writethedocs.org)

@@ -8,13 +8,11 @@
 
 
 (defn- get-terminal-data []
-  (->> (d/q '[:find ?name ?lat ?lon
-              :where [?e :terminal-id ?name]
-              [?e :lat ?lat]
-              [?e :lon ?lon]]
+  (->> (d/q '[:find [(pull ?e [:terminal-id :lat :lon]) ...]
+              :where [?e :terminal-id]]
          @excel/conn)
-    (map (fn [[name lat lon]]
-           {:name name :lat lat :lon lon}))))
+    (map (fn [{:keys [terminal-id lat lon]}]
+           {:name terminal-id :lat lat :lon lon}))))
 
 
 
@@ -35,5 +33,11 @@
          @excel/conn)
     (map (fn [[name lat lon]]
            {:name name :lat lat :lon lon})))
+
+
+
+  (d/q '[:find [(pull ?e []) ...]
+         :where [?e :terminal-id]]
+    @excel/conn)
 
   ())

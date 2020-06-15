@@ -46,10 +46,10 @@
   [slice-at chart-type data options]
 
   (let [ret (add-slice-data (get-in data [:data :series 0 :data] []) slice-at)]
-    (prn "pie/convert-name-y " chart-type
-      " //// (data) " data
-      " //// (:data) " (get-in data [:data :series 0 :data])
-      " //// (ret) " ret)
+    ;(prn "pie/convert-name-y " chart-type
+    ;  " //// (data) " data
+    ;  " //// (:data) " (get-in data [:data :series 0 :data])
+    ;  " //// (ret) " ret)
 
     ret))
 

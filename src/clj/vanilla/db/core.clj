@@ -133,19 +133,26 @@
        "returns terminal locations around the world"]
 
       ;20
-      ["24000" "carousel-service" "Multi-Data Carousel"
-       "data-format/carousel" "vanilla.carousel-service/fetch-data"
-       "returns carousel widget that supports multiple widgets"]
+      ;["24000" "carousel-service" "Multi-Data Carousel"
+      ; "data-format/carousel" "vanilla.carousel-service/fetch-data"
+      ; "returns carousel widget that supports multiple widgets"]
 
       ;21
-      ["25000" "beam-service" "'General' Beam Data"
+      ["25000" "x-beam-location-service" "X-band Beam Data"
        "data-format/lat-lon-e" "vanilla.beam-location-service/fetch-data"
-       "returns 'general' beam location data for 2D/3D display"]
+       "returns X-band beam location data for 2D/3D display"]
 
       ;22
       ["26000" "terminal-list-service" "List of Terminals"
        "data-format/entities" "vanilla.terminal-list-service/fetch-data"
-       "returns a collection of Terminals and their properties"]]}))
+       "returns a collection of Terminals and their properties"]
+
+      ;23
+      ["27000" "ka-beam-location-service" "Ka-band Beam Data"
+       "data-format/lat-lon-e" "vanilla.beam-location-service/fetch-data"
+       "returns Ka-band beam location data for 2D/3D display"]]}))
+
+
 
 
 

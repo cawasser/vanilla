@@ -10,15 +10,12 @@
 
 
 (defn- get-data []
-  (->> (d/q '[:find ?name ?organization ?start-time ?end-time
-              :where [?e :task-name ?name]
-              [?e :organization ?organization]
-              [?e :start-time ?start-time]
-              [?e :end-time ?end-time]]
+  (->> (d/q '[:find [(pull ?e [*]) ...]
+              :where [?e :task-name]]
          @excel/conn)
-    (map (fn [[name organization start-time end-time]]
-           {:id    name
-            :name  name
+    (map (fn [{:keys [task-name organization start-time end-time]}]
+           {:id    task-name
+            :name  task-name
             :type  organization
             :start start-time
             :end   end-time}))
@@ -54,5 +51,9 @@
     (into []))
 
   (get-data)
+
+  (d/q '[:find [(pull ?e [*]) ...]
+         :where [?e :task-name]]
+    @excel/conn)
 
   ())
