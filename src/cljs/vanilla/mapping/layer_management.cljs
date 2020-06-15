@@ -134,9 +134,10 @@
     ; use the 4th (index 3) epoch as an example
 
     ["blue-marble"
+     (location-layer "Cities" cities (.-YELLOW WorldWind/Color))
      (beam-layer "Ka Beams" (->> (find-epoch epoch ka-beams) first :data) false)
-     (location-layer "Terminals" (->> (find-epoch epoch terminals) first :data) (.-WHITE WorldWind/Color))
-     (location-layer "Cities" cities (.-YELLOW WorldWind/Color))]))
+     (location-layer "Terminals" (->> (find-epoch epoch terminals) first :data) (.-WHITE WorldWind/Color))]))
+
 
 
 
