@@ -8,7 +8,7 @@
 (def schema {})
 (def conn (d/create-conn schema))
 
-(def filename "public/excel/Demo.xlsx")
+(def filename "public/excel/Demo CONUS.xlsx")
 
 ; drf: "data reduction factor"
 (def drf 10)
