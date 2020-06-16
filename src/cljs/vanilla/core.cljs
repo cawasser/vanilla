@@ -130,7 +130,8 @@
      [:div.container.level.is-fluid {:width "100%"}
       [:div.level-left.has-text-left
        [wc/change-header (rf/subscribe [:configure-widget])]
-       [add-wid/version-number]]
+       [add-wid/version-number]
+       [add-wid/current-user]]
       [top-right-buttons]]]]
    [widgets-grid]])
 
