@@ -22,6 +22,9 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(def sat-1 "SAT1")
+(def sat-2 "SAT2")
+
 (defn- extract-add-event
   "compute all the :add events (anytime some thing changes, so again 'start' and 'end')"
   [s]
@@ -140,8 +143,8 @@
 
 (defn- sat-tag [id]
   (condp = id
-    "SAT1" "-"
-    "SAT2" "_"
+    sat-1 "-"
+    sat-2 "_"
     :default ".."))
 
 
@@ -299,15 +302,16 @@
 
   [band {:keys [satellite-id beam-id radius lat lon type]}]
 
-  {:name (str (condp = satellite-id
-                "SAT1" "1"
-                "SAT2" "2"
-                :default "?")
-           "-" band "-" beam-id)
-   :lat  lat
-   :lon  lon
-   :e    {:diam    (* radius 2)
-          :purpose type}})
+  {:name         (str (condp = satellite-id
+                        sat-1 "1"
+                        sat-2 "2"
+                        :default "?")
+                   "-" band "-" beam-id)
+   :lat          lat
+   :lon          lon
+   :satellite-id satellite-id
+   :e            {:diam    (* radius 2)
+                  :purpose type}})
 
 
 
@@ -336,7 +340,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (def signal-path-context
-  {:file       "resources/public/excel/Demo.xlsx"
+  {:file       "resources/public/excel/Demo CONUS.xlsx"
    :sheet      "SCN_NETWORK_CARRIER_VW"
    :column-map {:A :satellite-id :B :tx-beam :C :tx-channel :D :rx-beam
                 :E :rx-channel :F :plan-id :G :mission-id :K :tx-term-lat
@@ -345,7 +349,7 @@
    :post-fn    (fn [x] x)})
 
 (def beam-context
-  {:file       "resources/public/excel/Demo.xlsx"
+  {:file       "resources/public/excel/Demo CONUS.xlsx"
    :sheet      "Beams"
    :column-map {:A :satellite-id
                 :B :band
@@ -431,7 +435,7 @@
    :lat          32.633,
    :end-epoch    "230000Z JUL 2020",
    :beam-id      2,
-   :satellite-id "SAT2"}
+   :satellite-id sat-2}
 
   ())
 
@@ -454,7 +458,7 @@
             :tx-term-lat  "-14.31", :rx-term-id "TRML-2",
             :rx-channel   "1", :tx-term-lon "32.22",
             :mission-id   "MISSION-1", :end-epoch "230000Z JUL 2020",
-            :satellite-id "SAT2", :tx-beam "3",
+            :satellite-id sat-2, :tx-beam "3",
             :rx-term-lat  "-34.31", :rx-beam "3"})
   (:start-epoch row)
 
