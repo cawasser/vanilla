@@ -132,21 +132,10 @@
     ;(prn "ka-beams[2]" (get-in ka-beams [2 :data]))
     ;(prn "terminals" @(rf/subscribe [:app-db :terminal-location-service]) terminals)
 
-    ; use the 4th (index 3) epoch as an example
-
     ["blue-marble"
      ;(location-layer "Cities" cities (.-YELLOW WorldWind/Color))
      (beam-layer "Ka Beams" (->> (find-epoch epoch ka-beams) first :data) false)
      (location-layer "Terminals"
-       ;(into #{}
-       ;  (filter #(= t-id (subs (:name %) 0
-       ;                     (clojure.string/index-of (:name %) "-")))
-       ;    (apply concat
-       ;      (map (fn [e]
-       ;             (map (fn [t]
-       ;                    (assoc t :name (str (:name t) "-" (subs (:name e) 0 4))))
-       ;               (:data e)))
-       ;        terminals))))
        (->> (find-epoch epoch terminals) first :data)
        (.-WHITE WorldWind/Color))]))
 
