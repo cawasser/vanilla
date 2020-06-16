@@ -133,7 +133,7 @@
     ;(prn "terminals" @(rf/subscribe [:app-db :terminal-location-service]) terminals)
 
     ["blue-marble"
-     ;(location-layer "Cities" cities (.-YELLOW WorldWind/Color))
+     (location-layer "Cities" cities (.-YELLOW WorldWind/Color))
      (beam-layer "Ka Beams" (->> (find-epoch epoch ka-beams) first :data) false)
      (location-layer "Terminals"
        (->> (find-epoch epoch terminals) first :data)
