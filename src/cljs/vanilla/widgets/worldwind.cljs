@@ -23,4 +23,4 @@
                  :text-align   :center
                  :border-style (basic/debug-style options)}}
    [:> Globe (merge {:layers (lm/make-layers)}
-               (:africa start-loc))]])
+               (:n-america start-loc))]])

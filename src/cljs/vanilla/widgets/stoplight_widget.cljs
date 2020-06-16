@@ -5,7 +5,7 @@
 
 (defn- stoplight [id val]
 
-  ; (prn "stoplight " id ", " val)
+  ;(prn "stoplight " id ", " val)
 
   (let [c (condp = val
             :up "green"
@@ -13,6 +13,7 @@
             :fault "red")]
     ^{:key id}
     [:button.button {:style    {:background-color c
+                                :color (if (= :warning val) "black" "white")
                                 :width            "20%"
                                 :height           "20%"
                                 :border-spacing   "5px"}
