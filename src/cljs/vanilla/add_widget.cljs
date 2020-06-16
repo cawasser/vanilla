@@ -334,7 +334,22 @@
       [:div.control
        [:div.tags.has-addons
         [:span.tag.is-dark "version"]
-        [:span.tag.is-dark @version]]])))
+        (if (seq @version)
+          [:span.tag.is-dark @version]
+          [:span.tag.is-dark "unknown"])]])))
+
+(defn current-user
+  "Returns the current user ID wrapped in a h6 element."
+
+  []
+
+  (let [user (rf/subscribe [:current-user])]
+    (fn []
+      [:div.control
+       [:div.tags.has-addons
+        (if (seq @user)
+          [:span.tag.is-success @user]
+          [:p])]])))
 
 
 

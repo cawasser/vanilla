@@ -10,10 +10,11 @@
   (let [c (condp = val
             :up "green"
             :warning "yellow"
+            :inactive "gray"
             :fault "red")]
     ^{:key id}
     [:button.button {:style    {:background-color c
-                                :color (if (= :warning val) "black" "white")
+                                :color            (if (= :warning val) "black" "white")
                                 :width            "20%"
                                 :height           "20%"
                                 :border-spacing   "5px"}
