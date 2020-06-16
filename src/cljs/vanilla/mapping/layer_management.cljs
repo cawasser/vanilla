@@ -102,7 +102,7 @@
                    textAttributes (WorldWind/TextAttributes.)
                    text           (WorldWind/GeographicText. label-pt (get d :name "Missing"))]
 
-               (beam-properties attributes (get-in d [:e :purpose]) hollow)
+               (beam-properties attributes (get-in d [:e :purpose]) (= "1" (last (:satellite-id d))))
 
                (set! (.-color textAttributes) (.-WHITE WorldWind/Color))
                (set! (.-attributes text) textAttributes)
@@ -125,7 +125,8 @@
   (let [x-beams   (get-in @(rf/subscribe [:app-db :x-beam-location-service]) [:data :data])
         ka-beams  (get-in @(rf/subscribe [:app-db :ka-beam-location-service]) [:data :data])
         terminals (get-in @(rf/subscribe [:app-db :terminal-location-service]) [:data :data])
-        epoch     "170400Z JUL 2020"]
+        epoch     "170400Z JUL 2020"
+        t-id      "MOB1"]
 
     ;(prn "ka-beams" ka-beams)
     ;(prn "ka-beams[2]" (get-in ka-beams [2 :data]))
@@ -134,9 +135,20 @@
     ; use the 4th (index 3) epoch as an example
 
     ["blue-marble"
-     (location-layer "Cities" cities (.-YELLOW WorldWind/Color))
+     ;(location-layer "Cities" cities (.-YELLOW WorldWind/Color))
      (beam-layer "Ka Beams" (->> (find-epoch epoch ka-beams) first :data) false)
-     (location-layer "Terminals" (->> (find-epoch epoch terminals) first :data) (.-WHITE WorldWind/Color))]))
+     (location-layer "Terminals"
+       ;(into #{}
+       ;  (filter #(= t-id (subs (:name %) 0
+       ;                     (clojure.string/index-of (:name %) "-")))
+       ;    (apply concat
+       ;      (map (fn [e]
+       ;             (map (fn [t]
+       ;                    (assoc t :name (str (:name t) "-" (subs (:name e) 0 4))))
+       ;               (:data e)))
+       ;        terminals))))
+       (->> (find-epoch epoch terminals) first :data)
+       (.-WHITE WorldWind/Color))]))
 
 
 
@@ -178,4 +190,35 @@
   (->> (find-epoch epoch terminals) first :data)
 
 
+
+  ; since we don't yet have a means of scanning through the epochs,
+  ; for data development, collapse all the terminal epochs into 1,
+  ; suffixing the terminal-id with the epoch so we get a sense of terminals
+  ; "moving" across the globe
+
+  (map (fn [e]
+         (fn [t]
+           (:data t))
+         (:data e))
+    terminals)
+
+  (def t-id "MOB2")
+  (into #{}
+    (filter #(= t-id (subs (:name %) 0
+                       (clojure.string/index-of (:name %) "-")))
+      (apply concat
+        (map (fn [e]
+               (map (fn [t]
+                      (assoc t :name (str (:name t) "-" (subs (:name e) 0 4))))
+                 (:data e)))
+          terminals))))
+
+  (subs "222000Z JUL 2020" 0 4)
+  (clojure.string/index-of "DUL>1904" ">")
+
+  (subs "MOB1-1808" 0 (clojure.string/index-of "MOB1-1808" "-"))
+  (= t-id (subs "MOB1-1808" 0
+            (clojure.string/index-of "MOB1-1808" "-")))
+
+  (last "SAT3")
   ())
