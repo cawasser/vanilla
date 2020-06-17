@@ -208,8 +208,10 @@
     ; " //// (all-configs) " all-configs)
 
     (reagent/create-class
-      {:reagent-render
-       (fn [args]
+      {:display-name (str chart-type)
+
+       :reagent-render
+       (fn []
          ;@dom-node                                          ; be sure to render if node changes, doesnt seem necessary
          [:div#hc {:style {:width "100%" :height "100%"}}])
 
@@ -243,18 +245,12 @@
 
 (comment
 
-  {:chart-options     {:chart/type              :dependency-chart,
-                       :chart/supported-formats [:data-format/from-to-n :data-format/from-to-e :data-format/from-to],
-                       :chart                   {:type "dependencywheel"},
-                       :plot-options            {:dataLabels {:color    "#333",
-                                                              :textPath {:enabled true, :attributes {:dy 5}},
-                                                              :distance 10},
-                                                 :size       "95%"}},
-   :merge-plot-option {:default ""},
-   :conversions       {:default             "",
-                       :data-format/from-to ""}}
-
-  ;;;;;;;;;;;;ALL-CONFIGS;;;;;;;;;;;;; for future reference
+  ;;;;;;;;;;;;ALL-CONFIGS;;;;;;;;;;;;;
+  ;; This is the final chart all-config for a single chart that is
+  ;; passed to the Highcharts lib in the above make-chart function.
+  ;; This has been left as a reference to see how the data struct is
+  ;; laid out in order to more easily made changes to it in the future.
+  ;;
   {:legendBackgroundColor "rgba(48, 48, 48, 0.8)",
    :labels {:style {:color "#CCC"}},
    :dataLabelsColor "#444",

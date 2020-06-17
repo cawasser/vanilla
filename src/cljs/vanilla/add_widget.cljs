@@ -261,10 +261,6 @@
                     [widget-card name label icon chosen-widget widgets]])]])
 
 
-(defn filtered [services]
-  "filters the services list shown in the modal"  ;only removes carousel currently due to specific carousel button addition
-  (vec (remove #(= "carousel-service" (:keyword %)) services)))
-
 (defn add-by-source-modal
   "modal to allow the user to pick new widgets by first picking the data source they want"
   [is-active]

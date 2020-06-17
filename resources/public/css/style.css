@@ -45,3 +45,54 @@ body {
 .menu-cursor {
     cursor:context-menu;
 }
+
+/*
+.globe {
+    width: 100%;
+    height: calc(100vh - 3.5rem);
+    background-color: black;
+}
+*/
+
+.overlayTools {
+    position: absolute;
+    top: 3.5rem;
+    max-height: calc(100vh - 3.5rem);
+}
+
+.overlayCards {
+    position: absolute;
+    top: 7.5rem;
+    left: 10px;
+    max-width: 120px;
+    max-height: calc(100vh - 3.5rem);
+}
+
+.card {
+    background:rgba(255,255,255,0.7) !important;
+}
+
+.card-body {
+    overflow-y: scroll;
+    max-height: calc(100vh - 8rem);
+}
+
+.noninteractive {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    -o-user-select: none;
+    pointer-events: none;
+}
+
+.interactive {
+    -webkit-touch-callout: auto !important;
+    -webkit-user-select: auto !important;
+    -khtml-user-select: auto !important;
+    -moz-user-select: auto !important;
+    -ms-user-select: auto !important;
+    -o-user-select: auto !important;
+    pointer-events: auto !important;
+}
