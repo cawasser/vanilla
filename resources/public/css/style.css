@@ -63,7 +63,8 @@ body {
 .overlayCards {
     position: absolute;
     top: 7.5rem;
-    left: 100px;
+    left: 10px;
+    max-width: 120px;
     max-height: calc(100vh - 3.5rem);
 }
 

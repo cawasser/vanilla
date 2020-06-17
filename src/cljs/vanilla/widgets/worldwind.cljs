@@ -46,11 +46,14 @@
                                 :items [(r/as-element
                                           [:> bs4/NavBarItem {:key "lyr"
                                                               :title "Layers"
-                                                              :icon "list"
+                                                              :icon "/images/list-icon.png"
                                                               :collapse @layersRef}])]}]] ; #(reset! is-active false) (fn []...
 
-              [:> rs/Container {:fluid "lg"}
+              [:> rs/Container {:fluid "xl"
+                                :style {:width "100%"
+                                        :height "100%"}}
                 [:div#globe {:style {:width        "100%"
+                                     :height       "100%"
                                      :text-align   :center
                                      :border-style (basic/debug-style options)}
                              :className "globe"}
@@ -63,7 +66,7 @@
                 [:div.overlayCards.noninteractive
                  [:> rs/CardColumns
                   [:> bs4/LayersCard {:ref #(reset! layersRef %)
-                                      :categories ["overlay" "base"]
+                                      ;:categories ["overlay" "base"]
                                       :globe @globeRef}]]]]
               ])}))))
 
