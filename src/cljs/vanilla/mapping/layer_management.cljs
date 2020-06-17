@@ -113,11 +113,16 @@
     ;(prn "x-beams" @(rf/subscribe [:app-db :beam-location-service]) x-beams)
     ;(prn "terminals" @(rf/subscribe [:app-db :terminal-location-service]) terminals)
 
-    ["blue-marble"
-     (location-layer "Cities" cities (.-YELLOW WorldWind/Color))
-     (location-layer "Terminals" terminals (.-WHITE WorldWind/Color))
-     (beam-layer "X Beams" x-beams true)
-     (beam-layer "Ka Beams"ka-beams false)]))
+    [{:layer "blue-marble"
+      :options {:category "base" :enabled true}}
+     {:layer (location-layer "Cities" cities (.-YELLOW WorldWind/Color))
+      :options {:category "overlay" :enabled false}}
+     {:layer (location-layer "Terminals" terminals (.-WHITE WorldWind/Color))
+      :options {:category "overlay" :enabled false}}
+     {:layer (beam-layer "X Beams" x-beams true)
+      :options {:category "overlay" :enabled false}}
+     {:layer (beam-layer "Ka Beams"ka-beams false)
+      :options {:category "overlay" :enabled false}}]))
 
 
 

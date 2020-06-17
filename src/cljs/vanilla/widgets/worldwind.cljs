@@ -66,7 +66,7 @@
                 [:div.overlayCards.noninteractive
                  [:> rs/CardColumns
                   [:> bs4/LayersCard {:ref #(reset! layersRef %)
-                                      ;:categories ["overlay" "base"]
+                                      :categories ["overlay" "base"]
                                       :globe @globeRef}]]]]
               ])}))))
 
