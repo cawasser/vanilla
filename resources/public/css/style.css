@@ -64,8 +64,19 @@ body {
     position: absolute;
     top: 7.5rem;
     left: 10px;
+    color: black;
     max-width: 120px;
     max-height: calc(100vh - 3.5rem);
+}
+
+h5 {
+    color: black;
+    width: 100%;
+}
+
+btn {
+    position: absolute;
+    right: 0px;
 }
 
 .card {
