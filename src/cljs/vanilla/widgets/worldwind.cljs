@@ -6,11 +6,14 @@
             ["../js/worldwind-react-globe.js" :as Globe]
             ["worldwind-react-globe-bs4" :as bs4]
             ["reactstrap" :as rs]
-            [vanilla.mapping.layer-management :as lm]))
+            [vanilla.mapping.layer-management :as lm]
+            [vanilla.data-source-subscribe :as ds]))
 
 
 
 (defn make-widget [name data options]
+
+  (ds/data-source-subscribe [:x-beam-location-service :terminal-location-service :ka-beam-location-service])
 
   ;(prn "ww widget " data)
 
