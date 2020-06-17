@@ -95,8 +95,8 @@
                (.addRenderable layer circle)))
 
         data))
-    (prn "Beam Layer: " layer
-         "Data: " data)
+    ;(prn "Beam Layer: " layer
+    ;     "Data: " data)
     layer))
 
 
