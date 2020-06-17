@@ -122,29 +122,35 @@
   ; TODO: this is a hack for the following hack (does NOT unsubscribe to sources when widget closes)
   (ds/data-source-subscribe [:terminal-location-service :ka-beam-location-service])
 
-  (let [x-beams   (get-in @(rf/subscribe [:app-db :x-beam-location-service]) [:data :data])
-        ka-beams  (get-in @(rf/subscribe [:app-db :ka-beam-location-service]) [:data :data])
-        terminals (get-in @(rf/subscribe [:app-db :terminal-location-service]) [:data :data])
-        epoch     "170400Z JUL 2020"
-        t-id      "MOB1"]
+  (let [ka-beams  (get-in @(rf/subscribe [:app-db :ka-beam-location-service]) [:data :data])
+        terminals (get-in @(rf/subscribe [:app-db :terminal-location-service]) [:data :data])]
 
     ;(prn "ka-beams" ka-beams)
     ;(prn "ka-beams[2]" (get-in ka-beams [2 :data]))
     ;(prn "terminals" @(rf/subscribe [:app-db :terminal-location-service]) terminals)
 
-    ["blue-marble"
-     (location-layer "Cities" cities (.-YELLOW WorldWind/Color))
-     (beam-layer "Ka Beams" (->> (find-epoch epoch ka-beams) first :data) false)
-     (location-layer "Terminals"
-       (->> (find-epoch epoch terminals) first :data)
-       (.-WHITE WorldWind/Color))]))
+    (apply conj
+      (apply conj
+        [{:layer "blue-marble" :options {:category "base" :enabled true}}
+         {:layer (location-layer "Cities" cities (.-YELLOW WorldWind/Color))
+          :options {:category "overlay" :enabled true}}]
+
+        (for [e (map #(:name %) terminals)]
+          {:layer (location-layer "Terminals"
+                    (->> (find-epoch e terminals) first :data)
+                    (.-WHITE WorldWind/Color))
+           :options {:category "overlay" :enabled true}}))
+
+      (for [e (map #(:name %) ka-beams)]
+        {:layer (beam-layer e (->> (find-epoch e ka-beams) first :data) false)
+         :options {:category "overlay" :enabled true}}))))
 
 
 
 
 
-(defn add-layer [layers new-layer]
-  (swap! layers conj new-layer))
+;(defn add-layer [layers new-layer]
+;  (swap! layers conj new-layer))
 
 
 
@@ -177,6 +183,22 @@
   (def epoch "190000Z JUL 2020")
   (->> (find-epoch epoch ka-beams) first :data)
   (->> (find-epoch epoch terminals) first :data)
+
+  (apply conj
+    (apply conj
+      [{:layer "blue-marble" :options {:category "base" :enabled true}}
+       {:layer (location-layer "Cities" cities (.-YELLOW WorldWind/Color))
+        :options {:category "overlay" :enabled true}}]
+
+      (for [e (map #(:name %) terminals)]
+        {:layer (location-layer "Terminals"
+                  (->> (find-epoch e terminals) first :data)
+                  (.-WHITE WorldWind/Color))
+         :options {:category "overlay" :enabled true}}))
+
+    (for [e (map #(:name %) ka-beams)]
+      {:layer (beam-layer e (->> (find-epoch e ka-beams) first :data) false)
+       :options {:category "overlay" :enabled true}}))
 
 
 
