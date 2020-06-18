@@ -20,6 +20,8 @@
 
 (defn make-widget [name data options]
 
+  (ds/data-source-subscribe [:x-beam-location-service :terminal-location-service :ka-beam-location-service])
+
   ;(prn "ww widget " data)
 
   ;[:div#globe {:style {:width        "100%"
@@ -72,6 +74,25 @@
                 [:div.overlayCards.noninteractive
                  [:> rs/CardColumns
                   [:> bs4/LayersCard {:ref #(reset! layersRef %)
-                                      ;:categories ["overlay" "base"]
+                                      :categories ["overlay" "base"]
                                       :globe @globeRef}]]]]])}))))
 
+
+
+
+  ;(r/create-element
+  ;  (r/create-class
+  ;    {:display-name "Globe"
+  ;
+  ;     :reagent-render
+  ;       (fn []
+  ;         [:div#globe {:style {:width        "100%"
+  ;                              :text-align   :center
+  ;                              :border-style (basic/debug-style options)}}])
+  ;
+  ;     :component-did-mount
+  ;       (fn [this]
+  ;         [:> Globe {:ref       (r/dom-node this)
+  ;                    :layers    (lm/make-layers)
+  ;                    :latitude  28.538336
+  ;                    :longitude -81.379234}])})))

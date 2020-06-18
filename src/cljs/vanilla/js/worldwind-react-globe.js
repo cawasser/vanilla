@@ -1855,9 +1855,9 @@ var Globe$1 = function (_Component) {
               break;
             case 'object':
               //if (config instanceof WorldWind.Layer) {
-                _this2.addLayer(config);
+              //  _this2.addLayer(config);
               //} else {
-              //  _this2.addLayer(config.layer, config.options);
+                _this2.addLayer(config.layer, config.options);
               //}
               break;
           }

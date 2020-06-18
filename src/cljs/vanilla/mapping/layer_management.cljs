@@ -118,9 +118,18 @@
 (defn- find-epoch [epoch events]
   (filter #(= epoch (:name %)) events))
 
+
+(defn- assemble-layer [layer]
+  {:layer (location-layer e
+            (->> (find-epoch e terminals) first :data)
+            (.-WHITE WorldWind/Color))
+            ;layer)
+   :options {:category "overlay" :enabled false}})
+
+
 (defn make-layers []
   ; TODO: this is a hack for the following hack (does NOT unsubscribe to sources when widget closes)
-  (ds/data-source-subscribe [:terminal-location-service :ka-beam-location-service])
+  ;(ds/data-source-subscribe [:x-beam-location-service :terminal-location-service :ka-beam-location-service])
 
   (let [ka-beams  (get-in @(rf/subscribe [:app-db :ka-beam-location-service]) [:data :data])
         terminals (get-in @(rf/subscribe [:app-db :terminal-location-service]) [:data :data])]
@@ -136,20 +145,30 @@
           :options {:category "overlay" :enabled true}}]
 
         (for [e (map #(:name %) terminals)]
-          {:layer (location-layer "Terminals"
+          {:layer (location-layer e
                     (->> (find-epoch e terminals) first :data)
                     (.-WHITE WorldWind/Color))
-           :options {:category "overlay" :enabled true}}))
-
+           :options {:category "overlay" :enabled false}}))
       (for [e (map #(:name %) ka-beams)]
         {:layer (beam-layer e (->> (find-epoch e ka-beams) first :data) false)
-         :options {:category "overlay" :enabled true}}))))
+         :options {:category "overlay" :enabled false}}))))
+
+;[{:layer "blue-marble"
+;  :options {:category "base" :enabled true}}
+; {:layer (location-layer "Cities" cities (.-YELLOW WorldWind/Color))
+;  :options {:category "overlay" :enabled false}}
+; {:layer (location-layer "Terminals" terminals (.-WHITE WorldWind/Color))
+;  :options {:category "overlay" :enabled false}}
+; {:layer (beam-layer "X Beams" x-beams true)
+;  :options {:category "overlay" :enabled false}}
+; {:layer (beam-layer "Ka Beams"ka-beams false)
+;  :options {:category "overlay" :enabled false}}]
 
 
 
 
 
-;(defn add-layer [layers new-layer]
+  ;(defn add-layer [layers new-layer]
 ;  (swap! layers conj new-layer))
 
 
@@ -232,4 +251,17 @@
             (clojure.string/index-of "MOB1-1808" "-")))
 
   (last "SAT3")
+
+
+  (apply conj
+    [{:layer "blue-marble" :options {:category "base" :enabled true}}
+     {:layer (location-layer "Cities" cities (.-YELLOW WorldWind/Color))
+      :options {:category "overlay" :enabled true}}]
+
+    (for [e epochs]
+      (->> (WorldWind/RenderableLayer. e)
+        (assemble-layer location-layer)
+        (assemble-layer beam-layer))))
+
+
   ())
