@@ -59,22 +59,22 @@
 
 
 
-(defn- location-layer [title data color]
-  (let [layer          (WorldWind/RenderableLayer. title)
-        textAttributes (WorldWind/TextAttributes.)]
+(defn- location-layer [data color layer]
+  (if (seq data)
+    (let [textAttributes (WorldWind/TextAttributes.)]
 
-    (set! (.-color textAttributes) color)
+      (set! (.-color textAttributes) color)
 
-    (doall (map (fn [d]
-                  ;(prn "location-layer d" d)
-                  (let [point (WorldWind/Position. (:lat d) (:lon d) (get d :alt 200))
-                        name  (get d :name "Missing")
-                        text  (WorldWind/GeographicText. point name)]
+      (doall (map (fn [d]
+                    (prn "location-layer d" d)
+                    (let [point (WorldWind/Position. (:lat d) (:lon d) (get d :alt 200))
+                          name  (get d :name "Missing")
+                          text  (WorldWind/GeographicText. point name)]
 
-                    (set! (.-attributes text) textAttributes)
-                    (.addRenderable layer text)))
-             data))
-    layer))
+                      (set! (.-attributes text) textAttributes)
+                      (.addRenderable layer text)))
+               data))))
+  layer)
 
 
 (defn- beam-properties [attributes beam hollow]
@@ -90,11 +90,11 @@
     (set! (.-outlineColor attributes) (WorldWind/Color. r g b 1.0))))
 
 
-(defn- beam-layer [title data hollow]
-  (let [layer (WorldWind/RenderableLayer. title)]
+(defn- beam-layer [data layer]
+  (if (seq data)
     (doall
       (map (fn [d]
-             ;(prn "beam-layer d" d)
+             (prn "beam-layer d" d)
              (let [attributes     (WorldWind/ShapeAttributes.)
                    point          (WorldWind/Location. (:lat d) (:lon d))
                    label-pt       (WorldWind/Position. (:lat d) (:lon d) (get d :alt 100))
@@ -110,8 +110,8 @@
 
                (.addRenderable layer circle)))
 
-        data))
-    layer))
+        data)))
+  layer)
 
 
 
@@ -119,38 +119,37 @@
   (filter #(= epoch (:name %)) events))
 
 
-(defn- assemble-layer [layer]
-  {:layer (location-layer e
-            (->> (find-epoch e terminals) first :data)
-            (.-WHITE WorldWind/Color))
-            ;layer)
-   :options {:category "overlay" :enabled false}})
 
 
 (defn make-layers []
   ; TODO: this is a hack for the following hack (does NOT unsubscribe to sources when widget closes)
   ;(ds/data-source-subscribe [:x-beam-location-service :terminal-location-service :ka-beam-location-service])
 
-  (let [ka-beams  (get-in @(rf/subscribe [:app-db :ka-beam-location-service]) [:data :data])
-        terminals (get-in @(rf/subscribe [:app-db :terminal-location-service]) [:data :data])]
+  (let [ka-beams  (get-in @(rf/subscribe
+                             [:app-db :ka-beam-location-service])
+                    [:data :data])
+        terminals (get-in @(rf/subscribe
+                             [:app-db :terminal-location-service])
+                    [:data :data])
+        epochs    (clojure.set/union
+                    (into #{} (map :name ka-beams))
+                    (into #{} (map :name terminals)))]
 
     ;(prn "ka-beams" ka-beams)
     ;(prn "ka-beams[2]" (get-in ka-beams [2 :data]))
     ;(prn "terminals" @(rf/subscribe [:app-db :terminal-location-service]) terminals)
 
     (apply conj
-      (apply conj
-        [{:layer "blue-marble" :options {:category "base" :enabled true}}
-         {:layer (location-layer "Cities" cities (.-YELLOW WorldWind/Color))
-          :options {:category "overlay" :enabled true}}]
+      [{:layer "blue-marble" :options {:category "base" :enabled true}}
+       {:layer   (location-layer cities
+                   (.-YELLOW WorldWind/Color)
+                   (WorldWind/RenderableLayer. "Cities"))
+        :options {:category "overlay" :enabled true}}]
 
-        (for [e (map #(:name %) terminals)]
-          {:layer (location-layer e
-                    (->> (find-epoch e terminals) first :data)
-                    (.-WHITE WorldWind/Color))
-           :options {:category "overlay" :enabled false}}))
-      (for [e (map #(:name %) ka-beams)]
-        {:layer (beam-layer e (->> (find-epoch e ka-beams) first :data) false)
+      (for [e (reverse (sort epochs))]
+        {:layer (->> (WorldWind/RenderableLayer. e)
+                  (location-layer (find-epoch e terminals) (.-WHITE WorldWind/Color)))
+                  ;(beam-layer ka-beams))
          :options {:category "overlay" :enabled false}}))))
 
 ;[{:layer "blue-marble"
@@ -168,7 +167,7 @@
 
 
 
-  ;(defn add-layer [layers new-layer]
+;(defn add-layer [layers new-layer]
 ;  (swap! layers conj new-layer))
 
 
@@ -180,15 +179,22 @@
 
 
   ; working out how to get just one epoch from the epochal-data
-  (def ka-beams (get-in @(rf/subscribe [:app-db :ka-beam-location-service]) [:data :data]))
+  (def ka-beams (get-in @(rf/subscribe [:app-db :ka-beam-location-service])
+                  [:data :data]))
   (get-in ka-beams [2 :data])
   (map :name ka-beams)
 
-  (def terminals (get-in @(rf/subscribe [:app-db :terminal-location-service]) [:data :data]))
+  (def terminals (get-in @(rf/subscribe [:app-db :terminal-location-service])
+                   [:data :data]))
   (map :name terminals)
-  (clojure.set/intersection
-    (into #{} (map :name ka-beams))
-    (into #{} (map :name terminals)))
+  (def epochs (clojure.set/union
+                (into #{} (map :name ka-beams))
+                (into #{} (map :name terminals))))
+  (def common-epochs (clojure.set/intersection
+                       (into #{} (map :name ka-beams))
+                       (into #{} (map :name terminals))))
+
+  (reverse (sort epochs))
 
   #{"161200Z JUL 2020"
     "170400Z JUL 2020"
@@ -203,65 +209,48 @@
   (->> (find-epoch epoch ka-beams) first :data)
   (->> (find-epoch epoch terminals) first :data)
 
-  (apply conj
-    (apply conj
-      [{:layer "blue-marble" :options {:category "base" :enabled true}}
-       {:layer (location-layer "Cities" cities (.-YELLOW WorldWind/Color))
-        :options {:category "overlay" :enabled true}}]
-
-      (for [e (map #(:name %) terminals)]
-        {:layer (location-layer "Terminals"
-                  (->> (find-epoch e terminals) first :data)
-                  (.-WHITE WorldWind/Color))
-         :options {:category "overlay" :enabled true}}))
-
-    (for [e (map #(:name %) ka-beams)]
-      {:layer (beam-layer e (->> (find-epoch e ka-beams) first :data) false)
-       :options {:category "overlay" :enabled true}}))
-
-
-
-  ; since we don't yet have a means of scanning through the epochs,
-  ; for data development, collapse all the terminal epochs into 1,
-  ; suffixing the terminal-id with the epoch so we get a sense of terminals
-  ; "moving" across the globe
-
-  (map (fn [e]
-         (fn [t]
-           (:data t))
-         (:data e))
-    terminals)
-
-  (def t-id "MOB2")
-  (into #{}
-    (filter #(= t-id (subs (:name %) 0
-                       (clojure.string/index-of (:name %) "-")))
-      (apply concat
-        (map (fn [e]
-               (map (fn [t]
-                      (assoc t :name (str (:name t) "-" (subs (:name e) 0 4))))
-                 (:data e)))
-          terminals))))
-
-  (subs "222000Z JUL 2020" 0 4)
-  (clojure.string/index-of "DUL>1904" ">")
-
-  (subs "MOB1-1808" 0 (clojure.string/index-of "MOB1-1808" "-"))
-  (= t-id (subs "MOB1-1808" 0
-            (clojure.string/index-of "MOB1-1808" "-")))
 
   (last "SAT3")
+
+  (assemble-layer location-layer "161200Z JUL 2020"
+    terminals (.-WHITE WorldWind/Color) ())
+
+  (->> (WorldWind/RenderableLayer. "161200Z JUL 2020")
+    (assemble-layer location-layer "161200Z JUL 2020" terminals
+      (.-WHITE WorldWind/Color)))
+
+  (->> (WorldWind/RenderableLayer. "201200Z JUL 2020")
+    (assemble-layer beam-layer "201200Z JUL 2020" ka-beams
+      dummy-color))
+
+  (if (seq (find-epoch "161200Z JUL 2020" ka-beams)) true false)
+  (if (seq (find-epoch "201200Z JUL 2020" ka-beams)) true false)
+  (if (seq (find-epoch "201200Z JUL 2020" terminals)) true false)
+
+
+  (for [e epochs]
+    (->> (WorldWind/RenderableLayer. e)
+      (assemble-layer location-layer e terminals
+        (.-WHITE WorldWind/Color))))
+
+
+  (for [e epochs]
+    (->> (WorldWind/RenderableLayer. e)
+      (assemble-layer beam-layer e ka-beams dummy-color)))
 
 
   (apply conj
     [{:layer "blue-marble" :options {:category "base" :enabled true}}
-     {:layer (location-layer "Cities" cities (.-YELLOW WorldWind/Color))
+     {:layer   (location-layer cities
+                 (.-YELLOW WorldWind/Color)
+                 (WorldWind/RenderableLayer. "Cities"))
       :options {:category "overlay" :enabled true}}]
 
-    (for [e epochs]
-      (->> (WorldWind/RenderableLayer. e)
-        (assemble-layer location-layer)
-        (assemble-layer beam-layer))))
+    (for [e (reverse (sort epochs))]
+      {:layer (->> (WorldWind/RenderableLayer. e)
+                (location-layer (find-epoch e terminals) (.-WHITE WorldWind/Color))
+                (beam-layer (find-epoch e ka-beams)))
+       :options {:category "overlay" :enabled false}}))
 
 
   ())
