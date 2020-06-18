@@ -8,9 +8,11 @@
 (s/def ::is-vector vector?)
 (s/def ::is-string string?)
 (s/def ::is-float float?)
+(s/def ::is-integer integer?)
 
 ;
-; a special function to range bound a value
+; a special function to range bound a float
+; spec already has a built-in for double called double-in
 ;
 (s/defop bounded-float
          [min max]

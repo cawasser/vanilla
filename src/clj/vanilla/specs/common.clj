@@ -16,3 +16,6 @@
 ;
 (s/def ::lat (vsu/bounded-float min-latitude max-latitude))
 (s/def ::lon (vsu/bounded-float min-longitude max-longitude))
+
+(s/def ::latitude (s/double-in :min min-latitude :max max-latitude :NaN? false :infinite? false))
+(s/def ::longitude (s/double-in :min min-longitude :max max-longitude :NaN? false :infinite? false))

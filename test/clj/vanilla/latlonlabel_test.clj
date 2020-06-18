@@ -5,20 +5,22 @@
             [vanilla.specs.latlonlabel :as vsd]))
 
 (def single-lat-lon-label {::vsd/lat 35.33 ::vsd/name "test name" ::vsd/lon 150.00})
+(comment [(deftest example-passing-test
+            (is (= 1 1)))
 
-(deftest example-passing-test
-  (is (= 1 1)))
+          (deftest is-vector-test-1
+            (is (s/valid? ::vsu/is-vector 42)))
 
-(deftest is-vector-test-1
-  (is (s/valid? ::vsu/is-vector 42)))
+          (deftest is-vector-test-2
+            (is (s/valid? ::vsu/is-vector [])))
 
-(deftest is-vector-test-2
-  (is (s/valid? ::vsu/is-vector [])))
+          (deftest single-lat-lon-label-test
+            (is (= 1 1)))])
 
-(deftest single-lat-lon-label-test
-  (is (= 1 1)))
+
 
 (comment [
+
           (def lat-lon-label-data [{:name "Canberra",
                                     :lat -35.2809,
                                     :lon 149.13}
