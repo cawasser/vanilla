@@ -46,8 +46,8 @@
 
          :reagent-render
            (fn []
-             [:div#all {:style {:width "100%" :height "100%"}}
-              [:div#nav
+             [:div#all {:style {:width "100%" :height "100%" :overflow "hidden"}}
+              [:div#nav {:style {:width "100%" :position "fixed" :align-items "stretch"}}
                 [:> bs4/NavBar {:logo ""
                                 :title "HammerGlobe"
                                 :items [(r/as-element
@@ -56,26 +56,27 @@
                                                               :icon "/images/list-icon.png"
                                                               :collapse @layersRef}])]}]] ; #(reset! is-active false) (fn []...
 
-              [:> rs/Container {:fluid "xl"
-                                :style {:width "100%"
-                                        :height "100%"}}
-                [:div#globe {:style {:width        "100%"
-                                     :height       "100%"
-                                     :text-align   :center
-                                     :border-style (basic/debug-style options)}
-                             :className "globe"}
+              [:div#contain {:style {:width "100%" :height "100%" }}
+                [:> rs/Container {:fluid "lg"
+                                  :style {:width "100%"
+                                          :height "100%"}}
+                  [:div#globe {:style {:width        "100%"
+                                       :height       "100%"
+                                       :text-align   :center
+                                       :border-style (basic/debug-style options)}
+                               :className "globe"}
 
-                  [:> Globe (merge {:ref  #(reset! globeRef %)
-                                    :layers (lm/make-layers)
-                                    :latitude  28.538336
-                                    :longitude -81.379234}
-                              (:n-america start-loc))]]
+                    [:> Globe (merge {:ref  #(reset! globeRef %)
+                                      :layers (lm/make-layers)
+                                      :latitude  28.538336
+                                      :longitude -81.379234}
+                                (:n-america start-loc))]]
 
-                [:div.overlayCards.noninteractive
-                 [:> rs/CardColumns
-                  [:> bs4/LayersCard {:ref #(reset! layersRef %)
-                                      :categories ["overlay" "base"]
-                                      :globe @globeRef}]]]]])}))))
+                  [:div.overlayCards.noninteractive
+                   [:> rs/CardColumns
+                    [:> bs4/LayersCard {:ref #(reset! layersRef %)
+                                        :categories ["overlay" "base"]
+                                        :globe @globeRef}]]]]]])}))))
 
 
 

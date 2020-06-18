@@ -66,7 +66,7 @@
       (set! (.-color textAttributes) color)
 
       (doall (map (fn [d]
-                    (prn "location-layer d" d)
+                    ;(prn "location-layer d" d)
                     (let [point (WorldWind/Position. (:lat d) (:lon d) (get d :alt 200))
                           name  (get d :name "Missing")
                           text  (WorldWind/GeographicText. point name)]
@@ -94,7 +94,7 @@
   (if (seq data)
     (doall
       (map (fn [d]
-             (prn "beam-layer d" d)
+             ;(prn "beam-layer d" d)
              (let [attributes     (WorldWind/ShapeAttributes.)
                    point          (WorldWind/Location. (:lat d) (:lon d))
                    label-pt       (WorldWind/Position. (:lat d) (:lon d) (get d :alt 100))
