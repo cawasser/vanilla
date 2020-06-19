@@ -34,3 +34,4 @@
 (s/def ::data ::vsl/lat-lon-label-vector)
 
 (s/def ::australia-map-service (s/keys :req-un [::title ::data-format ::data]))
+
