@@ -20,20 +20,11 @@
 
 (defn make-widget [name data options]
 
+  ; TODO: this is a hack for the following hack (does NOT unsubscribe to sources when widget closes)
+  ; hack has been moved here from layer-mngmt to prevent overload of ajax calls as layers redraw frequently
   (ds/data-source-subscribe [:x-beam-location-service :terminal-location-service :ka-beam-location-service])
 
-  ;(prn "ww widget " data)
-
-  ;[:div#globe {:style {:width        "100%"
-  ;               :text-align   :center
-  ;               :border-style (basic/debug-style options)}}
-  ; [:> Globe {:layers    (lm/make-layers)
-  ;            :latitude  28.538336
-  ;            :longitude -81.379234}]])
-
-  (let [this (r/current-component)
-        state (merge {:globe nil} (r/state this))
-        globeRef (atom nil)
+  (let [globeRef (atom nil)
         layersRef (atom nil)
         layers (lm/make-layers)]
 
@@ -54,8 +45,8 @@
                                 :items [(r/as-element
                                           [:> bs4/NavBarItem {:key "lyr"
                                                               :title "Layers"
-                                                              :icon "/images/list-icon.png"
-                                                              :collapse @layersRef}])]}]] ; #(reset! is-active false) (fn []...
+                                                              :icon "list"
+                                                              :collapse @layersRef}])]}]]
 
               [:div#contain {:style {:width "100%" :height "100%"}}
                 [:> rs/Container {:fluid "lg"
@@ -81,6 +72,15 @@
 
 
 
+
+;(prn "ww widget " data)
+
+;[:div#globe {:style {:width        "100%"
+;               :text-align   :center
+;               :border-style (basic/debug-style options)}}
+; [:> Globe {:layers    (lm/make-layers)
+;            :latitude  28.538336
+;            :longitude -81.379234}]])
 
   ;(r/create-element
   ;  (r/create-class
