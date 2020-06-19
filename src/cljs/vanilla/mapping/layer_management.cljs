@@ -62,14 +62,14 @@
 (defn- location-layer [data color layer]
   (if (seq data)
     (do
-      (prn "location-layer" data)
+      ;(prn "location-layer" data)
       (let [textAttributes (WorldWind/TextAttributes.)]
 
         (set! (.-color textAttributes) color)
 
         (doall
           (map (fn [d]
-                 (prn "location-layer d" (:name d) (:lat d) (:lon d))
+                 ;(prn "location-layer d" (:name d) (:lat d) (:lon d))
                  (let [point (WorldWind/Position. (:lat d) (:lon d) (get d :alt 200))
                        name  (get d :name "Missing")
                        text  (WorldWind/GeographicText. point name)]
@@ -99,7 +99,7 @@
       (map (fn [d]
              (if (seq d)
                (do
-                 (prn "beam-layer d" d)
+                 ;(prn "beam-layer d" d)
                  (let [attributes     (WorldWind/ShapeAttributes.)
                        point          (WorldWind/Location. (:lat d) (:lon d))
                        label-pt       (WorldWind/Position. (:lat d) (:lon d) (get d :alt 100))
@@ -155,8 +155,8 @@
 
       (for [e (reverse (sort epochs))]
         {:layer (->> (WorldWind/RenderableLayer. e)
-                  (location-layer (->> (find-epoch e terminals) first :data) (.-WHITE WorldWind/Color)))
-                  ;(beam-layer ka-beams))
+                  (location-layer (->> (find-epoch e terminals) first :data) (.-WHITE WorldWind/Color))
+                  (beam-layer (->> (find-epoch e ka-beams) first :data)))
          :options {:category "overlay" :enabled false}}))))
 
 ;[{:layer "blue-marble"

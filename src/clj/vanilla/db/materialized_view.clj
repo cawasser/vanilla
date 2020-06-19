@@ -14,6 +14,43 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;
+; 'context' for importing data from excel
+;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(def signal-path-context
+  {:file       "resources/public/excel/Demo CONUS.xlsx"
+   :sheet      "SCN_NETWORK_CARRIER_VW"
+   :data-type  :TERMINAL
+   :column-map {:A :satellite-id :B :tx-beam :C :tx-channel :D :rx-beam
+                :E :rx-channel :F :plan-id :G :mission-id :K :tx-term-lat
+                :L :tx-term-lon :N :rx-term-lat :O :rx-term-lon :Q :tx-term-id
+                :R :rx-term-id :S :start-epoch :T :end-epoch :U :data-rate}
+   :post-fn    (fn [x] x)})
+
+(def beam-context
+  {:file       "resources/public/excel/Demo CONUS.xlsx"
+   :sheet      "Beams"
+   :data-type  :BEAM
+   :column-map {:A :satellite-id
+                :B :band
+                :C :beam-id
+                :D :lat
+                :E :lon
+                :F :radius
+                :G :start-epoch
+                :H :end-epoch
+                :J :beam-type}
+   :post-fn    (fn [x] x)})
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;
 ; 'PRIVATE' 'helper' functions
 ;
 ;   i.e., the stuff that makes it work
@@ -28,14 +65,14 @@
 (defn- extract-add-event
   "compute all the :add events (anytime some thing changes, so again 'start' and 'end')"
   [s type]
-  {:epoch (:start-epoch s) :event :add :data (assoc s :type type)})
+  {:epoch (:start-epoch s) :event :add :data (assoc s :data-type type)})
 
 
 
 (defn- extract-remove-event
   "compute all the :remove events (anytime some thing changes, so again 'start' and 'end')"
   [s type]
-  {:epoch (:end-epoch s) :event :remove :data (assoc s :type type)})
+  {:epoch (:end-epoch s) :event :remove :data (assoc s :data-type type)})
 
 
 
@@ -89,7 +126,7 @@
 
   [events]
 
-  (let [state-map (atom {})
+  (let [state-map  (atom {})
         last-accum (atom #{})]
     (doall
       (for [epoch (sort (into #{} (map #(:epoch %) events)))]
@@ -110,8 +147,8 @@
         (select-columns (:column-map source-context))
         (drop 1)
         (map (fn [s]
-               [(extract-add-event s (:type source-context))
-                (extract-remove-event s (:type source-context))]))
+               [(extract-add-event s (:data-type source-context))
+                (extract-remove-event s (:data-type source-context))]))
         flatten))))
 
 
@@ -183,7 +220,7 @@
                    (sort-by (juxt (fn [x] (get x 0))
                               (fn [x] (get x 1)))
                      (remove nil?
-                       (apply concat (map #(if (= type (:type %))
+                       (apply concat (map #(if (= type (:data-type %))
                                              (signal-path %))
                                        events)))))})
 
@@ -217,7 +254,7 @@
   {:name epoch
    :data (into #{}
            (remove nil?
-             (apply concat (map #(if (= type (:type %))
+             (apply concat (map #(if (= type (:data-type %))
                                    (terminal-location %))
                              events))))})
 
@@ -259,7 +296,7 @@
   {:name epoch
    :data (into #{}
            (remove nil?
-             (map #(if (= type (:type %))
+             (map #(if (= type (:data-type %))
                      (mission-data %))
                events)))})
 
@@ -313,7 +350,7 @@
 (defn- beam-data
   "build the data needed to present a ka-beam location in a timeline widget"
 
-  [band {:keys [satellite-id beam-id radius lat lon type]}]
+  [band {:keys [satellite-id beam-id radius lat lon beam-type]}]
 
   {:name         (str (condp = satellite-id
                         sat-1 "1"
@@ -324,7 +361,7 @@
    :lon          lon
    :satellite-id satellite-id
    :e            {:diam    (* radius 2)
-                  :purpose type}})
+                  :purpose beam-type}})
 
 
 
@@ -336,7 +373,7 @@
   {:name epoch
    :data (into #{}
            (remove nil?
-             (map #(if (and (= type (:type %))
+             (map #(if (and (= type (:data-type %))
                          (= band (:band %)))
                      (beam-data band %))
                events)))})
@@ -350,43 +387,6 @@
     (apply-events)))
 
 
-
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;
-; 'context' for importing data from excel
-;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-(def signal-path-context
-  {:file       "resources/public/excel/Demo CONUS.xlsx"
-   :sheet      "SCN_NETWORK_CARRIER_VW"
-   :type       :TERMINAL
-   :column-map {:A :satellite-id :B :tx-beam :C :tx-channel :D :rx-beam
-                :E :rx-channel :F :plan-id :G :mission-id :K :tx-term-lat
-                :L :tx-term-lon :N :rx-term-lat :O :rx-term-lon :Q :tx-term-id
-                :R :rx-term-id :S :start-epoch :T :end-epoch :U :data-rate}
-   :post-fn    (fn [x] x)})
-
-(def beam-context
-  {:file       "resources/public/excel/Demo CONUS.xlsx"
-   :sheet      "Beams"
-   :type       :BEAM
-   :column-map {:A :satellite-id
-                :B :band
-                :C :beam-id
-                :D :lat
-                :E :lon
-                :F :radius
-                :G :start-epoch
-                :H :end-epoch
-                :J :type}
-   :post-fn    (fn [x] x)})
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;
