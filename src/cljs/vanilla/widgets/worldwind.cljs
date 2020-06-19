@@ -34,7 +34,8 @@
   (let [this (r/current-component)
         state (merge {:globe nil} (r/state this))
         globeRef (atom nil)
-        layersRef (atom nil)]
+        layersRef (atom nil)
+        layers (lm/make-layers)]
 
     (r/create-element
       (r/create-class
@@ -56,7 +57,7 @@
                                                               :icon "/images/list-icon.png"
                                                               :collapse @layersRef}])]}]] ; #(reset! is-active false) (fn []...
 
-              [:div#contain {:style {:width "100%" :height "100%" }}
+              [:div#contain {:style {:width "100%" :height "100%"}}
                 [:> rs/Container {:fluid "lg"
                                   :style {:width "100%"
                                           :height "100%"}}
@@ -67,7 +68,7 @@
                                :className "globe"}
 
                     [:> Globe (merge {:ref  #(reset! globeRef %)
-                                      :layers (lm/make-layers)
+                                      :layers layers
                                       :latitude  28.538336
                                       :longitude -81.379234}
                                 (:n-america start-loc))]]

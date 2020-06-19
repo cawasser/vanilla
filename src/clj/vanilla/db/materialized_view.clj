@@ -87,15 +87,18 @@
   "accumulate the changes form each add/remove event, with each 'epoch'
   staring with the final result of previous one"
 
-  [state-map events]
+  [events]
 
-  (prn "apply-events" @state-map (count events))
-  (let [last-accum (atom #{})]
-    (for [epoch (sort (into #{} (map #(:epoch %) events)))]
-      (let [current-accum (apply-epoch-events @last-accum (events-for events epoch))]
-        (prn @last-accum "/" current-accum)
-        (swap! state-map assoc epoch current-accum)
-        (reset! last-accum current-accum)))))
+  (let [state-map (atom {})
+        last-accum (atom #{})]
+    (doall
+      (for [epoch (sort (into #{} (map #(:epoch %) events)))]
+        (let [current-accum (apply-epoch-events @last-accum (events-for events epoch))]
+          ;(prn @last-accum "/" current-accum)
+          (swap! state-map assoc epoch current-accum)
+          (reset! last-accum current-accum))))
+    ;(prn "apply-event" @state-map)
+    @state-map))
 
 
 
@@ -122,7 +125,7 @@
 
   (into []
     (sort-by :name
-      (for [[epoch events] @event-state]
+      (for [[epoch events] event-state]
         (build-fn epoch type events)))))
 
 
@@ -203,8 +206,8 @@
   [{:keys [tx-term-id tx-term-lat tx-term-lon
            rx-term-id rx-term-lat rx-term-lon]}]
 
-  [{:name tx-term-id :lat tx-term-lat :lon tx-term-lon}
-   {:name rx-term-id :lat rx-term-lat :lon rx-term-lon}])
+  [{:name tx-term-id :lat (Double/valueOf tx-term-lat) :lon (Double/valueOf tx-term-lon)}
+   {:name rx-term-id :lat (Double/valueOf rx-term-lat) :lon (Double/valueOf rx-term-lon)}])
 
 
 (defn- build-terminal-locations
@@ -329,7 +332,7 @@
   "for each set of events, get the locations of all the Ka beams"
 
   [band epoch type events]
-  (prn "build-beam-data" epoch type)
+  ;(prn "build-beam-data" epoch type)
   {:name epoch
    :data (into #{}
            (remove nil?
@@ -337,6 +340,15 @@
                          (= band (:band %)))
                      (beam-data band %))
                events)))})
+
+
+
+(defn- get-state []
+  ;(log/info "Loading Materialized View")
+  (->> [signal-path-context beam-context]
+    (get-all-events)
+    (apply-events)))
+
 
 
 
@@ -388,27 +400,13 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-; pmt-event-state holds the results of the 'reducer' over all the epochal changes to
-; the state of 'everything' loaded by the SCN_ and Beam sheets
-;
-;
-(def event-state (atom {}))
-
-
-(defn- with-state [state]
-  (if (empty? @state)
-    (->> [signal-path-context beam-context]
-      (get-all-events)
-      (apply-events state)))
-  state)
-
 
 (defn signal-path-query []
-  (event-query (with-state event-state) :TERMINAL build-signal-path))
+  (event-query (get-state) :TERMINAL build-signal-path))
 
 
 (defn mission-query []
-  (let [events (event-query (with-state event-state) :TERMINAL build-mission-data)]
+  (let [events (event-query (get-state) :TERMINAL build-mission-data)]
     (map
       (fn [[k v]] (merge-mission v))
       (group-by :id
@@ -419,12 +417,12 @@
 
 
 (defn terminal-location-query []
-  (event-query (with-state event-state) :TERMINAL build-terminal-locations))
+  (event-query (get-state) :TERMINAL build-terminal-locations))
 
 
 
 (defn beam-query [band]
-  (event-query (with-state event-state) :BEAM (partial build-beam-data band)))
+  (event-query (get-state) :BEAM (partial build-beam-data band)))
 
 
 
@@ -463,7 +461,7 @@
 
   (sort (into #{} (map #(:epoch %) all-events)))
 
-  (def event-state (atom {}))
+  ;(def event-state (atom {}))
   (def source-context beam-context)
   (def source-context signal-path-context)
 
@@ -510,6 +508,12 @@
 
   (beam-query "X")
   (beam-query "Ka")
+
+
+  (vanilla.subscription-manager/refresh-source :signal-path-service)
+  (vanilla.subscription-manager/refresh-source :terminal-location-service)
+  (vanilla.subscription-manager/refresh-source :x-beam-location-service)
+  (vanilla.subscription-manager/refresh-source :ka-beam-location-service)
 
   (map #(:band %) (val (first @event-state)))
 

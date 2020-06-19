@@ -61,19 +61,22 @@
 
 (defn- location-layer [data color layer]
   (if (seq data)
-    (let [textAttributes (WorldWind/TextAttributes.)]
+    (do
+      (prn "location-layer" data)
+      (let [textAttributes (WorldWind/TextAttributes.)]
 
-      (set! (.-color textAttributes) color)
+        (set! (.-color textAttributes) color)
 
-      (doall (map (fn [d]
-                    ;(prn "location-layer d" d)
-                    (let [point (WorldWind/Position. (:lat d) (:lon d) (get d :alt 200))
-                          name  (get d :name "Missing")
-                          text  (WorldWind/GeographicText. point name)]
+        (doall
+          (map (fn [d]
+                 (prn "location-layer d" (:name d) (:lat d) (:lon d))
+                 (let [point (WorldWind/Position. (:lat d) (:lon d) (get d :alt 200))
+                       name  (get d :name "Missing")
+                       text  (WorldWind/GeographicText. point name)]
 
-                      (set! (.-attributes text) textAttributes)
-                      (.addRenderable layer text)))
-               data))))
+                   (set! (.-attributes text) textAttributes)
+                   (.addRenderable layer text)))
+            data)))))
   layer)
 
 
@@ -94,21 +97,23 @@
   (if (seq data)
     (doall
       (map (fn [d]
-             ;(prn "beam-layer d" d)
-             (let [attributes     (WorldWind/ShapeAttributes.)
-                   point          (WorldWind/Location. (:lat d) (:lon d))
-                   label-pt       (WorldWind/Position. (:lat d) (:lon d) (get d :alt 100))
-                   circle         (WorldWind/SurfaceCircle. point (* 1.6 (get-in d [:e :diam])) attributes)
-                   textAttributes (WorldWind/TextAttributes.)
-                   text           (WorldWind/GeographicText. label-pt (get d :name "Missing"))]
+             (if (seq d)
+               (do
+                 (prn "beam-layer d" d)
+                 (let [attributes     (WorldWind/ShapeAttributes.)
+                       point          (WorldWind/Location. (:lat d) (:lon d))
+                       label-pt       (WorldWind/Position. (:lat d) (:lon d) (get d :alt 100))
+                       circle         (WorldWind/SurfaceCircle. point (* 1.6 (get-in d [:e :diam])) attributes)
+                       textAttributes (WorldWind/TextAttributes.)
+                       text           (WorldWind/GeographicText. label-pt (get d :name "Missing"))]
 
-               (beam-properties attributes (get-in d [:e :purpose]) (= "1" (last (:satellite-id d))))
+                   (beam-properties attributes (get-in d [:e :purpose]) (= "1" (last (:satellite-id d))))
 
-               (set! (.-color textAttributes) (.-WHITE WorldWind/Color))
-               (set! (.-attributes text) textAttributes)
-               ;(.addRenderable layer text)
+                   (set! (.-color textAttributes) (.-WHITE WorldWind/Color))
+                   (set! (.-attributes text) textAttributes)
+                   ;(.addRenderable layer text)
 
-               (.addRenderable layer circle)))
+                   (.addRenderable layer circle)))))
 
         data)))
   layer)
@@ -124,6 +129,8 @@
 (defn make-layers []
   ; TODO: this is a hack for the following hack (does NOT unsubscribe to sources when widget closes)
   ;(ds/data-source-subscribe [:x-beam-location-service :terminal-location-service :ka-beam-location-service])
+
+  (prn "make-layers")
 
   (let [ka-beams  (get-in @(rf/subscribe
                              [:app-db :ka-beam-location-service])
@@ -148,7 +155,7 @@
 
       (for [e (reverse (sort epochs))]
         {:layer (->> (WorldWind/RenderableLayer. e)
-                  (location-layer (find-epoch e terminals) (.-WHITE WorldWind/Color)))
+                  (location-layer (->> (find-epoch e terminals) first :data) (.-WHITE WorldWind/Color)))
                   ;(beam-layer ka-beams))
          :options {:category "overlay" :enabled false}}))))
 
@@ -208,6 +215,13 @@
   (def epoch "190000Z JUL 2020")
   (->> (find-epoch epoch ka-beams) first :data)
   (->> (find-epoch epoch terminals) first :data)
+
+  (->> (find-epoch epoch terminals) first :data first)
+  (->> (find-epoch epoch terminals)
+    first :data first
+    :lon
+    (js/parseFloat))
+
 
 
   (last "SAT3")
