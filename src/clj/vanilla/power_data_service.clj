@@ -42,24 +42,6 @@
 
 
 (comment
-
-  (def temp
-    {:legendBackgroundColor "rgba(48, 48, 48, 0.8)",
-     :labels                {:style {:color "#CCC"}},
-     :dataLabelsColor       "#444",
-     :boost                 {:useGPUTranslations true},
-     :chart                 {:type            "line",
-                             :zoomType        "x",
-                             :backgroundColor {:linearGradient {:x1 0, :y1 0, :x2 0, :y2 1},
-                                               :stops          [[0 "rgb(96, 96, 96)"] [1 "rgb(16, 16, 16)"]]},
-                             :borderWidth     0,
-                             :borderRadius 0,
-                             :plotBackgroundColor nil,
-                             :plotShadow false,
-                             :plotBorderWidth 0}})
-
-  (update-in temp [:chart] assoc :height 500 :width 660)
-
   (bigdec 3.0)
 
   (with-precision 1 (range (bigdec 7900) (bigdec 8400) (bigdec 0.1)))

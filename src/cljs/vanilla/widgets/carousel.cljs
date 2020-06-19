@@ -188,7 +188,9 @@
       (for [[idx s] (map-indexed vector sources)]
         (r/create-element
           (r/create-class
-            {:reagent-render
+            {:display-name (str "Carousel slide " idx)
+
+             :reagent-render
              (fn [args]
                [:div#chartSlide {:style {:width "100%" :height "100%"}}])
 

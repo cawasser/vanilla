@@ -16,8 +16,7 @@
           named-widget (assoc widget-type
                          :key (str next-id)
                          :data-source data-source
-                         :username current-user             ;;add username key value to widget map
-                         :data-grid {:x 0 :y 0 :w 5 :h 15})]
+                         :username current-user)]
 
       (do
         (assoc db
@@ -35,8 +34,7 @@
           named-widget (assoc widget-type
                          :key (str next-id)
                          :data-source :carousel-service
-                         :username current-user             ;;add username key value to widget map
-                         :data-grid {:x 0 :y 0 :w 5 :h 15 :isResizable false})]  ;;carousel size is locked and cant be resized
+                         :username current-user)]  ;;carousel size is locked and cant be resized
 
       (do
         (assoc db
@@ -53,8 +51,7 @@
           named-widget (assoc widget-type
                          :key (str next-id)
                          :data-source :carousel-service
-                         :username current-user             ;;add username key value to widget map
-                         :data-grid {:x 0 :y 0 :w 5 :h 15 :isResizable false})]  ;;carousel size is locked and cant be resized
+                         :username current-user)]  ;;carousel size is locked and cant be resized
 
       (do
         (assoc db
@@ -260,10 +257,6 @@
       ^{:key name} [:td
                     [widget-card name label icon chosen-widget widgets]])]])
 
-
-(defn filtered [services]
-  "filters the services list shown in the modal"  ;only removes carousel currently due to specific carousel button addition
-  (vec (remove #(= "carousel-service" (:keyword %)) services)))
 
 (defn add-by-source-modal
   "modal to allow the user to pick new widgets by first picking the data source they want"
