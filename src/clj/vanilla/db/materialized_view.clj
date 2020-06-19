@@ -27,15 +27,15 @@
 
 (defn- extract-add-event
   "compute all the :add events (anytime some thing changes, so again 'start' and 'end')"
-  [s]
-  {:epoch (:start-epoch s) :event :add :data s})
+  [s type]
+  {:epoch (:start-epoch s) :event :add :data (assoc s :type type)})
 
 
 
 (defn- extract-remove-event
   "compute all the :remove events (anytime some thing changes, so again 'start' and 'end')"
-  [s]
-  {:epoch (:end-epoch s) :event :remove :data s})
+  [s type]
+  {:epoch (:end-epoch s) :event :remove :data (assoc s :type type)})
 
 
 
@@ -80,17 +80,36 @@
   (zipmap epochs (repeat #{})))
 
 
+
+
+
 (defn apply-events
   "accumulate the changes form each add/remove event, with each 'epoch'
   staring with the final result of previous one"
 
   [state-map events]
+
+  (prn "apply-events" @state-map (count events))
   (let [last-accum (atom #{})]
-    (for [epoch (sort (into #{} (map #(:epoch %) events)))] ;(keys @state-atom)]
+    (for [epoch (sort (into #{} (map #(:epoch %) events)))]
       (let [current-accum (apply-epoch-events @last-accum (events-for events epoch))]
-        ;(prn @last-accum "/" current-accum)
+        (prn @last-accum "/" current-accum)
         (swap! state-map assoc epoch current-accum)
         (reset! last-accum current-accum)))))
+
+
+
+(defn- get-all-events [sources]
+  (apply concat
+    (for [source-context sources]
+      (->> (load-workbook (:file source-context))
+        (select-sheet (:sheet source-context))
+        (select-columns (:column-map source-context))
+        (drop 1)
+        (map (fn [s]
+               [(extract-add-event s (:type source-context))
+                (extract-remove-event s (:type source-context))]))
+        flatten))))
 
 
 (defn- event-query
@@ -99,31 +118,12 @@
   for each epoch in an epoch-map (the 'event-state'), call the 'build-fn'
   to generate the appropriate data"
 
-  [source-context event-state build-fn]
-
-  (if (empty? @event-state)
-    (do
-      (log/info "Loading " (:file source-context))
-      (let [scn        (->> (load-workbook (:file source-context))
-                         (select-sheet (:sheet source-context))
-                         (select-columns (:column-map source-context))
-                         (drop 1))
-            all-events (->> (map
-                              (fn [s]
-                                [(extract-add-event s) (extract-remove-event s)])
-                              scn)
-                         flatten)]
-        (reset! event-state (empty-state-map
-                              (->> (map #(-> % :epoch) all-events)
-                                (into #{})
-                                sort)))
-        (doall
-          (apply-events event-state all-events)))))
+  [event-state type build-fn]
 
   (into []
     (sort-by :name
       (for [[epoch events] @event-state]
-        (build-fn epoch events)))))
+        (build-fn epoch type events)))))
 
 
 
@@ -171,7 +171,7 @@
 (defn- build-signal-path
   "for each set of events, ge the 'path' data for a sankey chart"
 
-  [epoch events]
+  [epoch type events]
   {:name         epoch
    :showInLegend true
    :type         :sankey
@@ -179,7 +179,10 @@
    :data         (into []
                    (sort-by (juxt (fn [x] (get x 0))
                               (fn [x] (get x 1)))
-                     (apply concat (map #(signal-path %) events))))})
+                     (remove nil?
+                       (apply concat (map #(if (= type (:type %))
+                                             (signal-path %))
+                                       events)))))})
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -207,10 +210,13 @@
 (defn- build-terminal-locations
   "for each set of events, get the locations of all the terminals"
 
-  [epoch events]
+  [epoch type events]
   {:name epoch
    :data (into #{}
-           (apply concat (map #(terminal-location %) events)))})
+           (remove nil?
+             (apply concat (map #(if (= type (:type %))
+                                   (terminal-location %))
+                             events))))})
 
 
 
@@ -246,10 +252,14 @@
 (defn- build-mission-data
   "for each set of events, get the locations of all the terminals"
 
-  [epoch events]
+  [epoch type events]
   {:name epoch
    :data (into #{}
-           (map #(mission-data %) events))})
+           (remove nil?
+             (map #(if (= type (:type %))
+                     (mission-data %))
+               events)))})
+
 
 
 (defn- merge-mission
@@ -318,13 +328,15 @@
 (defn- build-beam-data
   "for each set of events, get the locations of all the Ka beams"
 
-  [band epoch events]
+  [band epoch type events]
+  (prn "build-beam-data" epoch type)
   {:name epoch
    :data (into #{}
-           (map #(if (= band (:band %))
-                   (beam-data band %)
-                   {})
-             events))})
+           (remove nil?
+             (map #(if (and (= type (:type %))
+                         (= band (:band %)))
+                     (beam-data band %))
+               events)))})
 
 
 
@@ -342,6 +354,7 @@
 (def signal-path-context
   {:file       "resources/public/excel/Demo CONUS.xlsx"
    :sheet      "SCN_NETWORK_CARRIER_VW"
+   :type       :TERMINAL
    :column-map {:A :satellite-id :B :tx-beam :C :tx-channel :D :rx-beam
                 :E :rx-channel :F :plan-id :G :mission-id :K :tx-term-lat
                 :L :tx-term-lon :N :rx-term-lat :O :rx-term-lon :Q :tx-term-id
@@ -351,6 +364,7 @@
 (def beam-context
   {:file       "resources/public/excel/Demo CONUS.xlsx"
    :sheet      "Beams"
+   :type       :BEAM
    :column-map {:A :satellite-id
                 :B :band
                 :C :beam-id
@@ -375,21 +389,26 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ; pmt-event-state holds the results of the 'reducer' over all the epochal changes to
-; the state of 'everything' loaded by the SCN_ sheet, so:
+; the state of 'everything' loaded by the SCN_ and Beam sheets
 ;
-; 'p' -> signal-path
-; 'm' -> missions
-; 't' -> terminal-locations
 ;
-(def pmt-event-state (atom ()))
+(def event-state (atom {}))
+
+
+(defn- with-state [state]
+  (if (empty? @state)
+    (->> [signal-path-context beam-context]
+      (get-all-events)
+      (apply-events state)))
+  state)
 
 
 (defn signal-path-query []
-  (event-query signal-path-context pmt-event-state build-signal-path))
+  (event-query (with-state event-state) :TERMINAL build-signal-path))
 
 
 (defn mission-query []
-  (let [events (event-query signal-path-context pmt-event-state build-mission-data)]
+  (let [events (event-query (with-state event-state) :TERMINAL build-mission-data)]
     (map
       (fn [[k v]] (merge-mission v))
       (group-by :id
@@ -400,31 +419,105 @@
 
 
 (defn terminal-location-query []
-  (event-query signal-path-context pmt-event-state build-terminal-locations))
+  (event-query (with-state event-state) :TERMINAL build-terminal-locations))
 
-
-
-
-; ka-event-state holds the results of the 'reducer' over all the epochal changes to
-; the state of 'everything' loaded by the 'ka Beam' sheet
-;
-(def beam-event-state (atom ()))
 
 
 (defn beam-query [band]
-  (event-query beam-context beam-event-state (partial build-beam-data band)))
+  (event-query (with-state event-state) :BEAM (partial build-beam-data band)))
 
 
 
 (comment
+
+  (defn- test-apply-events [event-state all-events]
+    (let [last-accum (atom #{})]
+      (for [epoch (sort (into #{} (map #(:epoch %) all-events)))]
+        (let [current-accum (apply-epoch-events @last-accum (events-for all-events epoch))]
+          ;(prn @last-accum "/" current-accum)
+          (swap! event-state assoc epoch current-accum)
+          (reset! last-accum current-accum)))))
+
+
+  (defn- get-all-events [sources]
+    (apply concat
+      (for [source-context sources]
+        (->> (load-workbook (:file source-context))
+          (select-sheet (:sheet source-context))
+          (select-columns (:column-map source-context))
+          (drop 1)
+          (map (fn [s]
+                 [(extract-add-event s (:type source-context))
+                  (extract-remove-event s (:type source-context))]))
+          flatten))))
+
+
+  (count (get-all-events [beam-context]))
+  (count (get-all-events [signal-path-context]))
+
+  (def all-events (get-all-events [beam-context signal-path-context]))
+
+  (= (first all-events)
+    (second all-events))
+  (count all-events)
+
+  (sort (into #{} (map #(:epoch %) all-events)))
+
+  (def event-state (atom {}))
+  (def source-context beam-context)
+  (def source-context signal-path-context)
+
+  (def epoch "161200Z JUL 2020")
+  (def last-accum (atom #{}))
+  (def current-accum (apply-epoch-events @last-accum (events-for all-events epoch)))
+
+
+  (def all-events (get-all-events [beam-context signal-path-context]))
+
+  (apply-events event-state all-events)
+
+  (->> [signal-path-context beam-context]
+    (get-all-events)
+    (apply-events pmt-event-state))
+
+
+
+  (->> (map #(:epoch %) all-events)
+    (into #{})
+    sort)
+
+  (def epoch-of-interest "141807Z JUL 2020")
+  (->> (filter #(= (:epoch %) epoch-of-interest) all-events)
+    count)
+  (->> (get @event-state epoch-of-interest)
+    count)
+
+  ())
+
+
+
+
+(comment
+
   (signal-path-query)
 
   (mission-query)
 
   (terminal-location-query)
 
+
+  (event-query (with-state event-state) :BEAM (partial build-beam-data "Ka"))
+
   (beam-query "X")
   (beam-query "Ka")
+
+  (map #(:band %) (val (first @event-state)))
+
+  (into #{}
+    (map #(if (and (= :BEAM (:type %))
+                (= "Ka" (:band %)))
+            (beam-data "Ka" %))
+      (val (first @event-state))))
 
 
   {:start-epoch  "161200Z JUL 2020",
