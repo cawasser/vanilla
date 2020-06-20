@@ -399,11 +399,11 @@
     (get-all-events)
     (apply-events)))
 ; TODO - add data to datascript so we only need to load it ONCE from the spreadsheet(s)
-    ;(apply concat
-    ;  (map (fn [[k v]]
-    ;         (for [data v]
-    ;           (assoc data :epoch k)))))
-    ;(d/transact! conn)))
+;(apply concat
+;  (map (fn [[k v]]
+;         (for [data v]
+;           (assoc data :epoch k)))))
+;(d/transact! conn)))
 
 
 
@@ -724,31 +724,44 @@
   ;
   (defn merge-data-sets [[k v]]
     {:name k
-     :data (into #{}
-             (map (fn [[e m]]
-                    m) v))})
+     :data (into #{} v)})
 
 
-  ; maybe this needs to be a macro? (my first!)
+  (merge-data-sets ["221200Z JUL 2020"
+                    [{:tx-term-id  "MOB2",
+                      :epoch       "221200Z JUL 2020",
+                      :data-type   :TERMINAL,
+                      :start-epoch "221200Z JUL 2020",
+                      :data-rate   2048.0,}
+                     {:tx-term-id  "DUL",
+                      :epoch       "221200Z JUL 2020",
+                      :data-type   :TERMINAL,
+                      :start-epoch "221200Z JUL 2020",
+                      :data-rate   2048.0,}]])
+
+
+
+  ; maybe we can use tranducers (my first!)
   ;
-  (defn query-thread [q-fn m-fn]
-    (->> (q-fn)))
-      ;(m-fn)
-      ;(group-by first)
-      ;sort
-      ;(map merge-data-sets)))
+  ;    NB: the key here is that (sequence <x-ducer>) changes the format of the result, so
+  ;        the group-by must be different
+  (defn query-thread
+    ([q-fn m-fn]
+     (->> q-fn
+       (sequence m-fn)                                       ; apply the 'm-fn' transducer
+       (group-by :epoch)
+       sort
+       (map merge-data-sets)))
+    ([q-fn]
+     (query-thread q-fn identity)))
 
-  (defn get-beam-data2 []
-    (query-thread
-      '(d/q '[:find [(pull ?e [*]) ...]
-              :where [?e :band ?band]
-              [?e :beam-id ?name]
-              :in $ ?band]
-         @conn "Ka")
-      '(map (fn [{:keys [epoch band beam-id lat lon radius beam-type]}]
-              [epoch {:name (str band beam-id) :lat lat :lon lon
-                      :e    {:diam (* radius 2) :purpose beam-type}}]))))
-  (get-beam-data2)
+  (query-thread
+    (d/q '[:find [(pull ?e [*]) ...]
+           :where [?e :tx-term-id ?tx-term-id]]
+      @conn))
+
+
+
 
   ;
   ;
@@ -762,17 +775,16 @@
   ; TODO: move code to beam-location-service
   ;
   (defn get-beam-data []
-    (->> (d/q '[:find [(pull ?e [*]) ...]
-                :where [?e :band ?band]
-                [?e :beam-id ?name]
-                :in $ ?band]
-           @conn "Ka")
+    (query-thread
+      (d/q '[:find [(pull ?e [*]) ...]
+             :where [?e :band ?band]
+             [?e :beam-id ?name]
+             :in $ ?band] @conn "Ka")
       (map (fn [{:keys [epoch band beam-id lat lon radius beam-type]}]
-             [epoch {:name (str band beam-id) :lat lat :lon lon
-                     :e    {:diam (* radius 2) :purpose beam-type}}]))
-      (group-by first)
-      sort
-      (map merge-data-sets)))
+             {:epoch epoch
+              :name (str band beam-id) :lat lat :lon lon
+              :e    {:diam (* radius 2) :purpose beam-type}}))))
+
   (get-beam-data)
 
   ;
@@ -793,12 +805,6 @@
 
   (defn get-terminal-location-data []
     (tx-rx-terminals-by-epoch
-      ;(fn [a b]
-      ;  (for [{:keys [name data]} a]
-      ;    (->> (get-in b [name data])
-      ;      (clojure.set/union data)
-      ;      ((fn [x] {:name name :data x})))))
-
       ; this gets the Tx terminals
       (->> (d/q '[:find [(pull ?e [*]) ...]
                   :where [?e :tx-term-id ?tx-term-id]]
