@@ -4,7 +4,7 @@
             [clj-time.format :as f]
             [clojure.edn :as edn]
             [clojure.tools.logging :as log]
-
+            [datascript.core :as d]
             [clojure.set :refer [union]]))
 
 
@@ -63,21 +63,23 @@
 (def sat-2 "SAT2")
 
 (defn- extract-add-event
-  "compute all the :add events (anytime some thing changes, so again 'start' and 'end')"
+  "compute all the :add events (i.e., when something 'starts')"
+
   [s type]
   {:epoch (:start-epoch s) :event :add :data (assoc s :data-type type)})
 
 
 
 (defn- extract-remove-event
-  "compute all the :remove events (anytime some thing changes, so again 'start' and 'end')"
+  "compute all the :remove events (i.e., when something 'ends')"
+
   [s type]
   {:epoch (:end-epoch s) :event :remove :data (assoc s :data-type type)})
 
 
 
 (defn- events-for
-  "get the events for a given epoch"
+  "get all the events for a given epoch"
 
   [events epoch]
   (filter #(= epoch (:epoch %)) events))
@@ -95,7 +97,7 @@
 
 
 (defn- apply-epoch-events
-  "apply all the events for a given epoch into the state-map"
+  "apply all the events for a given epoch into the accum-ulator"
 
   [accum events]
   (loop [a accum
@@ -106,23 +108,21 @@
       (recur (apply-event a (first e)) (rest e)))))
 
 
-; we need to get each invocation to start with the results of the LAST invocation
+;; we need to get each invocation to start with the results of the LAST invocation
+;;
+;; so well use and atom to gather the state as we apply the change events
+;;
+;(defn- empty-state-map
+;  "create a map where each key is an epoch"
 ;
-; so well use and atom to gather the state as we apply the change events
+;  [epochs]
+;  (zipmap epochs (repeat #{})))
 ;
-(defn- empty-state-map
-  "create a map where each key is an epoch"
-
-  [epochs]
-  (zipmap epochs (repeat #{})))
-
-
-
-
-
+;
+;
 (defn apply-events
-  "accumulate the changes form each add/remove event, with each 'epoch'
-  staring with the final result of previous one"
+  "accumulate the changes from each add/remove event, with each 'epoch'
+  starting with the acumulated state from then previous epoch"
 
   [events]
 
@@ -139,7 +139,12 @@
 
 
 
-(defn- get-all-events [sources]
+(defn- get-all-events
+  "get all thee data from the spreadheet(s) into a single flat vector of
+   add and remove events. this vector will then be materialized into views
+   by 'epoch'"
+
+  [sources]
   (apply concat
     (for [source-context sources]
       (->> (load-workbook (:file source-context))
@@ -152,6 +157,8 @@
         flatten))))
 
 
+
+; TODO - drop event-query
 (defn- event-query
   "use the event-state as the source of data for the query.
 
@@ -181,6 +188,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+; TODO - migrate sat-tag to signal-path-service
 (defn- sat-tag [id]
   (condp = id
     sat-1 "-"
@@ -188,7 +196,7 @@
     :default ".."))
 
 
-
+; TODO - drop signal-path
 (defn- signal-path
   "build the data needed for a Sankey diagram. we must add the 't' and 'r'
   as well as a notation for the specific satellite to make the names
@@ -207,7 +215,7 @@
      [(str rx rx-channel) (str rx rx-term-id) data-rate]]))
 
 
-
+; TODO - drop build-signal-path
 (defn- build-signal-path
   "for each set of events, ge the 'path' data for a sankey chart"
 
@@ -236,6 +244,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+; TODO - drop terminal-location
 (defn- terminal-location
   "build the data needed to draw a terminal on a layer in the
   WorldWind widget on the client"
@@ -247,6 +256,7 @@
    {:name rx-term-id :lat (Double/valueOf rx-term-lat) :lon (Double/valueOf rx-term-lon)}])
 
 
+; TODO - drop build-terminal-locations
 (defn- build-terminal-locations
   "for each set of events, get the locations of all the terminals"
 
@@ -347,6 +357,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+; TODO - drop beam-data
 (defn- beam-data
   "build the data needed to present a ka-beam location in a timeline widget"
 
@@ -364,7 +375,7 @@
                   :purpose beam-type}})
 
 
-
+; TODO - drop build-beam-data
 (defn- build-beam-data
   "for each set of events, get the locations of all the Ka beams"
 
@@ -379,12 +390,21 @@
                events)))})
 
 
+; TODO - add a local ds/connection
+;(def conn (d/create-conn {}))
 
 (defn- get-state []
-  ;(log/info "Loading Materialized View")
+  (log/info "Loading Materialized View")
   (->> [signal-path-context beam-context]
     (get-all-events)
     (apply-events)))
+; TODO - add data to datascript so we only need to load it ONCE from the spreadsheet(s)
+    ;(apply concat
+    ;  (map (fn [[k v]]
+    ;         (for [data v]
+    ;           (assoc data :epoch k)))))
+    ;(d/transact! conn)))
+
 
 
 
@@ -396,11 +416,13 @@
 ;
 ; PUBLIC API functions
 ;
+;   working to get rid of these!
+;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-
+; TODO - drop signal-path-query
 (defn signal-path-query []
   (event-query (get-state) :TERMINAL build-signal-path))
 
@@ -416,11 +438,12 @@
             (map #(:data %) events)))))))
 
 
+; TODO - drop terminal-location-query
 (defn terminal-location-query []
   (event-query (get-state) :TERMINAL build-terminal-locations))
 
 
-
+; TODO - drop beam-query
 (defn beam-query [band]
   (event-query (get-state) :BEAM (partial build-beam-data band)))
 
@@ -493,8 +516,6 @@
   ())
 
 
-
-
 (comment
 
   (signal-path-query)
@@ -535,6 +556,7 @@
    :satellite-id sat-2}
 
   ())
+
 
 (comment
   ka-beam-context
@@ -643,4 +665,169 @@
 
   ())
 
+
+; can we keep using datascript?
+; this will get us out of the business of building the MV for every query like we are now
+;
+;  no idea why I can't get the (atom) for teh MV to work inside a function so it only
+;     gets called once, but it always resets to {}
+;
+(comment
+  ; some example data for clarity
+  (def one-epoch
+    {"141807Z JUL 2020"
+     #{{:tx-term-id  "ORL", :data-type :TERMINAL, :start-epoch "141807Z JUL 2020",
+        :data-rate   10240.0, :plan-id "Alpha", :tx-channel 1.0,
+        :rx-term-lon "-119.81", :tx-term-lat "28.53", :rx-term-id "MOB1",
+        :rx-channel  3.0, :tx-term-lon "-81.4", :mission-id "One",
+        :end-epoch   "151807Z JUL 2020", :satellite-id "SAT1", :tx-beam "T3",
+        :rx-term-lat "34.79", :rx-beam "R1"}
+       {:tx-term-id  "MOB1", :data-type :TERMINAL, :start-epoch "141807Z JUL 2020",
+        :data-rate   7168.0, :plan-id "Alpha", :tx-channel 3.0,
+        :rx-term-lon "-81.4", :tx-term-lat "34.79", :rx-term-id "ORL",
+        :rx-channel  1.0, :tx-term-lon "-119.81", :mission-id "One",
+        :end-epoch   "151807Z JUL 2020", :satellite-id "SAT1", :tx-beam "T2",
+        :rx-term-lat "28.53", :rx-beam "R3"}}})
+
+
+
+  ; get the epochs
+  (get-state)
+
+  ; flatten into a single vector pf maps that can be put into datascript
+  (def flattened (apply concat
+                   (map (fn [[k v]]
+                          (for [data v]
+                            (assoc data :epoch k)))
+                     (get-state))))
+
+
+  ; transact the data into datascript
+  (def conn (d/create-conn {}))
+  (d/transact! conn flattened)
+
+
+
+  ; query for something interesting
+  (group-by first
+    (d/q '[:find ?epoch ?tx-term-id ?rx-term-id
+           :where [_ :epoch ?epoch]
+           [?e :tx-term-id ?tx-term-id]
+           [?e :rx-term-id ?rx-term-id]]
+      @conn))
+
+  (beam-query "Ka")
+
+
+  ;
+  ; helper function for munging some of the data coming out of datascript
+  ;
+  (defn merge-data-sets [[k v]]
+    {:name k
+     :data (into #{}
+             (map (fn [[e m]]
+                    m) v))})
+
+
+  ; maybe this needs to be a macro? (my first!)
+  ;
+  (defn query-thread [q-fn m-fn]
+    (->> (q-fn)))
+      ;(m-fn)
+      ;(group-by first)
+      ;sort
+      ;(map merge-data-sets)))
+
+  (defn get-beam-data2 []
+    (query-thread
+      '(d/q '[:find [(pull ?e [*]) ...]
+              :where [?e :band ?band]
+              [?e :beam-id ?name]
+              :in $ ?band]
+         @conn "Ka")
+      '(map (fn [{:keys [epoch band beam-id lat lon radius beam-type]}]
+              [epoch {:name (str band beam-id) :lat lat :lon lon
+                      :e    {:diam (* radius 2) :purpose beam-type}}]))))
+  (get-beam-data2)
+
+  ;
+  ;
+  ; can we go back to using datascript queries for the services?
+  ;
+  ; YES!!!!!
+  ;
+  ;
+
+  ;
+  ; TODO: move code to beam-location-service
+  ;
+  (defn get-beam-data []
+    (->> (d/q '[:find [(pull ?e [*]) ...]
+                :where [?e :band ?band]
+                [?e :beam-id ?name]
+                :in $ ?band]
+           @conn "Ka")
+      (map (fn [{:keys [epoch band beam-id lat lon radius beam-type]}]
+             [epoch {:name (str band beam-id) :lat lat :lon lon
+                     :e    {:diam (* radius 2) :purpose beam-type}}]))
+      (group-by first)
+      sort
+      (map merge-data-sets)))
+  (get-beam-data)
+
+  ;
+  ;
+  ; TODO: move code to terminal-location-service
+  ;
+  ;
+  ;   TODO: need to test with Rx or only Tx terminals to be sure we capture them
+  ;
+  [{:name tx-term-id :lat (Double/valueOf tx-term-lat) :lon (Double/valueOf tx-term-lon)}
+   {:name rx-term-id :lat (Double/valueOf rx-term-lat) :lon (Double/valueOf rx-term-lon)}]
+
+  (defn tx-rx-terminals-by-epoch [a b]
+    (for [{:keys [name data]} a]
+      (->> (get-in b [name data])
+        (clojure.set/union data)
+        ((fn [x] {:name name :data x})))))
+
+  (defn get-terminal-location-data []
+    (tx-rx-terminals-by-epoch
+      ;(fn [a b]
+      ;  (for [{:keys [name data]} a]
+      ;    (->> (get-in b [name data])
+      ;      (clojure.set/union data)
+      ;      ((fn [x] {:name name :data x})))))
+
+      ; this gets the Tx terminals
+      (->> (d/q '[:find [(pull ?e [*]) ...]
+                  :where [?e :tx-term-id ?tx-term-id]]
+             @conn)
+        (map (fn [{:keys [epoch tx-term-id tx-term-lat tx-term-lon]}]
+               [epoch {:name tx-term-id :lat tx-term-lat :lon tx-term-lon}]))
+        (group-by first)
+        sort
+        (map merge-data-sets))
+
+      ; and the rx terminals
+      (->> (d/q '[:find [(pull ?e [*]) ...]
+                  :where [?e :rx-term-id ?rx-term-id]]
+             @conn)
+        (map (fn [{:keys [epoch rx-term-id rx-term-lat rx-term-lon]}]
+               [epoch {:name rx-term-id :lat rx-term-lat :lon rx-term-lon}]))
+        (group-by first)
+        sort
+        (map merge-data-sets))))
+  (get-terminal-location-data)
+
+
+  ;
+  ;
+  ; TODO: move to signal-path-service
+  ;
+  ;
+
+
+
+  ())
 
