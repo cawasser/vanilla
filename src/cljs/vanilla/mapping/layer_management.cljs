@@ -128,7 +128,7 @@
 
 (defn make-layers []
   ; TODO: this is a hack for the following hack (does NOT unsubscribe to sources when widget closes)
-  ;(ds/data-source-subscribe [:x-beam-location-service :terminal-location-service :ka-beam-location-service])
+  (ds/data-source-subscribe [:x-beam-location-service :terminal-location-service :ka-beam-location-service])
 
   (prn "make-layers")
 

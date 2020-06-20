@@ -22,7 +22,7 @@
 
   ; TODO: this is a hack for the following hack (does NOT unsubscribe to sources when widget closes)
   ; hack has been moved here from layer-mngmt to prevent overload of ajax calls as layers redraw frequently
-  (ds/data-source-subscribe [:x-beam-location-service :terminal-location-service :ka-beam-location-service])
+  ;(ds/data-source-subscribe [:x-beam-location-service :terminal-location-service :ka-beam-location-service])
 
   (let [globeRef (atom nil)
         layersRef (atom nil)
@@ -41,7 +41,7 @@
              [:div#all {:style {:width "100%" :height "100%" :overflow "hidden"}}
               [:div#nav {:style {:width "100%" :position "fixed" :align-items "stretch"}}
                 [:> bs4/NavBar {:logo ""
-                                :title "HammerGlobe"
+                                ;:title "HammerGlobe"
                                 :items [(r/as-element
                                           [:> bs4/NavBarItem {:key "lyr"
                                                               :title "Layers"
