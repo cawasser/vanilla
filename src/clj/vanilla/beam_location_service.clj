@@ -30,14 +30,15 @@
                     [?e :beam-id ?name]
                     :in $ ?band] @mv/conn band)
      :map-fn (map (fn [{:keys [epoch band beam-id lat lon radius beam-type satellite-id]}]
-                    {:epoch epoch
-                     :name  (str (condp = satellite-id
-                                   mv/sat-1 "1"
-                                   mv/sat-2 "2"
-                                   :default "?")
-                              "-" band "-" beam-id)
-                     :lat lat :lon lon
-                     :e     {:diam (* radius 2) :purpose beam-type}}))}))
+                    {:epoch        epoch
+                     :name         (str (condp = satellite-id
+                                          mv/sat-1 "1"
+                                          mv/sat-2 "2"
+                                          :default "?")
+                                     "-" band "-" beam-id)
+                     :satellite-id satellite-id
+                     :lat          lat :lon lon
+                     :e            {:diam (* radius 2) :purpose beam-type}}))}))
 
 
 
@@ -46,7 +47,7 @@
 
   {:title       "Beam Locations"
    :data-format :data-format/lat-lon-e
-   :data        (get-beam-data band)}) ;(mv/beam-query band)})
+   :data        (get-beam-data band)})                      ;(mv/beam-query band)})
 
 
 (comment
