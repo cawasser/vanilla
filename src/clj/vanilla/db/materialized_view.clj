@@ -62,9 +62,11 @@
 (def sat-1 "SAT1")
 (def sat-2 "SAT2")
 
-;
-; helper function for munging some of the data coming out of datascript
-;
+; TODO - migrate to the same connection in excel
+(def conn (d/create-conn {}))
+
+
+
 (defn merge-data-sets
   ""
 
@@ -119,18 +121,7 @@
       (recur (apply-event a (first e)) (rest e)))))
 
 
-;; we need to get each invocation to start with the results of the LAST invocation
-;;
-;; so well use and atom to gather the state as we apply the change events
-;;
-;(defn- empty-state-map
-;  "create a map where each key is an epoch"
-;
-;  [epochs]
-;  (zipmap epochs (repeat #{})))
-;
-;
-;
+
 (defn apply-events
   "accumulate the changes from each add/remove event, with each 'epoch'
   starting with the acumulated state from then previous epoch"
@@ -166,6 +157,34 @@
                [(extract-add-event s (:data-type source-context))
                 (extract-remove-event s (:data-type source-context))]))
         flatten))))
+
+
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;
+;
+; PUBLIC API functions
+;
+;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defn get-state []
+  (log/info "Loading Materialized View into Datascript")
+
+  (->> [signal-path-context beam-context]
+    (get-all-events)
+    (apply-events)
+    (map (fn [[k v]]
+           (for [data v]
+             (assoc data :epoch k))))
+    (apply concat)
+    (d/transact! conn)))
 
 
 
@@ -207,296 +226,7 @@
     (map merge-fn)))
 
 
-; TODO - drop event-query
-(defn- event-query
-  "use the event-state as the source of data for the query.
-
-  for each epoch in an epoch-map (the 'event-state'), call the 'build-fn'
-  to generate the appropriate data"
-
-  [event-state type build-fn]
-
-  (into []
-    (sort-by :name
-      (for [[epoch events] event-state]
-        (build-fn epoch type events)))))
-
-
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;
-; signal-path support functions
-;
-;   designed to provide data compatible with
-;   the SANKEY chart widget
-;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-; TODO - migrate sat-tag to signal-path-service
-(defn- sat-tag [id]
-  (condp = id
-    sat-1 "-"
-    sat-2 "_"
-    :default ".."))
-
-
-; TODO - drop signal-path
-(defn- signal-path
-  "build the data needed for a Sankey diagram. we must add the 't' and 'r'
-  as well as a notation for the specific satellite to make the names
-  distinct, otherwise we the diagram think they are the
-  same thing, even if one is 'transmit' and the other is 'receive'"
-
-  [{:keys [satellite-id tx-beam tx-channel rx-beam
-           rx-channel tx-term-id rx-term-id data-rate]}]
-  (let [tx (str "t" (sat-tag satellite-id))
-        rx (str "r" (sat-tag satellite-id))]
-    [[(str tx tx-term-id) (str tx tx-channel) data-rate]
-     [(str tx tx-channel) (str tx tx-beam) data-rate]
-     [(str tx tx-beam) satellite-id data-rate]
-     [satellite-id (str rx rx-beam) data-rate]
-     [(str rx rx-beam) (str rx rx-channel) data-rate]
-     [(str rx rx-channel) (str rx rx-term-id) data-rate]]))
-
-
-; TODO - drop build-signal-path
-(defn- build-signal-path
-  "for each set of events, ge the 'path' data for a sankey chart"
-
-  [epoch type events]
-  {:name         epoch
-   :showInLegend true
-   :type         :sankey
-   :keys         ["from" "to" "weight"]
-   :data         (into []
-                   (sort-by (juxt (fn [x] (get x 0))
-                              (fn [x] (get x 1)))
-                     (remove nil?
-                       (apply concat (map #(if (= type (:data-type %))
-                                             (signal-path %))
-                                       events)))))})
-
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;
-; terminal-location support functions
-;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-; TODO - drop terminal-location
-(defn- terminal-location
-  "build the data needed to draw a terminal on a layer in the
-  WorldWind widget on the client"
-
-  [{:keys [tx-term-id tx-term-lat tx-term-lon
-           rx-term-id rx-term-lat rx-term-lon]}]
-
-  [{:name tx-term-id :lat (Double/valueOf tx-term-lat) :lon (Double/valueOf tx-term-lon)}
-   {:name rx-term-id :lat (Double/valueOf rx-term-lat) :lon (Double/valueOf rx-term-lon)}])
-
-
-; TODO - drop build-terminal-locations
-(defn- build-terminal-locations
-  "for each set of events, get the locations of all the terminals"
-
-  [epoch type events]
-  {:name epoch
-   :data (into #{}
-           (remove nil?
-             (apply concat (map #(if (= type (:data-type %))
-                                   (terminal-location %))
-                             events))))})
-
-
-
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;
-; mission-list support functions
-;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-(def datetime-formatter (f/formatter "ddHHmmz MMM yyyy"))
-
-(defn ->GMT [x] (clojure.string/replace x #"Z" "GMT"))
-(defn ->Z [x] (clojure.string/replace x #"UTC" "Z"))
-(defn strip-tz [x] (clojure.string/replace x #"UTC|GMT|Z" ""))
-
-(defn- mission-data
-  "build the data needed to present a Mission in a timeline widget"
-
-  [{:keys [mission-id plan-id start-epoch end-epoch]}]
-
-  {:id    mission-id :name mission-id :type plan-id
-   :start (f/parse datetime-formatter (->GMT start-epoch))
-   :end   (f/parse datetime-formatter (->GMT end-epoch))})
-
-
-
-(defn- build-mission-data
-  "for each set of events, get the locations of all the terminals"
-
-  [epoch type events]
-  {:name epoch
-   :data (into #{}
-           (remove nil?
-             (map #(if (= type (:data-type %))
-                     (mission-data %))
-               events)))})
-
-
-
-(defn- merge-mission
-  "combine all the mission entries in the argument into a single 'mission'
-
-  returns map of one mission entry:
-
-  :id, :name, :type from the first item
-
-  :start   earliest of all the :start values (converted to strings for transmission)
-  :end     latest of all the :end values (converted to strings for transmission)
-
-  ASSUMPTIONS
-
-  - all the :id :name: and :type values are the same"
-
-  [args]
-  (if (seq args)
-    (let [a (first args)]
-      {:id    (:id a)
-       :name  (:name a)
-       :type  (:type a)
-       :start (->> (map #(:start-set %) args)
-                (apply union)
-                sort
-                first
-                .toDate)
-       :end   (->> (map #(:end-set %) args)
-                (apply union)
-                sort
-                last
-                .toDate)})
-    {}))
-
-
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;
-; ka-beam-location support functions
-;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-; TODO - drop beam-data
-(defn- beam-data
-  "build the data needed to present a ka-beam location in a timeline widget"
-
-  [band {:keys [satellite-id beam-id radius lat lon beam-type]}]
-
-  {:name         (str (condp = satellite-id
-                        sat-1 "1"
-                        sat-2 "2"
-                        :default "?")
-                   "-" band "-" beam-id)
-   :lat          lat
-   :lon          lon
-   :satellite-id satellite-id
-   :e            {:diam    (* radius 2)
-                  :purpose beam-type}})
-
-
-; TODO - drop build-beam-data
-(defn- build-beam-data
-  "for each set of events, get the locations of all the Ka beams"
-
-  [band epoch type events]
-  ;(prn "build-beam-data" epoch type)
-  {:name epoch
-   :data (into #{}
-           (remove nil?
-             (map #(if (and (= type (:data-type %))
-                         (= band (:band %)))
-                     (beam-data band %))
-               events)))})
-
-
-; TODO - migrate to the same connection in excel
-(def conn (d/create-conn {}))
-
-(defn- get-state []
-  (log/info "Loading Materialized View")
-  (->> [signal-path-context beam-context]
-    (get-all-events)
-    (apply-events)
-    (map (fn [[k v]]
-           (for [data v]
-             (assoc data :epoch k))))
-    (apply concat)
-    (d/transact! conn)))
-
-
-
-
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;
-; PUBLIC API functions
-;
-;   working to get rid of these!
-;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-; TODO - drop signal-path-query
-(defn signal-path-query []
-  (event-query (get-state) :TERMINAL build-signal-path))
-
-
-(defn mission-query []
-  (let [events (event-query (get-state) :TERMINAL build-mission-data)]
-    (map
-      (fn [[k v]] (merge-mission v))
-      (group-by :id
-        (map #(assoc % :start-set #{(:start %)}
-                :end-set #{(:end %)})
-          (apply concat
-            (map #(:data %) events)))))))
-
-
-; TODO - drop terminal-location-query
-(defn terminal-location-query []
-  (event-query (get-state) :TERMINAL build-terminal-locations))
-
-
-; TODO - drop beam-query
-(defn beam-query [band]
-  (event-query (get-state) :BEAM (partial build-beam-data band)))
-
-
-
+; work out the materialized view logic (applying the adds and removes)
 (comment
 
   (defn- test-apply-events [event-state all-events]
@@ -563,163 +293,7 @@
 
   ())
 
-
-(comment
-
-  (signal-path-query)
-
-  (mission-query)
-
-  (terminal-location-query)
-
-
-  (event-query (with-state event-state) :BEAM (partial build-beam-data "Ka"))
-
-  (beam-query "X")
-  (beam-query "Ka")
-
-
-  (vanilla.subscription-manager/refresh-source :signal-path-service)
-  (vanilla.subscription-manager/refresh-source :terminal-location-service)
-  (vanilla.subscription-manager/refresh-source :x-beam-location-service)
-  (vanilla.subscription-manager/refresh-source :ka-beam-location-service)
-
-  (map #(:band %) (val (first @event-state)))
-
-  (into #{}
-    (map #(if (and (= :BEAM (:type %))
-                (= "Ka" (:band %)))
-            (beam-data "Ka" %))
-      (val (first @event-state))))
-
-
-  {:start-epoch  "161200Z JUL 2020",
-   :band         "Ka",
-   :type         "R",
-   :radius       111000.0,
-   :lon          29.564,
-   :lat          32.633,
-   :end-epoch    "230000Z JUL 2020",
-   :beam-id      2,
-   :satellite-id sat-2}
-
-  ())
-
-
-(comment
-  ka-beam-context
-
-  (def missions (->> (load-workbook (:file signal-path-context))
-                  (select-sheet (:sheet signal-path-context))
-                  (select-columns (:column-map signal-path-context))
-                  (drop 1)))
-
-  (def beams (->> (load-workbook (:file ka-beam-context))
-               (select-sheet (:sheet ka-beam-context))
-               (select-columns (:column-map ka-beam-context))
-               (drop 1)))
-
-  (def row {:tx-term-id   "TRML-1", :start-epoch "222000Z JUL 2020",
-            :data-rate    2048.0, :plan-id "PLAN-1",
-            :tx-channel   "1", :rx-term-lon "132.22",
-            :tx-term-lat  "-14.31", :rx-term-id "TRML-2",
-            :rx-channel   "1", :tx-term-lon "32.22",
-            :mission-id   "MISSION-1", :end-epoch "230000Z JUL 2020",
-            :satellite-id sat-2, :tx-beam "3",
-            :rx-term-lat  "-34.31", :rx-beam "3"})
-  (:start-epoch row)
-
-  (f/parse (f/formatter "ddHHmm MMM yyyy") "010000 JAN 2020")
-  (f/parse (f/formatter "ddHHmmz MMM yyyy") "010000GMT JAN 2020")
-
-  ; this doesn't work, 'Z' not a valid timezone
-  (f/parse (f/formatter "ddHHmmz MMM yyyy") "010000Z JAN 2020")
-
-  ; then replace it with GMT, which means the same
-  (clojure.string/replace "010000Z JAN 2020" #"Z" "GMT")
-
-  (f/parse (f/formatter "ddHHmmz MMM yyyy")
-    (clojure.string/replace "010000Z JAN 2020" #"Z" "GMT"))
-
-  (f/parse (f/formatter "ddHHmmz MMM yyyy")
-    (clojure.string/replace (:start-epoch row) #"Z" "GMT"))
-
-
-  ; work out just getting the missions (we don't need the epoch data)
-  (def missions
-    (event-query signal-path-context pmt-event-state build-mission-data))
-  (apply concat
-    (map #(:data %) missions))
-
-  (def smaller-data
-    [{:id    "MISSION-1",
-      :name  "MISSION-1",
-      :type  "PLAN-1",
-      :start "2020-07-22T12:00:00.000Z",
-      :end   "2020-07-22T16:00:00.000Z"}
-     {:id    "MISSION-1",
-      :name  "MISSION-1",
-      :type  "PLAN-1",
-      :start "2020-07-22T16:00:00.000Z",
-      :end   "2020-07-28T20:00:00.000Z"}
-     {:id    "MISSION-1",
-      :name  "MISSION-1",
-      :type  "PLAN-1",
-      :start "2020-07-22T16:00:00.000Z",
-      :end   "2020-07-23T20:00:00.000Z"}])
-
-  (map #(assoc % :start-set #{(:start %)} :end-set #{(:end %)}) smaller-data)
-
-  (def set-data (map #(assoc % :start-set #{(:start %)}
-                        :end-set #{(:end %)}) smaller-data))
-
-  ; none of the clojure 'merges' work for what we want, which is the scalar values and
-  ;the union of the set values
-
-  (def a (first set-data))
-  (def b (second set-data))
-  (def args set-data)
-
-  (merge-mission set-data)
-
-  (def intermediate
-    (group-by :id
-      (map #(assoc % :start-set #{(:start %)}
-              :end-set #{(:end %)})
-        (apply concat
-          (map #(:data %) missions)))))
-
-  (map (fn [[k v]] v) (take 1 intermediate))
-
-  (map
-    (fn [[k v]] (merge-mission v))
-    (group-by :id
-      (map #(assoc % :start-set #{(:start %)}
-              :end-set #{(:end %)})
-        (apply concat
-          (map #(:data %) missions)))))
-
-  (first (sort (apply union (map #(:start-set %) args))))
-
-  (->> (map #(:start-set %) args)
-    (apply union)
-    sort
-    first)
-  (->> (map #(:end-set %) args)
-    (apply union)
-    sort
-    last)
-  (f/unparse datetime-formatter)
-
-  ())
-
-
-; can we keep using datascript?
-; this will get us out of the business of building the MV for every query like we are now
-;
-;  no idea why I can't get the (atom) for the MV to work inside a function so it only
-;     gets called once, but it always resets to {}
-;
+; work out the datascript implementation for querying the MV
 (comment
   ; some example data for clarity
   (def one-epoch
@@ -939,7 +513,4 @@
 
 
   ())
-
-
-
 

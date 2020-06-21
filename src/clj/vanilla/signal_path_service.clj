@@ -37,15 +37,18 @@
   "combines the various data collections"
 
   [[k v]]
-  {:name k
-   :data (sort-by (juxt (fn [x] (get x 0))
-                    (fn [x] (get x 1)))
-           (remove nil?
-             (into []
-               (apply concat
-                 (map (fn [{:keys [epoch data]}]
-                        data)
-                   v)))))})
+  {:name         k
+   :showInLegend true
+   :type         :sankey
+   :keys         ["from" "to" "weight"]
+   :data         (->> v
+                   (map (fn [{:keys [epoch data]}]
+                          data))
+                   (apply concat)
+                   (into [])
+                   (remove nil?)
+                   (sort-by (juxt (fn [x] (get x 0))
+                              (fn [x] (get x 1)))))})
 
 
 
@@ -77,13 +80,23 @@
 
   {:title       "Signal Path Data - Grouped"
    :data-format :data-format/grouped-from-to-n
-   :series (get-signal-path-data)}) ;(mv/signal-path-query)})
+   :series      (get-signal-path-data)})                    ;(mv/signal-path-query)})
 
 
 
 
 (comment
   (get-signal-path-data)
+
+
+  (sort-by (juxt (fn [x] (get x 0))
+             (fn [x] (get x 1)))
+    (remove nil?
+      (into []
+        (apply concat
+          (map (fn [{:keys [epoch data]}]
+                 data)
+            v)))))
 
   (take 1 (mv/signal-path-query))
 
