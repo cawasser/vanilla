@@ -692,7 +692,7 @@
 
 
   ; get the epochs
-  (get-state)
+  ;(get-state)
 
   ; flatten into a single vector pf maps that can be put into datascript
   (def flattened (apply concat
@@ -704,7 +704,11 @@
 
   ; transact the data into datascript
   (def conn (d/create-conn {}))
-  (d/transact! conn flattened)
+  (d/transact! conn (apply concat
+                      (map (fn [[k v]]
+                             (for [data v]
+                               (assoc data :epoch k)))
+                        (get-state))))
 
 
 
@@ -741,24 +745,54 @@
 
 
 
-  ; maybe we can use tranducers (my first!)
+  ; maybe we can use transducers (my first!)
   ;
   ;    NB: the key here is that (sequence <x-ducer>) changes the format of the result, so
   ;        the group-by must be different
+  ;
   (defn query-thread
-    ([q-fn m-fn]
-     (->> q-fn
-       (sequence m-fn)                                       ; apply the 'm-fn' transducer
-       (group-by :epoch)
-       sort
-       (map merge-data-sets)))
-    ([q-fn]
-     (query-thread q-fn identity)))
+    "this function chains together the query (:q-fn), a function to
+    pick out the fields you want (with any renaming you need), called :map-fn
+    and a function to combine all the results for a given epoch into a single
+    data collection, usually a vector or set (:merge-fn)
+
+    takes a map with up to 3 keys:
+
+    :q-fn (required)   - the datascript query to get the data out of the database, do whatever you want here
+
+    :map-fn (optional) - a function (technically a transducer) to map each result into the correct format
+                         for the data-source. maybe you need just some of the fields, or you need to change
+                         the 'name' (keyword) to return the data to the client
+
+                         expects this function to produce results in the form:
+                             {:epoch 'epoch-string' :data <whatever collection you prefer>}
+
+                         if you don't provide a :map-fn, query-thread will use 'identity' as the default
+
+    :merge-fn (optional) - a function (again a transducer) to combine the :data results for each :epoch
+                           into a single collection. the data passed into this transducer will be a collection
+                           of collections.
+
+                           if not provided it will use (merge-data-sets) as the default
+
+                           Note: merge-data-sets will include an :epoch value in each data map; just ignore it"
+
+    [{q-fn :q-fn map-fn :map-fn merge-fn :merge-fn
+      :or  {map-fn identity merge-fn merge-data-sets}}]
+
+    ;(prn "map-fn" map-fn "merge-fn" merge-fn)
+    (->> q-fn
+      (sequence map-fn)
+      (group-by :epoch)
+      sort
+      (map merge-fn)))
+
+
 
   (query-thread
-    (d/q '[:find [(pull ?e [*]) ...]
-           :where [?e :tx-term-id ?tx-term-id]]
-      @conn))
+    {:q-fn (d/q '[:find [(pull ?e [*]) ...]
+                  :where [?e :tx-term-id ?tx-term-id]]
+             @conn)})
 
 
 
@@ -774,18 +808,31 @@
   ;
   ; TODO: move code to beam-location-service
   ;
-  (defn get-beam-data []
-    (query-thread
-      (d/q '[:find [(pull ?e [*]) ...]
-             :where [?e :band ?band]
-             [?e :beam-id ?name]
-             :in $ ?band] @conn "Ka")
-      (map (fn [{:keys [epoch band beam-id lat lon radius beam-type]}]
-             {:epoch epoch
-              :name (str band beam-id) :lat lat :lon lon
-              :e    {:diam (* radius 2) :purpose beam-type}}))))
+  (defn get-beam-data
+    "get all beams of a give band, by epoch
 
-  (get-beam-data)
+    - band  - a string value of the :band of interest
+
+    returns a sequence of maps:
+
+        ({:name <epoch-id>
+          :data #{{:name <beam-id> :lat <lat> :lon <lon>
+                   :e {:diam <diam> :purpose <data-format>}}})
+
+    see (query-thread) for additional information"
+
+    [band]
+    (query-thread
+      {:q-fn   (d/q '[:find [(pull ?e [*]) ...]
+                      :where [?e :band ?band]
+                      [?e :beam-id ?name]
+                      :in $ ?band] @conn band)
+       :map-fn (map (fn [{:keys [epoch band beam-id lat lon radius beam-type]}]
+                      {:epoch epoch
+                       :name  (str band beam-id) :lat lat :lon lon
+                       :e     {:diam (* radius 2) :purpose beam-type}}))}))
+
+  (get-beam-data "Ka")
 
   ;
   ;
@@ -794,24 +841,36 @@
   ;
   ;   TODO: need to test with Rx or only Tx terminals to be sure we capture them
   ;
-  [{:name tx-term-id :lat (Double/valueOf tx-term-lat) :lon (Double/valueOf tx-term-lon)}
-   {:name rx-term-id :lat (Double/valueOf rx-term-lat) :lon (Double/valueOf rx-term-lon)}]
 
-  (defn tx-rx-terminals-by-epoch [a b]
+  (defn- tx-rx-terminals-by-epoch
+    "this is a helper function to combine the results of the Tx and Rx terminal
+    into a single result set"
+
+    [a b]
     (for [{:keys [name data]} a]
       (->> (get-in b [name data])
         (clojure.set/union data)
         ((fn [x] {:name name :data x})))))
 
-  (defn get-terminal-location-data []
+  (defn get-terminal-location-data
+    "get all the terminals (Tx and Rx) by epoch
+
+    returns a sequence maps:
+
+        ({:name <epoch-id>
+          :data #{{:epoch <epoch-id>
+                   :name <terminal-id>
+                   :lat <lat> :lon <lon>}}})"
+
+    []
     (tx-rx-terminals-by-epoch
       ; this gets the Tx terminals
       (->> (d/q '[:find [(pull ?e [*]) ...]
                   :where [?e :tx-term-id ?tx-term-id]]
              @conn)
         (map (fn [{:keys [epoch tx-term-id tx-term-lat tx-term-lon]}]
-               [epoch {:name tx-term-id :lat tx-term-lat :lon tx-term-lon}]))
-        (group-by first)
+               {:epoch epoch :name tx-term-id :lat tx-term-lat :lon tx-term-lon}))
+        (group-by :epoch)
         sort
         (map merge-data-sets))
 
@@ -820,8 +879,8 @@
                   :where [?e :rx-term-id ?rx-term-id]]
              @conn)
         (map (fn [{:keys [epoch rx-term-id rx-term-lat rx-term-lon]}]
-               [epoch {:name rx-term-id :lat rx-term-lat :lon rx-term-lon}]))
-        (group-by first)
+               {:epoch epoch :name rx-term-id :lat rx-term-lat :lon rx-term-lon}))
+        (group-by :epoch)
         sort
         (map merge-data-sets))))
   (get-terminal-location-data)
@@ -831,9 +890,96 @@
   ;
   ; TODO: move to signal-path-service
   ;
+
+  (defn- signal-path
+    "build the data needed for a Sankey diagram. we must add the 't' and 'r'
+    as well as a notation for the specific satellite to make the names
+    distinct, otherwise we the diagram think they are the
+    same thing, even if one is 'transmit' and the other is 'receive'"
+
+    [{:keys [epoch satellite-id tx-beam tx-channel rx-beam
+             rx-channel tx-term-id rx-term-id data-rate]}]
+    (let [tx (str "t" (sat-tag satellite-id))
+          rx (str "r" (sat-tag satellite-id))]
+      {:epoch epoch
+       :data  [[(str tx tx-term-id) (str tx tx-channel) data-rate]
+               [(str tx tx-channel) (str tx tx-beam) data-rate]
+               [(str tx tx-beam) satellite-id data-rate]
+               [satellite-id (str rx rx-beam) data-rate]
+               [(str rx rx-beam) (str rx rx-channel) data-rate]
+               [(str rx rx-channel) (str rx rx-term-id) data-rate]]}))
+
+
+
+  (defn merge-signal-paths
+    "combines the various data collections
+
+    "
+
+    [[k v]]
+    {:name k
+     :data (sort-by (juxt (fn [x] (get x 0))
+                      (fn [x] (get x 1)))
+             (remove nil?
+               (into []
+                 (apply concat
+                   (map (fn [{:keys [epoch data]}]
+                          data)
+                     v)))))})
+
+
+
+  (defn get-signal-path-data
+    "returns signal-paths:
+
+       tx-terminal -> tx-beam -> tx-channel -> satellite  -> rx-channel -> rx-beam -> rx-terminal
+
+    per epoch.
+
+    returns a sequence of maps:
+
+        ({:name <epoch-id>
+          :data ([<from> <to> <weight>]...)})"
+
+    []
+    (query-thread
+      {:q-fn     (d/q '[:find [(pull ?e [*]) ...]
+                        :where [?e :tx-term-id ?tx-term-id]
+                        [?e :rx-term-id]]
+                   @conn)
+       :map-fn   (map signal-path)
+       :merge-fn merge-signal-paths}))
+  (get-signal-path-data)
+
+
+
   ;
+  ;
+  ; mission-data
+  ;
+  ;    TODO: migrate to task-service
+  ;
+
+  (defn get-mission-data
+    ""
+
+    []
+    (->> (d/q '[:find [(pull ?e [*]) ...]
+                :where [?e :mission-id]]
+           @conn)
+      (map mission-data)
+      (map #(assoc %
+              :start-set #{(:start %)}
+              :end-set #{(:end %)}))
+      (group-by :id)
+      (map (fn [[k v]] (merge-mission v)))))
+  (get-mission-data)
+
 
 
 
   ())
+
+
+
 
