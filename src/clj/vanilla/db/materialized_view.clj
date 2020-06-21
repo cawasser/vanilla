@@ -62,6 +62,17 @@
 (def sat-1 "SAT1")
 (def sat-2 "SAT2")
 
+;
+; helper function for munging some of the data coming out of datascript
+;
+(defn merge-data-sets
+  ""
+
+  [[k v]]
+  {:name k
+   :data (into #{} v)})
+
+
 (defn- extract-add-event
   "compute all the :add events (i.e., when something 'starts')"
 
@@ -156,6 +167,44 @@
                 (extract-remove-event s (:data-type source-context))]))
         flatten))))
 
+
+
+(defn query-thread
+  "this function chains together the query (:q-fn), a function to
+  pick out the fields you want (with any renaming you need), called :map-fn
+  and a function to combine all the results for a given epoch into a single
+  data collection, usually a vector or set (:merge-fn)
+
+  takes a map with up to 3 keys:
+
+  :q-fn (required)   - the datascript query to get the data out of the database, do whatever you want here
+
+  :map-fn (optional) - a function (technically a transducer) to map each result into the correct format
+                       for the data-source. maybe you need just some of the fields, or you need to change
+                       the 'name' (keyword) to return the data to the client
+
+                       expects this function to produce results in the form:
+                           {:epoch 'epoch-string' :data <whatever collection you prefer>}
+
+                       if you don't provide a :map-fn, query-thread will use 'identity' as the default
+
+  :merge-fn (optional) - a function (again a transducer) to combine the :data results for each :epoch
+                         into a single collection. the data passed into this transducer will be a collection
+                         of collections.
+
+                         if not provided it will use (merge-data-sets) as the default
+
+                         Note: merge-data-sets will include an :epoch value in each data map; just ignore it"
+
+  [{q-fn :q-fn map-fn :map-fn merge-fn :merge-fn
+    :or  {map-fn identity merge-fn merge-data-sets}}]
+
+  ;(prn "map-fn" map-fn "merge-fn" merge-fn)
+  (->> q-fn
+    (sequence map-fn)
+    (group-by :epoch)
+    sort
+    (map merge-fn)))
 
 
 ; TODO - drop event-query
@@ -390,20 +439,19 @@
                events)))})
 
 
-; TODO - add a local ds/connection
-;(def conn (d/create-conn {}))
+; TODO - migrate to the same connection in excel
+(def conn (d/create-conn {}))
 
 (defn- get-state []
   (log/info "Loading Materialized View")
   (->> [signal-path-context beam-context]
     (get-all-events)
-    (apply-events)))
-; TODO - add data to datascript so we only need to load it ONCE from the spreadsheet(s)
-;(apply concat
-;  (map (fn [[k v]]
-;         (for [data v]
-;           (assoc data :epoch k)))))
-;(d/transact! conn)))
+    (apply-events)
+    (map (fn [[k v]]
+           (for [data v]
+             (assoc data :epoch k))))
+    (apply concat)
+    (d/transact! conn)))
 
 
 
@@ -701,7 +749,6 @@
                             (assoc data :epoch k)))
                      (get-state))))
 
-
   ; transact the data into datascript
   (def conn (d/create-conn {}))
   (d/transact! conn (apply concat
@@ -709,6 +756,7 @@
                              (for [data v]
                                (assoc data :epoch k)))
                         (get-state))))
+
 
 
 
@@ -804,32 +852,7 @@
   ;
   ;
 
-  ;
-  ; TODO: move code to beam-location-service
-  ;
-  (defn get-beam-data
-    "get all beams of a give band, by epoch
 
-    - band  - a string value of the :band of interest
-
-    returns a sequence of maps:
-
-        ({:name <epoch-id>
-          :data #{{:name <beam-id> :lat <lat> :lon <lon>
-                   :e {:diam <diam> :purpose <data-format>}}})
-
-    see (query-thread) for additional information"
-
-    [band]
-    (query-thread
-      {:q-fn   (d/q '[:find [(pull ?e [*]) ...]
-                      :where [?e :band ?band]
-                      [?e :beam-id ?name]
-                      :in $ ?band] @conn band)
-       :map-fn (map (fn [{:keys [epoch band beam-id lat lon radius beam-type]}]
-                      {:epoch epoch
-                       :name  (str band beam-id) :lat lat :lon lon
-                       :e     {:diam (* radius 2) :purpose beam-type}}))}))
 
   (= (map :name (get-beam-data "Ka")) (map :name (beam-query "Ka")))
   (clojure.set/difference
@@ -847,50 +870,6 @@
   ; TODO: move code to terminal-location-service
   ;
   ;
-  ;   TODO: need to test with Rx or only Tx terminals to be sure we capture them
-  ;
-
-  (defn- tx-rx-terminals-by-epoch
-    "this is a helper function to combine the results of the Tx and Rx terminal
-    into a single result set"
-
-    [a b]
-    (for [{:keys [name data]} a]
-      (->> (get-in b [name data])
-        (clojure.set/union data)
-        ((fn [x] {:name name :data x})))))
-
-  (defn get-terminal-location-data
-    "get all the terminals (Tx and Rx) by epoch
-
-    returns a sequence maps:
-
-        ({:name <epoch-id>
-          :data #{{:epoch <epoch-id>
-                   :name <terminal-id>
-                   :lat <lat> :lon <lon>}}})"
-
-    []
-    (tx-rx-terminals-by-epoch
-      ; this gets the Tx terminals
-      (->> (d/q '[:find [(pull ?e [*]) ...]
-                  :where [?e :tx-term-id ?tx-term-id]]
-             @conn)
-        (map (fn [{:keys [epoch tx-term-id tx-term-lat tx-term-lon]}]
-               {:epoch epoch :name tx-term-id :lat tx-term-lat :lon tx-term-lon}))
-        (group-by :epoch)
-        sort
-        (map merge-data-sets))
-
-      ; and the rx terminals
-      (->> (d/q '[:find [(pull ?e [*]) ...]
-                  :where [?e :rx-term-id ?rx-term-id]]
-             @conn)
-        (map (fn [{:keys [epoch rx-term-id rx-term-lat rx-term-lon]}]
-               {:epoch epoch :name rx-term-id :lat rx-term-lat :lon rx-term-lon}))
-        (group-by :epoch)
-        sort
-        (map merge-data-sets))))
 
   (get-terminal-location-data)
   (= (get-terminal-location-data) (terminal-location-query))
@@ -911,64 +890,6 @@
   ; TODO: move to signal-path-service
   ;
 
-  (defn- signal-path
-    "build the data needed for a Sankey diagram. we must add the 't' and 'r'
-    as well as a notation for the specific satellite to make the names
-    distinct, otherwise we the diagram think they are the
-    same thing, even if one is 'transmit' and the other is 'receive'"
-
-    [{:keys [epoch satellite-id tx-beam tx-channel rx-beam
-             rx-channel tx-term-id rx-term-id data-rate]}]
-    (let [tx (str "t" (sat-tag satellite-id))
-          rx (str "r" (sat-tag satellite-id))]
-      {:epoch epoch
-       :data  [[(str tx tx-term-id) (str tx tx-channel) data-rate]
-               [(str tx tx-channel) (str tx tx-beam) data-rate]
-               [(str tx tx-beam) satellite-id data-rate]
-               [satellite-id (str rx rx-beam) data-rate]
-               [(str rx rx-beam) (str rx rx-channel) data-rate]
-               [(str rx rx-channel) (str rx rx-term-id) data-rate]]}))
-
-
-
-  (defn merge-signal-paths
-    "combines the various data collections
-
-    "
-
-    [[k v]]
-    {:name k
-     :data (sort-by (juxt (fn [x] (get x 0))
-                      (fn [x] (get x 1)))
-             (remove nil?
-               (into []
-                 (apply concat
-                   (map (fn [{:keys [epoch data]}]
-                          data)
-                     v)))))})
-
-
-
-  (defn get-signal-path-data
-    "returns signal-paths:
-
-       tx-terminal -> tx-beam -> tx-channel -> satellite  -> rx-channel -> rx-beam -> rx-terminal
-
-    per epoch.
-
-    returns a sequence of maps:
-
-        ({:name <epoch-id>
-          :data ([<from> <to> <weight>]...)})"
-
-    []
-    (query-thread
-      {:q-fn     (d/q '[:find [(pull ?e [*]) ...]
-                        :where [?e :tx-term-id ?tx-term-id]
-                        [?e :rx-term-id]]
-                   @conn)
-       :map-fn   (map signal-path)
-       :merge-fn merge-signal-paths}))
 
   (= (get-signal-path-data) (signal-path-query))
   (= (map :name (get-signal-path-data)) (map :name (signal-path-query)))
