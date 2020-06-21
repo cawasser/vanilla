@@ -669,7 +669,7 @@
 ; can we keep using datascript?
 ; this will get us out of the business of building the MV for every query like we are now
 ;
-;  no idea why I can't get the (atom) for teh MV to work inside a function so it only
+;  no idea why I can't get the (atom) for the MV to work inside a function so it only
 ;     gets called once, but it always resets to {}
 ;
 (comment
@@ -720,7 +720,6 @@
            [?e :rx-term-id ?rx-term-id]]
       @conn))
 
-  (beam-query "Ka")
 
 
   ;
@@ -832,7 +831,16 @@
                        :name  (str band beam-id) :lat lat :lon lon
                        :e     {:diam (* radius 2) :purpose beam-type}}))}))
 
-  (get-beam-data "Ka")
+  (= (map :name (get-beam-data "Ka")) (map :name (beam-query "Ka")))
+  (clojure.set/difference
+    (into #{} (map :name (get-beam-data "Ka")))
+    (into #{} (map :name (beam-query "Ka"))))
+  (clojure.set/difference
+    (into #{} (map :name (beam-query "Ka")))
+    (into #{} (map :name (get-beam-data "Ka"))))
+  ; only missing the empty epoch "230000Z JUL 2020"
+
+
 
   ;
   ;
@@ -883,7 +891,19 @@
         (group-by :epoch)
         sort
         (map merge-data-sets))))
+
   (get-terminal-location-data)
+  (= (get-terminal-location-data) (terminal-location-query))
+
+  (= (map :name (get-terminal-location-data)) (map :name (terminal-location-query)))
+  (clojure.set/difference
+    (into #{} (map :name (get-terminal-location-data)))
+    (into #{} (map :name (terminal-location-query))))
+  (clojure.set/difference
+    (into #{} (map :name (terminal-location-query)))
+    (into #{} (map :name (get-terminal-location-data))))
+  ; only missing the empty epoch "230000Z JUL 2020"
+
 
 
   ;
@@ -949,7 +969,17 @@
                    @conn)
        :map-fn   (map signal-path)
        :merge-fn merge-signal-paths}))
-  (get-signal-path-data)
+
+  (= (get-signal-path-data) (signal-path-query))
+  (= (map :name (get-signal-path-data)) (map :name (signal-path-query)))
+
+  (clojure.set/difference
+    (into #{} (map :name (get-signal-path-data)))
+    (into #{} (map :name (signal-path-query))))
+  (clojure.set/difference
+    (into #{} (map :name (signal-path-query)))
+    (into #{} (map :name (get-signal-path-data))))
+  ; only missing the empty epoch "230000Z JUL 2020"
 
 
 
@@ -973,8 +1003,17 @@
               :end-set #{(:end %)}))
       (group-by :id)
       (map (fn [[k v]] (merge-mission v)))))
+
   (get-mission-data)
 
+  (= (get-mission-data) (mission-query))
+  (clojure.set/difference
+    (into #{} (map :name (get-mission-data)))
+    (into #{} (map :name (mission-query))))
+  (clojure.set/difference
+    (into #{} (map :name (mission-query)))
+    (into #{} (map :name (get-mission-data))))
+  ; only missing the empty epoch "230000Z JUL 2020"
 
 
 
