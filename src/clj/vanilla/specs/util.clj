@@ -10,6 +10,7 @@
 (s/def ::is-float float?)
 (s/def ::is-double double?)
 (s/def ::is-integer integer?)
+(s/def ::is-list list?)
 
 ;
 ; a special function to range bound a float
