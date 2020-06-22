@@ -68,7 +68,10 @@
 
 
 (defn merge-data-sets
-  ""
+  "the default merge implementation, used whenever there is NO :merge-fn defined in the parameter
+  to (query-thread), which is mapped over all all the results as the very last step in the query-thread
+
+  does a simple (into #{}) for all the values (v) of the epoch (k)"
 
   [[k v]]
   {:name k
@@ -142,7 +145,7 @@
 
 
 (defn- get-all-events
-  "get all thee data from the spreadheet(s) into a single flat vector of
+  "get all the data from the spreadsheet(s) into a single flat vector of
    add and remove events. this vector will then be materialized into views
    by 'epoch'"
 
@@ -174,7 +177,15 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defn get-state []
+(defn get-state
+  "creates a 'materialized view' of the events. accumulates the adds and removes at each epoch boundary,
+  creating a snapshot of the current state which is constant throughout that epoch. The follwing
+  epoch starts the state form the prior epoch, hence the accumulation
+
+  updated the datascript database in 'conn'"
+
+  []
+
   (log/info "Loading Materialized View into Datascript")
 
   (->> [signal-path-context beam-context]

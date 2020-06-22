@@ -5,7 +5,21 @@
             [datascript.core :as d]))
 
 
-(defn- sat-tag [id]
+(defn- sat-tag
+  "helper to 'unique-ify' the names of intermediate elements fo the signal-path, since
+  a user might use the same 'simple name' for things on the Tx side and he Rx side.
+
+  This helps address the 'context-sensitive' nature of human-named things (humans tend to name things within a
+  given context, such as 'channel 3', which exists on both the TX and Rx sides o fht path). Inside the
+  system these things are different, so their names must be made different.
+
+  Assumption:
+
+  only the :satellite-id is used for uniqueness. beams, antennas, etc are NOT
+
+  only handles 3 satellites"
+
+  [id]
   (condp = id
     mv/sat-1 "-"
     mv/sat-2 "_"
@@ -34,7 +48,16 @@
 
 
 (defn merge-signal-paths
-  "combines the various data collections"
+  "combines the various data collections into the proper format for use in a Highcharts Sankey
+  chart, i.e., [<from> <to> <weight>] where
+
+  <from> is starting elements of a segment of the path (tx-terminal, satellite, etc.)
+
+  <to> is ending elements of a segment of the path (tx-terminal, satellite, etc.)
+
+  <weight> is a number used to draw the line thickness, signal-paths use the data-rate
+
+  sorts the data by the <from> then the <to>"
 
   [[k v]]
   {:name         k
