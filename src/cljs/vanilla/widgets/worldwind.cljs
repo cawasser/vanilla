@@ -20,10 +20,6 @@
 
 (defn make-widget [name data options]
 
-  ; TODO: this is a hack for the following hack (does NOT unsubscribe to sources when widget closes)
-  ; hack has been moved here from layer-mngmt to prevent overload of ajax calls as layers redraw frequently
-  ;(ds/data-source-subscribe [:x-beam-location-service :terminal-location-service :ka-beam-location-service])
-
   (let [globeRef (atom nil)
         layersRef (atom nil)
         layers (lm/make-layers)]
