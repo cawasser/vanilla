@@ -11,7 +11,7 @@ a source code tree. Each ['commit'](https://www.atlassian.com/git/tutorials/savi
 of the immutable repository changed. Until the nex commit, the state of the tree is NOT changing.
 
 A [Datomic database](https://docs.datomic.com/cloud/whatis/data-model.html#time-model)
-could also be thought of as epochal since each  
+could also be thought of as epochal since each
 transaction demotes a specific state of the entire database at a give date/time.
 
 Epochal data is a key concept in the notion of "planning." To develop a plan for future activities in a
