@@ -1,6 +1,7 @@
 (ns vanilla.specs.common
   (:require [clojure.spec-alpha2 :as s]
-            [vanilla.specs.util :as vsu]))
+            [vanilla.specs.util :as vsu]
+            [vanilla.specs.dataformat :as vsd]))
 
 
 ;
@@ -19,3 +20,9 @@
 
 (s/def ::latitude (s/double-in :min min-latitude :max max-latitude :NaN? false :infinite? false))
 (s/def ::longitude (s/double-in :min min-longitude :max max-longitude :NaN? false :infinite? false))
+
+;
+; other specs commonly used
+;
+(s/def ::title ::vsu/is-string)
+(s/def ::data-format ::vsd/data-format-in-set)
