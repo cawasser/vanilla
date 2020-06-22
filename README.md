@@ -12,7 +12,7 @@ This single-page application (SPA) provides a number of graphical widgets based 
 
 [look here](docs/history.md)
 
-> 0.5.0  - "Epochal time". This version supports data expressed as a series of "snapshots" over time. See [Handling Epochal Time](docs/epocahl-time.md)  
+> 0.5.0  - "Epochal time". This version supports data expressed as a series of "snapshots" over time. See [Handling Epochal Time](docs/epochal-time.md)
 > for more details.
 
 
