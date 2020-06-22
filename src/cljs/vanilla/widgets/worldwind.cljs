@@ -7,15 +7,10 @@
             ["worldwind-react-globe-bs4" :as bs4]
             ["reactstrap" :as rs]
             [vanilla.mapping.layer-management :as lm]
-            [vanilla.data-source-subscribe :as ds]))
+            [vanilla.data-source-subscribe :as ds]
+            [vanilla.continental-locations :as cl]))
 
 
-(def start-loc {:n-america {:latitude 47.040182 :longitude -99.403964}
-                :s-america {:latitude -15.453680 :longitude -58.771031}
-                :europe {:latitude 48.574790 :longitude 12.163178}
-                :africa {:latitude 10.487812 :longitude 20.470202}
-                :australia {:latitude -18.812718 :longitude 134.619212}
-                :asia {:latitude 31.952162 :longitude 115.949663}})
 
 
 (defn make-widget [name data options]
@@ -55,10 +50,8 @@
                                :className "globe"}
 
                     [:> Globe (merge {:ref  #(reset! globeRef %)
-                                      :layers layers
-                                      :latitude  28.538336
-                                      :longitude -81.379234}
-                                (:n-america start-loc))]]
+                                      :layers layers}
+                                (:n-america cl/start-loc))]]
 
                   [:div.overlayCards.noninteractive
                    [:> rs/CardColumns

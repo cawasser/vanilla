@@ -2,10 +2,8 @@
   (:require [re-frame.core :as rf]
             [day8.re-frame.tracing :refer-macros [fn-traced]]
             ["worldwindjs" :as WorldWind]
-            [vanilla.data-source-subscribe :as ds]))
-
-
-
+            [vanilla.data-source-subscribe :as ds]
+            [vanilla.continental-locations :as cl]))
 
 
 (rf/reg-event-db
@@ -119,6 +117,18 @@
   layer)
 
 
+(defn- epoch-layer [data layer]
+  (prn "epoch-layer" data)
+  (if (seq data)
+    (let [label-pt       (WorldWind/Position. (:lat data) (:lon data) 100)
+          textAttributes (WorldWind/TextAttributes.)
+          text           (WorldWind/GeographicText. label-pt (:name data))]
+
+      (set! (.-color textAttributes) (.-WHITE WorldWind/Color))
+      (set! (.-attributes text) textAttributes)
+      (.addRenderable layer text)))
+  layer)
+
 
 (defn- find-epoch [epoch events]
   (filter #(= epoch (:name %)) events))
@@ -140,9 +150,13 @@
                     [:data :data])
         epochs    (clojure.set/union
                     (into #{} (map :name ka-beams))
-                    (into #{} (map :name terminals)))]
+                    (into #{} (map :name terminals)))
+        epoch-labels (map (fn [x] {:name x
+                                   :lat (get-in cl/start-loc [:n-america :latitude])
+                                   :lon (get-in cl/start-loc [:n-america :longitude])}) epochs)]
 
-    ;(prn "ka-beams" ka-beams)
+    (prn "epoch-labels" epoch-labels)
+    ; (prn "ka-beams" ka-beams)
     ;(prn "ka-beams[2]" (get-in ka-beams [2 :data]))
     ;(prn "terminals" @(rf/subscribe [:app-db :terminal-location-service]) terminals)
 
@@ -155,6 +169,7 @@
 
       (for [e (reverse (sort epochs))]
         {:layer (->> (WorldWind/RenderableLayer. e)
+                  (epoch-layer (->> (find-epoch e epoch-labels) first))
                   (location-layer (->> (find-epoch e terminals) first :data) (.-WHITE WorldWind/Color))
                   (beam-layer (->> (find-epoch e ka-beams) first :data)))
          :options {:category "overlay" :enabled false}}))))
@@ -202,6 +217,14 @@
                        (into #{} (map :name terminals))))
 
   (reverse (sort epochs))
+
+  (def epoch-labels
+    (map (fn [x] {:name x :lat -18.812718 :lon 134.619212}) epochs))
+
+  (filter #(= "161200Z JUL 2020" (:name %)) epoch-labels)
+
+  (find-epoch "161200Z JUL 2020" epoch-labels)
+
 
   #{"161200Z JUL 2020"
     "170400Z JUL 2020"
