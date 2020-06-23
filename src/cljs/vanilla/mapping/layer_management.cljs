@@ -161,7 +161,8 @@
     ;(prn "terminals" @(rf/subscribe [:app-db :terminal-location-service]) terminals)
 
     (apply conj
-      [{:layer "blue-marble" :options {:category "base" :enabled true}}
+      [{:layer "blue-marble" :options {:category "base" :enabled true}}  ;:pickEnabled false
+       {:layer "eox-sentinal2" :options {:category "base" :enabled false}}
        {:layer   (location-layer cities
                    (.-YELLOW WorldWind/Color)
                    (WorldWind/RenderableLayer. "Cities"))

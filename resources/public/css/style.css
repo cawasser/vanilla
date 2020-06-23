@@ -77,10 +77,19 @@ btn {
     right: 0px;
 }
 
+/*
+.card {
+    background:rgba(255,255,255,0.7);
+}
+*/
 
 .card-body {
     overflow-y: scroll;
     max-height: 300px;
+}
+
+.close {
+    color: white;
 }
 
 .noninteractive {
