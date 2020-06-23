@@ -2,6 +2,7 @@
   (:require [vanilla.widgets.table-widget]
             [vanilla.widgets.stoplight-widget]
             [vanilla.widgets.simple-text]
+            [vanilla.widgets.gif-widget]
             [vanilla.widgets.worldwind]
             [vanilla.widgets.timeline]
             [vanilla.widgets.carousel]
@@ -74,6 +75,18 @@
                :data-grid {:x 0 :y 0 :w 5 :h 15 }
                :options     {:viz/title        "Time"
                              :viz/banner-color {:r 0x00 :g 0xff :b 0xff :a 1}}}
+
+              {:name        :gif-widget
+               :basis       :simple
+               :type        :gif-widget
+               :build-fn    vanilla.widgets.gif-widget/make-widget
+               :ret_types   [:data-format/string]
+               :icon        "/images/gif-widget.png"
+               :label       "Gif Player"
+               :data-grid {:x 0 :y 0 :w 2 :h 10 }
+               :options     {:viz/title        "Gif"
+                             :viz/banner-color {:r 0x159 :g 0x5 :b 0x0 :a 1}
+                             :viz/banner-text-color white}}
 
               {:name        :rough-widget
                :basis       :simple
