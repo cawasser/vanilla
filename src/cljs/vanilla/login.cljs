@@ -158,6 +158,7 @@
          [:label "Username:"
           [:div
            [input-element "username" username]]]
+         [:span {:style {:display "inline-block" :width "70px"}}]
          [:label "Password:"
           [:div
            [input-element "password"  pass]]]]

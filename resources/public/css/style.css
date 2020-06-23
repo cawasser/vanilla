@@ -68,7 +68,7 @@ body {
 }
 
 h5 {
-    color: black;
+    color: rgba(255,255,255,0.7);
     width: 100%;
 }
 
@@ -77,9 +77,6 @@ btn {
     right: 0px;
 }
 
-.card {
-    background:rgba(255,255,255,0.7) !important;
-}
 
 .card-body {
     overflow-y: scroll;
