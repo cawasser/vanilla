@@ -1,5 +1,6 @@
 (ns vanilla.subscription-manager
   (:require [dashboard-clj.data-source :as ds]
+            [clojure.tools.logging :as log]
             [dashboard-clj.components.system :as system]
             [vanilla.service-deps :as deps]))
 
@@ -27,12 +28,18 @@
   ;(prn "add-empty-user " username)
   (swap! subscribed-sources assoc-in [:subscribers username] {:username username :sources #{}}))
 
+(defn clean-sources
+  "Verifies that all sources are valid and removes any invalid ones"
+  "Purposefully doesnt notify the user of any issues"
+  [sources]
+  (into [] (remove #(nil? (get-servicedep %)) sources)))
+
 
 
 (defn push-data!
   "Gets the websocket send-fn from the system-map to push out the updated data-source"
   [username source]
-  (prn "push-data! " username source)
+  (log/info "push-data! " username source)
   (let [data-src (ds/new-data-source (get-servicedep source))
         new-data (apply (ds/resolve-fn (:read-fn data-src)) (:params data-src))
         event    (ds/data->event (:name data-src) new-data)]
@@ -47,7 +54,7 @@
    updates the map of sources with the users who have subscribed
    Executes websocket push to send the latest data to the client"
   [username sources]
-  (prn "add-subscribers " username " to " sources)
+  (log/info "add-subscribers " username " to " sources)
   (reset! subscribed-sources
     (-> @subscribed-sources
       (assoc-in [:subscribers username :sources]
@@ -174,6 +181,9 @@
   (add-subscribers "test" [:repl-test-data :terminal-location-service])
 
   (swap! subscribed-sources assoc-in [:subscribers username :sources] sources)
+
+  (get-servicedep :bubble-service)
+  (into [] (remove #(nil? (get-servicedep %)) [:bubble-service :spectrum-traces :spas-race]))
 
   (merge #{"one" "two"} "three")
   (merge #{"one" "two"} "one")

@@ -16,11 +16,12 @@
 
 (defn subscribe-to-services
   "Handles subscribing a user to the vector of data sources currently on their dashboard"
+  "Verifies all services are valid with clean-sources first"
   [user services]
 
   (let [distinct-str (into [] (distinct (clojure.core/read-string services)))]
     ;(prn "URL handler subscribing: " distinct-str)
-    (subman/add-subscribers user distinct-str)))
+    (subman/add-subscribers user (subman/clean-sources distinct-str))))
 
 
 (def from-sqlite {:id :key :data_source :data-source :data_grid :data-grid})
