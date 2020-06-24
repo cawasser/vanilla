@@ -5,12 +5,14 @@
 ; some common specs for 'type checking'
 ;
 (s/def ::is-keyword keyword?)
-(s/def ::is-vector vector?)
 (s/def ::is-string string?)
 (s/def ::is-float float?)
 (s/def ::is-double double?)
 (s/def ::is-integer integer?)
 (s/def ::is-decimal decimal?)
+(s/def ::is-boolean boolean?)
+
+(s/def ::is-vector vector?)
 (s/def ::is-list list?)
 
 ;
