@@ -111,7 +111,7 @@
                (load-data workbook sheet column-map post-fn))
           defs)))
     (catch Exception e (log/error "Exception: " (.getMessage e)))
-    (finally (log/info "Excel file" filename "not loaded!"))))
+    (finally (log/info "Excel file" filename "loaded!"))))
 
 
 
