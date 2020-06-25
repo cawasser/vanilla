@@ -51,7 +51,7 @@
                          :plotOptions             {:series {:dataLabels {:enabled true
                                                                          :color   "#000000"}}}}
 
-     :merge-plot-option {:default plot-options}
+     :merge-plot-option {:default mc/default-plot-options} ;plot-options}
 
      :conversions       {:default mc/default-conversion}}))
 

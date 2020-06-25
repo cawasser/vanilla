@@ -11,9 +11,9 @@
 
 (defn- code [x]
   (cond
-    (< x 3) :up
-    (and (< 3 x)
-         (< x 7)) :warning
+    (<= x 50) :up
+    (and (< 50 x) (<= x 80)) :inactive
+    (and (< 80 x) (<= x 93)) :warning
     :else :fault))
 
 
@@ -24,10 +24,15 @@
    :data-format :data-format/entity
    :src/keys [:id :status]
    :series (let [v (map (fn [_]
-                          (->> 10 rand code))
+                          (->> 100 rand code))
                         (range 25))]
              (sort
                (into []
                      (zipmap idents v))))})
 
 
+(comment
+
+  (vanilla.subscription-manager/refresh-source :health-and-status-data)
+
+  ())

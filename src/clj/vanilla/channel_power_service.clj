@@ -56,8 +56,9 @@
 
 
 (comment
-  (def sat-num "3000")
+  (def sat-num "SAT1")
 
+  (get-data "SAT1")
 
   (def channel-1 (sort-by first
                    (d/q '[:find ?freq ?cp
@@ -97,58 +98,5 @@
          [?e :freq ?freq]]
     @excel/conn)
 
-  (def sat-3000 (let [ch-1 (sort-by first
-                             (d/q '[:find ?freq ?cp
-                                    :where
-                                    [?e :satellite-id ?sat-num]
-                                    [?e :freq ?freq]
-                                    [?e :channel-1-power ?cp]
-                                    :in $ ?sat-num]
-                               @excel/conn sat-num))
-                      ch-2 (sort-by first
-                             (d/q '[:find ?freq ?cp
-                                    :where
-                                    [?e :satellite-id ?sat-num]
-                                    [?e :freq ?freq]
-                                    [?e :channel-2-power ?cp]
-                                    :in $ ?sat-num]
-                               @excel/conn sat-num))
-                      ch-3 (sort-by first
-                             (d/q '[:find ?freq ?cp
-                                    :where
-                                    [?e :satellite-id ?sat-num]
-                                    [?e :freq ?freq]
-                                    [?e :channel-3-power ?cp]
-                                    :in $ ?sat-num]
-                               @excel/conn sat-num))]
-                  [ch-1 ch-2 ch-3]))
-
-  (def sat-4000 (let [ch-1 (sort-by first
-                             (d/q '[:find ?freq ?cp
-                                    :where
-                                    [?e :satellite-id ?sat-num]
-                                    [?e :freq ?freq]
-                                    [?e :channel-1-power ?cp]
-                                    :in $ ?sat-num]
-                               @excel/conn "4000"))
-                      ch-2 (sort-by first
-                             (d/q '[:find ?freq ?cp
-                                    :where
-                                    [?e :satellite-id ?sat-num]
-                                    [?e :freq ?freq]
-                                    [?e :channel-2-power ?cp]
-                                    :in $ ?sat-num]
-                               @excel/conn "4000"))
-                      ch-3 (sort-by first
-                             (d/q '[:find ?freq ?cp
-                                    :where
-                                    [?e :satellite-id ?sat-num]
-                                    [?e :freq ?freq]
-                                    [?e :channel-3-power ?cp]
-                                    :in $ ?sat-num]
-                               @excel/conn "4000"))]
-                  [ch-1 ch-2 ch-3]))
-
-  (= sat-3000 sat-4000)
 
   ())

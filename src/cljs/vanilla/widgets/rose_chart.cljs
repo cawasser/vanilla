@@ -19,9 +19,9 @@
                  :endOnTick     false
                  :showLastLabel true
                  :reversedStacks false}
-   :legend      {:align         "right"
-                 :verticalAlign "top"
-                 :layout        "vertical"}
+   ;:legend      {:align         "right"
+   ;              :verticalAlign "top"
+   ;              :layout        "vertical"}
    :plotOptions {:series {:stacking       :normal
                           :groupPadding   0
                           :pointPlacement "on"}

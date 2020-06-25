@@ -11,6 +11,14 @@
     (get db :version)))
 
 
+(rf/reg-sub
+  :current-user
+  (fn [db _]
+    ;(prn (str ":version " db))
+    (get db :current-user)))
+
+
+
 
 (rf/reg-sub
   :services

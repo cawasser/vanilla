@@ -72,3 +72,15 @@ new widgets, just revised default layout
 > 0.3.4-SNAPSHOT. New modal so user can "customize" a widget: banner color, title text, and title text color.
 
 > 0.3.5-SNAPSHOT. Added World Map and Continental Australia map widgets.
+
+
+## 0.4.x
+
+> 0.4.0-SNAPSHOT. Migration of the client software (written in [Clojurescript]()) to a new build tool: [shadow-cljs](). "Dark-mode"
+
+> 0.4.1-SNAPSHOT. Addition of Nasa [WorldWind](https://github.com/worldwindearth/worldwind-react-globe), a [timeline](https://github.com/guiqui/react-timeline-gantt) using a gantt
+> format, and a multi-content [Carousel](https://github.com/express-labs/pure-react-carousel). Use of excel files (via [docjure](https://github.com/mjul/docjure)
+> and [Apache POI](http://poi.apache.org)), combined with [Datascript](https://github.com/tonsky/datascript) as an additional source of information to the server.
+
+> 0.4.2-SNAPSHOT. Revisions of the "Table Widget", additional "dark-mode" using [bulma.io](https://jenil.github.io/bulmaswatch/). Added data-services
+> for terminal-list, x-beams, ka-beams, channel-power.

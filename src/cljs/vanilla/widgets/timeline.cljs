@@ -5,14 +5,6 @@
 
 (def built-in-formatter (f/formatters :date-time-no-ms))
 
-;(def local-data {:data  [{:id  1 :start (t/now)
-;                          :end (t/plus (t/now) (t/months 1)) :name "Demo Task 1"}
-;                         {:id  2 :start (t/plus (t/now) (t/months 1))
-;                          :end (t/plus (t/now) (t/months 1) (t/weeks 2) (t/days 4) (t/hours 9)) :name "Demo Task 2"}]
-;
-;                 :links [{:id 1 :start 1 :end 2}
-;                         {:id 2 :start 1 :end 3}]})
-;
 
 
 (def colors ["blue" "green" "red" "goldenrod" "purple"])
@@ -28,6 +20,7 @@
                                      (assoc orig :color (get colors
                                                           (.indexOf types-set type))))
                                 (:data data)))))]
+    ;(prn "parse-types-to-color" ret)
     ret))
 
 (defn parse-times [data]
@@ -46,7 +39,7 @@
 (defn make-widget
   [name source-data options]
 
-;  (prn "timeline" source-data)
+  ;(prn "timeline" source-data)
 
   [:> TimeLine (merge {:style {:overflow :auto
                                :backgroundColor "#2F4F4F"}

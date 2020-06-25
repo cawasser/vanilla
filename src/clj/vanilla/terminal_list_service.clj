@@ -34,6 +34,13 @@
 
 
 (comment
+
+  (vanilla.subscription-manager/refresh-source :terminal-list-service)
+
+  ())
+
+
+(comment
   (->>
     (d/q '[:find [(pull ?e [*]) ...]
            :where [?e :terminal-id]]

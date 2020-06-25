@@ -124,7 +124,7 @@
 
       ; 18
       ["22000" "signal-path-service" "Signal Paths"
-       "data-format/from-to-n" "vanilla.signal-path-service/fetch-data"
+       "data-format/grouped-from-to-n" "vanilla.signal-path-service/fetch-data"
        "returns signal path for missions"]
 
       ; 19

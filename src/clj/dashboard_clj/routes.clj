@@ -10,7 +10,8 @@
             [clojure.data.json :as json]
             [trptcolin.versioneer.core :as version]
             [vanilla.url-handlers :as h]
-            [clojure.tools.logging :as log])
+            [clojure.tools.logging :as log]
+            [vanilla.subscription-manager :as subman])
   (:gen-class))
 
 
@@ -100,6 +101,13 @@
      :body (do
             {:rows-updated (h/create-user (:params req)) :status 200})})                            ;;Expects a struct of username password
 
+
+  (POST "/logout" req
+    {:status 200
+     :header {"Content-Type" "text/json; charset=utf-8"}
+     :body   (do
+               (log/info "Port closed to UID: " (-> req :params :user))
+               (subman/remove-user (-> req :params :user)))})
 
 
   (resources "/"))

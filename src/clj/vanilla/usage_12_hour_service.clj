@@ -22,18 +22,20 @@
    :src/x-title "time"
    :src/y-title "Mbps"
    :series      [
-                 (make-map "1000 X" hours 200)
-                 (make-map "1000 Ka" hours 200)
-                 (make-map "2000 X" hours 200)
-                 (make-map "2000 Ka" hours 200)
-                 (make-map "3000 X" hours 200)
-                 (make-map "3000 Ka" hours 200)
-                 (make-map "4000 X" hours 200)
-                 (make-map "4000 Ka" hours 200)]})
+                 (make-map "SAT1 X" hours 200)
+                 (make-map "SAT1 Ka" hours 200)
+                 (make-map "SAT2 X" hours 200)
+                 (make-map "SAT2 Ka" hours 200)]})
+                 ;(make-map "3000 X" hours 200)
+                 ;(make-map "3000 Ka" hours 200)
+                 ;(make-map "4000 X" hours 200)
+                 ;(make-map "4000 Ka" hours 200)]})
 
 
 
 (comment
+
+  (vanilla.subscription-manager/refresh-source :usage-12-hour-service)
 
   (make-map "Apple" ["0000h" "0100h"] 10)
 

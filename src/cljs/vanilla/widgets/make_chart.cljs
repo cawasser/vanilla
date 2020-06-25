@@ -201,14 +201,17 @@
         base-config     (make-config chart-config data options)
         all-configs     (merge-configs base-config data options)]
 
-        ;(prn "make-chart " chart-type
-        ; " //// (chart-config) " chart-config
-        ; " //// (chart-reg-entry) " chart-reg-entry
-        ; " //// (all-configs) " all-configs )
+    ;(prn "make-chart " chart-type
+    ; ;" //// (chart-config) " chart-config
+    ; ;" //// (chart-reg-entry) " chart-reg-entry
+    ; " //// (data) " data
+    ; " //// (all-configs) " all-configs)
 
     (reagent/create-class
-      {:reagent-render
-       (fn [args]
+      {:display-name (str chart-type)
+
+       :reagent-render
+       (fn []
          ;@dom-node                                          ; be sure to render if node changes, doesnt seem necessary
          [:div#hc {:style {:width "100%" :height "100%"}}])
 

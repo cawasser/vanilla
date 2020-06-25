@@ -16,8 +16,7 @@
           named-widget (assoc widget-type
                          :key (str next-id)
                          :data-source data-source
-                         :username current-user             ;;add username key value to widget map
-                         :data-grid {:x 0 :y 0 :w 5 :h 15})]
+                         :username current-user)]
 
       (do
         (assoc db
@@ -27,19 +26,39 @@
 (rf/reg-event-db
   :add-carousel
   (fn-traced [db]
-             (let [next-id      (:next-id db)
-                   widget-type  (get-in db [:widget-types :carousel-widget])
-                   current-user @(rf/subscribe [:get-current-user])  ;;get current user
-                   named-widget (assoc widget-type
-                                  :key (str next-id)
-                                  :data-source :carousel-service
-                                  :username current-user             ;;add username key value to widget map
-                                  :data-grid {:x 0 :y 0 :w 5 :h 15 :isResizable false})]  ;;carousel size is locked and cant be resized
+    (prn ":add-carousel" (get-in db [:widget-types :carousel-widget]))
 
-               (do
-                 (assoc db
-                   :widgets (conj (:widgets db) named-widget)
-                   :next-id (uuid/uuid-string (uuid/make-random-uuid)))))))
+    (let [next-id      (:next-id db)
+          widget-type  (get-in db [:widget-types :carousel-widget])
+          current-user @(rf/subscribe [:get-current-user])  ;;get current user
+          named-widget (assoc widget-type
+                         :key (str next-id)
+                         :data-source :carousel-service
+                         :username current-user)]  ;;carousel size is locked and cant be resized
+
+      (do
+        (assoc db
+          :widgets (conj (:widgets db) named-widget)
+          :next-id (uuid/uuid-string (uuid/make-random-uuid)))))))
+
+(rf/reg-event-db
+  :add-sankey-carousel
+  (fn-traced [db]
+    (prn ":add-sankey-carousel" (get-in db [:widget-types :sankey-carousel-widget]))
+    (let [next-id      (:next-id db)
+          widget-type  (get-in db [:widget-types :sankey-carousel-widget])
+          current-user @(rf/subscribe [:get-current-user])  ;;get current user
+          named-widget (assoc widget-type
+                         :key (str next-id)
+                         :data-source :carousel-service
+                         :username current-user)]  ;;carousel size is locked and cant be resized
+
+      (do
+        (assoc db
+          :widgets (conj (:widgets db) named-widget)
+          :next-id (uuid/uuid-string (uuid/make-random-uuid)))))))
+
+
 
 (rf/reg-event-db
   :init-selected-service
@@ -308,7 +327,22 @@
       [:div.control
        [:div.tags.has-addons
         [:span.tag.is-dark "version"]
-        [:span.tag.is-dark @version]]])))
+        (if (seq @version)
+          [:span.tag.is-dark @version]
+          [:span.tag.is-dark "unknown"])]])))
+
+(defn current-user
+  "Returns the current user ID wrapped in a h6 element."
+
+  []
+
+  (let [user (rf/subscribe [:current-user])]
+    (fn []
+      [:div.control
+       [:div.tags.has-addons
+        (if (seq @user)
+          [:span.tag.is-success @user]
+          [:p])]])))
 
 
 

@@ -20,13 +20,17 @@
             [vanilla.terminal-location-service]
             [vanilla.usage-12-hour-service]
             [vanilla.usage-data-service]
-            [vanilla.terminal-list-service]))
+            [vanilla.terminal-list-service]
+            [vanilla.repl-test-data]))
 
 (def datasources
   [{:name    :spectrum-traces
     :read-fn :vanilla.spectrum-traces-service/fetch-data}
    ;:schedule {:in    [0 :seconds]
    ;           :every [10 :seconds]}}
+
+   {:name    :repl-test-data
+    :read-fn :vanilla.repl-test-data/fetch-data}
 
    {:name :carousel-service
     :read-fn :vanilla.carousel-service/fetch-data}
@@ -36,19 +40,11 @@
 
    {:name    :channel-power-1000-service
     :read-fn :vanilla.channel-power-service/fetch-data
-    :params ["Sat-Power-1000" "1000"]}
+    :params ["(SAT1)" "SAT1"]}
 
    {:name    :channel-power-2000-service
     :read-fn :vanilla.channel-power-service/fetch-data
-    :params ["Sat-Power-2000" "2000"]}
-
-   {:name    :channel-power-3000-service
-    :read-fn :vanilla.channel-power-service/fetch-data
-    :params ["Sat-Power-3000" "3000"]}
-
-   {:name    :channel-power-4000-service
-    :read-fn :vanilla.channel-power-service/fetch-data
-    :params ["Sat-Power-4000" "4000"]}
+    :params ["(SAT2)" "SAT2"]}
 
    {:name    :x-beam-location-service
     :read-fn :vanilla.beam-location-service/fetch-data

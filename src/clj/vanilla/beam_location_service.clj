@@ -1,66 +1,61 @@
 (ns vanilla.beam-location-service
   (:require [clojure.tools.logging :as log]
             [vanilla.db.excel-data :as excel]
-            [datascript.core :as d]))
+            [datascript.core :as d]
+            [vanilla.db.materialized-view :as mv]))
 
 
 
 
+;
+; TODO: move code to beam-location-service
+;
+(defn get-beam-data
+  "get all beams of a give band, by epoch
 
-(defn- get-data [band]
-  (->> (d/q '[:find [(pull ?e [*]) ...]
-              :where [?e :band ?band]
-              [?e :beam-id ?name]
-              :in $ ?band]
-         @excel/conn band)
-    (map (fn [{:keys [band beam-id lat lon radius type]}]
-           {:name (str band beam-id) :lat lat :lon lon
-            :e {:diam (* radius 2) :purpose type}}))))
+   - band  - a string value of the :band of interest
+
+   returns a sequence of maps:
+
+    ({:name <epoch-id>
+      :data #{{:name <beam-id> :lat <lat> :lon <lon>
+               :e {:diam <diam> :purpose <data-format>}}})
+
+   see (query-thread) for additional information"
+
+  [band]
+  (mv/query-thread
+    {:q-fn   (d/q '[:find [(pull ?e [*]) ...]
+                    :where [?e :band ?band]
+                    [?e :beam-id ?name]
+                    :in $ ?band] @mv/conn band)
+     :map-fn (map (fn [{:keys [epoch band beam-id lat lon radius beam-type satellite-id]}]
+                    {:epoch        epoch
+                     :name         (str (condp = satellite-id
+                                          mv/sat-1 "1"
+                                          mv/sat-2 "2"
+                                          :default "?")
+                                     "-" band "-" beam-id)
+                     :satellite-id satellite-id
+                     :lat          lat :lon lon
+                     :e            {:diam (* radius 2) :purpose beam-type}}))}))
+
 
 
 (defn fetch-data [band]
   (log/info "Beam Locations" band "band")
 
-  {:title "Beam Locations"
+  {:title       "Beam Locations"
    :data-format :data-format/lat-lon-e
-   :data (get-data band)})
-
+   :data        (get-beam-data band)})                      ;(mv/beam-query band)})
 
 
 (comment
-  (sort-by :name (get-data "X"))
 
-  (sort-by :name (get-data "Ka"))
+  (get-beam-data "Ka")
 
-  (d/q '[:find ?name
-         :where [?e :beam-id ?name]]
-    @excel/conn)
-
-
-  (def db @excel/conn)
-  (def band "X")
-
-  (d/q '[:find [(d/pull ?e ?name) ...]
-         :where [?e :beam-id ?name]]
-    db)
-
-  (d/q '[:find ?e
-         :where [?e :beam-id ?name]]
-        db)
-
-  (def beams (d/q '[:find ?e
-                    :where [?e :beam-id ?name]]
-               db))
-
-  (d/pull db '[*] (ffirst beams))
-
-  (d/q '[:find [(pull ?e [*]) ...]
-         :where [?e :beam-id _]]
-    db)
-
-
-
+  (vanilla.subscription-manager/refresh-source :x-beam-location-service)
+  (vanilla.subscription-manager/refresh-source :ka-beam-location-service)
 
   ())
-
 

@@ -12,14 +12,9 @@ This single-page application (SPA) provides a number of graphical widgets based 
 
 [look here](docs/history.md)
 
-> 0.4.0-SNAPSHOT. Migration of the client software (written in [Clojurescript]()) to a new build tool: [shadow-cljs](). "Dark-mode"
+> 0.5.0  - "Epochal time". This version supports data expressed as a series of "snapshots" over time. See [Handling Epochal Time](docs/epochal-time.md)
+> for more details.
 
-> 0.4.1-SNAPSHOT. Addition of Nasa [WorldWind](https://github.com/worldwindearth/worldwind-react-globe), a [timeline](https://github.com/guiqui/react-timeline-gantt) using a gantt
-> format, and a multi-content [Carousel](https://github.com/express-labs/pure-react-carousel). Use of excel files (via [docjure](https://github.com/mjul/docjure)
-> and [Apache POI](http://poi.apache.org)), combined with [Datascript](https://github.com/tonsky/datascript) as an additional source of information to the server.
->
-> 0.4.2-SNAPSHOT. Revisions of the "Table Widget", additional "dark-mode" using [bulma.io](https://jenil.github.io/bulmaswatch/). Added data-services
-> for terminal-list, x-beams, ka-beams, channel-power.
 
 
 ## Roadmap
@@ -56,6 +51,11 @@ This single-page application (SPA) provides a number of graphical widgets based 
 - [Modal Usage](docs/modal_useage.md)
 - [Using Excel](docs/excel-and-datascript.md)
 - [Using Datascript](docs/excel-and-datascript.md)
+- [How Widgets Work](docs/how-widgets-work.md)
+- Working at the REPL
+  - [On the Server](docs/repl-driven-server.md)
+  - [On the Client]()
+- [Handling Epochal Time](docs/epochal-time.md)
 
 ### Running the application
 
