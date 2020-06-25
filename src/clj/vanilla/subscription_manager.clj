@@ -30,7 +30,6 @@
 
 (defn clean-sources
   "Verifies that all sources are valid and removes any invalid ones"
-  "Purposefully doesnt notify the user of any issues"
   [sources]
   (into [] (remove #(nil? (get-servicedep %)) sources)))
 

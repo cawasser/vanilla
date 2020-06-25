@@ -118,7 +118,7 @@
 
 
 (defn- epoch-layer [data layer]
-  (prn "epoch-layer" data)
+  ;(prn "epoch-layer" data)
   (if (seq data)
     (let [label-pt       (WorldWind/Position. (:lat data) (:lon data) 100)
           textAttributes (WorldWind/TextAttributes.)

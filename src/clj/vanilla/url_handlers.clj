@@ -16,7 +16,6 @@
 
 (defn subscribe-to-services
   "Handles subscribing a user to the vector of data sources currently on their dashboard"
-  "Verifies all services are valid with clean-sources first"
   [user services]
 
   (let [distinct-str (into [] (distinct (clojure.core/read-string services)))]
