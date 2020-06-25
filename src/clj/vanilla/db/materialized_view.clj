@@ -20,9 +20,10 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(def excel-filename "public/excel/Demo CONUS.xlsx")
+
 (def signal-path-context
-  {:file       "resources/public/excel/Demo CONUS.xlsx"
-   :sheet      "SCN_NETWORK_CARRIER_VW"
+  {:sheet      "SCN_NETWORK_CARRIER_VW"
    :data-type  :TERMINAL
    :column-map {:A :satellite-id :B :tx-beam :C :tx-channel :D :rx-beam
                 :E :rx-channel :F :plan-id :G :mission-id :K :tx-term-lat
@@ -31,7 +32,7 @@
    :post-fn    (fn [x] x)})
 
 (def beam-context
-  {:file       "resources/public/excel/Demo CONUS.xlsx"
+  {:file       "public/excel/Demo CONUS.xlsx"
    :sheet      "Beams"
    :data-type  :BEAM
    :column-map {:A :satellite-id
@@ -150,16 +151,23 @@
    by 'epoch'"
 
   [sources]
-  (apply concat
-    (for [source-context sources]
-      (->> (load-workbook (:file source-context))
-        (select-sheet (:sheet source-context))
-        (select-columns (:column-map source-context))
-        (drop 1)
-        (map (fn [s]
-               [(extract-add-event s (:data-type source-context))
-                (extract-remove-event s (:data-type source-context))]))
-        flatten))))
+
+  (log/info "Init MV From Excel" excel-filename)
+
+  (try
+    (with-open [workbook (load-workbook-from-resource excel-filename)]
+      (apply concat
+        (for [source-context sources]
+          (->> workbook
+            (select-sheet (:sheet source-context))
+            (select-columns (:column-map source-context))
+            (drop 1)
+            (map (fn [s]
+                   [(extract-add-event s (:data-type source-context))
+                    (extract-remove-event s (:data-type source-context))]))
+            flatten))))
+    (catch Exception e (log/error "Exception: " (.getMessage e)))
+    (finally (log/info "Excel file" excel-filename "loaded!"))))
 
 
 
