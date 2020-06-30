@@ -2,7 +2,8 @@
   (:require
     [vanilla.db.core :as db]
     [vanilla.subscription-manager :as subman]
-    [clojure.core]))
+    [clojure.core]
+    [clojure.tools.logging :as log]))
 
 
 ;;;;;;;;;;;;;;;;
@@ -17,10 +18,11 @@
 (defn subscribe-to-services
   "Handles subscribing a user to the vector of data sources currently on their dashboard"
   [user services]
-
-  (let [distinct-str (into [] (distinct (clojure.core/read-string services)))]
-    ;(prn "URL handler subscribing: " distinct-str)
-    (subman/add-subscribers user (subman/clean-sources distinct-str))))
+  (if (some? user)        ;; TODO: This nil check can likely be removed once we add support for multi-data-source widget subscribes
+    (let [distinct-str (into [] (distinct (clojure.core/read-string services)))]
+      ;(prn "URL handler subscribing: " distinct-str)
+      (subman/add-subscribers user (subman/clean-sources distinct-str)))
+    (log/info "Tried to subscribe a nil user to " services)))
 
 
 (def from-sqlite {:id :key :data_source :data-source :data_grid :data-grid})

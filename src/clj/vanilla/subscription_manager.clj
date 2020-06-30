@@ -92,6 +92,7 @@
   "Removes a user from the subscribed sources atom and the use from any sources
    they had subscribed to"
   [username]
+  ;(log/info "Removing " username "'s sources from subscriptions")
   (reset! subscribed-sources
     (-> @subscribed-sources
       (assoc :subscribers (dissoc (:subscribers @subscribed-sources) username))
@@ -138,8 +139,8 @@
 
 
   (add-empty-user "test")
-  (add-subscribers "test" [:spectrum-traces :bubble-service :australia-map-service])
-  (remove-user "test")
+  (add-subscribers "test" [:spectrum-traces :signal-path-service])
+  (remove-user nil)
 
 
   (get-subbed-sources "austin")

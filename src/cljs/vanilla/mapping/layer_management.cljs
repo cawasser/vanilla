@@ -140,7 +140,7 @@
   ; TODO: this is a hack for the following hack (does NOT unsubscribe to sources when widget closes)
   (ds/data-source-subscribe [:x-beam-location-service :terminal-location-service :ka-beam-location-service])
 
-  (prn "make-layers")
+  ;(prn "make-layers")
 
   (let [ka-beams  (get-in @(rf/subscribe
                              [:app-db :ka-beam-location-service])
@@ -155,7 +155,7 @@
                                    :lat (get-in cl/start-loc [:n-america :latitude])
                                    :lon (get-in cl/start-loc [:n-america :longitude])}) epochs)]
 
-    (prn "epoch-labels" epoch-labels)
+    ;(prn "epoch-labels" epoch-labels)
     ; (prn "ka-beams" ka-beams)
     ;(prn "ka-beams[2]" (get-in ka-beams [2 :data]))
     ;(prn "terminals" @(rf/subscribe [:app-db :terminal-location-service]) terminals)
