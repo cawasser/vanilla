@@ -182,9 +182,6 @@
 
   (swap! subscribed-sources assoc-in [:subscribers username :sources] sources)
 
-  (get-servicedep :bubble-service)
-  (into [] (remove #(nil? (get-servicedep %)) [:bubble-service :spectrum-traces :spas-race]))
-
   (merge #{"one" "two"} "three")
   (merge #{"one" "two"} "one")
 
