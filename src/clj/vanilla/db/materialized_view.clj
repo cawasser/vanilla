@@ -82,7 +82,7 @@
 (defn- extract-add-event
   "compute all the :add events (i.e., when something 'starts')"
 
-  [s type]
+  [type s]
   {:epoch (:start-epoch s) :event :add :data (assoc s :data-type type)})
 
 
@@ -90,7 +90,7 @@
 (defn- extract-remove-event
   "compute all the :remove events (i.e., when something 'ends')"
 
-  [s type]
+  [type s]
   {:epoch (:end-epoch s) :event :remove :data (assoc s :data-type type)})
 
 
@@ -126,21 +126,33 @@
 
 
 
+(defn- add-epoch
+  "this little helper function just adds the epoch as an explicit keye/vale
+  in the hash-map"
+
+  [[k v]]
+  (for [data v]
+    (assoc data :epoch k)))
+
+
+
 (defn apply-events
   "accumulate the changes from each add/remove event, with each 'epoch'
-  starting with the acumulated state from then previous epoch"
+  starting with the accumulated state from then previous epoch"
 
   [events]
+
+  (log/info "Constructing materialized view")
 
   (let [state-map  (atom {})
         last-accum (atom #{})]
     (doall
       (for [epoch (sort (into #{} (map #(:epoch %) events)))]
-        (let [current-accum (apply-epoch-events @last-accum (events-for events epoch))]
-          ;(prn @last-accum "/" current-accum)
+        (let [current-accum (->> epoch
+                              (events-for events)
+                              (apply-epoch-events @last-accum))]
           (swap! state-map assoc epoch current-accum)
           (reset! last-accum current-accum))))
-    ;(prn "apply-event" @state-map)
     @state-map))
 
 
@@ -148,25 +160,35 @@
 (defn- get-all-events
   "get all the data from the spreadsheet(s) into a single flat vector of
    add and remove events. this vector will then be materialized into views
-   by 'epoch'"
+   by 'epoch'
+
+
+   NOTE: 'juxt' is a HOF that runs each param-function separately on the input and puts
+         all the results into a collection
+
+   NOTE: we combine partial with juxt because the functions in juxt require an additional 'context' parameter as well as
+         the data-item to be processes (the 2nd argument). 'partial' let's us pre-mix this parameter into each call beforehand,
+         so when we call the juxt'd functions with 'map' they only need the data-item itself.
+
+         see the 'rich comment' at line 535"
 
   [sources]
 
-  (log/info "Init MV From Excel" excel-filename)
+  (log/info "Get events from excel" excel-filename)
 
   (try
     (with-open [workbook (load-workbook-from-resource excel-filename)]
       (apply concat
-        (for [source-context sources]
+        (for [context sources]
           (->> workbook
-            (select-sheet (:sheet source-context))
-            (select-columns (:column-map source-context))
-            (drop 1)
-            (map (fn [s]
-                   [(extract-add-event s (:data-type source-context))
-                    (extract-remove-event s (:data-type source-context))]))
+            (select-sheet (:sheet context))
+            (select-columns (:column-map context))
+            (drop 1)                                        ; the header row
+            (map (partial (juxt extract-add-event extract-remove-event) (:data-type context)))
             flatten))))
+
     (catch Exception e (log/error "Exception: " (.getMessage e)))
+
     (finally (log/info "Excel file" excel-filename "loaded!"))))
 
 
@@ -187,21 +209,19 @@
 
 (defn get-state
   "creates a 'materialized view' of the events. accumulates the adds and removes at each epoch boundary,
-  creating a snapshot of the current state which is constant throughout that epoch. The follwing
-  epoch starts the state form the prior epoch, hence the accumulation
+  creating a snapshot of the current state which is constant throughout that epoch. The subsequent
+  epoch starts with the state from the prior epoch, hence the accumulation
 
-  updated the datascript database in 'conn'"
+  updates the datascript database in 'conn'"
 
   []
 
-  (log/info "Loading Materialized View into Datascript")
+  (log/info "Loading materialized view into Datascript")
 
   (->> [signal-path-context beam-context]
     (get-all-events)
     (apply-events)
-    (map (fn [[k v]]
-           (for [data v]
-             (assoc data :epoch k))))
+    (map add-epoch)
     (apply concat)
     (d/transact! conn)))
 
@@ -247,27 +267,6 @@
 
 ; work out the materialized view logic (applying the adds and removes)
 (comment
-
-  (defn- test-apply-events [event-state all-events]
-    (let [last-accum (atom #{})]
-      (for [epoch (sort (into #{} (map #(:epoch %) all-events)))]
-        (let [current-accum (apply-epoch-events @last-accum (events-for all-events epoch))]
-          ;(prn @last-accum "/" current-accum)
-          (swap! event-state assoc epoch current-accum)
-          (reset! last-accum current-accum)))))
-
-
-  (defn- get-all-events [sources]
-    (apply concat
-      (for [source-context sources]
-        (->> (load-workbook (:file source-context))
-          (select-sheet (:sheet source-context))
-          (select-columns (:column-map source-context))
-          (drop 1)
-          (map (fn [s]
-                 [(extract-add-event s (:type source-context))
-                  (extract-remove-event s (:type source-context))]))
-          flatten))))
 
 
   (count (get-all-events [beam-context]))
@@ -533,3 +532,24 @@
 
   ())
 
+
+
+(comment
+
+  (def events (with-open [workbook (load-workbook-from-resource excel-filename)]
+                (for [context [signal-path-context beam-context]]
+                  (->> workbook
+                    (select-sheet (:sheet signal-path-context))
+                    (select-columns (:column-map signal-path-context))
+                    (drop 1)))))
+  ;(map (juxt #(extract-add-event (:data-type signal-path-context) %)
+  ;       #(extract-remove-event (:data-type signal-path-context) %)))))))
+
+  (= (map (juxt #(extract-add-event (:data-type signal-path-context) %)
+            #(extract-remove-event (:data-type signal-path-context) %))
+       (first events))
+
+    (map (partial (juxt extract-add-event extract-remove-event) (:data-type signal-path-context))
+      (first events)))
+
+  ())
