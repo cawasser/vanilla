@@ -1,5 +1,6 @@
 (ns vanilla.subscription-manager
   (:require [dashboard-clj.data-source :as ds]
+            [clojure.tools.logging :as log]
             [dashboard-clj.components.system :as system]
             [vanilla.service-deps :as deps]))
 
@@ -27,12 +28,17 @@
   ;(prn "add-empty-user " username)
   (swap! subscribed-sources assoc-in [:subscribers username] {:username username :sources #{}}))
 
+(defn clean-sources
+  "Verifies that all sources are valid and removes any invalid ones"
+  [sources]
+  (into [] (remove #(nil? (get-servicedep %)) sources)))
+
 
 
 (defn push-data!
   "Gets the websocket send-fn from the system-map to push out the updated data-source"
   [username source]
-  (prn "push-data! " username source)
+  (log/info "push-data! " username source)
   (let [data-src (ds/new-data-source (get-servicedep source))
         new-data (apply (ds/resolve-fn (:read-fn data-src)) (:params data-src))
         event    (ds/data->event (:name data-src) new-data)]
@@ -47,7 +53,7 @@
    updates the map of sources with the users who have subscribed
    Executes websocket push to send the latest data to the client"
   [username sources]
-  (prn "add-subscribers " username " to " sources)
+  (log/info "add-subscribers " username " to " sources)
   (reset! subscribed-sources
     (-> @subscribed-sources
       (assoc-in [:subscribers username :sources]
@@ -86,6 +92,7 @@
   "Removes a user from the subscribed sources atom and the use from any sources
    they had subscribed to"
   [username]
+  ;(log/info "Removing " username "'s sources from subscriptions")
   (reset! subscribed-sources
     (-> @subscribed-sources
       (assoc :subscribers (dissoc (:subscribers @subscribed-sources) username))
@@ -132,8 +139,8 @@
 
 
   (add-empty-user "test")
-  (add-subscribers "test" [:spectrum-traces :bubble-service :australia-map-service])
-  (remove-user "test")
+  (add-subscribers "test" [:spectrum-traces :signal-path-service])
+  (remove-user nil)
 
 
   (get-subbed-sources "austin")

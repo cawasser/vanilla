@@ -4,7 +4,6 @@
     [clojure.tools.logging :as log]
     [clojure.core.async :as async]
     [vanilla.subscription-manager :as subman]
-     [dashboard-clj.components.system :as system]
     [dashboard-clj.data-source :as ds]))
 
 (defmulti -client-ev-handler (fn [_ y] (:id y)))
