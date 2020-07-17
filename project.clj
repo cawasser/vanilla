@@ -34,6 +34,7 @@
                  [org.clojure/google-closure-library "0.0-20191016-6ae1f72f" :scope "provided"]
                  [org.clojure/tools.cli "0.4.2"]
                  [org.clojure/tools.logging "0.5.0"]
+                 [org.clojars.frozenlock/reagent-table "0.1.5"]
                  [org.webjars.npm/bulma "0.8.0"]
                  [org.webjars.npm/material-icons "0.3.1"]
                  [org.webjars/webjars-locator "0.38"]

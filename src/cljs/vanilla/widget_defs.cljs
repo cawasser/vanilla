@@ -1,5 +1,6 @@
 (ns vanilla.widget-defs
   (:require [vanilla.widgets.table-widget]
+            [vanilla.widgets.new-table-widget]
             [vanilla.widgets.stoplight-widget]
             [vanilla.widgets.simple-text]
             [vanilla.widgets.worldwind]
@@ -144,6 +145,18 @@
                :ret_types [:data-format/entities]
                :icon      "/images/table-widget.png"
                :label     "Data Table"
+               :data-grid {:x 0 :y 0 :w 5 :h 15 }
+               :options   {:viz/title        "Table"
+                           :viz/banner-color {:r 0x00 :g 0xff :b 0xff :a 1}}}
+
+              {:name      :new-table-widget
+               :basis     :simple
+               :type      :new-table-widget
+               :build-fn  vanilla.widgets.new-table-widget/make-widget
+               ;:data-source :table-widget
+               :ret_types [:data-format/entities]
+               :icon      "/images/table-widget.png"
+               :label     "Epoch Table"
                :data-grid {:x 0 :y 0 :w 5 :h 15 }
                :options   {:viz/title        "Table"
                            :viz/banner-color {:r 0x00 :g 0xff :b 0xff :a 1}}}
