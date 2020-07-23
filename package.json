@@ -12,6 +12,7 @@
     "mobx-react": "^5.4.4",
     "pure-react-carousel": "^1.26.1",
     "react": "^16.7.0",
+    "react-beautiful-dnd": "^13.0.0",
     "react-color": "^2.18.0",
     "react-dom": "^16.7.0",
     "react-flip-move": "3.0.3",

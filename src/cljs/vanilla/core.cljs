@@ -39,7 +39,9 @@
     [vanilla.widgets.scatter-chart]
     [vanilla.widgets.vari-pie-chart]
     [vanilla.widgets.continent-map]
-    [vanilla.widgets.australia-map]))
+    [vanilla.widgets.australia-map]
+
+    [vanilla.data-sidebar.main-page :as mp]))
 
 
 
@@ -183,7 +185,7 @@
 
 
   (prn "rendering home-page")
-  (r/render home-page (.getElementById js/document "app")))
+  (r/render mp/home-page (.getElementById js/document "app")))
 
 
 ;(start-dashboard)

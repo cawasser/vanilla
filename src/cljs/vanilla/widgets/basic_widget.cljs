@@ -78,6 +78,8 @@
                                :width  (get options :viz/width "100%")}}
    (widget-title-bar name options)
 
+   (widget-drop-filter)
+
    [:div.widget.widget-content
     {:style         {:width        "100%"
                      :height       "100%"
