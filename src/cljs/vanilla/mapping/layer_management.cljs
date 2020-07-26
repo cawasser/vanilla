@@ -153,8 +153,10 @@
                     (into #{} (map :name terminals)))
         epoch-labels (map (fn [x] {:name x
                                    :lat (get-in cl/start-loc [:n-america :latitude])
-                                   :lon (get-in cl/start-loc [:n-america :longitude])}) epochs)]
+                                   :lon (get-in cl/start-loc [:n-america :longitude])}) epochs)
+        c (count epochs)]
 
+    (prn "epoch count " c)
     ;(prn "epoch-labels" epoch-labels)
     ; (prn "ka-beams" ka-beams)
     ;(prn "ka-beams[2]" (get-in ka-beams [2 :data]))
@@ -168,12 +170,17 @@
                    (WorldWind/RenderableLayer. "Cities"))
         :options {:category "overlay" :enabled true}}]
 
-      (for [e (reverse (sort epochs))]
-        {:layer (->> (WorldWind/RenderableLayer. e)
-                  (epoch-layer (->> (find-epoch e epoch-labels) first))
-                  (location-layer (->> (find-epoch e terminals) first :data) (.-WHITE WorldWind/Color))
-                  (beam-layer (->> (find-epoch e ka-beams) first :data)))
-         :options {:category "overlay" :enabled false}}))))
+
+      (for [[idx e] (map-indexed vector (reverse (sort epochs)))]
+        (do
+          (prn "idx " idx)
+          {:layer (->> (WorldWind/RenderableLayer. e)
+                    (epoch-layer (->> (find-epoch e epoch-labels) first))
+                    (location-layer (->> (find-epoch e terminals) first :data) (.-WHITE WorldWind/Color))
+                    (beam-layer (->> (find-epoch e ka-beams) first :data)))
+           :options {:category "overlay" :enabled (if (= (dec c) idx)
+                                                    true
+                                                    false)}})))))
 
 ;[{:layer "blue-marble"
 ;  :options {:category "base" :enabled true}}
