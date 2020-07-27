@@ -68,9 +68,9 @@
        "returns quantity of fruit sold"]
 
       ; 7
-      ["7000" "heatmap-data" "Heatmap Data"
-       "data-format/grid-n" "vanilla.heatmap-service/heatmap-data"
-       "returns quantity of fruit sold per country"]
+      ["7000" "heatmap-data" "Beam Heatmap Data"
+       "data-format/grouped-grid-n" "vanilla.heatmap-service/heatmap-data"
+       "returns data-rates of beam across 'globe'"]
 
       ; 8
       ["8000" "health-and-status-data" "Health and Status"

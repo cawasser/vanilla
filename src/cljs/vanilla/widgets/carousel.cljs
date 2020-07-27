@@ -221,6 +221,27 @@
                          {:series {:showInLegend true :visible false}})))))))
 
 
+(defn make-heatmap-widget [name data options]
+  ; TODO: this is a hack for the following hack (does NOT unsubscribe to sources when widget closes)
+  (ds/data-source-subscribe [:heatmap-data])
+
+  (let [data @(rf/subscribe [:app-db :heatmap-data])
+        chart-config @(rf/subscribe [:hc-type :heatmap-chart])
+        sources (get-in data [:data :series])]
+
+    ;(prn "Making sankey carousel widget: " data " //// " sources)
+    ;  " //// chart-config " chart-config)
+
+    (carousel
+      (for [[idx s] (map-indexed vector sources)]
+        (do
+          ;(prn "make-sankey-chart " s)
+          (r/create-element
+            ^{:key idx} (m/make-chart chart-config
+                          {:data {:series [s]}}
+                          {:series {:showInLegend true :visible false}})))))))
+
+
 (comment
   (def data @(rf/subscribe [:app-db :signal-path-service]))
 

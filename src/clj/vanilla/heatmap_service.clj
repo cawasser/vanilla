@@ -61,8 +61,8 @@
   (log/info "Heatmap Service")
 
   {:title       "Heatmap Data"
-   :data-format :data-format/grid-n
-   :series      (take 5 (map fill-out-sparse-matrix (get-beam-data "Ka")))})
+   :data-format :data-format/grouped-grid-n
+   :series      (map fill-out-sparse-matrix (get-beam-data "Ka"))})
 
 
 (comment
