@@ -8,8 +8,14 @@
 
 (defn- plot-options [chart-config data options]
   ;(prn "heat-map/plot-options" data)
-  (let [ret {:xAxis {:categories (get-in data [:data :series 0 :categories :x])}
-             :yAxis {:categories (get-in data [:data :series 0 :categories :y])}}]
+  (let [ret {:xAxis {:categories (get-in data [:data :series 0 :categories :x])
+                     :max 180
+                     :min -180
+                     :labels {:format "{value}0"}}
+             :yAxis {:categories (get-in data [:data :series 0 :categories :y])
+                     :max 90
+                     :min -90
+                     :labels {:format "{value}0"}}}]
     ;(prn "options" ret)
     ret))
 
@@ -34,22 +40,22 @@
 
                          ;:xAxis                   {:categories ["Apples" "Avocados" "Bananas" "Oranges" "Peaches" "Pears" "Plums" "Prunes" "Starfruit" "Tangerine"]}
 
-                         :yAxis                   {;:categories ["North America" "South America" "Africa" "Europe" "Asia" "Australia" "Antarctica"]
-                                                   :title      ""
-                                                   :reversed   true}
+                         ;:yAxis                   {;:categories ["North America" "South America" "Africa" "Europe" "Asia" "Australia" "Antarctica"]
+                         ;                          :title      ""
+                         ;                          :reversed   true}
 
-                         :colorAxis               {:min      0
-                                                   :minColor "#FFFFFF"
-                                                   :maxColor "#006400"}
+                         :colorAxis               {:stops [[0, "#3060cf"],
+                                                           [0.5, "#fffbbc"],
+                                                           [0.9, "#c4463a"],
+                                                           [1, "#c4463a"]]}
 
-                         :legend                  {:align         "right"
-                                                   :layout        "vertical"
-                                                   :margin        0
-                                                   :verticalAlign "top"
-                                                   :y             25
-                                                   :symbolHeight  280}
-                         :plotOptions             {:series {:dataLabels {:enabled true
-                                                                         :color   "#000000"}}}}
+
+                         ;:legend                  {:align         "bottom"
+                         ;                          :layout        "horizontal"
+                         ;                          :margin        0
+                         ;                          :itemDistance 50}
+                         :plotOptions             {:series {:dataLabels {;:enabled true
+                                                                         :color "#000000"}}}}
 
      :merge-plot-option {:default mc/default-plot-options} ;plot-options}
 
