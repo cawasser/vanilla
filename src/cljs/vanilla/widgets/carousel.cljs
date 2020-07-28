@@ -154,7 +154,6 @@
                            :totalSlides        (count contents)
                            :dragEnabled        false}
       [:div {:style {:display :flex :justify-content :center :align-items :center}}
-       [:button.button.is-small {:on-click #(swap! is-widget-active not)} "+"]
        [:> ButtonFirst {:class "button is-small"} "First"]
        [:> ButtonBack {:class "button is-small"} "Back"]
        [:> ButtonNext {:class "button is-small"} "Next"]
