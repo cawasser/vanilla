@@ -50,8 +50,8 @@
   (assoc m
     :showInLegend true
     :type         :heatmap
-    :categories   {:x lon
-                   :y lat}
+    ;:categories   {:x lon
+    ;               :y lat}
     :keys         ["x" "y" "value"]
     :data (fill-data (:data m))))
 

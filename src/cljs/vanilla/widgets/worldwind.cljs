@@ -28,36 +28,36 @@
          ;    (r/set-state this {:globe @globeRef}))
 
          :reagent-render
-           (fn []
-             [:div#all {:style {:width "100%" :height "100%" :overflow "hidden"}}
-              [:div#nav {:style {:width "100%" :position "fixed" :align-items "stretch"}}
-                [:> bs4/NavBar {:logo ""
-                                ;:title "HammerGlobe"
-                                :items [(r/as-element
-                                          [:> bs4/NavBarItem {:key "lyr"
-                                                              :title "Layers"
-                                                              :icon "list"
-                                                              :collapse @layersRef}])]}]]
+                       (fn []
+                         [:div#all {:style {:width "100%" :height "100%" :overflow "hidden"}}
+                          [:div#nav {:style {:width "100%" :position "fixed" :align-items "stretch"}}
+                           [:> bs4/NavBar {:logo  ""
+                                           ;:title "HammerGlobe"
+                                           :items [(r/as-element
+                                                     [:> bs4/NavBarItem {:key      "lyr"
+                                                                         :title    "Layers"
+                                                                         :icon     "list"
+                                                                         :collapse @layersRef}])]}]]
 
-              [:div#contain {:style {:width "100%" :height "100%"}}
-                [:> rs/Container {:fluid "lg"
-                                  :style {:width "100%"
-                                          :height "100%"}}
-                  [:div#globe {:style {:width        "100%"
-                                       :height       "100%"
-                                       :text-align   :center
-                                       :border-style (basic/debug-style options)}
-                               :className "globe"}
+                          [:div#contain {:style {:width "100%" :height "100%"}}
+                           [:> rs/Container {:fluid "lg"
+                                             :style {:width  "100%"
+                                                     :height "100%"}}
+                            :div#globe {:style     {:width        "100%"
+                                                    :height       "100%"
+                                                    :text-align   :center
+                                                    :border-style (basic/debug-style options)}
+                                        :className "globe"}
 
-                    [:> Globe (merge {:ref  #(reset! globeRef %)
-                                      :layers layers}
-                                (:n-america cl/start-loc))]]
+                            [:> Globe (merge {:ref    #(if (not= @globeRef %) (reset! globeRef %) globeRef)
+                                              :layers layers}
+                                        (:n-america cl/start-loc))]
 
-                  [:div.overlayCards.noninteractive
-                   [:> rs/CardColumns
-                    [:> bs4/LayersCard {:ref #(reset! layersRef %)
-                                        :categories ["overlay" "base"]
-                                        :globe @globeRef}]]]]]])}))))
+                            [:div.overlayCards.noninteractive
+                             [:> rs/CardColumns
+                              [:> bs4/LayersCard {:ref        #(reset! layersRef %)
+                                                  :categories ["overlay" "base"]
+                                                  :globe      @globeRef}]]]]]])}))))
 
 
 
