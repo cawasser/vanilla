@@ -39,7 +39,7 @@
     {:services
      [; 1
       ["1000" "spectrum-traces" "Spectrum Traces"
-       "data-format/x-y" "vanilla.spectrum-traces-service/spectrum-traces"
+       "data-format/grouped-x-y" "vanilla.spectrum-traces-service/spectrum-traces"
        "returns power over frequency"]
 
       ; 2

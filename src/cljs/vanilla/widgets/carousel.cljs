@@ -172,7 +172,7 @@
 
 
 
-(defn make-widget [name data options]
+(defn make-spectrum-widget [name data options]
   ;(prn "Making carousel widget: " data)
   ;     "///data?data? destringed\\\\ " (edn/read-string (:data (:data data)))
   ;     "/////options: " options)
@@ -187,7 +187,7 @@
       (for [[idx s] (map-indexed vector sources)]
         (r/create-element
           (r/create-class
-            {:display-name (str "Carousel slide " idx)
+            {:display-name (str "Spectrum slide " idx)
 
              :reagent-render
              (fn [args]

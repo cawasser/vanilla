@@ -112,17 +112,17 @@
                              :viz/banner-color {:r 0x99 :g 0xff :b 0x00 :a 1}
                              :viz/banner-text-color black}}
 
-              {:name        :carousel-widget
+              {:name        :spectrum-carousel-widget
                :basis       :simple
-               :type        :carousel-widget
-               :build-fn    vanilla.widgets.carousel/make-widget
-               :ret_types   [:data-format/carousel]
+               :type        :spectrum-carousel-widget
+               :build-fn    vanilla.widgets.carousel/make-spectrum-widget
+               :ret_types   [:data-format/grouped-x-y]
                :icon        "/images/carousel-widget.png"
                :label       "Carousel"
                :data-grid {:x 0 :y 0 :w 5 :h 15 :isResizable false}
-               :options     {:viz/title        "Carousel"
-                             :viz/banner-color {:r 0x99 :g 0xff :b 0x00 :a 1}
-                             :viz/banner-text-color black}}
+               :options     {:viz/title        "Spectrum Traces"
+                             :viz/banner-color {:r 0x99 :g 0x10 :b 0x46 :a 1}
+                             :viz/banner-text-color white}}
 
               {:name        :sankey-carousel-widget
                :basis       :simple
@@ -132,7 +132,7 @@
                :icon        "/images/carousel-widget.png"
                :label       "Carousel"
                :data-grid {:x 0 :y 0 :w 5 :h 15 :isResizable false}
-               :options     {:viz/title        "Sankey Carousel"
+               :options     {:viz/title        "Signal Paths"
                              :viz/banner-color {:r 0x66 :g 0x99 :b 0x00 :a 1}
                              :viz/banner-text-color black}}
 
@@ -144,7 +144,7 @@
                :icon        "/images/carousel-widget.png"
                :label       "Carousel"
                :data-grid {:x 0 :y 0 :w 5 :h 15 :isResizable false}
-               :options     {:viz/title        "Heatmap Carousel"
+               :options     {:viz/title        "Ka-beam Heatmap"
                              :viz/banner-color {:r 0x1e :g 0x90 :b 0xff :a 1}
                              :viz/banner-text-color black}}
 
@@ -250,7 +250,7 @@
                :type      :heatmap-chart
                :ret_types [:data-format/grid-n] ; TODO: heat-map support for :data-format/grid-e :data-format/lat-lon-n :data-format/lat-lon-e]
                :icon      "/images/heatmap-widget.png"
-               :label     "Heatmap"
+               :label     "Ka-beam Heatmap"
                :data-grid {:x 0 :y 0 :w 5 :h 15}
                :options   {:viz/title        "Heat Map"
                            :viz/banner-color {:r 0x90 :g 0xee :b 0x90 :a 1}
@@ -384,7 +384,6 @@
                 {:name      :area-widget
                  :basis     :chart
                  :type      :area-chart
-                 ;:data-source :spectrum-traces
                  :ret_types [:data-format/x-y :data-format/x-y-n :data-format/x-y-e :data-format/y]
                  :icon      "/images/area-widget.png"
                  :label     "Area"
@@ -402,7 +401,6 @@
                 {:name      :bar-widget
                  :basis     :chart
                  :type      :bar-chart
-                 ;:data-source :spectrum-traces
                  :ret_types [:data-format/x-y :data-format/x-y-n :data-format/x-y-e :data-format/y]
                  :icon      "/images/bar-widget.png"
                  :label     "Bar"

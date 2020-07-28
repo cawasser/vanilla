@@ -326,7 +326,7 @@
     (fn []
       [:div.has-text-left
        [:button.button.is-info {:on-click #(swap! is-source-active not)} "Add Source"]
-       [:button.button.is-info {:on-click #(add-carousel)} "Add Carousel"]
+       ;[:button.button.is-info {:on-click #(add-carousel)} "Add Carousel"]
        [add-by-source-modal is-source-active]])))
        ;[add-by-widget-modal is-widget-active]
 
