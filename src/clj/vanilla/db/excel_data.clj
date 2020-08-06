@@ -87,7 +87,7 @@
 
 
 
-(defn- load-data
+(defn load-data
   ([workbook sheet column-map]
    (load-data workbook sheet column-map (fn [x] x)))
 
@@ -97,8 +97,8 @@
      (select-sheet sheet)
      (select-columns column-map)
      (drop 1)
-     post-fn
-     (d/transact! conn))))
+     post-fn)))
+
 
 
 (defn init-from-excel [filename defs]
@@ -108,7 +108,9 @@
     (with-open [workbook (load-workbook-from-resource filename)]
       (doall
         (map (fn [{:keys [sheet column-map post-fn]}]
-               (load-data workbook sheet column-map post-fn))
+               (->>
+                 (load-data workbook sheet column-map post-fn)
+                 (d/transact! conn)))
           defs)))
     (catch Exception e (log/error "Exception: " (.getMessage e)))
     (finally (log/info "Excel file" filename "loaded!"))))

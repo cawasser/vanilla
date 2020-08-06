@@ -118,7 +118,7 @@
                :build-fn    vanilla.widgets.carousel/make-spectrum-widget
                :ret_types   [:data-format/grouped-x-y]
                :icon        "/images/carousel-widget.png"
-               :label       "Carousel"
+               :label       "Spectrum"
                :data-grid {:x 0 :y 0 :w 5 :h 15 :isResizable false}
                :options     {:viz/title        "Spectrum Traces"
                              :viz/banner-color {:r 0x99 :g 0x10 :b 0x46 :a 1}
@@ -146,6 +146,18 @@
                :data-grid {:x 0 :y 0 :w 5 :h 15 :isResizable false}
                :options     {:viz/title        "Ka-beam Heatmap"
                              :viz/banner-color {:r 0x1e :g 0x90 :b 0xff :a 1}
+                             :viz/banner-text-color black}}
+
+              {:name        :telemetry-carousel-widget
+               :basis       :simple
+               :type        :telemetry-carousel-widget
+               :build-fn    vanilla.widgets.carousel/make-telemetry-widget
+               :ret_types   [:data-format/grouped-x-y]
+               :icon        "/images/carousel-widget.png"
+               :label       "Telemetry"
+               :data-grid {:x 0 :y 0 :w 5 :h 15 :isResizable false}
+               :options     {:viz/title        "Telemetry"
+                             :viz/banner-color {:r 0x1e :g 0x00 :b 0xff :a 1}
                              :viz/banner-text-color black}}
 
               {:name      :table-widget

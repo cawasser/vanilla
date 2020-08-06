@@ -133,9 +133,9 @@
        "returns terminal locations around the world"]
 
       ;20
-      ;["24000" "carousel-service" "Multi-Data Carousel"
-      ; "data-format/carousel" "vanilla.carousel-service/fetch-data"
-      ; "returns carousel widget that supports multiple widgets"]
+      ["24000" "telemetry-service" "Telemetry"
+       "data-format/grouped-x-y" "vanilla.telemetry-service/fetch-data"
+       "returns carousel widget of spave vehicel telemetry data"]
 
       ;21
       ["25000" "x-beam-location-service" "X-band Beam Data"

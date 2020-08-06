@@ -21,7 +21,7 @@
   {:legendBackgroundColor "rgba(48, 48, 48, 0.8)",
    :labels                {:style {:color "#CCC"}},
    :dataLabelsColor       "#444",
-   :boost {:useGPUTranslations true}
+   :boost                 {:useGPUTranslations true}
 
    :background2           "rgb(70, 70, 70)",
    :navigation            {:buttonOptions {:symbolStroke      "#DDDDDD",
@@ -103,10 +103,8 @@
    :series                data})
 
 
-(defn big-chart [name dataset]
-
-  (let [data @(rf/subscribe [:app-db dataset])]
-    (make-the-chart name :line-type "line" (get-in data [:data :series]))))
+(defn big-chart [name data]
+  (make-the-chart name :line-type "line" (get-in data [:data :series])))
 
 
 
@@ -147,28 +145,28 @@
 
   (let [is-widget-active (r/atom false)]
     ;[:div#Carousel {:style {:width "100%" :height "100%"}}
-     [:> CarouselProvider {:style {:width "100%" :height "100%"}
-                           :naturalSlideWidth  500
-                           :naturalSlideHeight 230
-                           ;:isIntrinsicHeight  true
-                           :totalSlides        (count contents)
-                           :dragEnabled        false}
-      [:div {:style {:display :flex :justify-content :center :align-items :center}}
-       [:> ButtonFirst {:class "button is-small"} "First"]
-       [:> ButtonBack {:class "button is-small"} "Back"]
-       [:> ButtonNext {:class "button is-small"} "Next"]
-       [:> ButtonLast {:class "button is-small"} "Last"]
-       [add-by-widget-modal is-widget-active]]
+    [:> CarouselProvider {:style              {:width "100%" :height "100%"}
+                          :naturalSlideWidth  500
+                          :naturalSlideHeight 230
+                          ;:isIntrinsicHeight  true
+                          :totalSlides        (count contents)
+                          :dragEnabled        false}
+     [:div {:style {:display :flex :justify-content :center :align-items :center}}
+      [:> ButtonFirst {:class "button is-small"} "First"]
+      [:> ButtonBack {:class "button is-small"} "Back"]
+      [:> ButtonNext {:class "button is-small"} "Next"]
+      [:> ButtonLast {:class "button is-small"} "Last"]
+      [add-by-widget-modal is-widget-active]]
 
-      [:> Slider {:class "slider" :style {:width "100%" :height "100%"}}
-       (for [[idx c] (map-indexed vector contents)]
-         ^{:key idx} [:> Slide {:key idx :index idx} c])]]))
+     [:> Slider {:class "slider" :style {:width "100%" :height "100%"}}
+      (for [[idx c] (map-indexed vector contents)]
+        ^{:key idx} [:> Slide {:key idx :index idx} c])]]))
 
 
 
-      ;[:div {:style {:display :flex :justify-content :center :align-items :center}}
-      ; (for [[idx c] (map-indexed vector contents)]
-      ;   ^{:key idx} [:> Dot {:class "button is-small" :slide idx}])]]]))
+;[:div {:style {:display :flex :justify-content :center :align-items :center}}
+; (for [[idx c] (map-indexed vector contents)]
+;   ^{:key idx} [:> Dot {:class "button is-small" :slide idx}])]]]))
 
 
 
@@ -180,8 +178,8 @@
   ; TODO: this is a hack for the following hack (does NOT unsubscribe to sources when widget closes)
   (ds/data-source-subscribe [:channel-power-1000-service :channel-power-2000-service])
 
-  (let [sources [(big-chart "Signal Power (SAT1)" :channel-power-1000-service)
-                 (big-chart "Signal Power (SAT2)" :channel-power-2000-service)]]
+  (let [sources [(big-chart "Signal Power (SAT1)" @(rf/subscribe [:app-db :channel-power-1000-service]))
+                 (big-chart "Signal Power (SAT2)" @(rf/subscribe [:app-db :channel-power-2000-service]))]]
 
     (carousel
       (for [[idx s] (map-indexed vector sources)]
@@ -190,12 +188,12 @@
             {:display-name (str "Spectrum slide " idx)
 
              :reagent-render
-             (fn [args]
-               [:div#chartSlide {:style {:width "100%" :height "100%"}}])
+                           (fn [args]
+                             [:div#chartSlide {:style {:width "100%" :height "100%"}}])
 
              :component-did-mount
-             (fn [this]
-               ^{:key idx} [:> (Highcharts/chart (r/dom-node this) (clj->js s))])}))))))
+                           (fn [this]
+                             ^{:key idx} [:> (Highcharts/chart (r/dom-node this) (clj->js s))])}))))))
 
 
 
@@ -203,30 +201,30 @@
   ; TODO: this is a hack for the following hack (does NOT unsubscribe to sources when widget closes)
   (ds/data-source-subscribe [:signal-path-service])
 
-  (let [data @(rf/subscribe [:app-db :signal-path-service])
+  (let [data         @(rf/subscribe [:app-db :signal-path-service])
         chart-config @(rf/subscribe [:hc-type :sankey-chart])
-        sources (get-in data [:data :series])]
+        sources      (get-in data [:data :series])]
 
     ;(prn "Making sankey carousel widget: " data " //// " sources)
     ;  " //// chart-config " chart-config)
 
     (carousel
       (for [[idx s] (map-indexed vector sources)]
-       (do
-         ;(prn "make-sankey-chart " s)
-         (r/create-element
-           ^{:key idx} (m/make-chart chart-config
-                         {:data {:series [s]}}
-                         {:series {:showInLegend true :visible false}})))))))
+        (do
+          (prn "make-sankey-chart " s)
+          (r/create-element
+            ^{:key idx} (m/make-chart chart-config
+                          {:data {:series [s]}}
+                          {:series {:showInLegend true :visible false}})))))))
 
 
 (defn make-heatmap-widget [name data options]
   ; TODO: this is a hack for the following hack (does NOT unsubscribe to sources when widget closes)
   (ds/data-source-subscribe [:heatmap-data])
 
-  (let [data @(rf/subscribe [:app-db :heatmap-data])
+  (let [data         @(rf/subscribe [:app-db :heatmap-data])
         chart-config @(rf/subscribe [:hc-type :heatmap-chart])
-        sources (get-in data [:data :series])]
+        sources      (get-in data [:data :series])]
 
     ;(prn "Making sankey carousel widget: " data " //// " sources)
     ;  " //// chart-config " chart-config)
@@ -241,15 +239,85 @@
                           {:series {:showInLegend true :visible false}})))))))
 
 
+(defn make-telemetry-widget [name data options]
+  ; TODO: this is a hack for the following hack (does NOT unsubscribe to sources when widget closes)
+  (ds/data-source-subscribe [:telemetry-service])
+
+  (let [data-source  @(rf/subscribe [:app-db :telemetry-service])
+        chart-config @(rf/subscribe [:hc-type :line-chart])
+        sources      (->> (get-in data-source [:data :series])
+                       (map (fn [{:keys [name data]}]
+                              (big-chart name data)))
+                       (into []))]
+
+    (prn "Making telemetry carousel widget: " data " //// " sources
+      " //// chart-config " chart-config)
+
+    (carousel
+      (for [[idx s] (map-indexed vector sources)]
+        (r/create-element
+          (r/create-class
+            {:display-name
+             (str "Spectrum slide " idx)
+
+             :reagent-render
+             (fn [args]
+               [:div#chartSlide {:style {:width "100%" :height "100%"}}])
+
+             :component-did-mount
+             (fn [this]
+               ^{:key idx} [:> (Highcharts/chart (r/dom-node this) (clj->js s))])}))))))
+
+
+
 (comment
   (def data @(rf/subscribe [:app-db :signal-path-service]))
 
   (def sources (get-in data [:data :series]))
 
 
+  @(rf/subscribe [:app-db :telemetry-service])
+
+
+  (def data @(rf/subscribe [:app-db :telemetry-service]))
+  (def chart-config @(rf/subscribe [:hc-type :line-chart]))
+  (def sources (get-in data [:data :series]))
+
+  (for [g sources]
+    (let [{:keys [name data]} g]
+      (for [{series-id :name series-data :data} data]
+        [series-id])))
+
+
+  (for [group sources
+        [idx s] (map-indexed vector group)])
   ())
 
 
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;
+; working out how to convert telemetry data into "big-charts"
+;
+(comment
+  (def d @(rf/subscribe [:app-db :telemetry-service]))
+
+  (->>
+    (get-in d [:data :series])
+    count)
+
+
+  (def f (first (get-in d [:data :series])))
+  (big-chart (:name f) (:data f))
+
+
+  (->> (get-in d [:data :series])
+    (map (fn [{:keys [name data]}]
+           (big-chart name data)))
+    (into []))
+
+  ())
 
 ;[:div {:key "9" :data-grid {:x 8 :y 6 :w 4 :h 3}}
 ; [basic-widget

@@ -21,6 +21,7 @@
             [vanilla.usage-12-hour-service]
             [vanilla.usage-data-service]
             [vanilla.terminal-list-service]
+            [vanilla.telemetry-service]
             [vanilla.repl-test-data]))
 
 (def datasources
@@ -28,6 +29,9 @@
     :read-fn :vanilla.spectrum-traces-service/fetch-data}
    ;:schedule {:in    [0 :seconds]
    ;           :every [10 :seconds]}}
+
+   {:name :telemetry-service
+    :read-fn :vanilla.telemetry-service/fetch-data}
 
    {:name    :repl-test-data
     :read-fn :vanilla.repl-test-data/fetch-data}
