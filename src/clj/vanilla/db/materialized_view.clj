@@ -128,7 +128,7 @@
 
 (defn apply-events
   "accumulate the changes from each add/remove event, with each 'epoch'
-  starting with the acumulated state from then previous epoch"
+  starting with the accumulated state from then previous epoch"
 
   [events]
 

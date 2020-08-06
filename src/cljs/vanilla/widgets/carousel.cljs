@@ -59,7 +59,7 @@
                            :backgroundColor {:linearGradient {:x1 0, :y1 0, :x2 0, :y2 1},
                                              :stops          [[0 "rgb(96, 96, 96)"] [1 "rgb(16, 16, 16)"]]},
                            :borderWidth     0, :borderRadius 0, :plotBackgroundColor nil, :plotShadow false, :plotBorderWidth 0},
-   :yAxis                 {:title              {:text          "power",
+   :yAxis                 {:title              {:text          "power", ; TODO Fix 'power' label
                                                 :allowDecimals false,
                                                 :align         "high",
                                                 :style         {:color "#AAA", :font "bold 12px Lucida Grande, Lucida Sans Unicode, Verdana, Arial, Helvetica, sans-serif"}},
@@ -79,7 +79,7 @@
                            :series       {:color "#7798BF", :lineColor "#A6C7ED"}},
    :maskColor             "rgba(255,255,255,0.3)",
    :toolbar               {:itemStyle {:color "#CCC"}},
-   :xAxis                 {:title         {:text          "frequency",
+   :xAxis                 {:title         {:text          "frequency", ; TODO Fix 'frequency' label
                                            :allowDecimals false,
                                            :style         {:color "#AAA", :font "bold 12px Lucida Grande, Lucida Sans Unicode, Verdana, Arial, Helvetica, sans-serif"}},
                            :gridLineWidth 0,
@@ -104,7 +104,7 @@
 
 
 (defn big-chart [name data]
-  (make-the-chart name :line-type "line" (get-in data [:data :series])))
+  (make-the-chart name :line-type "line" data))
 
 
 
@@ -178,8 +178,8 @@
   ; TODO: this is a hack for the following hack (does NOT unsubscribe to sources when widget closes)
   (ds/data-source-subscribe [:channel-power-1000-service :channel-power-2000-service])
 
-  (let [sources [(big-chart "Signal Power (SAT1)" @(rf/subscribe [:app-db :channel-power-1000-service]))
-                 (big-chart "Signal Power (SAT2)" @(rf/subscribe [:app-db :channel-power-2000-service]))]]
+  (let [sources [(big-chart "Signal Power (SAT1)" (get-in @(rf/subscribe [:app-db :channel-power-1000-service]) [:data :series]))
+                 (big-chart "Signal Power (SAT2)" (get-in @(rf/subscribe [:app-db :channel-power-2000-service]) [:data :series]))]]
 
     (carousel
       (for [[idx s] (map-indexed vector sources)]
@@ -211,7 +211,7 @@
     (carousel
       (for [[idx s] (map-indexed vector sources)]
         (do
-          (prn "make-sankey-chart " s)
+          ;(prn "make-sankey-chart " s)
           (r/create-element
             ^{:key idx} (m/make-chart chart-config
                           {:data {:series [s]}}
@@ -239,19 +239,31 @@
                           {:series {:showInLegend true :visible false}})))))))
 
 
+(defn- read-datetime [dt]
+  (.parse js/Date dt))
+
+(defn- cvt [data]
+  (map (juxt first (comp read-datetime str second))
+   data))
+
+(defn convert-time [data]
+  (map (fn [{:keys [data] :as all}]
+         (assoc all :data (cvt data)))
+    data))
+
+
 (defn make-telemetry-widget [name data options]
   ; TODO: this is a hack for the following hack (does NOT unsubscribe to sources when widget closes)
   (ds/data-source-subscribe [:telemetry-service])
 
   (let [data-source  @(rf/subscribe [:app-db :telemetry-service])
-        chart-config @(rf/subscribe [:hc-type :line-chart])
         sources      (->> (get-in data-source [:data :series])
                        (map (fn [{:keys [name data]}]
-                              (big-chart name data)))
+                              (big-chart name (convert-time data))))
                        (into []))]
 
-    (prn "Making telemetry carousel widget: " data " //// " sources
-      " //// chart-config " chart-config)
+    ;(prn "Making telemetry carousel widget: " data " //// " sources
+    ;  " //// chart-config " chart-config)
 
     (carousel
       (for [[idx s] (map-indexed vector sources)]
@@ -298,24 +310,25 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;
-; working out how to convert telemetry data into "big-charts"
+; convert #inst to something useful in js
 ;
 (comment
   (def d @(rf/subscribe [:app-db :telemetry-service]))
 
-  (->>
-    (get-in d [:data :series])
-    count)
+  ;; what's already happening:
+  (let [data-source @(rf/subscribe [:app-db :telemetry-service])]
+    (->> (get-in data-source [:data :series])
+      (map (fn [{:keys [name data]}]
+             (big-chart name (convert-time data))))
+      (into [])
+      (map (juxt (comp :text :title) :series))))
 
 
-  (def f (first (get-in d [:data :series])))
-  (big-chart (:name f) (:data f))
+  (.parse js/Date
+    "Mon Aug 12 2019 18:00:00 GMT-0400 (Eastern Daylight Time)")
 
-
-  (->> (get-in d [:data :series])
-    (map (fn [{:keys [name data]}]
-           (big-chart name data)))
-    (into []))
+  (read-datetime
+    "Mon Aug 12 2019 18:00:00 GMT-0400 (Eastern Daylight Time)")
 
   ())
 
