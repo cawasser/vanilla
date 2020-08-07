@@ -158,7 +158,7 @@
                :data-grid {:x 0 :y 0 :w 5 :h 15 :isResizable false}
                :options     {:viz/title        "Telemetry"
                              :viz/banner-color {:r 0x1e :g 0x00 :b 0xff :a 1}
-                             :viz/banner-text-color black}}
+                             :viz/banner-text-color white}}
 
               {:name      :table-widget
                :basis     :simple

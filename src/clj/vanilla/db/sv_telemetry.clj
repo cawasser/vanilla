@@ -83,11 +83,12 @@
         (map (fn [{:keys [sheet column-map post-fn]}]
                (->>
                  (excel/load-data workbook sheet column-map post-fn)
-                 (take 2)
+                 ;(take 3)
                  (swap! sv-telemetry assoc sheet)))
           defs)))
     (catch Exception e (log/error "Exception: " (.getMessage e)))
-    (finally (log/info "Telemetry file" filename "loaded!"))))
+    (finally (log/info "Telemetry file" filename "loaded!")))
+  ())
 
 
 

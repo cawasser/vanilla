@@ -17,7 +17,8 @@
 
 
 
-(defn make-the-chart [name chart-type type data]
+(defn make-the-chart [name chart-type type labels data]
+
   {:legendBackgroundColor "rgba(48, 48, 48, 0.8)",
    :labels                {:style {:color "#CCC"}},
    :dataLabelsColor       "#444",
@@ -59,7 +60,7 @@
                            :backgroundColor {:linearGradient {:x1 0, :y1 0, :x2 0, :y2 1},
                                              :stops          [[0 "rgb(96, 96, 96)"] [1 "rgb(16, 16, 16)"]]},
                            :borderWidth     0, :borderRadius 0, :plotBackgroundColor nil, :plotShadow false, :plotBorderWidth 0},
-   :yAxis                 {:title              {:text          "power", ; TODO Fix 'power' label
+   :yAxis                 {:title              {:text          (second labels) ; TODO Fix 'power' label
                                                 :allowDecimals false,
                                                 :align         "high",
                                                 :style         {:color "#AAA", :font "bold 12px Lucida Grande, Lucida Sans Unicode, Verdana, Arial, Helvetica, sans-serif"}},
@@ -79,7 +80,7 @@
                            :series       {:color "#7798BF", :lineColor "#A6C7ED"}},
    :maskColor             "rgba(255,255,255,0.3)",
    :toolbar               {:itemStyle {:color "#CCC"}},
-   :xAxis                 {:title         {:text          "frequency", ; TODO Fix 'frequency' label
+   :xAxis                 {:title         {:text          (first labels) ; TODO Fix 'frequency' label
                                            :allowDecimals false,
                                            :style         {:color "#AAA", :font "bold 12px Lucida Grande, Lucida Sans Unicode, Verdana, Arial, Helvetica, sans-serif"}},
                            :gridLineWidth 0,
@@ -103,8 +104,9 @@
    :series                data})
 
 
-(defn big-chart [name data]
-  (make-the-chart name :line-type "line" data))
+(defn big-chart [name labels data]
+  (prn "big-chart " name labels data)
+  (make-the-chart name :line-type "line" labels data))
 
 
 
@@ -178,8 +180,10 @@
   ; TODO: this is a hack for the following hack (does NOT unsubscribe to sources when widget closes)
   (ds/data-source-subscribe [:channel-power-1000-service :channel-power-2000-service])
 
-  (let [sources [(big-chart "Signal Power (SAT1)" (get-in @(rf/subscribe [:app-db :channel-power-1000-service]) [:data :series]))
-                 (big-chart "Signal Power (SAT2)" (get-in @(rf/subscribe [:app-db :channel-power-2000-service]) [:data :series]))]]
+  (let [service-1000 @(rf/subscribe [:app-db :channel-power-1000-service])
+        service-2000 @(rf/subscribe [:app-db :channel-power-2000-service])
+        sources      [(big-chart "Signal Power (SAT1)" (get-in service-1000 [:data :labels]) (get-in service-1000 [:data :series]))
+                      (big-chart "Signal Power (SAT2)" (get-in service-2000 [:data :labels]) (get-in service-2000 [:data :series]))]]
 
     (carousel
       (for [[idx s] (map-indexed vector sources)]
@@ -243,24 +247,33 @@
   (.parse js/Date dt))
 
 (defn- cvt [data]
-  (map (juxt first (comp read-datetime str second))
-   data))
+  (map (juxt (comp read-datetime str first) second) data))
 
-(defn convert-time [data]
+(defn- convert-time [data]
   (map (fn [{:keys [data] :as all}]
          (assoc all :data (cvt data)))
     data))
+
+
+(defn- build-charts [name labels data]
+  (map (fn [{d :data :as all}]
+         (let [cvtAll (assoc all :data (cvt d))]
+           (do
+             (prn "build-charts " cvtAll)
+             (big-chart name labels cvtAll))))
+    data))
+
 
 
 (defn make-telemetry-widget [name data options]
   ; TODO: this is a hack for the following hack (does NOT unsubscribe to sources when widget closes)
   (ds/data-source-subscribe [:telemetry-service])
 
-  (let [data-source  @(rf/subscribe [:app-db :telemetry-service])
-        sources      (->> (get-in data-source [:data :series])
-                       (map (fn [{:keys [name data]}]
-                              (big-chart name (convert-time data))))
-                       (into []))]
+  (let [data-source @(rf/subscribe [:app-db :telemetry-service])
+        sources     (->> (get-in data-source [:data :series])
+                      (map (fn [{:keys [name labels data]}]
+                             (big-chart name labels (convert-time data))))
+                      (into []))]
 
     ;(prn "Making telemetry carousel widget: " data " //// " sources
     ;  " //// chart-config " chart-config)
@@ -284,6 +297,10 @@
 
 (comment
   (def data @(rf/subscribe [:app-db :signal-path-service]))
+
+
+  @(rf/subscribe [:app-db :channel-power-1000-service])
+
 
   (def sources (get-in data [:data :series]))
 
@@ -329,6 +346,72 @@
 
   (read-datetime
     "Mon Aug 12 2019 18:00:00 GMT-0400 (Eastern Daylight Time)")
+
+  ())
+
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;
+; get the correct labels for the axes
+;
+(comment
+  (def data-source @(rf/subscribe [:app-db :telemetry-service]))
+  (def series (get-in data-source [:data :series]))
+  (def sources (->> (:data data-source)
+                 (map (fn [{:keys [name data]}]
+                        data))))
+
+  (->> (get-in data-source [:data :series])
+    (map (fn [{:keys [name data]}]
+           [name data]))
+    (into []))
+
+
+  (defn- build-charts [name labels data]
+    (map (fn [{d :data :as all}]
+           (big-chart name labels (assoc all :data (cvt d))))
+      data))
+
+  (->> (get-in data-source [:data :series])
+    (map (fn [{:keys [name labels data]}]
+           (big-chart name labels (convert-time data))))
+    (into []))
+
+  (->> (get-in data-source [:data :series])
+    (map (fn [{:keys [name labels data]}]
+           (build-charts name labels data)))
+    (into []))
+
+
+
+
+
+
+
+
+
+  (map (fn [{:keys [name labels data]}]
+         (build-charts name labels data))
+    (get-in data-source [:data :series]))
+
+
+  (convert-time
+    (take 2
+      (:data
+        (first
+          (:data
+            (first
+              (get-in data-source [:data :series])))))))
+
+
+
+
+  (->> (get-in data-source [:data :series])
+    (map (fn [{:keys [name data]}]
+           (big-chart name (:labels data) (convert-time data))))
+    (into []))
+
 
   ())
 
