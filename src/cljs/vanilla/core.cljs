@@ -1,6 +1,7 @@
 (ns vanilla.core
   (:require
     [reagent.core :as r]
+    [reagent.dom :as rd]
     [re-frame.core :as rf]
     [dashboard-clj.core :as d]
     [vanilla.subscriptions :as subs]
@@ -140,7 +141,7 @@
   "mount the main UI components using Reagent"
   []
   (prn "rendering home-page")
-  (r/render home-page (.getElementById js/document "app")))
+  (rd/render home-page (.getElementById js/document "app")))
 
 
 

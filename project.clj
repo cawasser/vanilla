@@ -29,7 +29,7 @@
                  [mount "0.1.16"]
                  [nrepl "0.8.0"]
                  [org.clojure/clojure "1.10.1"]
-                 [org.clojure/clojurescript "1.10.597" :scope "provided"]
+                 [org.clojure/clojurescript "1.10.773" :scope "provided"]
                  [org.clojure/core.async "1.3.610"]
                  [org.clojure/google-closure-library "0.0-20191016-6ae1f72f" :scope "provided"]
                  [org.clojure/tools.cli "1.0.194"]

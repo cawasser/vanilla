@@ -1,5 +1,6 @@
 (ns vanilla.widgets.carousel
   (:require [reagent.core :as r :refer [atom]]
+            [reagent.dom :as rd]
             [vanilla.widgets.basic-widget :as basic]
             [vanilla.add-widget :as add-widg]
             [re-frame.core :as rf]
@@ -197,7 +198,7 @@
 
              :component-did-mount
                            (fn [this]
-                             ^{:key idx} [:> (Highcharts/chart (r/dom-node this) (clj->js s))])}))))))
+                             ^{:key idx} [:> (Highcharts/chart (rd/dom-node this) (clj->js s))])}))))))
 
 
 
@@ -291,7 +292,7 @@
 
              :component-did-mount
              (fn [this]
-               ^{:key idx} [:> (Highcharts/chart (r/dom-node this) (clj->js s))])}))))))
+               ^{:key idx} [:> (Highcharts/chart (rd/dom-node this) (clj->js s))])}))))))
 
 
 
