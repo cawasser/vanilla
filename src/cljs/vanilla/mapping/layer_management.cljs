@@ -156,7 +156,7 @@
                                    :lon (get-in cl/start-loc [:n-america :longitude])}) epochs)
         c (count epochs)]
 
-    (prn "epoch count " c)
+    ;(prn "epoch count " c)
     ;(prn "epoch-labels" epoch-labels)
     ; (prn "ka-beams" ka-beams)
     ;(prn "ka-beams[2]" (get-in ka-beams [2 :data]))
@@ -173,7 +173,7 @@
 
       (for [[idx e] (map-indexed vector (reverse (sort epochs)))]
         (do
-          (prn "idx " idx)
+          ;(prn "idx " idx)
           {:layer (->> (WorldWind/RenderableLayer. e)
                     (epoch-layer (->> (find-epoch e epoch-labels) first))
                     (location-layer (->> (find-epoch e terminals) first :data) (.-WHITE WorldWind/Color))
