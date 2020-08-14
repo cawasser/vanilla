@@ -39,7 +39,7 @@
     {:services
      [; 1
       ["1000" "spectrum-traces" "Spectrum Traces"
-       "data-format/x-y" "vanilla.spectrum-traces-service/spectrum-traces"
+       "data-format/grouped-x-y" "vanilla.spectrum-traces-service/spectrum-traces"
        "returns power over frequency"]
 
       ; 2
@@ -68,9 +68,9 @@
        "returns quantity of fruit sold"]
 
       ; 7
-      ["7000" "heatmap-data" "Heatmap Data"
-       "data-format/grid-n" "vanilla.heatmap-service/heatmap-data"
-       "returns quantity of fruit sold per country"]
+      ["7000" "heatmap-data" "Beam Heatmap Data"
+       "data-format/grouped-grid-n" "vanilla.heatmap-service/heatmap-data"
+       "returns data-rates of beam across 'globe'"]
 
       ; 8
       ["8000" "health-and-status-data" "Health and Status"
@@ -133,9 +133,9 @@
        "returns terminal locations around the world"]
 
       ;20
-      ;["24000" "carousel-service" "Multi-Data Carousel"
-      ; "data-format/carousel" "vanilla.carousel-service/fetch-data"
-      ; "returns carousel widget that supports multiple widgets"]
+      ["24000" "telemetry-service" "Telemetry"
+       "data-format/grouped-x-y" "vanilla.telemetry-service/fetch-data"
+       "returns carousel widget of space vehicle telemetry data"]
 
       ;21
       ["25000" "x-beam-location-service" "X-band Beam Data"

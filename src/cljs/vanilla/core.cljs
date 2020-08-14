@@ -136,6 +136,13 @@
    [widgets-grid]])
 
 
+(defn ^:dev/after-load-async mount-components
+  "mount the main UI components using Reagent"
+  []
+  (prn "rendering home-page")
+  (r/render home-page (.getElementById js/document "app")))
+
+
 
 (defn start-dashboard
   "Initialize all the data needed for the start of our SPA, ends by calling the UI to generate"
@@ -182,8 +189,4 @@
     (rf/dispatch-sync [:widget-type w]))
 
 
-  (prn "rendering home-page")
-  (r/render home-page (.getElementById js/document "app")))
-
-
-;(start-dashboard)
+  (mount-components))

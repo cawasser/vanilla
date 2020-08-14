@@ -17,11 +17,12 @@
 
 
 
-(defn make-the-chart [name chart-type type data]
+(defn make-the-chart [name chart-type type labels axis-types data]
+
   {:legendBackgroundColor "rgba(48, 48, 48, 0.8)",
    :labels                {:style {:color "#CCC"}},
    :dataLabelsColor       "#444",
-   :boost {:useGPUTranslations true}
+   :boost                 {:useGPUTranslations true}
 
    :background2           "rgb(70, 70, 70)",
    :navigation            {:buttonOptions {:symbolStroke      "#DDDDDD",
@@ -59,11 +60,12 @@
                            :backgroundColor {:linearGradient {:x1 0, :y1 0, :x2 0, :y2 1},
                                              :stops          [[0 "rgb(96, 96, 96)"] [1 "rgb(16, 16, 16)"]]},
                            :borderWidth     0, :borderRadius 0, :plotBackgroundColor nil, :plotShadow false, :plotBorderWidth 0},
-   :yAxis                 {:title              {:text          "power",
+   :yAxis                 {:title              {:text          (second labels) ; TODO Fix 'power' label
                                                 :allowDecimals false,
                                                 :align         "high",
                                                 :style         {:color "#AAA", :font "bold 12px Lucida Grande, Lucida Sans Unicode, Verdana, Arial, Helvetica, sans-serif"}},
                            :labels             {:overflow "justify", :style {:color "#999", :fontWeight "bold"}},
+                           :type (:y axis-types)
                            :alternateGridColor nil,
                            :minorTickInterval  nil,
                            :gridLineColor      "rgba(255, 255, 255, .1)",
@@ -79,9 +81,10 @@
                            :series       {:color "#7798BF", :lineColor "#A6C7ED"}},
    :maskColor             "rgba(255,255,255,0.3)",
    :toolbar               {:itemStyle {:color "#CCC"}},
-   :xAxis                 {:title         {:text          "frequency",
+   :xAxis                 {:title         {:text          (first labels) ; TODO Fix 'frequency' label
                                            :allowDecimals false,
                                            :style         {:color "#AAA", :font "bold 12px Lucida Grande, Lucida Sans Unicode, Verdana, Arial, Helvetica, sans-serif"}},
+                           :type (:x axis-types)
                            :gridLineWidth 0,
                            :lineColor     "#999",
                            :tickColor     "#999",
@@ -103,10 +106,9 @@
    :series                data})
 
 
-(defn big-chart [name dataset]
-
-  (let [data @(rf/subscribe [:app-db dataset])]
-    (make-the-chart name :line-type "line" (get-in data [:data :series]))))
+(defn big-chart [name labels axis-types data]
+  ;(prn "big-chart " name labels data)
+  (make-the-chart name :line-type "line" labels axis-types data))
 
 
 
@@ -147,33 +149,32 @@
 
   (let [is-widget-active (r/atom false)]
     ;[:div#Carousel {:style {:width "100%" :height "100%"}}
-     [:> CarouselProvider {:style {:width "100%" :height "100%"}
-                           :naturalSlideWidth  500
-                           :naturalSlideHeight 230
-                           ;:isIntrinsicHeight  true
-                           :totalSlides        (count contents)
-                           :dragEnabled        false}
-      [:div {:style {:display :flex :justify-content :center :align-items :center}}
-       [:button.button.is-small {:on-click #(swap! is-widget-active not)} "+"]
-       [:> ButtonFirst {:class "button is-small"} "First"]
-       [:> ButtonBack {:class "button is-small"} "Back"]
-       [:> ButtonNext {:class "button is-small"} "Next"]
-       [:> ButtonLast {:class "button is-small"} "Last"]
-       [add-by-widget-modal is-widget-active]]
+    [:> CarouselProvider {:style              {:width "100%" :height "100%"}
+                          :naturalSlideWidth  500
+                          :naturalSlideHeight 230
+                          ;:isIntrinsicHeight  true
+                          :totalSlides        (count contents)
+                          :dragEnabled        false}
+     [:div {:style {:display :flex :justify-content :center :align-items :center}}
+      [:> ButtonFirst {:class "button is-small"} "First"]
+      [:> ButtonBack {:class "button is-small"} "Back"]
+      [:> ButtonNext {:class "button is-small"} "Next"]
+      [:> ButtonLast {:class "button is-small"} "Last"]
+      [add-by-widget-modal is-widget-active]]
 
-      [:> Slider {:class "slider" :style {:width "100%" :height "100%"}}
-       (for [[idx c] (map-indexed vector contents)]
-         ^{:key idx} [:> Slide {:key idx :index idx} c])]]))
-
-
-
-      ;[:div {:style {:display :flex :justify-content :center :align-items :center}}
-      ; (for [[idx c] (map-indexed vector contents)]
-      ;   ^{:key idx} [:> Dot {:class "button is-small" :slide idx}])]]]))
+     [:> Slider {:class "slider" :style {:width "100%" :height "100%"}}
+      (for [[idx c] (map-indexed vector contents)]
+        ^{:key idx} [:> Slide {:key idx :index idx} c])]]))
 
 
 
-(defn make-widget [name data options]
+;[:div {:style {:display :flex :justify-content :center :align-items :center}}
+; (for [[idx c] (map-indexed vector contents)]
+;   ^{:key idx} [:> Dot {:class "button is-small" :slide idx}])]]]))
+
+
+
+(defn make-spectrum-widget [name data options]
   ;(prn "Making carousel widget: " data)
   ;     "///data?data? destringed\\\\ " (edn/read-string (:data (:data data)))
   ;     "/////options: " options)
@@ -181,14 +182,100 @@
   ; TODO: this is a hack for the following hack (does NOT unsubscribe to sources when widget closes)
   (ds/data-source-subscribe [:channel-power-1000-service :channel-power-2000-service])
 
-  (let [sources [(big-chart "Signal Power (SAT1)" :channel-power-1000-service)
-                 (big-chart "Signal Power (SAT2)" :channel-power-2000-service)]]
+  (let [service-1000 @(rf/subscribe [:app-db :channel-power-1000-service])
+        service-2000 @(rf/subscribe [:app-db :channel-power-2000-service])
+        sources      [(big-chart "Signal Power (SAT1)" (get-in service-1000 [:data :labels])
+                        {:x "number" :y "number"} (get-in service-1000 [:data :series]))
+                      (big-chart "Signal Power (SAT2)" (get-in service-2000 [:data :labels])
+                        {:x "number" :y "number"} (get-in service-2000 [:data :series]))]]
 
     (carousel
       (for [[idx s] (map-indexed vector sources)]
         (r/create-element
           (r/create-class
-            {:display-name (str "Carousel slide " idx)
+            {:display-name (str "Spectrum slide " idx)
+
+             :reagent-render
+                           (fn [args]
+                             [:div#chartSlide {:style {:width "100%" :height "100%"}}])
+
+             :component-did-mount
+                           (fn [this]
+                             ^{:key idx} [:> (Highcharts/chart (r/dom-node this) (clj->js s))])}))))))
+
+
+
+(defn make-sankey-widget [name data options]
+  ; TODO: this is a hack for the following hack (does NOT unsubscribe to sources when widget closes)
+  (ds/data-source-subscribe [:signal-path-service])
+
+  (let [data         @(rf/subscribe [:app-db :signal-path-service])
+        chart-config @(rf/subscribe [:hc-type :sankey-chart])
+        sources      (get-in data [:data :series])]
+
+    ;(prn "Making sankey carousel widget: " data " //// " sources)
+    ;  " //// chart-config " chart-config)
+
+    (carousel
+      (for [[idx s] (map-indexed vector sources)]
+        (do
+          ;(prn "make-sankey-chart " s)
+          (r/create-element
+            ^{:key idx} (m/make-chart chart-config
+                          {:data {:series [s]}}
+                          {:series {:showInLegend true :visible false}})))))))
+
+
+(defn make-heatmap-widget [name data options]
+  ; TODO: this is a hack for the following hack (does NOT unsubscribe to sources when widget closes)
+  (ds/data-source-subscribe [:heatmap-data])
+
+  (let [data         @(rf/subscribe [:app-db :heatmap-data])
+        chart-config @(rf/subscribe [:hc-type :heatmap-chart])
+        sources      (get-in data [:data :series])]
+
+    ;(prn "Making sankey carousel widget: " data " //// " sources)
+    ;  " //// chart-config " chart-config)
+
+    (carousel
+      (for [[idx s] (map-indexed vector sources)]
+        (do
+          ;(prn "make-sankey-chart " s)
+          (r/create-element
+            ^{:key idx} (m/make-chart chart-config
+                          {:data {:series [s]}}
+                          {:series {:showInLegend true :visible false}})))))))
+
+
+(defn- build-charts [name labels axis-types data]
+  (map (fn [{d :data :as all}]
+         (let [cvtAll (assoc all :data d)]
+           (do
+             (prn "build-charts " cvtAll)
+             (big-chart name labels axis-types cvtAll))))
+    data))
+
+
+
+(defn make-telemetry-widget [name data options]
+  ; TODO: this is a hack for the following hack (does NOT unsubscribe to sources when widget closes)
+  (ds/data-source-subscribe [:telemetry-service])
+
+  (let [data-source @(rf/subscribe [:app-db :telemetry-service])
+        sources     (->> (get-in data-source [:data :series])
+                      (map (fn [{:keys [name labels data]}]
+                             (big-chart name labels {:x "datetime" :y "number"} data)))
+                      (into []))]
+
+    ;(prn "Making telemetry carousel widget: " data " //// " sources
+    ;  " //// chart-config " chart-config)
+
+    (carousel
+      (for [[idx s] (map-indexed vector sources)]
+        (r/create-element
+          (r/create-class
+            {:display-name
+             (str "Spectrum slide " idx)
 
              :reagent-render
              (fn [args]
@@ -200,43 +287,68 @@
 
 
 
-(defn make-sankey-widget [name data options]
-  ; TODO: this is a hack for the following hack (does NOT unsubscribe to sources when widget closes)
-  (ds/data-source-subscribe [:signal-path-service])
-
-  (let [data @(rf/subscribe [:app-db :signal-path-service])
-        chart-config @(rf/subscribe [:hc-type :sankey-chart])
-        sources (get-in data [:data :series])]
-
-    ;(prn "Making sankey carousel widget: " data " //// " sources)
-    ;  " //// chart-config " chart-config)
-
-    (carousel
-      (for [[idx s] (map-indexed vector sources)]
-       (do
-         ;(prn "make-sankey-chart " s)
-         (r/create-element
-           ^{:key idx} (m/make-chart chart-config
-                         {:data {:series [s]}}
-                         {:series {:showInLegend true :visible false}})))))))
-
-
 (comment
   (def data @(rf/subscribe [:app-db :signal-path-service]))
+
+
+  @(rf/subscribe [:app-db :channel-power-1000-service])
+
 
   (def sources (get-in data [:data :series]))
 
 
+  @(rf/subscribe [:app-db :telemetry-service])
+
+
+  (def data @(rf/subscribe [:app-db :telemetry-service]))
+  (def chart-config @(rf/subscribe [:hc-type :line-chart]))
+  (def sources (get-in data [:data :series]))
+
+  (for [g sources]
+    (let [{:keys [name data]} g]
+      (for [{series-id :name series-data :data} data]
+        [series-id])))
+
+
+  (for [group sources
+        [idx s] (map-indexed vector group)])
   ())
 
 
 
-;[:div {:key "9" :data-grid {:x 8 :y 6 :w 4 :h 3}}
-; [basic-widget
-;  "carousel"
-;  [carousel [[:> ReactHighcharts {:config data/heatmap-data}]
-;             [:> ReactHighmaps {:config mapping/world-map-data}]
-;             [:> ReactHighmaps {:config mapping/aus-map-data}]]]
-;  {:viz/title             "Carousel"
-;   :viz/banner-color      {:r 255 :g 0 :b 0 :a 1}
-;   :viz/banner-text-color white}]]]]]))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;
+; get the correct labels for the axes
+;
+(comment
+  (def data-source @(rf/subscribe [:app-db :telemetry-service]))
+  (def series (get-in data-source [:data :series]))
+  (def sources (->> (:data data-source)
+                 (map (fn [{:keys [name data]}]
+                        data))))
+
+  (->> (get-in data-source [:data :series])
+    (map (fn [{:keys [name data]}]
+           [name data]))
+    (into []))
+
+
+  (defn- build-charts [name labels data]
+    (map (fn [{d :data :as all}]
+           (big-chart name labels (assoc all :data (cvt d))))
+      data))
+
+  (->> (get-in data-source [:data :series])
+    (map (fn [{:keys [name labels data]}]
+           (build-charts name labels data)))
+    (into []))
+
+  (map (fn [{:keys [name labels data]}]
+         (build-charts name labels data))
+    (get-in data-source [:data :series]))
+
+
+
+  ())
+

@@ -51,9 +51,16 @@
 
   {:title       (str "Channel Power " sheet)
    :data-format :data-format/x-y
+   :labels      ["Frequency" "Power"]
    :series      (get-data sat-num)})
 
 
+
+(comment
+  (vanilla.subscription-manager/refresh-source :channel-power-1000-service)
+  (vanilla.subscription-manager/refresh-source :channel-power-2000-service)
+
+  ())
 
 (comment
   (def sat-num "SAT1")

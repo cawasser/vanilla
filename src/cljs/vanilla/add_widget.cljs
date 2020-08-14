@@ -58,6 +58,22 @@
           :widgets (conj (:widgets db) named-widget)
           :next-id (uuid/uuid-string (uuid/make-random-uuid)))))))
 
+(rf/reg-event-db
+  :add-heatmap-carousel
+  (fn-traced [db]
+    (prn ":add-heatmap-carousel" (get-in db [:widget-types :heatmap-carousel-widget]))
+    (let [next-id      (:next-id db)
+          widget-type  (get-in db [:widget-types :heatmap-carousel-widget])
+          current-user @(rf/subscribe [:get-current-user])  ;;get current user
+          named-widget (assoc widget-type
+                         :key (str next-id)
+                         :data-source :carousel-service
+                         :username current-user)]  ;;carousel size is locked and cant be resized
+
+      (do
+        (assoc db
+          :widgets (conj (:widgets db) named-widget)
+          :next-id (uuid/uuid-string (uuid/make-random-uuid)))))))
 
 
 (rf/reg-event-db
@@ -310,7 +326,7 @@
     (fn []
       [:div.has-text-left
        [:button.button.is-info {:on-click #(swap! is-source-active not)} "Add Source"]
-       [:button.button.is-info {:on-click #(add-carousel)} "Add Carousel"]
+       ;[:button.button.is-info {:on-click #(add-carousel)} "Add Carousel"]
        [add-by-source-modal is-source-active]])))
        ;[add-by-widget-modal is-widget-active]
 
