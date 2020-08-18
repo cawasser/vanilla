@@ -1,0 +1,20 @@
+https://roboloco.net/blog/docker-postgres/
+
+https://hub.docker.com/_/postgres
+
+
+
+'docker pull postgres'
+This pulls the official postgres docker image from the repo. Once you have the image
+on your machine you don't have to run this again. To check if you already have
+this image, use 'docker images' and check if postgres is listed.
+
+
+Once you have the postgres image, run the following command:
+'docker run --name postgres -e POSTGRES_PASSWORD=Password -p 5432:5432 -d postgres'
+This will create a container running postgres at port 5432.
+
+
+Docker compose:
+
+

@@ -1,0 +1,30 @@
+# https://docs.docker.com/compose/
+
+version: "3.6"
+
+
+# To build all run "docker-compose up"
+services:
+
+  # This builds vanilla based on dockerfile in this dir
+#  vanilla:
+#    build: .
+#    depends_on:
+#      - db
+
+  # This is our postgres db
+  db:
+    image: postgres
+    #ports: "5432:5432"
+    restart: always
+    environment:
+      POSTGRES_USER: vanilla
+      POSTGRES_PASSWORD: Password
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
+
+

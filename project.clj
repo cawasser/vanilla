@@ -34,6 +34,7 @@
                  [org.clojure/google-closure-library "0.0-20191016-6ae1f72f" :scope "provided"]
                  [org.clojure/tools.cli "0.4.2"]
                  [org.clojure/tools.logging "0.5.0"]
+                 [org.clojure/java.jdbc "0.7.9"]
                  [org.webjars.npm/bulma "0.8.0"]
                  [org.webjars.npm/material-icons "0.3.1"]
                  [org.webjars/webjars-locator "0.38"]
@@ -63,6 +64,7 @@
                  [com.layerware/hugsql "0.5.1"]
                  [org.xerial/sqlite-jdbc "3.30.1"]
                  [seancorfield/next.jdbc "1.0.12"]
+                 [org.postgresql/postgresql "42.2.4"]
                  [org.clojure/tools.nrepl "0.2.13"]
                  [day8.re-frame/re-frame-10x "0.4.3"]
                  [day8.re-frame/tracing "0.5.3"]
@@ -94,7 +96,9 @@
                        :source-paths ["env/prod/clj" "env/prod/cljs"]
                        :resource-paths ["env/prod/resources"]}
 
-             :dev           [:project/dev :profiles/dev]
+             :dev           [:project/dev :profiles/dev
+                             {:database-url "jdbc:postgresql://localhost:5432/vanilla_db?
+                                              user=db_username&password=password"}]
 
              :test          [:project/dev :project/test :profiles/test]
 

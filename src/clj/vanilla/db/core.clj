@@ -19,17 +19,32 @@
 (hugsql/def-db-fns "sql/queries.sql")
 
 (def db-type "sqlite")
+(def db-pg-type "postgresql")
 
 
 ;; This database is stored locally. It is considered our "working" or dev db
 ;; This should not be pushed to the repo or AWS, it will be added to git ignore
+;(def vanilla-db
+;  "SQLite database connection spec."
+;  {:dbtype db-type :dbname "vanilla_db"})
+
 (def vanilla-db
   "SQLite database connection spec."
-  {:dbtype db-type :dbname "vanilla_db"})
+  {:dbtype db-pg-type
+   :dbname "vanilla_db"
+   :user "postgres"
+   :password "Password"
+   :host "localhost"
+   :port "5432"})
 
+(comment
 
+  (jdbc/get-datasource pg-db)
+  (sql/query pg-db ["SELECT * FROM services"])
+  (sql/query pg-db ["SELECT * FROM users"])
+  (sql/query pg-db ["SELECT * FROM layout"])
 
-
+  ())
 
 
 (defn populate-services
@@ -232,6 +247,10 @@
 
   ;; Run this to create a local database for your app
   (initialize-database vanilla-db)
+
+
+
+  (initialize-database pg-db)
 
   ())
 

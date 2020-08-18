@@ -56,14 +56,14 @@ create table layout (
   id                   TEXT PRIMARY KEY,
   username              TEXT,
   name                  TEXT,
-  ret_types             BLOB,
+  ret_types             bytea,
   basis                 TEXT,
   data_source           TEXT,
   type                  TEXT,
   icon                  TEXT,
   label                 TEXT,
-  data_grid             BLOB,
-  options               BLOB);
+  data_grid             bytea,
+  options               bytea);
 
 
 
