@@ -18,7 +18,7 @@
 
 
 
-(defn make-the-chart [name chart-type type labels data]
+(defn make-the-chart [name chart-type type labels axis-types data]
 
   {:legendBackgroundColor "rgba(48, 48, 48, 0.8)",
    :labels                {:style {:color "#CCC"}},
@@ -66,6 +66,7 @@
                                                 :align         "high",
                                                 :style         {:color "#AAA", :font "bold 12px Lucida Grande, Lucida Sans Unicode, Verdana, Arial, Helvetica, sans-serif"}},
                            :labels             {:overflow "justify", :style {:color "#999", :fontWeight "bold"}},
+                           :type (:y axis-types)
                            :alternateGridColor nil,
                            :minorTickInterval  nil,
                            :gridLineColor      "rgba(255, 255, 255, .1)",
@@ -84,6 +85,7 @@
    :xAxis                 {:title         {:text          (first labels) ; TODO Fix 'frequency' label
                                            :allowDecimals false,
                                            :style         {:color "#AAA", :font "bold 12px Lucida Grande, Lucida Sans Unicode, Verdana, Arial, Helvetica, sans-serif"}},
+                           :type (:x axis-types)
                            :gridLineWidth 0,
                            :lineColor     "#999",
                            :tickColor     "#999",
@@ -105,9 +107,9 @@
    :series                data})
 
 
-(defn big-chart [name labels data]
-  (prn "big-chart " name labels data)
-  (make-the-chart name :line-type "line" labels data))
+(defn big-chart [name labels axis-types data]
+  ;(prn "big-chart " name labels data)
+  (make-the-chart name :line-type "line" labels axis-types data))
 
 
 
@@ -183,8 +185,10 @@
 
   (let [service-1000 @(rf/subscribe [:app-db :channel-power-1000-service])
         service-2000 @(rf/subscribe [:app-db :channel-power-2000-service])
-        sources      [(big-chart "Signal Power (SAT1)" (get-in service-1000 [:data :labels]) (get-in service-1000 [:data :series]))
-                      (big-chart "Signal Power (SAT2)" (get-in service-2000 [:data :labels]) (get-in service-2000 [:data :series]))]]
+        sources      [(big-chart "Signal Power (SAT1)" (get-in service-1000 [:data :labels])
+                        {:x "number" :y "number"} (get-in service-1000 [:data :series]))
+                      (big-chart "Signal Power (SAT2)" (get-in service-2000 [:data :labels])
+                        {:x "number" :y "number"} (get-in service-2000 [:data :series]))]]
 
     (carousel
       (for [[idx s] (map-indexed vector sources)]
@@ -244,24 +248,12 @@
                           {:series {:showInLegend true :visible false}})))))))
 
 
-(defn- read-datetime [dt]
-  (.parse js/Date dt))
-
-(defn- cvt [data]
-  (map (juxt (comp read-datetime str first) second) data))
-
-(defn- convert-time [data]
-  (map (fn [{:keys [data] :as all}]
-         (assoc all :data (cvt data)))
-    data))
-
-
-(defn- build-charts [name labels data]
+(defn- build-charts [name labels axis-types data]
   (map (fn [{d :data :as all}]
-         (let [cvtAll (assoc all :data (cvt d))]
+         (let [cvtAll (assoc all :data d)]
            (do
              (prn "build-charts " cvtAll)
-             (big-chart name labels cvtAll))))
+             (big-chart name labels axis-types cvtAll))))
     data))
 
 
@@ -273,7 +265,7 @@
   (let [data-source @(rf/subscribe [:app-db :telemetry-service])
         sources     (->> (get-in data-source [:data :series])
                       (map (fn [{:keys [name labels data]}]
-                             (big-chart name labels (convert-time data))))
+                             (big-chart name labels {:x "datetime" :y "number"} data)))
                       (into []))]
 
     ;(prn "Making telemetry carousel widget: " data " //// " sources
@@ -326,32 +318,6 @@
 
 
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;
-; convert #inst to something useful in js
-;
-(comment
-  (def d @(rf/subscribe [:app-db :telemetry-service]))
-
-  ;; what's already happening:
-  (let [data-source @(rf/subscribe [:app-db :telemetry-service])]
-    (->> (get-in data-source [:data :series])
-      (map (fn [{:keys [name data]}]
-             (big-chart name (convert-time data))))
-      (into [])
-      (map (juxt (comp :text :title) :series))))
-
-
-  (.parse js/Date
-    "Mon Aug 12 2019 18:00:00 GMT-0400 (Eastern Daylight Time)")
-
-  (read-datetime
-    "Mon Aug 12 2019 18:00:00 GMT-0400 (Eastern Daylight Time)")
-
-  ())
-
-
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;
 ; get the correct labels for the axes
@@ -376,52 +342,14 @@
 
   (->> (get-in data-source [:data :series])
     (map (fn [{:keys [name labels data]}]
-           (big-chart name labels (convert-time data))))
-    (into []))
-
-  (->> (get-in data-source [:data :series])
-    (map (fn [{:keys [name labels data]}]
            (build-charts name labels data)))
     (into []))
-
-
-
-
-
-
-
-
 
   (map (fn [{:keys [name labels data]}]
          (build-charts name labels data))
     (get-in data-source [:data :series]))
 
 
-  (convert-time
-    (take 2
-      (:data
-        (first
-          (:data
-            (first
-              (get-in data-source [:data :series])))))))
-
-
-
-
-  (->> (get-in data-source [:data :series])
-    (map (fn [{:keys [name data]}]
-           (big-chart name (:labels data) (convert-time data))))
-    (into []))
-
 
   ())
 
-;[:div {:key "9" :data-grid {:x 8 :y 6 :w 4 :h 3}}
-; [basic-widget
-;  "carousel"
-;  [carousel [[:> ReactHighcharts {:config data/heatmap-data}]
-;             [:> ReactHighmaps {:config mapping/world-map-data}]
-;             [:> ReactHighmaps {:config mapping/aus-map-data}]]]
-;  {:viz/title             "Carousel"
-;   :viz/banner-color      {:r 255 :g 0 :b 0 :a 1}
-;   :viz/banner-text-color white}]]]]]))

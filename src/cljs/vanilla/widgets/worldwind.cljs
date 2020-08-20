@@ -32,7 +32,7 @@
                          [:div#all {:style {:width "100%" :height "100%" :overflow "hidden"}}
                           [:div#nav {:style {:width "100%" :position "fixed" :align-items "stretch"}}
                            [:> bs4/NavBar {:logo  ""
-                                           ;:title "HammerGlobe"
+                                           :title ""
                                            :items [(r/as-element
                                                      [:> bs4/NavBarItem {:key      "lyr"
                                                                          :title    "Layers"

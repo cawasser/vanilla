@@ -15,25 +15,25 @@
              :TCS_OX_TANK_TEMP_5-TREND_AVG temp
              :TCS_OX_TANK_TEMP_6-TREND_AVG temp
              :PSS_PT2_FUEL_TRANSDUCER_1-TREND_AVG pressure
-             :PSS_PT5_FUEL_TRANSDUCER_2-TREND_AVG pressure
-             :TCS_FUEL_TANK_TEMP_1-TREND_AVG temp
-             :TCS_FUEL_TANK_TEMP_2-TREND_AVG temp
-             :TCS_FUEL_TANK_TEMP_3-TREND_AVG temp
-             :TCS_FUEL_TANK_TEMP_4-TREND_AVG temp
-             :TCS_FUEL_TANK_TEMP_5-TREND_AVG temp
-             :TCS_FUEL_TANK_TEMP_6-TREND_AVG temp
-             :PSS_PT1_GHE_TRANSDUCER-TREND_AVG pressure
-             :TCS_XPT3_XE_MFLD_TEMP-TREND_AVG pressure
-             :HPS_XPT1_XETANK_TRANSDUCER_1-TREND_AVG pressure
-             :HPS_XPT2_XETANK_TRANSDUCER_2-TREND_AVG pressure
-             :TCS_EP_NXETANK_TEMP_1-TREND_AVG pressure
-             :TCS_EP_NXETANK_TEMP_2-TREND_AVG pressure
-             :TCS_EP_NXETANK_TEMP_3-TREND_AVG pressure
-             :TCS_EP_NXETANK_TEMP_4-TREND_AVG pressure
-             :TCS_EP_NXETANK_TEMP_5-TREND_AVG pressure
-             :TCS_EP_NXETANK_TEMP_6-TREND_AVG pressure
-             :HPS_XPT3_XEMFLD_TRANSDUCER_1-TREND_AVG pressure
-             :HPS_XPT4_XEMFLD_TRANSDUCER_2-TREND_AV pressure})
+             :PSS_PT5_FUEL_TRANSDUCER_2-TREND_AVG pressure})
+             ;:TCS_FUEL_TANK_TEMP_1-TREND_AVG temp
+             ;:TCS_FUEL_TANK_TEMP_2-TREND_AVG temp
+             ;:TCS_FUEL_TANK_TEMP_3-TREND_AVG temp
+             ;:TCS_FUEL_TANK_TEMP_4-TREND_AVG temp
+             ;:TCS_FUEL_TANK_TEMP_5-TREND_AVG temp
+             ;:TCS_FUEL_TANK_TEMP_6-TREND_AVG temp
+             ;:PSS_PT1_GHE_TRANSDUCER-TREND_AVG pressure
+             ;:TCS_XPT3_XE_MFLD_TEMP-TREND_AVG pressure
+             ;:HPS_XPT1_XETANK_TRANSDUCER_1-TREND_AVG pressure
+             ;:HPS_XPT2_XETANK_TRANSDUCER_2-TREND_AVG pressure
+             ;:TCS_EP_NXETANK_TEMP_1-TREND_AVG pressure
+             ;:TCS_EP_NXETANK_TEMP_2-TREND_AVG pressure
+             ;:TCS_EP_NXETANK_TEMP_3-TREND_AVG pressure
+             ;:TCS_EP_NXETANK_TEMP_4-TREND_AVG pressure
+             ;:TCS_EP_NXETANK_TEMP_5-TREND_AVG pressure
+             ;:TCS_EP_NXETANK_TEMP_6-TREND_AVG pressure
+             ;:HPS_XPT3_XEMFLD_TRANSDUCER_1-TREND_AVG pressure
+             ;:HPS_XPT4_XEMFLD_TRANSDUCER_2-TREND_AV pressure})
 
 
 (defn reformat [raw field]
@@ -43,7 +43,8 @@
            (map (fn [[k v]]
                   {:name k
                    :keys ["x" "y"]
-                   :data (map (juxt :Spacecraft-Time #(get % field)) v)})
+                   :data ;(take-nth 6
+                           (map (juxt :Spacecraft-Time #(get % field)) v)})
              raw))})
 
 
@@ -72,8 +73,6 @@
 
   ())
 
-
-{:name "131807Z JUL 2020", :showInLegend true, :type :sankey, :keys ["from" "to" "weight"], :data ()}
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;

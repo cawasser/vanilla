@@ -1,9 +1,6 @@
 (ns vanilla.widgets.timeline
-  (:require ["react-gantt-timeline" :default TimeLine]
-            [cljs-time.core :as t]
-            [cljs-time.format :as f]))
+  (:require ["react-gantt-timeline" :default TimeLine]))
 
-(def built-in-formatter (f/formatters :date-time-no-ms))
 
 
 
@@ -21,18 +18,6 @@
                                                           (.indexOf types-set type))))
                                 (:data data)))))]
     ;(prn "parse-types-to-color" ret)
-    ret))
-
-(defn parse-times [data]
-  (let [ret (assoc
-              data
-              :data (into []
-                      (doall
-                        (map (fn [{:keys [start end] :as orig}]
-                               (-> orig
-                                 (assoc :start (f/parse built-in-formatter start))
-                                 (assoc :end (f/parse built-in-formatter end))))
-                          (:data data)))))]
     ret))
 
 
@@ -54,7 +39,6 @@
                                                               :backgroundColor "#2F4F4F"}}}}}
 
                  (->> (:data (:data source-data))
-                   ;parse-times
                    parse-types-to-color))])
 
 

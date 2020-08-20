@@ -135,7 +135,7 @@
       ;20
       ["24000" "telemetry-service" "Telemetry"
        "data-format/grouped-x-y" "vanilla.telemetry-service/fetch-data"
-       "returns carousel widget of spave vehicel telemetry data"]
+       "returns carousel widget of space vehicle telemetry data"]
 
       ;21
       ["25000" "x-beam-location-service" "X-band Beam Data"
