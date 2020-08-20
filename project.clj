@@ -62,6 +62,7 @@
                  [compojure "1.6.1"]
                  [org.clojure/core.match "0.3.0"]
                  [com.layerware/hugsql "0.5.1"]
+                 [com.layerware/hugsql-adapter-next-jdbc "0.5.1"]
                  [org.xerial/sqlite-jdbc "3.30.1"]
                  [seancorfield/next.jdbc "1.0.12"]
                  [org.postgresql/postgresql "42.2.4"]

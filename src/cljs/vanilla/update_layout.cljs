@@ -33,7 +33,7 @@
 
 
 (defn save-layout [layout]
-  ;(prn "saving layout: " (clojure.core/pr-str layout))
+  (prn "saving layout: " (clojure.core/pr-str layout))
 
   (ds/data-source-subscribe (mapv #(:data-source %) layout))
 

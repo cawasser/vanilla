@@ -59,15 +59,15 @@
     {:status 200
      :headers {"Content-Type" "text/json; charset=utf-8"}
      :body (do
-             ;(prn "save layout")
+             (prn "save layout")
              {:widget-save (h/save-layout (get-in req [:params :widgets])) :status 200})})
 
-  (POST "/update-widget" req
-    {:status 200
-     :headers {"Content-Type" "text/json; charset=utf-8"}
-     :body (do
-             ;(prn "updating one widget" (get-in req [:params :widget]))
-             {:widget-update (h/update-widget (get-in req [:params :widget])) :status 200})})
+  ;(POST "/update-widget" req
+  ;  {:status 200
+  ;   :headers {"Content-Type" "text/json; charset=utf-8"}
+  ;   :body (do
+  ;           (prn "updating one widget" (get-in req [:params :widget]))
+  ;           {:widget-update (h/update-widget (get-in req [:params :widget])) :status 200})})
 
   (POST "/delete-widget" req
     {:status 200

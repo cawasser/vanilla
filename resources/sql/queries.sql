@@ -1,3 +1,7 @@
+--------------
+-- SERVICES --
+--------------
+
 -- :name create-services-table
 -- :command :execute
 -- :result :raw
@@ -9,7 +13,6 @@ create table services (
   ret_type        TEXT,
   read_fn         TEXT,
   doc_string      TEXT);
-
 
 
 -- :name drop-services-table :!
@@ -24,13 +27,10 @@ INSERT INTO services
 VALUES (:id, :keyword, :name, :ret_type, :read_fn, :doc_string);
 
 
-
 -- :name create-services! :! :n
 -- :doc creates multiple new service record
 INSERT INTO services (id, keyword, name, ret_type, read_fn, doc_string)
 values :tuple*:services;
-
-
 
 
 -- :name get-services :? :*
@@ -48,6 +48,11 @@ DELETE FROM services WHERE id = :id;
 DELETE FROM services;
 
 
+
+-------------
+-- LAYOUTS --
+-------------
+
 -- :name create-layout-table
 -- :command :execute
 -- :result :raw
@@ -56,15 +61,14 @@ create table layout (
   id                   TEXT PRIMARY KEY,
   username              TEXT,
   name                  TEXT,
-  ret_types             bytea,
+  ret_types             TEXT,
   basis                 TEXT,
   data_source           TEXT,
   type                  TEXT,
   icon                  TEXT,
   label                 TEXT,
-  data_grid             bytea,
-  options               bytea);
-
+  data_grid             TEXT,
+  options               TEXT);
 
 
 -- :name drop-layout-table :!
@@ -72,16 +76,6 @@ create table layout (
 drop table if exists layout;
 
 
--- :name create-layout! :! :n
--- :doc creates a new layout record
-INSERT INTO layout
-    (id, username, name, ret_types, basis, data_source, type, icon,
-        label, data_grid, options)
-    VALUES (:id, :username, :name, :ret_types, :basis, :data_source, :type, :icon,
-            :label, :data_grid, :options)
-    ON CONFLICT (id) DO
-    UPDATE SET options=excluded.options,
-               data_grid=excluded.data_grid;
 
 -- :name save-layout! :! :n
 -- :doc creates multiple new layout record, ordered by keys
@@ -114,6 +108,9 @@ DELETE FROM layout;
 
 
 
+-----------
+-- USERS --
+-----------
 
 -- :name create-user-table
 -- :command :execute

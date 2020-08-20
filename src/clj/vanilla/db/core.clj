@@ -1,6 +1,7 @@
 (ns vanilla.db.core
   (:require
     [hugsql.core :as hugsql]
+    [hugsql.adapter.next-jdbc :as next-adapter]
     [next.jdbc :as jdbc]
     [next.jdbc.sql :as sql]
     [com.stuartsierra.component :as component]
@@ -16,7 +17,8 @@
 ;
 
 
-(hugsql/def-db-fns "sql/queries.sql")
+(hugsql/def-db-fns "sql/queries.sql"
+                   {:adapter (next-adapter/hugsql-adapter-next-jdbc)})
 
 (def db-type "sqlite")
 (def db-pg-type "postgresql")
@@ -40,9 +42,10 @@
 (comment
 
   (jdbc/get-datasource pg-db)
-  (sql/query pg-db ["SELECT * FROM services"])
-  (sql/query pg-db ["SELECT * FROM users"])
-  (sql/query pg-db ["SELECT * FROM layout"])
+  (jdbc/get-datasource vanilla-db)
+  (sql/query vanilla-db ["SELECT * FROM services"])
+  (sql/query vanilla-db ["SELECT * FROM users"])
+  (sql/query vanilla-db ["SELECT * FROM layout"])
 
   ())
 
@@ -342,6 +345,10 @@
   ;;;;;;;;;;;;;;;
   (create-layout-table vanilla-db)
 
+  (do
+    (drop-layout-table vanilla-db)
+    (create-layout-table vanilla-db))
+
   ;ret_types needs square brackets around it
   ;data-grid needs curly braces around it
   ;viz_tooltip(redundant) = {:followPointer true}
@@ -369,34 +376,34 @@
                    :viz/banner-text-color {:r 255, :g 255, :b 255, :a 1}
                    :viz/animation         false}})
 
-  (create-layout!
-    vanilla-db
-    {:id          "\"213\""
-     :username    "\"APaine\""
-     :name        :bubble-widget
-     :ret_types   [:data-format/x-y-n]
-     :basis       :chart
-     :data_source :bubble-service
-     :type        :bubble-chart
-     :icon        "\"/images/bubble-widget.png\""
-     :label       "\"Bubble\""
-     :data_grid   {:x 4 :y 0 :w 5 :h 15}
-     :options     {:viz/banner-color      {:r 0x00 :g 0x00 :b 0xff :a 1}
-                   :viz/tooltip           {:followPointer true}
-                   :viz/dataLabels        true
-                   :viz/data-labels       true
-                   :viz/labelFormat       "{point.name}"
-                   :viz/lineWidth         0
-                   :viz/title             "Bubble"
-                   :viz/banner-text-color {:r 255, :g 255, :b 255, :a 1}
-                   :viz/animation         false}})
+  (def layout {:helllo :hey
+               :yo :whats-up})
+  (apply #(str %) layout)
 
 
   (get-layout vanilla-db)
 
-  (get-user-layout vanilla-db {:username "austin"})
+  (get-user-layout vanilla-db {:username "chad"})
+  (get-user-layout vanilla-db {:username "APaine"})
 
-  (save-layout! vanilla-db {:layout test1})
+
+  (def test1 {:layout [["123"
+                        "APaine"
+                        ":area-widget"
+                        "[:data-format/x-y]"
+                        ":chart"
+                        ":spectrum-traces"
+                        ":area-chart"
+                        "\"/images/area-widget.png\""
+                        "\"Area\""
+                        "{:x 0, :y 0, :w 4, :h 14}"
+                        "#:viz{:style-name \"widget\", :animation false, :x-title \"frequency\",
+                         :banner-text-color {:r 255, :g 255, :b 255, :a 1}, :title \"Channels (area)\",
+                         :allowDecimals false, :banner-color {:r 0, :g 0, :b 255, :a 1}, :y-title \"power\",
+                         :tooltip {:followPointer true}}"]]})
+
+
+  (save-layout! vanilla-db test1)
 
   (save-layout! vanilla-db
                 {:layout
