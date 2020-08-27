@@ -51,7 +51,7 @@
   :initialize
   (fn-traced
     [db _]
-    (prn (str ":initialize handler "))
+    ;(prn (str ":initialize handler "))
     (merge db {:data-sources {}
                :hc-type {}
                ;:chosen-bg-color {:r 150 :g 150 :b 150 :a 1.0}
@@ -140,7 +140,7 @@
 (defn ^:dev/after-load-async mount-components
   "mount the main UI components using Reagent"
   []
-  (prn "rendering home-page")
+  ;(prn "rendering home-page")
   (rd/render home-page (.getElementById js/document "app")))
 
 
@@ -159,7 +159,7 @@
   ; but sankey does NOT work here! WTF highcharts?????????????
   ;(addSankeyModule ReactHighcharts/Highcharts)
 
-  (prn "calling :initialize")
+  ;(prn "calling :initialize")
   (rf/dispatch-sync [:initialize])
 
   (get-version)

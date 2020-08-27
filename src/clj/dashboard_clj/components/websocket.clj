@@ -21,7 +21,7 @@
                           (log/info "Port closed to UID: " uid)
                           (subman/remove-user uid))         ;; when connection closes, cleanup users subscriptions.
     :chsk/ws-ping       (log/info "Websocket ping")
-    (println "un-handled client event" id)))
+    (log/info "un-handled client event" id)))
 
 
 (defmethod -client-ev-handler :dashboard-clj.core/sync

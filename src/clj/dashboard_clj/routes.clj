@@ -2,7 +2,13 @@
   (:require [clojure.java.io :as io]
             [compojure.core :refer [ANY GET PUT POST DELETE defroutes]]
             [compojure.route :refer [resources]]
-            [ring.middleware.defaults :refer [wrap-defaults api-defaults]]
+            [ring.middleware.defaults :refer [wrap-defaults site-defaults]]
+            [ring.middleware.session :refer [wrap-session]]
+            [selmer.parser :as parser]
+            [ring.util.http-response :refer [content-type ok]]
+            [ring.util.anti-forgery :refer [anti-forgery-field]]
+            [ring.middleware.session.cookie :refer (cookie-store)]
+            [ring.middleware.anti-forgery :refer [wrap-anti-forgery *anti-forgery-token*]]
             [ring.middleware.gzip :refer [wrap-gzip]]
             [ring.middleware.logger :refer [wrap-with-logger]]
             [ring.middleware.json :refer [wrap-json-response wrap-json-params]]
@@ -14,12 +20,23 @@
             [vanilla.subscription-manager :as subman])
   (:gen-class))
 
+(parser/set-resource-path!  (clojure.java.io/resource "html"))
+(parser/add-tag! :csrf-field (fn [_ _] (anti-forgery-field)))
+
+(defn render
+  "renders the HTML template located relative to resources/html"
+  [template & [params]]
+  (content-type
+    (ok
+      (parser/render-file
+        template
+        (assoc params
+          :page template
+          :csrf-token *anti-forgery-token*)))
+    "text/html; charset=utf-8"))
 
 (defroutes routes
-  (GET "/" _
-       {:status 200
-        :headers {"Content-Type" "text/html; charset=utf-8"}
-        :body (io/input-stream (io/resource "public/index.html"))})
+  (GET "/" _ (render "public/index.html"))
 
   (GET "/version" _
     {:status  200
@@ -122,7 +139,8 @@
        (POST "/chsk" req (ring-ajax-post req))
 
        (GET "/version" req (ring-ajax-get-or-ws-handshake req)))
-      (wrap-defaults api-defaults)
+      (wrap-defaults site-defaults)
+      (wrap-session)
       (wrap-json-response)
       (wrap-keyword-params)
       (wrap-json-params)

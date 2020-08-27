@@ -34,6 +34,7 @@
     (POST "/logout"
       {:format          (ajax/json-request-format {:keywords? true})
        :response-format (ajax/json-response-format {:keywords? true})
+       :headers         {"x-csrf-token" d/?csrf-token}
        :params          {:user (:current-user db)}
        :handler         #()
        :error-handler   #()})
@@ -58,6 +59,7 @@
   (POST "/create-new-user"
         {:format          (ajax/json-request-format {:keywords? true})
          :response-format (ajax/json-response-format {:keywords? true})
+         :headers         {"x-csrf-token" d/?csrf-token}
          :params          credentials
          :handler         #(rf/dispatch [:login-message % "Account created!"])
          :error-handler   #(rf/dispatch [:login-message % "Failed to create account, please try again."])}))
