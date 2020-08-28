@@ -1,3 +1,7 @@
+;; FOR MORE INFORMATION ABOUT OUR DATABASE MANAGEMENT:
+; docs/database_management.md
+
+
 (ns vanilla.db.core
   (:require
     [hugsql.core :as hugsql]
@@ -8,46 +12,56 @@
     [clojure.java.io :as jio]
     [clojure.tools.logging :as log]))
 
-
-
+;;;;;;;;;;;;;;;;;
+;; HELPFUL LINKS:
 ;
 ; https://www.hugsql.org
 ;
 ; https://github.com/seancorfield/usermanager-example
 ;
+;;;;
 
+
+
+;;;;;;;;;
+;; HUGSQL
+;
+; Instantiate hugsql functions, with an adapter for next-jdbc
+;
+;;;;;;;;;
 
 (hugsql/def-db-fns "sql/queries.sql"
                    {:adapter (next-adapter/hugsql-adapter-next-jdbc)})
 
-(def db-type "sqlite")
-(def db-pg-type "postgresql")
 
 
-;; This database is stored locally. It is considered our "working" or dev db
-;; This should not be pushed to the repo or AWS, it will be added to git ignore
-;(def vanilla-db
-;  "SQLite database connection spec."
-;  {:dbtype db-type :dbname "vanilla_db"})
 
+;;;;;;;;;;;;;;;;;;;;;;;;
+;
+;; Database spec
+;
+;;;;;;;;;;;;;;;;;;;;;;;;
+
+;; This is our database spec, configured for a connection to a postgresql database
 (def vanilla-db
   "SQLite database connection spec."
-  {:dbtype db-pg-type
+  {:dbtype "postgresql"
    :dbname "vanilla_db"
    :user "postgres"
    :password "Password"
    :host "localhost"
    :port "5432"})
 
-(comment
+;@TODO - this is a legacy sqlite database spec -> keep for record or delete?
+;; This database is stored locally. It is considered our "working" or dev db
+;; This should not be pushed to the repo or AWS, it will be added to git ignore
+(def vanilla-sqlite
+  "SQLite database connection spec."
+  {:dbtype "sqlite" :dbname "vanilla_db"})
 
-  (jdbc/get-datasource pg-db)
-  (jdbc/get-datasource vanilla-db)
-  (sql/query vanilla-db ["SELECT * FROM services"])
-  (sql/query vanilla-db ["SELECT * FROM users"])
-  (sql/query vanilla-db ["SELECT * FROM layout"])
 
-  ())
+
+
 
 
 (defn populate-services
@@ -173,13 +187,9 @@
 
 
 
-
-
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; INITIAL DB SETUP FUNCTION
 ;;
-;; run in the repl to create fresh db tables populated accordingly
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defn initialize-database
@@ -212,6 +222,7 @@
     (assoc this :datasource nil)))
 
 
+;@TODO - this is legacy, we no longer have a file that has our db
 (defn database-exist?
   "Runs a simple check to see if the vanilla_db file exists."
   [database]
@@ -220,7 +231,7 @@
   (.exists (jio/file (database :dbname))))
 
 
-
+;@TODO - is this still needed?
 (defn setup-database
   "This is called by dashboard-clj.system to start the applications
    connection to the database. Only creates a database when in dev mode
@@ -235,7 +246,7 @@
   (map->Database {:db-spec vanilla-db}))
 
 
-
+; @TODO - this is now legacy since we moved to postgres ->but is nice for debugging
 ;;; REPL ME WHEN DATABASE STRUCTURE CHANGES ;;;
 (comment
 
@@ -253,7 +264,7 @@
 
 
 
-  (initialize-database pg-db)
+  ;(initialize-database pg-db)
 
   ())
 
@@ -499,5 +510,67 @@
 
   (conj (:keys (first data-2)) "selected" "sliced")
   (map #(conj % false (< (second %) slice-at)) (:data (first data-2)))
+
+
+
+
+  ())
+
+(comment
+
+  (sql/query vanilla-db ["SELECT * FROM services"])
+  (sql/query vanilla-db ["SELECT * FROM users"])
+  (sql/query vanilla-db ["SELECT * FROM layout"])
+  (sql/query vanilla-sqlite ["SELECT * FROM services"])
+  (sql/query vanilla-sqlite ["SELECT * FROM users"])
+  (sql/query vanilla-sqlite ["SELECT * FROM layout"])
+
+  (def postgres-data
+    [#:layout{:ret_types "[:data-format/x-y :data-format/x-y-n :data-format/x-y-e :data-format/y]",
+              :name ":area-widget",
+              :username "chad",
+              :basis ":chart",
+              :data_grid "{:x 3, :y 0, :w 5, :h 15}",
+              :type ":area-chart",
+              :icon "/images/area-widget.png",
+              :label "Area",
+              :id "403346b2-508e-42f3-9a83-750922eb4c1d",
+              :data_source ":spectrum-traces",
+              :options "{:viz/style-name \"widget\", :viz/y-title \"power\", :viz/x-title \"frequency\", :viz/allowDecimals false, :viz/banner-color {:r 0, :g 0, :b 255, :a 1}, :viz/tooltip {:followPointer true}, :viz/title \"Channels (area)\", :viz/banner-text-color {:r 255, :g 255, :b 255, :a 1}, :viz/animation false}"}
+     #:layout{:ret_types "[:data-format/x-y :data-format/x-y-n :data-format/x-y-e :data-format/y]",
+              :name ":area-widget",
+              :username "chad1",
+              :basis ":chart",
+              :data_grid "{:x 0, :y 0, :w 5, :h 15}",
+              :type ":area-chart",
+              :icon "/images/area-widget.png",
+              :label "Area",
+              :id "adade292-295c-4ee7-9cc4-48f2dd224d1a",
+              :data_source ":bubble-service",
+              :options "{:viz/style-name \"widget\", :viz/y-title \"power\", :viz/x-title \"frequency\", :viz/allowDecimals false, :viz/banner-color {:r 0, :g 0, :b 255, :a 1}, :viz/tooltip {:followPointer true}, :viz/title \"Channels (area)\", :viz/banner-text-color {:r 255, :g 255, :b 255, :a 1}, :viz/animation false}"}])
+
+  (def sql-lite-data
+    [#:layout{:ret_types "[:data-format/lat-lon-label :data-format/lat-lon-e :data-format/cont-n]",
+              :name ":worldwind-widget",
+              :username "planner",
+              :basis ":simple",
+              :data_grid "{:x 0, :y 0, :w 5, :h 20}",
+              :type ":worldwind-widget",
+              :icon "/images/worldwind-widget.png",
+              :label "3d World",
+              :id "76c9b5fb-27bc-47d7-9aa2-948774090a24",
+              :data_source ":x-beam-location-service",
+              :options "{:viz/title \"3d World\", :viz/banner-color {:r 153, :g 0, :b 255, :a 1}, :viz/banner-text-color {:r 255, :g 255, :b 255, :a 1}}"}
+     #:layout{:ret_types "[:data-format/x-y-n :data-format/x-y :data-format/x-y-e :data-format/y]",
+              :name ":bubble-widget",
+              :username "chad",
+              :basis ":chart",
+              :data_grid "{:x 5, :y 0, :w 5, :h 15}",
+              :type ":bubble-chart",
+              :icon "/images/bubble-widget.png",
+              :label "Bubble",
+              :id "0a2b4fe6-c1db-46a6-9418-6340232411c7",
+              :data_source ":bubble-service",
+              :options "{:viz/title \"Bubble\", :viz/banner-color {:r 0, :g 100, :b 0, :a 1}, :viz/banner-text-color {:r 255, :g 255, :b 255, :a 1}, :viz/dataLabels true, :viz/labelFormat \"{point.name}\", :viz/lineWidth 0, :viz/animation false, :viz/data-labels true}"}])
 
   ())

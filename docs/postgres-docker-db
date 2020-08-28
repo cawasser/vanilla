@@ -3,8 +3,8 @@
 
 ## Postgres in docker
 
-To start you must first pull the offical postgres docker image, this will be used to create and run
-postgres containers.
+To start you must first pull the official postgres docker image, this will
+be used to create and run postgres containers.
 
 `docker pull postgres`
 
@@ -25,6 +25,16 @@ start the above container with:
 
 ## Docker compose:
 
+To deploy our database to AWS or builds that are not running a local container,
+run the command
+
+`docker-compose up`
+
+to run the build instructions in the [docker-compose file](../docker-compose.yml).
+
+These commands run the normal docker commands for the vanilla project and also the 
+docker commands to start and run a postgres container with the proper 
+configuration for our project.
 
 
 

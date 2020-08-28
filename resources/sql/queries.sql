@@ -26,7 +26,6 @@ INSERT INTO services
 (id, keyword, name, ret_type, read_fn, doc_string)
 VALUES (:id, :keyword, :name, :ret_type, :read_fn, :doc_string);
 
-
 -- :name create-services! :! :n
 -- :doc creates multiple new service record
 INSERT INTO services (id, keyword, name, ret_type, read_fn, doc_string)
@@ -37,11 +36,9 @@ values :tuple*:services;
 -- :doc retrieves a service record given the id
 SELECT * FROM services;
 
-
 -- :name delete-service! :! :n
 -- :doc deletes a service record given the id
 DELETE FROM services WHERE id = :id;
-
 
 -- :name delete-all-services! :! :n
 -- :doc deletes all service records
@@ -76,7 +73,6 @@ create table layout (
 drop table if exists layout;
 
 
-
 -- :name save-layout! :! :n
 -- :doc creates multiple new layout record, ordered by keys
 INSERT INTO layout
@@ -87,7 +83,6 @@ ON CONFLICT (id) DO
 UPDATE SET data_grid=excluded.data_grid,
             options=excluded.options;
 
-
 -- :name get-layout :? :*
 -- :doc retrieves all widgets given a username
 SELECT * FROM layout;
@@ -96,11 +91,9 @@ SELECT * FROM layout;
 -- :doc gets all widgets associated with a user
 SELECT * FROM layout WHERE username = :username;
 
-
 -- :name delete-layout! :! :n
 -- :doc deletes a layout record given the id
 DELETE FROM layout WHERE id = :id;
-
 
 -- :name delete-all-layouts! :! :n
 -- :doc deletes all layout records
@@ -124,7 +117,6 @@ create table users (
 -- :name drop-users-table :!
 -- :doc Drop users table if exists
 drop table if exists users
-
 
 
 -- :name create-new-user! :! :n

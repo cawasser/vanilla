@@ -5,16 +5,13 @@
     [re-frame.core :as rf]
     [day8.re-frame.tracing :refer-macros [fn-traced]]
     [clojure.edn :as edn]
-    [dashboard-clj.core :as d]
+    ;[dashboard-clj.core :as d]
     [vanilla.widget-defs :as widget-defs]
     [cljs-uuid-utils.core :as uuid]
     [vanilla.data-source-subscribe :as ds]))
 
 
-(defn get-services []
-  (GET "/services" {:headers         {"Accept" "application/transit+json"}
-                    :response-format (ajax/json-response-format {:keywords? true})
-                    :handler         #(rf/dispatch-sync [:set-services %])}))
+
 
 
 (rf/reg-sub
@@ -32,7 +29,10 @@
              (assoc db :new-login false)))
 
 
-(defn save-layout [layout]
+(defn save-layout
+  "Takes in the current layout and makes a call to save the layout to the database
+  through an ajax call"
+  [layout]
   (prn "saving layout: " (clojure.core/pr-str layout))
 
   (ds/data-source-subscribe (mapv #(:data-source %) layout))
@@ -98,7 +98,9 @@
     (rf/dispatch [:set-layout []])))
 
 
-(defn- apply-updates [new-layout widget]
+(defn- apply-updates
+  "Apply changes to the widgets data-grid, based on the passed in layout"
+  [new-layout widget]
   ;(prn "apply layout " new-layout)
   (-> widget
     (assoc-in [:data-grid :x] (:x new-layout))
@@ -107,7 +109,9 @@
     (assoc-in [:data-grid :h] (:h new-layout))))
 
 
-(defn reduce-layouts [layout]
+(defn reduce-layouts
+  "Non-intuitive data-processing?"
+  [layout]
   (map (fn [n]
          {:y   (:y n)
           :x   (:x n)
@@ -117,7 +121,9 @@
     layout))
 
 
-(defn update-layout [widgets layout]
+(defn update-layout
+  "Update the layout?"
+  [widgets layout]
   (->> (for [w widgets
              l layout]
          (if (= (str (:key w)) (str (:key l)))

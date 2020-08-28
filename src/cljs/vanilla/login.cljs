@@ -82,6 +82,11 @@
          [:button.button {:on-click #(reset! @show-pop-up false)} "Cancel"]]]])))
 
 
+;@TODO - is this needed?
+(defn get-services []
+  (GET "/services" {:headers         {"Accept" "application/transit+json"}
+                    :response-format (ajax/json-response-format {:keywords? true})
+                    :handler         #(rf/dispatch-sync [:set-services %])}))
 
 
 (defn login-successful?
@@ -92,7 +97,7 @@
     (do
       (rf/dispatch [:login-message {:status 200} "Welcome to Vanilla!"])
       (rf/dispatch-sync [:set-current-user username])
-      (layout/get-services)
+      (get-services)
       (d/connect-to-data-sources))
     (do
       (rf/dispatch [:login-message {:status 500} "Login failed, try again"])
@@ -110,10 +115,6 @@
         :response-format (ajax/json-response-format {:keywords? true})
         :params          credentials
         :handler #( login-successful? (% :verified-user) (credentials :username))}))
-
-
-
-
 
 
 (defn attempt-get-all-users

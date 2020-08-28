@@ -11,16 +11,21 @@
 (defn fixup-new-widget [widget]
   (merge widget {:data-grid {:x 0 :y 0 :w 5 :h 15}}))
 
+
+;;@TODO - this should move to the vanilla.update-layout ns?
 (rf/reg-event-db
   :update-layout
   (fn-traced [db [_ layout]]
-             (let [new-layout (u/update-layout (:widgets db) (u/reduce-layouts layout))]
-               (u/save-layout new-layout)
-               (assoc db :widgets new-layout))))
+    (prn "Updating layout... " layout)
+    (let [new-layout (u/update-layout (:widgets db) (u/reduce-layouts layout))]
+      (u/save-layout new-layout)
+      (assoc db :widgets new-layout))))
 
 
 
-(defn onLayoutChange [on-change prev new]
+(defn onLayoutChange
+  ""
+  [on-change prev new]
   ;; note the need to convert the callbacks from js objects
 
   (let [chg (js->clj new :keywordize-keys true)
@@ -44,7 +49,9 @@
 
 
 
-(defn widget-wrapper [props data]
+(defn widget-wrapper
+  ""
+  [props data]
 
   ;(prn "widget-wrapper..." props
   ;  " //// data " data)
@@ -68,7 +75,7 @@
 
 
 
-
+;@TODO - args? They do not do anything?
 (defn Grid
   [args]
 

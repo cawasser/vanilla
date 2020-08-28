@@ -1,3 +1,73 @@
+# Databases
+
+Vanilla utilizes a dockerized postgres database to store information for it's operation.
+
+The postgresql database currently stores data pertaining to:
+ - Users
+ - Data Services (refered to as services)
+ - Widget Layouts (referred to as layouts)
+
+
+Almost all database operations are confined to 
+[vanilla.db.core](../src/clj/vanilla/db/core.clj).
+
+
+
+## Postgres
+
+We use postgresql as our database solution, and run the database in a docker container
+alongside our application. For more information about postgres refer to their website:
+[postgresql website](https://www.postgresql.org/).
+
+To learn more about our use of the docker deployment of our database check out our
+[postgres docker readme](postgres-docker-db). 
+
+
+## Database spec
+
+To interact with a database in our project, you must declare a database spec, which 
+contains basic information that allows the application to find and interact with the
+database.
+
+Our current database spec looks like:
+
+```
+(def vanilla-db
+  {:dbtype "postgresql"
+   :dbname "vanilla_db"
+   :user "postgres"
+   :password "Password"
+   :host "localhost"
+   :port "5432"})
+```  
+
+### Next jdbc
+
+The above database spec is then used by jdbc to create a connection to the specified 
+database. We use the next-jdbc library to do this in Clojure. 
+
+To learn more visit 
+[next-jdbc](https://github.com/seancorfield/next-jdbc).
+
+
+
+
+## Hugsql
+
+For our vanilla project we utilize the [hugsql](https://www.hugsql.org) library to 
+call our sql statements like clojure functions. 
+
+
+
+
+
+
+
+# This is now legacy
+
+- We no longer use local database files.
+
+
 ## Database Management
 
 This project has two copies of a SQL database, 

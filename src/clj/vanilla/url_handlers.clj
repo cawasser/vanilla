@@ -25,150 +25,107 @@
     (log/info "Tried to subscribe a nil user to " services)))
 
 
-;(def from-sqlite {:id :key :data_source :data-source :data_grid :data-grid})
-;(def to-sqlite {:key :id :data-source :data_source :data-grid :data_grid})
+
 
 ;;;;;;;;;;
 ;; Layouts
 
-; fixup the key changes caused by SQLite with rename-keys
-; :id -> :key
+
+; fixup the key changes caused by SQL with rename-keys
+; :id -> key
 ; :data_source -> :data-source
 ; :data_grid -> :data-grid
+(def from-sql {:id :key :data_source :data-source :data_grid :data-grid})
+(def to-sql {:key :id :data-source :data_source :data-grid :data_grid})
 
 (defn get-layout
   "Retrieves a users layout from the db"
   [user]
-  (db/get-user-layout db/vanilla-db {:username user}))
+  (map #(clojure.set/rename-keys % from-sql) (db/get-user-layout db/vanilla-db {:username user})))
 
 
 (defn save-layout
-  "Saves a users entire widget layout to the db"
+  "Saves a users entire widget layout to the db.
+  Take in the new layout, and transformed the data into a workable format for the
+  postgres database."
+  ;@TODO - Clean up the let block? It is working and all steps are necessary - see comment block below
   [new-layout]
-  (log/info "SAVE-LAYOUT Handler(not ordered): " new-layout)
+  (prn "SAVE-LAYOUT Handler(not ordered): " new-layout)
   ;read in the stringed json, order the maps by keys, then remove all keys
-  (let [ordered (map #(into (sorted-map) %) (clojure.core/read-string new-layout))
-        sorted (apply #(into [] %) ordered)
-        sorted-str (map #(str (second %)) sorted)
-        vec-str (into [] sorted-str)]
+  (let [sql-ready (map #(clojure.set/rename-keys % to-sql) (clojure.core/read-string new-layout))
+        ordered (map #(into (sorted-map) %) sql-ready)
+        vec-ord (map #(into [] %)  ordered)
+        fun (fn [thing] (mapv #(str (second %)) thing))
+        sorted-vals (mapv #(fun %) vec-ord)
+        vec-vals (map #(str %) sorted-vals)]
+    (log/info "SAVE-LAYOUT Handler(sql-ready): " sql-ready)
     (log/info "SAVE-LAYOUT Handler(ordered): " ordered)
-    (log/info "SAVE-LAYOUT Handler(string): " sorted)
-    (log/info "SAVE-LAYOUT Handler(sorted-str): " sorted-str)
-    (log/info "SAVE-LAYOUT Handler(vec-str): " vec-str)
-    (db/save-layout! db/vanilla-db {:layout [vec-str]})))
-
+    (log/info "SAVE-LAYOUT Handler(vec-ord): " vec-ord)
+    (log/info (first vec-ord))
+    (prn sorted-vals)
+    (db/save-layout! db/vanilla-db {:layout sorted-vals})))
 
 (comment
 
+  (def data
+    ({:ret_types [:data-format/x-y :data-format/x-y-n :data-format/x-y-e :data-format/y],
+      :key "adade292-295c-4ee7-9cc4-48f2dd
+224d1a", :name :area-widget, :username "chad1",
+      :basis :chart, :data-source :bubble-service, :type :area-chart,
+      :icon "/images/area-widget.png", :label "Area",
+      :data-grid {:x 0, :y 0, :w 5, :h 15}, :options {:viz/style-name "widget", :viz/y-title "power", :viz/x-title "frequency", :viz/allowDecimals false,
+                                                      :viz/banner-color {:r 0, :g 0, :b 255, :a 1}, :viz/tooltip {:followPointer true}, :viz/title "Channels (area)",
+                                                                                                                                                     :viz/banner-text-color {:r 255, :g 255, :b 255, :a 1}, :viz/animation false}}
+     {:ret_types [:data-format/x-y-n :data-format/x-y :data-format/x-y-e :data-format/y],
+      :key "2f029b5f-14a4-4b0f-986d-3a316795f603", :name :bubble-widget,
+      :username "chad1", :basis :chart, :data-source :bubble-service, :type :bubble-chart,
+      :icon "/images/bubble-widget.png", :label "Bubble", :data-grid {:x 0, :y 15, :w 5, :h 15},
+      :options {:viz/title "Bubble", :viz/banner-color {:r 0, :g 100, :b 0, :a 1}, :viz/banner-text-color {:r 255, :g 255, :b 255, :a 1}, :viz/dataLabels true, :viz/labelFormat "{point.name}", :viz/lineWidth 0, :viz/animation false, :viz/data-labels true}}))
 
-  (def layout1 "({:ret_types [:data-format/x-y :data-format/x-y-n :data-format/x-y-e :data-format/y], :key \"751fe45a-10b4-4788-a56d-2012681dd0b3\", :name :area-widget, :username \"chad\",
- :basis :chart, :data-source :spectrum-traces, :type :area-chart, :icon \"/images/area-widget.png\", :label \"Area\", :data-grid {:x 0, :y 0, :w 5, :h 15}, :options {:viz/style-name \"widget\", :viz/y-title \"p
-ower\", :viz/x-title \"frequency\", :viz/allowDecimals false, :viz/banner-color {:r 0, :g 0, :b 255, :a 1}, :viz/tooltip {:followPointer true}, :viz/title \"Channels (area)\", :viz/banner-text-color {:r 255, :g
- 255, :b 255, :a 1}, :viz/animation false}})")
-  (def layout2 (str "(" {:ret_types [:data-format/x-y :data-format/x-y-n :data-format/x-y-e :data-format/y],
-                         :key "97e96773-0e11-4dfd-9208-75b2b5699818",
-                         :name :area-widget,
-                         :username "chad",
-                         :basis :chart,
-                         :data-source :spectrum-traces,
-                         :type :area-chart,
-                         :icon "/images/area-widget.png",
-                         :label "Area",
-                         :data-grid {:x 0, :y 0, :w 5, :h 15},
-                         :options {:viz/style-name "widget",
-                                   :viz/y-title "power",
-                                   :viz/x-title "frequency",
-                                   :viz/allowDecimals false,
-                                   :viz/banner-color {:r 0, :g 0, :b 255, :a 1},
-                                   :viz/tooltip {:followPointer true},
-                                   :viz/title "Channels (area)",
-                                   :viz/banner-text-color {:r 255, :g 255, :b 255, :a 1},
-                                   :viz/animation false}}
-                    ")"))
+  (def data-ordered (map #(into (sorted-map) %) data))
+  data-ordered
 
-  (def test (sorted-set layout2))
-  (def sorted (mapv #(into (sorted-map) %) (clojure.core/read-string layout2)))
+
+  (def data "({:ret_types [:data-format/x-y :data-format/x-y-n :data-format/x-y-e :data-format/y], :key \"07f9d07a-d315-4459-80f3-5e93ea0b4350\", :name :area-widget, :username \"chad2\", :basis :chart, :data-source :spectrum-traces, :type :area-chart, :icon \"/images/area-widget.png\", :label \"Area\", :data-grid {:x 0, :y 0, :w 5, :h 15}, :options {:viz/style-name \"widget\", :viz/y-title \"power\", :viz/x-title \"frequency\", :viz/allowDecimals false, :viz/banner-color {:r 0, :g 0, :b 255, :a 1}, :viz/tooltip {:followPointer true}, :viz/title \"Channels (area)\", :viz/banner-text-color {:r 255, :g 255, :b 255, :a 1}, :viz/animation false}} {:ret_types [:data-format/x-y-n :data-format/x-y :data-format/x-y-e :data-format/y], :key \"46e31202-a746-43b4-af53-549833e5188e\", :name :bubble-widget, :username \"chad2\", :basis :chart, :data-source :bubble-service, :type :bubble-chart, :icon \"/images/bubble-widget.png\", :label \"Bubble\", :data-grid {:x 1, :y 15, :w 5, :h 15}, :options {:viz/title \"Bubble\", :viz/banner-color {:r 0, :g 100, :b 0, :a 1}, :viz/banner-text-color {:r 255, :g 255, :b 255, :a 1}, :viz/dataLabels true, :viz/labelFormat \"{point.name}\", :viz/lineWidth 0, :viz/animation false, :viz/data-labels true}})")
+
+  (def sql (map #(clojure.set/rename-keys % to-sql) (clojure.core/read-string data)))
+  sql
+
+  (def sorted (map #(into (sorted-map) %) sql))
   sorted
-  ;(def sorted-vals (map #(vals %) sorted))
-  ;sorted-vals
-  (def sorted-vec (apply #(into [] %) sorted))
 
-  ;(def sorted-vec (map #(into [] %) sorted))
+  (mapv #(vals %) sorted)
+
+
+
+  (def sorted-vec (map #(into [] %) sorted))
   sorted-vec
   (second sorted-vec)
 
-  (def sorted-vals (map #(str (second %)) sorted-vec))
+  (def fun (fn [thing] (mapv #(str (second %)) thing)))
+  (def sorted-vals (mapv #(fun %) sorted-vec))
   sorted-vals
-  (def val-vex (into [] sorted-vals))
-  val-vex
+
+  (db/save-layout! db/vanilla-db {:layout sorted-vals})
+
+
+
+  (def vec-vals (mapv #(str %) sorted-vals))
+  vec-vals
+
+
+  ;(for [[k v] sorted] [ v])
+  ;
+  ;(def sorted-vals (map #(str (second %)) sorted-vec))
+  ;sorted-vals
+  ;(def val-vex (into [] sorted-vals))
+  ;val-vex
 
 
 
 
-
-
-
-
-
-
-  (apply #(str %) sorted-vals)
-  (apply str sorted-vals)
-  (map #(into [] %) sorted-vec)
-  (map #(str "*" % "*") (get-in sorted-vec))
-
-
-
-
-
-  (def inter (clojure.string/join "/n" sorted-vals))
-  (clojure.string/join "\n"
-        (clojure.string/split inter #"\s"))
-  (clojure.string/split (map #(str %) sorted-vec) " ")
-
-  (organize-layout layout1)
-
-  ;(defn organize-layout
-  ;  [old-layout]
-  ;  {:id          (:id layout)
-  ;   :username    (:username layout)
-  ;   :name        (:name layout)
-  ;   :ret_types   (:ret_types layout)
-  ;   :basis       (:basis layout)
-  ;   :data_source (:data_source layout)
-  ;   :type        (:type layout)
-  ;   :icon        (:icon layout)
-  ;   :label       (:label layout)
-  ;   :data_grid   (:data_grid layout)
-  ;   :options     (:options layout)})
-
-  (def proper
-    {:id          "\"123\""
-     :username    "\"APaine\""
-     :name        :area-widget
-     :ret_types   [:data-format/x-y]
-     :basis       :chart
-     :data_source :spectrum-traces
-     :type        :area-chart
-     :icon        "\"/images/area-widget.png\""
-     :label       "\"Area\""
-     :data_grid   {:x 0 :y 0 :w 4 :h 14}
-     :options     {:viz/style-name        "widget"
-                   :viz/y-title           "power"
-                   :viz/x-title           "frequency"
-                   :viz/allowDecimals     false
-                   :viz/banner-color      {:r 0x00 :g 0x00 :b 0xff :a 1}
-                   :viz/tooltip           {:followPointer true}
-                   :viz/title             "Channels (area)"
-                   :viz/banner-text-color {:r 255, :g 255, :b 255, :a 1}
-                   :viz/animation         false}})
-  (proper :id)
-  (:id proper)
-  (into {} (map #(clojure.core/read-string %) proper))
 
   ())
-
-
-
 
 
 ;(defn update-widget
@@ -211,8 +168,15 @@ ower\", :viz/x-title \"frequency\", :viz/allowDecimals false, :viz/banner-color 
 
 
 
-(comment
+;;;;;;;;;;;;;;;;
+;; RICH COMMENTS
+;;
+;;;;;;;;;;;;;;;;
 
+
+;;;;;;;;
+;; User
+(comment
 
   (create-user
     {:username "chad-uri-handler"
@@ -229,6 +193,55 @@ ower\", :viz/x-title \"frequency\", :viz/allowDecimals false, :viz/banner-color 
                       {:username "chad"
                        :pass "321"})
 
-  (get-all-users))
+  (get-all-users)
+  ())
 
+
+;;;;;;;;;;
+;; Layouts
+;; - Mostly editing layout data into usable/parse-able data.
+(comment
+
+  (def layout1 "({:ret_types [:data-format/x-y :data-format/x-y-n :data-format/x-y-e :data-format/y], :key \"751fe45a-10b4-4788-a56d-2012681dd0b3\", :name :area-widget, :username \"chad\",
+ :basis :chart, :data-source :spectrum-traces, :type :area-chart, :icon \"/images/area-widget.png\", :label \"Area\", :data-grid {:x 0, :y 0, :w 5, :h 15}, :options {:viz/style-name \"widget\", :viz/y-title \"p
+ower\", :viz/x-title \"frequency\", :viz/allowDecimals false, :viz/banner-color {:r 0, :g 0, :b 255, :a 1}, :viz/tooltip {:followPointer true}, :viz/title \"Channels (area)\", :viz/banner-text-color {:r 255, :g
+ 255, :b 255, :a 1}, :viz/animation false}})")
+  (def layout2 (str "(" {:ret_types [:data-format/x-y :data-format/x-y-n :data-format/x-y-e :data-format/y],
+                         :key "97e96773-0e11-4dfd-9208-75b2b5699818",
+                         :name :area-widget,
+                         :username "chad",
+                         :basis :chart,
+                         :data-source :spectrum-traces,
+                         :type :area-chart,
+                         :icon "/images/area-widget.png",
+                         :label "Area",
+                         :data-grid {:x 0, :y 0, :w 5, :h 15},
+                         :options {:viz/style-name "widget",
+                                   :viz/y-title "power",
+                                   :viz/x-title "frequency",
+                                   :viz/allowDecimals false,
+                                   :viz/banner-color {:r 0, :g 0, :b 255, :a 1},
+                                   :viz/tooltip {:followPointer true},
+                                   :viz/title "Channels (area)",
+                                   :viz/banner-text-color {:r 255, :g 255, :b 255, :a 1},
+                                   :viz/animation false}}
+                    ")"))
+
+  (def test (sorted-set layout2))
+  (def sorted (mapv #(into (sorted-map) %) (clojure.core/read-string layout2)))
+  sorted
+  ;(def sorted-vals (map #(vals %) sorted))
+  ;sorted-vals
+  (def sorted-vec (apply #(into [] %) sorted))
+
+  ;(def sorted-vec (map #(into [] %) sorted))
+  sorted-vec
+  (second sorted-vec)
+
+  (def sorted-vals (map #(str (second %)) sorted-vec))
+  sorted-vals
+  (def val-vex (into [] sorted-vals))
+  val-vex
+
+  ())
 

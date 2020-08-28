@@ -6,15 +6,17 @@
             [ajax.core :as ajax :refer [GET POST]]))
 
 
-(defn get-data-source [widgets key]
-  (:data-source (->> widgets
-                  (filter #(= (:key %) key))
-                  first)))
+;;;;
+;; This namespace is in charge of:
+;;  - standardized widget hiccup elements
+;;  -
 
 
-(defn delete-widget [widget-id]
+
+(defn delete-widget
+  "Make an AJAX call to delete the widget based on its ID"
+  [widget-id]
   ;(prn "removing widget: " widget-id)
-
   (POST "/delete-widget"
     {:format          (ajax/json-request-format {:keywords? true})
      :response-format (ajax/json-response-format {:keywords? true})
@@ -23,6 +25,13 @@
      :error-handler   #(rf/dispatch [:layout-message %])}))
 
 
+(defn- get-data-source
+  "Helper function to pull the data sources out of all the widgets.
+  'all widgets' are determined by their key value, since they are unique"
+  [widgets key]
+  (:data-source (->> widgets
+                     (filter #(= (:key %) key))
+                     first)))
 
 (rf/reg-event-db
   :remove-widget
@@ -34,14 +43,19 @@
 
 
 
-
-(defn debug-style [options]
+; @TODO - what does this pertain to specifically? - what does each do?
+(defn debug-style
+  "What?"
+  [options]
   (if (get-in options [:viz :debug] false)
     :dotted
     :none))
 
 
-(defn- widget-title-bar [name options]
+(defn- widget-title-bar
+  "Creates the title bar for the widgets and any interaction with the bar.
+   The options change the banner color, text, etc."
+  [name options]
   [:div.widget-banner.title-wrapper.grid-toolbar.move-cursor
    {:cursor "move"
     :style  {:width            "auto"
@@ -65,8 +79,15 @@
                                                  (rf/dispatch [:remove-widget name])
                                                  (.stopPropagation %))}]]]])
 
-
-(defn basic-widget [name data options custom-content]
+;@TODO - what does data do?
+(defn basic-widget
+  "In charge of basic hiccup components of the widget, such as the title and
+  widget frame. The custom-content is what makes each widget unique, showing different data.
+   - Name    = Name of widget, as displayed in title bar
+   - Data    =
+   - Options = some of the viz element options for the widget
+   - Custom-content = The actual content of the widget"
+  [name data options custom-content]
 
   ;(prn "basic-widget " name
   ;  " //// options " options
