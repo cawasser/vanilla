@@ -1,5 +1,6 @@
 (ns vanilla.widgets.make-chart
-  (:require [reagent.core :as reagent]
+  (:require [reagent.core :as r]
+            [reagent.dom :as rd]
             [re-frame.core :as rf]
             [day8.re-frame.tracing :refer-macros [fn-traced]]
             [vanilla.widgets.util :as util]
@@ -197,7 +198,7 @@
   ; TODO: should make-chart return a (fn [])?
   (let [chart-type      (-> chart-config :chart-options :chart/type)
         chart-reg-entry @(rf/subscribe [:hc-type chart-type])
-        dom-node        (reagent/atom nil)
+        dom-node        (r/atom nil)
         base-config     (make-config chart-config data options)
         all-configs     (merge-configs base-config data options)]
 
@@ -207,7 +208,7 @@
     ; " //// (data) " data
     ; " //// (all-configs) " all-configs)
 
-    (reagent/create-class
+    (r/create-class
       {:display-name (str chart-type)
 
        :reagent-render
@@ -217,7 +218,7 @@
 
        :component-did-mount
        (fn [this]
-         [:> (Highcharts/chart (reagent/dom-node this) (clj->js all-configs))])})))
+         [:> (Highcharts/chart (rd/dom-node this) (clj->js all-configs))])})))
 
 ;; in case we need to add :component-did-update in later, it used to look like this before shadow-cljs
         ;:component-did-update
@@ -233,7 +234,7 @@
         ;         " //// base-config " base-config
         ;         " //// (all-config)" all-configs)
         ;
-        ;    (js/Highcharts.Chart. (reagent/dom-node this)
+        ;    (js/Highcharts.Chart. (rd/dom-node this)
         ;                          (clj->js all-configs)))
 
 ;;;;;;;;;;;;;;;;;

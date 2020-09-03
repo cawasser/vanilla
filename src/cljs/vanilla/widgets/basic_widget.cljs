@@ -3,6 +3,7 @@
             [re-frame.core :as rf]
             [day8.re-frame.tracing :refer-macros [fn-traced]]
             [vanilla.widgets.util :as util]
+            [dashboard-clj.core :as d]
             [ajax.core :as ajax :refer [GET POST]]))
 
 
@@ -18,6 +19,7 @@
   (POST "/delete-widget"
     {:format          (ajax/json-request-format {:keywords? true})
      :response-format (ajax/json-response-format {:keywords? true})
+     :headers         {"x-csrf-token" d/?csrf-token}
      :params          {:id widget-id}
      :handler         #(rf/dispatch [:layout-message %])
      :error-handler   #(rf/dispatch [:layout-message %])}))

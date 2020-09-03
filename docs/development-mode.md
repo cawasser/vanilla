@@ -1,13 +1,12 @@
 # Running the Code in 'Development Mode' 
 
+Pre-Run Setup
+- cd to the base project directory
+- Run `npm install`
+- Using OpenJDK11 is the recommended java runtime for this project. Check your version by running `java -version`
+
+Running
 - Start server: `lein run`
 - Start shadow-cljs: `shadow-cljs watch app`
 - Go to http://localhost:5000
-
-
-
-#### Note:
-If this is the first time you run the application, you will have to run
-```npm install``` before the above commands. If you do not you will be 
-prompted to do so anyway.
 
