@@ -82,8 +82,9 @@
          [:button.button {:on-click #(reset! @show-pop-up false)} "Cancel"]]]])))
 
 
-;@TODO - is this needed?
-(defn get-services []
+(defn get-services
+  "Added here to stop the list of services and such leaking before the user logs in."
+  []
   (GET "/services" {:headers         {"Accept" "application/transit+json"}
                     :response-format (ajax/json-response-format {:keywords? true})
                     :handler         #(rf/dispatch-sync [:set-services %])}))

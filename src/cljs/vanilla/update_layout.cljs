@@ -45,6 +45,14 @@
          :error-handler   #(rf/dispatch [:layout-message %])}))
 
 
+(rf/reg-event-db
+  :update-layout
+  (fn-traced [db [_ layout]]
+             ;(prn "Updating layout... " layout)
+             (let [new-layout (update-layout (:widgets db) (reduce-layouts layout))]
+               (save-layout new-layout)
+               (assoc db :widgets new-layout))))
+
 (defn get-build-fn [name]
   (:build-fn (->> widget-defs/widgets
                   (filter #(= (:name %) name))

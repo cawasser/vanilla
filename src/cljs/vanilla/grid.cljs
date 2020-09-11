@@ -4,22 +4,11 @@
     [re-frame.core :as rf]
     ["react-grid-layout" :as ReactGridLayout]
     [vanilla.widgets.core :as widget]
-    [day8.re-frame.tracing :refer-macros [fn-traced]]
-    [vanilla.update-layout :as u]))
+    [day8.re-frame.tracing :refer-macros [fn-traced]]))
 
 
 (defn fixup-new-widget [widget]
   (merge widget {:data-grid {:x 0 :y 0 :w 5 :h 15}}))
-
-
-;;@TODO - this should move to the vanilla.update-layout ns?
-(rf/reg-event-db
-  :update-layout
-  (fn-traced [db [_ layout]]
-    (prn "Updating layout... " layout)
-    (let [new-layout (u/update-layout (:widgets db) (u/reduce-layouts layout))]
-      (u/save-layout new-layout)
-      (assoc db :widgets new-layout))))
 
 
 
