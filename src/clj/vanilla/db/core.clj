@@ -44,7 +44,7 @@
 
 ;; This is our database spec, configured for a connection to a postgresql database
 (def vanilla-db
-  "SQLite database connection spec."
+  "postgresql database connection spec."
   {:dbtype "postgresql"
    :dbname "vanilla_db"
    :user "postgres"
@@ -464,6 +464,7 @@
   (verify-credentials vanilla-db
     {:username "chad" :pass "321"})
 
+  (delete-user! vanilla-db {:username "test"})
 
   (drop-users-table vanilla-db)
 
@@ -517,6 +518,9 @@
   ())
 
 (comment
+
+  (jdbc/get-datasource vanilla-db)
+
 
   (sql/query vanilla-db ["SELECT * FROM services"])
   (sql/query vanilla-db ["SELECT * FROM users"])

@@ -33,7 +33,7 @@
   "Takes in the current layout and makes a call to save the layout to the database
   through an ajax call"
   [layout]
-  (prn "saving layout: " (clojure.core/pr-str layout))
+  ;(prn "saving layout: " (clojure.core/pr-str layout))
 
   (ds/data-source-subscribe (mapv #(:data-source %) layout))
 

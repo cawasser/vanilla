@@ -62,6 +62,8 @@
              (prn "save layout")
              {:widget-save (h/save-layout (get-in req [:params :widgets])) :status 200})})
 
+
+  ; @TODO - This is no longer used, we update every widget instead of one at a time
   ;(POST "/update-widget" req
   ;  {:status 200
   ;   :headers {"Content-Type" "text/json; charset=utf-8"}

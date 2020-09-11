@@ -141,3 +141,8 @@ WHERE (username = :username AND
 -- :name get-users :? :*
 -- :doc retrieves a user record given the id
 SELECT * FROM users;
+
+-- :name delete-user! :! :n
+-- :doc deletes a user record given the id
+DELETE FROM users
+WHERE username = :username;
