@@ -20,7 +20,7 @@ alongside our application. For more information about postgres refer to their we
 [postgresql website](https://www.postgresql.org/).
 
 To learn more about our use of the docker deployment of our database check out our
-[postgres docker readme](postgres-docker-db). 
+[postgres docker readme](postgres-docker-db.md). 
 
 
 ## Database spec

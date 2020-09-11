@@ -8,6 +8,68 @@
 
 This single-page application (SPA) provides a number of graphical widgets based on [Highcharts](https://highcharts.com)
 
+
+## User Guide
+
+### Quick start
+
+Once you have pulled the code from the repository run the following in the command prompt
+in the project directory 
+  
+```shell script
+npm install
+```
+ 
+This installs all our dependencies.
+
+After this you need to start a server by running 
+
+```shell script
+lein run
+```
+
+This will spin up a server to host our code at localhost:5000. But keep reading to have
+a fully functioning application.
+
+
+Start up our client-side code with run
+```shell script
+shadow-cljs watch app
+```
+
+You now have a functioning client and server, but use the instructions here to start a database:
+
+To start you must first pull the official postgres docker image, this will be used
+to create and run postgres containers.
+
+```shell script
+docker pull postgres
+```
+
+This pulls the official postgres docker image from the repo. Once you have the image
+on your machine you don't have to run this again. To check if you already have this image, 
+use 'docker images' and check if postgres is listed.
+
+Once you have the postgres image, run the following command:
+
+```shell script
+docker run --name postgres -e POSTGRES_PASSWORD=Password -p 5432:5432 -d postgres
+```
+
+This will create a container running postgres at port 5432. After this you can always start the above container with:
+
+```shell script
+docker start postgres
+```
+
+To review a deeper dive on the above instructions, check out our docs:
+
+- [Running a dev environment](docs/development-mode.md)
+- [Database Management](docs/database_management.md)
+- [Postgres db](docs/postgres-docker-db.md)
+
+
+
 ## History
 
 [look here](docs/history.md)
@@ -56,6 +118,7 @@ This single-page application (SPA) provides a number of graphical widgets based 
   - [On the Server](docs/repl-driven-server.md)
   - [On the Client]()
 - [Handling Epochal Time](docs/epochal-time.md)
+- [Auto documentation](docs/auto-documentation.md)
 
 ### Running the application
 
@@ -70,26 +133,6 @@ This single-page application (SPA) provides a number of graphical widgets based 
 
 ## Architecture
 
-### Auto-Documentation
-[Marginalia](https://github.com/gdeer81/marginalia) and more specifically [lein-marginalia](https://github.com/gdeer81/lein-marginalia)has been added as a plugin to this project to keep a healthy level of documentation of our codebase and architecture. The plugin essentially scans through the project and creates an html "wiki" of how our project operates. It takes all our in line comments and can be added to easily to explain certain namespaces, functions, or design decisions.
-
-To run the plugin and generate the aforementioned wiki simply use:
-
-```
-lein marg
-```
-
-This will generate the file:
-
-```
-./docs/uberdoc.html
-```
-
-Here is the document it generates:
-
-[marginalia-uberdoc](/docs/uberdoc.html)
-
-
 ### Generated Diagrams
 
 Diagrams are generated "automatically" by ???
@@ -99,15 +142,13 @@ Diagrams are generated "automatically" by ???
 - [Components](diagrams/basicComponent.png)
 
 
-
-
 #### see also
 - [cdk-clj](https://www.youtube.com/watch?v=TbDmupZyuXk)
 - [Watch the video from the 2019 Conj](https://github.com/StediInc/cdk-clj)
 > Note: cdk-clj has been abandoned by the developers.
 
 
-## User Guide
+
 
 
 
