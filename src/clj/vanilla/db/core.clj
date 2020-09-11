@@ -61,8 +61,22 @@
 
 
 
+;;;;;;;;;;;;;;;;;;;;;
+;; Database component
+;;
+(defrecord Database [db-spec                                ; configuration
+                     datasource]                            ; state
 
+  component/Lifecycle
+  (start [this]
+    (if datasource
+      this                                                  ; already initialized
+      (assoc this :datasource (jdbc/get-datasource db-spec))))
 
+  (stop [this]
+    (assoc this :datasource nil)))
+
+;;
 
 (defn populate-services
   [database]
@@ -193,6 +207,7 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defn initialize-database
+  "Drop and create all the database tables, then populate the service tables."
   [database]
   (do
     ;; Remove any current tables to start fresh
@@ -209,62 +224,43 @@
     (populate-services database)))
 
 
-(defrecord Database [db-spec                                ; configuration
-                     datasource]                            ; state
-
-  component/Lifecycle
-  (start [this]
-    (if datasource
-      this                                                  ; already initialized
-      (assoc this :datasource (jdbc/get-datasource db-spec))))
-
-  (stop [this]
-    (assoc this :datasource nil)))
+(defn reset-service-table
+  "Call this to drop, recreate, and populate the services table.
+  This is needed after changing the services table."
+  [database]
+  (do
+    (drop-services-table database)
+    (create-services-table database)
+    (populate-services database)))
 
 
-;@TODO - this is legacy, we no longer have a file that has our db
 (defn database-exist?
   "Runs a simple check to see if the vanilla_db file exists."
-  [database]
-  ;(prn "Database-exist? /////" (database :dbname))
-  ;(prn (str (.exists (jio/file "vanilla_db"))))
-  (.exists (jio/file (database :dbname))))
+  []
+  (some? (sql/query vanilla-db ["SELECT * FROM services"])))
 
 
-;@TODO - is this still needed?
 (defn setup-database
   "This is called by dashboard-clj.system to start the applications
    connection to the database. Only creates a database when in dev mode
    and when the vanilla_db has not been created."
   [dev-mode?]
-  (when (and (not (database-exist? vanilla-db)) dev-mode?)
+  (when (and (not (database-exist?)) dev-mode?)
     ;; If it does not exist, create it
     (initialize-database vanilla-db)
-    (log/info "creating startup database: VANILLA_DB"))
-
+    (log/info "Initializing database"))
   ;; Create a Database component -- see component library
   (map->Database {:db-spec vanilla-db}))
 
 
-; @TODO - this is now legacy since we moved to postgres ->but is nice for debugging
 ;;; REPL ME WHEN DATABASE STRUCTURE CHANGES ;;;
 (comment
 
-  ;; The following is the deployed database that is pushed to the repo and to AWS
-  ;; It is not called by any of our production code, so it is in this comment block
-  (def vanilla-default
-    "SQLite database connection spec."
-    {:dbtype db-type :dbname "vanilla_default"})
+  ;; If you just want to recreate the services table run this
+  (reset-service-table vanilla-db)
 
-  ;; Initialize this on database structure changes, push changes to repo
-  (initialize-database vanilla-default)
-
-  ;; Run this to create a local database for your app
+  ;; Run this to recreate the whole database
   (initialize-database vanilla-db)
-
-
-
-  ;(initialize-database pg-db)
 
   ())
 
@@ -346,10 +342,13 @@
 ;; Layout table rich comment
 (comment
 
-  (hugsql/def-db-fns "sql/queries.sql")
-  (hugsql/def-sqlvec-fns "sql/queries.sql")
+  (sql/query vanilla-db ["SELECT * FROM services"])
+  (sql/query vanilla-db ["SELECT * FROM users"])
+  (sql/query vanilla-db ["SELECT * FROM layout"])
+  (sql/query vanilla-sqlite ["SELECT * FROM services"])
+  (sql/query vanilla-sqlite ["SELECT * FROM users"])
+  (sql/query vanilla-sqlite ["SELECT * FROM layout"])
 
-  (create-layout-table-sqlvec vanilla-db)
 
   ;;;;;;;;;;;;;;;
   ; THIS FUNCTION MUST BE RUN TO CREATE INITIAL DB TABLE
@@ -365,37 +364,10 @@
   ;viz_tooltip(redundant) = {:followPointer true}
   ;viz_animation(redundant) = false, defaults to false though
 
-  (create-layout!
-    vanilla-db
-    {:id          "\"123\""
-     :username    "\"APaine\""
-     :name        :area-widget
-     :ret_types   [:data-format/x-y]
-     :basis       :chart
-     :data_source :spectrum-traces
-     :type        :area-chart
-     :icon        "\"/images/area-widget.png\""
-     :label       "\"Area\""
-     :data_grid   {:x 0 :y 0 :w 4 :h 14}
-     :options     {:viz/style-name        "widget"
-                   :viz/y-title           "power"
-                   :viz/x-title           "frequency"
-                   :viz/allowDecimals     false
-                   :viz/banner-color      {:r 0x00 :g 0x00 :b 0xff :a 1}
-                   :viz/tooltip           {:followPointer true}
-                   :viz/title             "Channels (area)"
-                   :viz/banner-text-color {:r 255, :g 255, :b 255, :a 1}
-                   :viz/animation         false}})
-
-  (def layout {:helllo :hey
-               :yo :whats-up})
-  (apply #(str %) layout)
-
 
   (get-layout vanilla-db)
 
-  (get-user-layout vanilla-db {:username "chad"})
-  (get-user-layout vanilla-db {:username "APaine"})
+  (get-user-layout vanilla-db {:username "test"})
 
 
   (def test1 {:layout [["123"
@@ -416,23 +388,11 @@
 
   (save-layout! vanilla-db test1)
 
-  (save-layout! vanilla-db
-                {:layout
-                 [["123" "APaine" ":area-widget" "[:data-format/x-y]"
-                   ":chart" ":spectrum-traces" ":area-chart"
-                   "\"/images/area-widget.png\"" "\"Area\"" "{:x 0, :y 0, :w 4, :h 14}"
-                   "#:viz{:style-name \"widget\", :animation false, :x-title \"frequency\", :banner-text-color {:r 255, :g 255, :b 255, :a 1}, :title \"Channels (area)\", :allowDecimals false, :banner-color {:r 0, :g 0, :b 255, :a 1}, :y-title \"power\", :tooltip {:followPointer true}}"]
-                  ["213" "APaine" ":bubble-widget" "[:data-format/x-y-n]"
-                   ":chart" ":bubble-service" ":bubble-chart"
-                   "\"/images/bubble-widget.png\"" "\"Bubble\"" "{:x 4, :y 0, :w 5, :h 15}"
-                   "#:viz{:animation false, :labelFormat \"{point.name}\", :banner-text-color {:r 255, :g 255, :b 255, :a 1}, :title \"Bubble\", :dataLabels true, :lineWidth 0, :data-labels true, :banner-color {:r 0, :g 0, :b 255, :a 1}, :tooltip {:followPointer true}}"]]})
-
   (delete-all-layouts! vanilla-db)
 
   (delete-layout! vanilla-db {:id "7ff54050-42bd-4837-b056-8916899cc0d0"})
   (delete-layout! vanilla-db {:id "213"})
 
-  (drop-layout-table vanilla-db)
 
   ())
 
@@ -514,67 +474,5 @@
 
 
 
-
-  ())
-
-(comment
-
-  (jdbc/get-datasource vanilla-db)
-
-
-  (sql/query vanilla-db ["SELECT * FROM services"])
-  (sql/query vanilla-db ["SELECT * FROM users"])
-  (sql/query vanilla-db ["SELECT * FROM layout"])
-  (sql/query vanilla-sqlite ["SELECT * FROM services"])
-  (sql/query vanilla-sqlite ["SELECT * FROM users"])
-  (sql/query vanilla-sqlite ["SELECT * FROM layout"])
-
-  (def postgres-data
-    [#:layout{:ret_types "[:data-format/x-y :data-format/x-y-n :data-format/x-y-e :data-format/y]",
-              :name ":area-widget",
-              :username "chad",
-              :basis ":chart",
-              :data_grid "{:x 3, :y 0, :w 5, :h 15}",
-              :type ":area-chart",
-              :icon "/images/area-widget.png",
-              :label "Area",
-              :id "403346b2-508e-42f3-9a83-750922eb4c1d",
-              :data_source ":spectrum-traces",
-              :options "{:viz/style-name \"widget\", :viz/y-title \"power\", :viz/x-title \"frequency\", :viz/allowDecimals false, :viz/banner-color {:r 0, :g 0, :b 255, :a 1}, :viz/tooltip {:followPointer true}, :viz/title \"Channels (area)\", :viz/banner-text-color {:r 255, :g 255, :b 255, :a 1}, :viz/animation false}"}
-     #:layout{:ret_types "[:data-format/x-y :data-format/x-y-n :data-format/x-y-e :data-format/y]",
-              :name ":area-widget",
-              :username "chad1",
-              :basis ":chart",
-              :data_grid "{:x 0, :y 0, :w 5, :h 15}",
-              :type ":area-chart",
-              :icon "/images/area-widget.png",
-              :label "Area",
-              :id "adade292-295c-4ee7-9cc4-48f2dd224d1a",
-              :data_source ":bubble-service",
-              :options "{:viz/style-name \"widget\", :viz/y-title \"power\", :viz/x-title \"frequency\", :viz/allowDecimals false, :viz/banner-color {:r 0, :g 0, :b 255, :a 1}, :viz/tooltip {:followPointer true}, :viz/title \"Channels (area)\", :viz/banner-text-color {:r 255, :g 255, :b 255, :a 1}, :viz/animation false}"}])
-
-  (def sql-lite-data
-    [#:layout{:ret_types "[:data-format/lat-lon-label :data-format/lat-lon-e :data-format/cont-n]",
-              :name ":worldwind-widget",
-              :username "planner",
-              :basis ":simple",
-              :data_grid "{:x 0, :y 0, :w 5, :h 20}",
-              :type ":worldwind-widget",
-              :icon "/images/worldwind-widget.png",
-              :label "3d World",
-              :id "76c9b5fb-27bc-47d7-9aa2-948774090a24",
-              :data_source ":x-beam-location-service",
-              :options "{:viz/title \"3d World\", :viz/banner-color {:r 153, :g 0, :b 255, :a 1}, :viz/banner-text-color {:r 255, :g 255, :b 255, :a 1}}"}
-     #:layout{:ret_types "[:data-format/x-y-n :data-format/x-y :data-format/x-y-e :data-format/y]",
-              :name ":bubble-widget",
-              :username "chad",
-              :basis ":chart",
-              :data_grid "{:x 5, :y 0, :w 5, :h 15}",
-              :type ":bubble-chart",
-              :icon "/images/bubble-widget.png",
-              :label "Bubble",
-              :id "0a2b4fe6-c1db-46a6-9418-6340232411c7",
-              :data_source ":bubble-service",
-              :options "{:viz/title \"Bubble\", :viz/banner-color {:r 0, :g 100, :b 0, :a 1}, :viz/banner-text-color {:r 255, :g 255, :b 255, :a 1}, :viz/dataLabels true, :viz/labelFormat \"{point.name}\", :viz/lineWidth 0, :viz/animation false, :viz/data-labels true}"}])
 
   ())

@@ -22,22 +22,7 @@ npm install
  
 This installs all our dependencies.
 
-After this you need to start a server by running 
-
-```shell script
-lein run
-```
-
-This will spin up a server to host our code at localhost:5000. But keep reading to have
-a fully functioning application.
-
-
-Start up our client-side code with run
-```shell script
-shadow-cljs watch app
-```
-
-You now have a functioning client and server, but use the instructions here to start a database:
+Now we need to set up our development database:
 
 To start you must first pull the official postgres docker image, this will be used
 to create and run postgres containers.
@@ -61,6 +46,27 @@ This will create a container running postgres at port 5432. After this you can a
 ```shell script
 docker start postgres
 ```
+
+
+After this you need to start a server by running
+
+```shell script
+lein run
+```
+
+This will spin up a server to host our code at localhost:5000. Keep the server running to keep the application going,
+but you can exit the process by using CTRL + C.
+
+
+Start up our client-side code with run
+```shell script
+shadow-cljs watch app
+```
+
+You now have a functioning client and server. Leave this command running for the front-end code to
+maintain its hot-loading of code changes to cljs file. You can exit this command with CTRL + C.
+
+
 
 To review a deeper dive on the above instructions, check out our docs:
 

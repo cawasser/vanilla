@@ -16,4 +16,4 @@ This will generate the file:
 
 Here is the document it generates:
 
-[marginalia-uberdoc](/docs/uberdoc.html)
+[marginalia-uberdoc](uberdoc.html)

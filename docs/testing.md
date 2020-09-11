@@ -21,3 +21,8 @@ lein test vanilla.example-test
 
 where you can replace 'vanilla.example-test' with any namespace in the
 test directory.
+
+
+## Auto-testing
+
+ADD this section here

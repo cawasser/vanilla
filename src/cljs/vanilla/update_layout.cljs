@@ -40,7 +40,8 @@
   (POST "/save-layout"
         {:format          (ajax/json-request-format {:keywords? true})
          :response-format (ajax/json-response-format {:keywords? true})
-         :params          {:widgets (clojure.core/pr-str (map #(dissoc % :build-fn) layout))}       ;convert the whole layout struct to a string to preserve values
+         ;convert the whole layout struct to a string to preserve values
+         :params          {:widgets (clojure.core/pr-str (map #(dissoc % :build-fn) layout))}
          :handler         #(rf/dispatch [:layout-message %])
          :error-handler   #(rf/dispatch [:layout-message %])}))
 
@@ -117,6 +118,7 @@
     (assoc-in [:data-grid :h] (:h new-layout))))
 
 
+;@todo - why is this? is it just for changing :i -> key? can it use clojure.core/rename-keys ?
 (defn reduce-layouts
   "Non-intuitive data-processing?"
   [layout]
